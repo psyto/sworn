@@ -16,3 +16,8 @@ contracts/broadcast/
 !**/.env.example
 node_modules/
 dist/
+# video/ recording pipeline: deps, forge build output kept local to video/, intermediates
+video/node_modules/
+video/.forge/
+video/*.raw.mp4
+video/*.marks.json

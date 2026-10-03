@@ -1,0 +1,129 @@
+<!doctype html>
+<!--
+  Sworn check-in 3 — the slides record-checkin.mjs drives. NO FIGURE IS WRITTEN HERE: every address,
+  hash, count and gas number arrives through window.__fill() from its source at record time, and
+  __fill throws if any [data-k] slot is left empty. Text in this file is labels only.
+-->
+<meta charset="utf-8" />
+<title>Sworn check-in 3</title>
+<style>
+:root{--bg:#0d1117;--panel:#141a23;--line:#243041;--fg:#d6dde8;--dim:#7d8a9c;--bold:#f5f8fc;
+ --acc:#7cc4ff;--grn:#6fd49a;--amb:#f2c46d;--red:#f08080}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1280px;height:720px;overflow:hidden;background:var(--bg)}
+body{color:var(--fg);font:22px/1.45 Inter,ui-sans-serif,-apple-system,"Segoe UI",system-ui,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.badge{position:absolute;top:26px;right:32px;z-index:5;font-size:15px;letter-spacing:.04em;color:var(--amb);
+ border:1px solid #5a4a26;background:#1d1910;border-radius:999px;padding:5px 14px}
+.badge::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--amb);
+ margin-right:9px;vertical-align:1px}
+.scene{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:64px 84px;gap:26px}
+.scene.on{display:flex}
+.fade{opacity:0;transform:translateY(8px);transition:opacity .6s ease,transform .6s ease}
+.fade.in{opacity:1;transform:none}
+h1{font-size:92px;font-weight:700;letter-spacing:-.02em;color:var(--bold);line-height:1}
+.claim{font-size:31px;color:var(--fg);max-width:1060px;line-height:1.35}
+h2{font-size:17px;font-weight:600;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+.card{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:20px 26px}
+.card .t{font-size:16px;color:var(--dim);margin-bottom:8px}
+.card .t b{color:var(--acc);font-weight:600}
+.row{display:flex;gap:18px;align-items:baseline;font-size:20px;line-height:1.7}
+.row .k{color:var(--dim);min-width:150px;font-size:17px}
+.row .v{color:var(--bold)}
+.big{font-size:23px}
+.src{font-size:15px;color:var(--dim)}
+.pass{color:var(--grn)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:17px;line-height:1.6;color:var(--fg);white-space:pre}
+.hero{display:flex;align-items:baseline;gap:28px}
+.hero .n{white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:-.02em;font-size:132px;font-weight:700;color:var(--grn);line-height:1}
+.hero .l{font-size:27px;color:var(--bold);max-width:640px;line-height:1.3}
+.lesson{font-size:30px;color:var(--bold);max-width:1080px;line-height:1.35}
+.lesson em{font-style:normal;color:var(--amb)}
+.amount{font-family:ui-monospace,Menlo,monospace;font-size:64px;font-weight:700;color:var(--grn);line-height:1.1}
+</style>
+
+<div class="badge mono">Moderato testnet</div>
+
+<!-- scene 1 — product, one-line claim, the deployed contract -->
+<div class="scene" id="s1">
+  <h1 class="fade" id="s1a">Sworn</h1>
+  <div class="claim fade" id="s1b" data-k="claim"></div>
+  <div class="card fade" id="s1c">
+    <div class="t">Deployed · <b data-k="network"></b> · chain <span data-k="chainId"></span></div>
+    <div class="row"><span class="k">Sworn</span><span class="v mono big" data-k="sworn"></span></div>
+    <div class="row"><span class="k">deploy tx</span><span class="v mono" data-k="swornTx"></span></div>
+    <div class="row"><span class="k">GUEST_VKEY</span><span class="v mono" data-k="vkey"></span></div>
+    <div class="row"><span class="k">explorer</span><span class="v mono src" data-k="swornUrl"></span></div>
+  </div>
+</div>
+
+<!-- scene 2, variant B — the real-proof test passing, the localnet slash, the deployed contracts -->
+<div class="scene" id="s2B">
+  <h2>A zero-knowledge proof of Tempo's EVM can slash the bond</h2>
+  <div class="card fade" id="s2Ba">
+    <div class="t"><b>forge test</b> · contracts/test/RealGroth16.t.sol · run while recording</div>
+    <pre data-k="forge"></pre>
+  </div>
+  <div class="card fade" id="s2Bb">
+    <div class="t"><b>Tempo's own node</b> · out/e2e/localnet-full-gate.log · gate <span data-k="gateCount"></span> <span class="pass" data-k="gateVerdict"></span></div>
+    <pre data-k="slashLine"></pre>
+  </div>
+  <div class="card fade" id="s2Bc">
+    <div class="t"><b>Deployed on Moderato</b> · constants read by eth_call</div>
+    <div class="row"><span class="k">Sworn</span><span class="v mono" data-k="sworn"></span></div>
+    <div class="row"><span class="k">SP1_VERIFIER</span><span class="v mono" data-k="verifier"></span> <span class="src" data-k="verifierVersion"></span></div>
+  </div>
+</div>
+
+<!-- scene 2, variant A — the slash on Moderato -->
+<div class="scene" id="s2A">
+  <h2>The bond paid the agent — on Moderato</h2>
+  <div class="card fade" id="s2Aa">
+    <div class="t"><b>Slashed</b> event from Sworn <span class="mono" data-k="sworn"></span></div>
+    <div class="amount" data-k="paid"></div>
+    <div class="row"><span class="k">to client</span><span class="v mono" data-k="slashClient"></span></div>
+    <div class="row"><span class="k">server</span><span class="v mono" data-k="slashServer"></span></div>
+    <div class="row"><span class="k">tx</span><span class="v mono" data-k="slashTx"></span></div>
+    <div class="row"><span class="k">block · status</span><span class="v mono"><span data-k="slashBlock"></span> · <span class="pass" data-k="slashStatus"></span></span></div>
+    <div class="row"><span class="k">explorer</span><span class="v mono src" data-k="slashUrl"></span></div>
+  </div>
+</div>
+
+<!-- scene 3 — 40 / 40 and the out-of-gas lesson -->
+<div class="scene" id="s3">
+  <div class="hero fade" id="s3a">
+    <div class="n" data-k="ac2"></div>
+    <div class="l">real Moderato TIP-20 transfers re-executed — receipts matched<div class="src mono" data-k="ac2Src"></div></div>
+  </div>
+  <div class="card fade" id="s3b">
+    <div class="t"><b>What I learned</b> · out/e2e/localnet-full-gate.log</div>
+    <pre data-k="gasLines"></pre>
+  </div>
+  <div class="lesson fade" id="s3c">"Blocked" was a transfer that ran <em>out of gas</em> — the limit, used to the last unit.</div>
+</div>
+
+<script>
+let D = null;
+window.__fill = (d) => {
+  D = d;
+  for (const el of document.querySelectorAll("[data-k]")) {
+    const k = el.dataset.k;
+    // Only slots in scenes this variant shows must be filled; the others stay hidden.
+    const sc = el.closest(".scene");
+    if (!d.scenes.includes(sc.id)) continue;
+    const v = d[k];
+    if (v === undefined || v === null || String(v).trim() === "")
+      throw new Error(`slot "${k}" in #${sc.id} has no value`);
+    el.textContent = String(v);
+  }
+  return true;
+};
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+window.__show = async (id) => {
+  for (const s of document.querySelectorAll(".scene")) s.classList.toggle("on", s.id === id);
+  const parts = [...document.querySelectorAll(`#${id} .fade`)];
+  for (const p of parts) { p.classList.add("in"); await sleep(450); }
+};
+</script>
