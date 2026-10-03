@@ -80,7 +80,7 @@ load and the tool's output was lost — re-checked with the same proof in
 
 ## What is not done
 
-- **Moderato's next hardfork, T12, activates ≈ 2026-10-08 09:00 JST.** The answerer refuses on a schedule
+- **Moderato's next hardfork, T12, activates at 2026-10-08 14:00 UTC (23:00 JST)** (`1791468000`). The answerer refuses on a schedule
   it does not know, so it stops answering at T12 until the guest is checked against it.
 - The run harness treats a challenger that dies mid-proof as "did not revert"; it should report it as a
   harness failure.
