@@ -352,8 +352,8 @@ function JobView({ job, N, now }: { job: ChallengeJob; N: string; now: number })
         </span>
         <span className="sub">
           real elapsed time
-          {proveStart ? ` · proving ${elapsed((job.phaseStartedAt.submitting ?? end) - proveStart)}` : ""} · a local proof takes about 6–7
-          minutes
+          {proveStart ? ` · proving ${elapsed((job.phaseStartedAt.submitting ?? end) - proveStart)}` : ""} · a local proof takes several
+          minutes (6–9 measured on this machine)
         </span>
       </div>
       <div className={`bar${job.phase === "done" || job.phase === "failed" ? "" : " indeterminate"}`}>

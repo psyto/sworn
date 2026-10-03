@@ -31,12 +31,12 @@ its policy blocks this sender, so Tempo holds the 500 in its receive-policy guar
 The answer was wrong.
 
 9
-00:00:41,709 --> 00:00:44,788
-A challenger — here, the agent itself
+00:00:41,709 --> 00:00:50,523
+A challenger — here, the agent itself — re-runs that transfer with Tempo's own engine inside a zero-knowledge proof:
 
 10
-00:00:44,838 --> 00:00:54,172
-— re-runs that transfer with Tempo's own engine inside a zero-knowledge proof: about seven minutes, locally; sped up here.
+00:00:50,573 --> 00:00:54,172
+about eight minutes, locally — sped up here.
 
 11
 00:00:54,222 --> 00:01:00,950
