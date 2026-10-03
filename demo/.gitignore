@@ -1,0 +1,8 @@
+node_modules
+dist
+.forge-out
+.forge-cache
+.env
+.env.local
+*.tsbuildinfo
+.env.local.generated

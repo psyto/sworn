@@ -12,3 +12,5 @@ contracts/broadcast/
 .env.*
 *.pem
 *keypair*.json
+!.env.example
+!**/.env.example
