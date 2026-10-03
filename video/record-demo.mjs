@@ -223,10 +223,10 @@ async function editScene1(t) {
     const p = await browser.newPage();
     const pill = (html, pos) => `<html><head><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=block"></head><body style="margin:0;width:1280px;height:720px;background:transparent">
       <div style="position:absolute;${pos};left:0;right:0;text-align:center;font:600 22px/1.35 Inter,-apple-system,system-ui,sans-serif">${html}</div></body></html>`;
-    await p.setContent(pill(`<span style="display:inline-block;background:#111;color:#fff;padding:10px 20px;text-align:left;font-family:'Geist Mono',ui-monospace,Menlo,monospace;font-weight:500;font-size:17px;letter-spacing:.06em;text-transform:uppercase">${label}<br>
+    await p.setContent(pill(`<span style="display:inline-block;background:#2b3078;color:#fff;padding:10px 20px;text-align:left;font-family:'Geist Mono',ui-monospace,Menlo,monospace;font-weight:500;font-size:17px;letter-spacing:.06em;text-transform:uppercase">${label}<br>
       <span style="font-weight:400;font-size:12px;letter-spacing:.06em;color:#d4d4d4">the app's clock shows the real elapsed time · same run, not a recording</span></span>`, "top:120px;text-align:right!important;padding-right:110px"));
     await p.evaluate(() => document.fonts.ready); await p.screenshot({ path: tlPng, omitBackground: true });
-    await p.setContent(pill(`<span style="display:inline-block;background:#fff;border:1px solid #e5e5e5;color:#111;padding:6px 14px;font-family:'Geist Mono',ui-monospace,Menlo,monospace;font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:uppercase">
+    await p.setContent(pill(`<span style="display:inline-block;background:#fffdf8;border:1px solid #e2dccf;color:#1d1b2e;padding:6px 14px;font-family:'Geist Mono',ui-monospace,Menlo,monospace;font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:uppercase">
       Tempo Moderato testnet · unaudited · no users, revenue or mainnet · compensation is capped by the reserved bond · it covers the answer about one block, not a later payment</span>`, "bottom:10px"));
     await p.evaluate(() => document.fonts.ready); await p.screenshot({ path: discPng, omitBackground: true });
   } finally { await browser.close(); }
