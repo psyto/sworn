@@ -60,7 +60,7 @@ Tempo against a state witness. Then "40 / 40" and the Moderato slash transaction
 
 | claim | source |
 |---|---|
-| MPP lets agents and apps pay per request | mpp.dev: *"agents, apps, or humans pay as part of their request"* (read 2026-10-03) |
+| MPP lets agents and apps pay per request | mpp.dev (`/llms-full.txt`, read while recording 2026-10-03): *"MPP lets any client—agents, apps, or humans—pay for any service in the same HTTP request."* (the earlier wording "pay as part of their request" is no longer on the site) |
 | MPP leaves the refund to the server | mpp.dev/advanced/refunds: *"Refund decisions are up to your service."* |
 | succeeded ≠ paid; held by the guard | `tempo/crates/precompiles/src/tip20/mod.rs:1349`; Moderato tx `0x65bc…312a` (guard +500, receiver +0) |
 | seller locks part of its own bond behind exactly that answer, on Tempo | `Sworn.sol` `reserve()`; Moderato reserve `0x08f6…0350` |
@@ -70,7 +70,7 @@ Tempo against a state witness. Then "40 / 40" and the Moderato slash transaction
 | forty of forty | `out/ac2_run.log`: `AC-2: matched 40 / 40` |
 | already slashed a lying server on Moderato | tx `0xa7b9…ab9b`, client +500 (`deployments/moderato.json`) |
 | rethlab | github.com/psyto/rethlab, rethlab.fabrknt.com |
-| (not narrated — on screen only) ETHGlobal Tokyo, Uniswap Foundation 3rd place | ethglobal.com/showcase/reckn-47t6m |
+| (not narrated — on screen only) ETHGlobal Tokyo, Uniswap Foundation 3rd place — **with Reckn**, the founder's earlier project, not Sworn | ethglobal.com/showcase/reckn-47t6m, checked while recording |
 
 **Not said, on purpose:** any user, customer, partner or revenue (there are none); "mainnet";
 "production"; a market size.
