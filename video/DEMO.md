@@ -29,7 +29,7 @@ built-in "recorded run" fast-forward — it is a different run.]**
 > answers "yes, plus 500", and bonds 500 of its own money behind that answer, on-chain. The agent pays.
 > The transaction succeeds — but the receiver gets nothing: its policy blocks this sender, so Tempo holds
 > the 500 in its receive-policy guard. The answer was wrong. A challenger — here, the agent itself —
-> re-runs that transfer with Tempo's own engine inside a zero-knowledge proof: about eight minutes,
+> re-runs that transfer with Tempo's own engine inside a zero-knowledge proof: about nine minutes,
 > locally — sped up here. The contract verifies the proof, and the provider's bond pays the agent 500.
 
 ## Scene 2 — the honest server cannot be slashed · 0:60–1:20 (≈ 45 words)
@@ -81,7 +81,7 @@ three hunks. Then the explorer: the Sworn contract, the SP1 verifier v6.1.0.]**
 | configured to lie, and it says so | `server/` `mode: "dishonest-demo"`; the UI's persistent banner |
 | reserves 500 of its bond behind the answer | Moderato reserve `0x08f6…0350` (`deployments/moderato.json`) |
 | Tempo holds the money in its receive-policy guard | Moderato payment `0x65bc…312a`: guard +500, receiver +0 |
-| about eight minutes here, locally | live take demo-20261003T120907Z: proving 8 min 22 s (on screen); earlier Moderato run: 414 s (`out/e2e/moderato-20261003T064745Z.log`) |
+| about nine minutes, locally | live take demo-20261003T131156Z: proving 9 min 00 s (on screen); earlier take 8 min 22 s; Moderato run 414 s (`out/e2e/moderato-20261003T064745Z.log`) |
 | the bond pays the agent 500 | Moderato challenge `0xa7b9…ab9b`; client +500 read at block−1 / block |
 | honest answer's challenge rejected after verifying the proof | `out/e2e/moderato-20261003T064745Z-honestReverts-recheck.log`; `Sworn.sol:323–324` |
 | SDK's five checks; witness in seconds | `sdk/src/index.ts`; Moderato run `S-1.sdkVerify`, `S-1.witness` (8.7 s) |

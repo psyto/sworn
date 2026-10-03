@@ -42,7 +42,7 @@
     "honestAnswerChallenge": "rejected with AnswerCorrect after verifyProof (dry run, nothing sent) - out/e2e/moderato-20261003T064745Z-honestReverts-recheck.log",
     "verifiedIndependently": "receipt status 1, Slashed topic0 matches Sworn.sol event, client balance read at block-1 and block, 2026-10-03"
   },
-  "demoLiveTake": {
+  "demoLiveTakeFirst": {
     "take": "video/takes/demo-20261003T120907Z",
     "date": "2026-10-03",
     "honestReserve": "0x07d7656bc70012d011900259863f61c33e5b06478e5fd4aff13e497426049c45",
@@ -56,5 +56,21 @@
     "clientPathUSDDelta": "500000000",
     "provingRealTime": "8 min 22 s",
     "verifiedIndependently": "receipt status 1 and Slashed from Sworn; guard +500 / R' +0 read at payment block-1 and block; client +500 at challenge block-1 and block"
+  },
+  "demoLiveTake": {
+    "take": "video/takes/demo-20261003T131156Z",
+    "date": "2026-10-03",
+    "note": "re-take in Sworn's own palette; this is the take in demo.mp4",
+    "honestReserve": "0x5c06912ec295019d0f369a2ba2adcea9f878aa45c032b31c1d94a89606ec4643",
+    "dishonestReserve": "0xaa1daae5d552bcd7580a080a34f89bce5ddc4c2256f9cbb2bccaffe03464e45d",
+    "paymentDivertedToReceivePolicyGuard": "0x5d764201fc26e6e30a02864adb96dca7c282105ce12cc77af479d74dd8fbde62",
+    "paymentBlock": 37994663,
+    "guardDelta": "500000000",
+    "receiverDelta": "0",
+    "challengeTx": "0x69abea9b6d5a54150486701f2f1deddc0843dc488a07765553a11e7cd2ce5188",
+    "challengeBlock": 37995577,
+    "clientPathUSDDelta": "500000000",
+    "provingRealTime": "9 min 00 s",
+    "verifiedIndependently": "receipt status 1 and Slashed from Sworn; guard +500 / R' +0 at payment block-1/block; client +500 at challenge block-1/block"
   }
 }
