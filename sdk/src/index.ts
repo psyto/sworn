@@ -21,7 +21,7 @@ import {
 import { tempoModerato } from 'viem/chains'
 import { Mppx, tempo } from 'mppx/client'
 import {
-  CHAIN_ID, eip712Types, swornAbi, tip20Abi, toAnswer, toQuestion,
+  CHAIN_ID, DEFAULT_GAS_LIMIT, eip712Types, swornAbi, tip20Abi, toAnswer, toQuestion,
   type AnswerJson, type PreflightParams, type PreflightResponse, type QuestionJson,
 } from './abi.ts'
 
@@ -316,10 +316,10 @@ export async function preflight(serverUrl: string, params: PreflightParams & { c
   const self = opts.account.address
   if (params.client && getAddress(params.client) !== getAddress(self)) throw new Error(`params.client ${params.client} is not the paying account ${self}`)
   const ask: PreflightParams = { from: params.from, token: params.token, receiver: params.receiver, amount: String(params.amount),
-    memo: params.memo ?? null, feeToken: params.feeToken, ...(params.gasLimit ? { gasLimit: String(params.gasLimit) } : {}) }
+    memo: params.memo ?? null, feeToken: params.feeToken, gasLimit: String(params.gasLimit ?? DEFAULT_GAS_LIMIT) }
   // Refuse locally before paying for a question the guest could never answer (R3.3).
   checkR33({ chainId: String(CHAIN_ID), blockNumber: '0', blockHash: `0x${'00'.repeat(32)}`, from: ask.from, token: ask.token,
-    data: encodeTransfer(ask), feeToken: ask.feeToken, gasLimit: ask.gasLimit ?? '300000' })
+    data: encodeTransfer(ask), feeToken: ask.feeToken, gasLimit: ask.gasLimit! })
   const base = serverUrl.replace(/\/$/, '')
   const info = await fetch(base + '/info').then((r) => r.json()).catch(() => null)
   const f = opts.fetch ?? paidFetch(opts.account, opts.rpcUrl)

@@ -93,3 +93,18 @@ export const eip712Types = {
     { name: 'receiverAfter', type: 'uint256' },
   ],
 } as const
+
+/** ReceivePolicyGuard precompile (tempo/crates/contracts/src/precompiles/mod.rs): blocked inbound
+ *  transfers land here (spec 001 §2.2). */
+export const RECEIVE_POLICY_GUARD: Address = '0xb10c000000000000000000000000000000000000'
+
+/** gasLimit of every preflight Question unless the caller sets one. Measured on the Sworn local
+ *  chain (2026-10-03, fees on; sdk/test/measure-gas.ts and the e2e log):
+ *    ordinary AlphaUSD transfer                         292,042  (eth_estimateGas 293,511)
+ *    receive-policy-blocked, DIVERTED to ReceivePolicyGuard
+ *      guard already holds the token                    803,491  (eth_estimateGas 809,019)
+ *      FIRST diversion (guard balance slot is new)    1,053,491  (real receipt 1,042,691)
+ *  The guard writes a receipt and Tempo prices a cold SSTORE at ~254k. 3,000,000 = 2.85× the worst
+ *  measured case, 10× under Tempo's 30,000,000 per-tx cap (TEMPO_T1_TX_GAS_LIMIT_CAP).
+ *  The old 300,000 made the diverted case run OUT OF GAS (success=false, gasUsed=300,000). */
+export const DEFAULT_GAS_LIMIT = '3000000'

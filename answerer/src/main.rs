@@ -20,6 +20,11 @@ use sworn_answerer::*;
 use sworn_challenger::{rpc::*, *};
 use std::time::{Duration, Instant};
 
+/// Same value and measurements as sdk/src/abi.ts DEFAULT_GAS_LIMIT: the first transfer diverted to
+/// ReceivePolicyGuard used 1,053,491 gas fees-on on the local chain (803,491 once the guard holds the
+/// token); 300,000 ran out of gas. 3,000,000 = 2.85× headroom, under the 30,000,000 per-tx cap.
+const DEFAULT_GAS_LIMIT: u64 = 3_000_000;
+
 enum Fail {
     Refused(String),
     Error(String),
@@ -63,7 +68,7 @@ fn answer(lie: bool, t0: Instant) -> Result<Value, Fail> {
     let receiver: Address = jparse(&req, "receiver")?;
     let amount = ju256(&req, "amount")?;
     let fee_token: Address = jparse(&req, "feeToken")?;
-    let gas_limit = if req.get("gasLimit").is_some_and(|v| !v.is_null()) { ju64(&req, "gasLimit")? } else { 300_000 };
+    let gas_limit = if req.get("gasLimit").is_some_and(|v| !v.is_null()) { ju64(&req, "gasLimit")? } else { DEFAULT_GAS_LIMIT };
     let data = match req.get("memo").filter(|m| !m.is_null()) {
         Some(_) => transferWithMemoCall { to: receiver, amount, memo: jparse::<B256>(&req, "memo")? }.abi_encode(),
         None => transferCall { to: receiver, amount }.abi_encode(),
