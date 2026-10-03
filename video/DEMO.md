@@ -14,21 +14,23 @@ answerer refuses until the guest is re-checked. **Recording on Moderato needs `D
 
 ## Scene 1 — the wrong answer, end to end · 0:00–0:60 (≈ 115 words; the rest is silent proof on screen)
 
-**[Demo app, agent wallet. Step 2 card, red banner "demo: this server is configured to lie". Click
+**[Demo app, agent wallet. The role strip is visible first: Paying agent (asks) · Preflight provider
+(answers + bonds) · Challenger (proves). Step 2 card, red banner "demo: this server is configured to lie". Click
 "Buy preflight" → "As of block N: receiver +500.00 · reserved 500 ↗". Click "Send 500 to R′". The card shows the
-payment: ReceivePolicyGuard +500, R′ +0, read from chain. Click "Challenge" → progress "Re-running
+payment card: **"✓ transaction succeeded" first, then the large contrast "receiver +0" | "ReceivePolicyGuard
++500"**, read from chain. Click "Challenge" → progress "Re-running
 Tempo's own EVM inside a zero-knowledge proof, against block N's hash" → "Slashed · paid 500 to you ↗".
 **The challenge is recorded live in full; the edit speeds up THIS challenge's footage, labelled
 "time-lapse · ~7 min → 10 s", with the app's real elapsed clock visible.** Do not splice in the app's
 built-in "recorded run" fast-forward — it is a different run.]**
 
-> This is an agent about to pay 500 test dollars on Tempo's testnet. First it buys an answer: will the
-> receiver actually get it? This server — I configured it to lie, and it says so — answers "yes, plus
-> 500", and reserves 500 of its own bond behind that answer, on-chain. The agent pays. But the receiver's
-> policy blocks this sender, so Tempo holds the money in its receive-policy guard instead. The answer was
-> wrong. The agent challenges: Tempo's own execution engine re-runs that transfer inside a zero-knowledge
-> proof — about seven minutes, locally; sped up here. The contract verifies the proof, sees a different
-> answer, and the server's bond pays the agent 500.
+> This paying agent is about to send 500 test dollars on Tempo's testnet. First it asks a preflight
+> provider: will the receiver actually get it? This provider — I configured it to lie, and it says so —
+> answers "yes, plus 500", and bonds 500 of its own money behind that answer, on-chain. The agent pays.
+> The transaction succeeds — but the receiver gets nothing: its policy blocks this sender, so Tempo holds
+> the 500 in its receive-policy guard. The answer was wrong. A challenger — here, the agent itself —
+> re-runs that transfer with Tempo's own engine inside a zero-knowledge proof: about seven minutes,
+> locally; sped up here. The contract verifies the proof, and the provider's bond pays the agent 500.
 
 ## Scene 2 — the honest server cannot be slashed · 0:60–1:20 (≈ 45 words)
 
