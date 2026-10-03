@@ -405,7 +405,7 @@ other chains, prover networks, LLM judging, a custom MPP payment method.
 
 | | |
 |---|---|
-| F-1 | ask Colosseum (Discord): does Moderato-only qualify; are track winners chosen separately |
+| F-1 | ~~ask Colosseum~~ **Answered 2026-10-03 (founder, Colosseum Discord): mainnet is not required — a Moderato-only integration qualifies; Tempo track winners are selected separately from the general shortlist.** |
 | F-2 | ~~product name~~ **Sworn** (decided 2026-10-03). Repo `psyto/sworn` — creation and publication still the founder's call |
 | F-3 | keys for the two demo servers and the client; faucet PathUSD for bonds and fees |
 | F-4 | the previous CWF form is replaced |
