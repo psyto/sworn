@@ -14,3 +14,5 @@ contracts/broadcast/
 *keypair*.json
 !.env.example
 !**/.env.example
+node_modules/
+dist/

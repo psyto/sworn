@@ -1,0 +1,30 @@
+[package]
+name = "sworn-challenger"
+version = "0.1.0"
+edition = "2024"
+description = "Sworn witness capture (sworn-witness) and challenge (sworn-challenge) — spec 002 §1"
+
+[lib]
+name = "sworn_challenger"
+
+[[bin]]
+name = "sworn-witness"
+path = "src/bin/sworn-witness.rs"
+
+[[bin]]
+name = "sworn-challenge"
+path = "src/bin/sworn-challenge.rs"
+
+[dependencies]
+spike-core = { path = "../core" }
+revm.workspace = true
+alloy-primitives = { workspace = true, features = ["serde", "std"] }
+alloy-sol-types.workspace = true
+alloy-consensus = { version = "2.5.0", default-features = false, features = ["std", "k256"] }
+alloy-eips = { version = "2.5.0", default-features = false, features = ["std"] }
+alloy-signer = "2.5.0"
+alloy-signer-local = "2.5.0"
+serde = { workspace = true, features = ["std"] }
+serde_json = "1"
+bincode = "1.3"
+ureq = { version = "2", features = ["json"] }

@@ -1,0 +1,20 @@
+[package]
+name = "sworn-answerer"
+version = "0.1.0"
+edition = "2024"
+description = "Sworn answering code (spec 002 §1): R3.3 + live fork-schedule check + fees-on Answer"
+
+[lib]
+name = "sworn_answerer"
+
+[[bin]]
+name = "sworn-answer"
+path = "src/main.rs"
+
+[dependencies]
+spike-core = { path = "../core" }
+sworn-challenger = { path = "../challenger" }
+tempo-chainspec.workspace = true
+alloy-primitives = { workspace = true, features = ["serde", "std"] }
+alloy-sol-types.workspace = true
+serde_json = "1"

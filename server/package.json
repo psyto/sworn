@@ -1,0 +1,19 @@
+{
+  "name": "sworn-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Sworn answering server (spec 002 §1/§2): POST /preflight behind an MPP tempo charge",
+  "scripts": {
+    "start": "node src/server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "mppx": "^0.13.1",
+    "viem": "^2.57.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.1",
+    "typescript": "^5.9.3"
+  }
+}
