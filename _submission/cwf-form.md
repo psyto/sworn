@@ -52,7 +52,7 @@ So the question was whether tempo-revm could run inside a zkVM against real Mode
 ## How does your product use these chains? · ≤500
 
 ```
-Tempo (Moderato): the answer is about Tempo state; the bond, reservation and slashing live in a Tempo contract paid in PathUSD; the SP1 Groth16 proof is verified on Tempo; the block hash binding uses Tempo's own BLOCKHASH. Inside the proof runs Tempo's execution engine (tempo-revm) with TIP-20, fee-token and receive-policy precompiles, over state MPT-verified against Tempo's header. The answer is sold over MPP. [FILL AFTER MODERATO: contract address]
+Tempo (Moderato): the answer is about Tempo state; the bond, reservation and slashing live in a Tempo contract paid in PathUSD; the SP1 Groth16 proof is verified on Tempo; the block hash binding uses Tempo's own BLOCKHASH. Inside the proof runs Tempo's execution engine (tempo-revm) with TIP-20, fee-token and receive-policy precompiles, over state MPT-verified against Tempo's header. The answer is sold over MPP. Sworn: 0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6 on Moderato.
 ```
 
 ## What technologies are you using or integrating with? · ≤500
@@ -169,7 +169,8 @@ No users. Built and measured inside the window:
 - Fidelity: 40 of 40 real Moderato transactions (type-2, account-abstraction and legacy) replayed with Tempo's own engine match their receipts — status, gas, fee, logs, balances.
 - A receive-policy-blocked transfer: 5.97M cycles, Groth16 proof in 391 s on a laptop.
 - Sworn.sol: bond, reserve, challenge, release; no owner; 59 tests including a real proof that slashes a wrong answer and cannot slash the right one.
-- [FILL AFTER MODERATO: deployment and the live slash transaction]
+- Deployed on Moderato (Sworn 0xc54b7e52…02c6, SP1 verifier v6.1.0). [FILL AFTER MODERATO: the live slash transaction]
+- Full flow 30/30 on Tempo's own localnet: MPP charge, reserve, SDK checks, proof, slash.
 - Server, SDK and demo: [state at submission]
 ```
 

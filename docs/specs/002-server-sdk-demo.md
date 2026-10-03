@@ -1,8 +1,9 @@
 # 002 — Answering server, client SDK, challenger, demo
 
-> **Status: spec, round 0, 2026-10-03.** Builds on 001 (§R3–R3.8 normative). Moderato only. No key is
-> generated, stored or used by an agent: every key comes from an environment variable, and local
-> end-to-end tests use **anvil's own dev accounts** on `anvil --network tempo`.
+> **Status: spec, round 0, 2026-10-03 — implemented the same day (§6).** Builds on 001 (§R3–R3.8
+> normative). Moderato only. Keys come only from the environment: local runs use the localnet's
+> standard dev mnemonic; Moderato runs use the founder's Foundry keystores via `scripts/with-keys.sh`.
+> ~~Local end-to-end tests use anvil's dev accounts on `anvil --network tempo`~~ — superseded, see §6.
 
 ## 1. Components
 
@@ -66,3 +67,30 @@ Response `200`:
 
 If anvil cannot run Tempo's precompiles/receive policies, say so with the exact error and fall back to
 Tempo's localnet container (`tempo/docs/localnet.md`); do not mock TIP-20 for S-1/S-2.
+
+## 6. Result (2026-10-03)
+
+**S-1..S-4: 30 / 30** — `scripts/check-e2e.sh --log out/e2e/localnet-full-gate.log`, seen to fail with
+one check flipped.
+
+- **Why not anvil.** anvil 1.7.1 `--network tempo --fork-url` reports `stateRoot 0x00…00` on forked
+  blocks, has no `debug_getRawHeader`, returns the empty code hash for TIP-20 proofs, and its Tempo mode
+  reverts `setReceivePolicy` (`UnknownFunctionSelector`). None of that can carry a proof.
+- **What ran instead.** Tempo's own node, `ghcr.io/tempoxyz/tempo-localnet` at `61c979a` (the vendored
+  commit), `tempo node --dev` with a genesis built from Tempo's dev alloc plus Moderato's config
+  (`scripts/localnet.sh`, `scripts/localnet-genesis.py`): chain 42431, Moderato's fork schedule, real
+  receive policies, raw headers and proofs, `--rpc.eth-proof-window 250` to mirror the public RPC. The
+  real `SP1VerifierGroth16` is placed in genesis at the verifier address.
+- **S-1** MPP charge paid → reserve → SDK checks → own witness (332 ms). **S-2** dishonest answer → local
+  Groth16 (361 s) → `challenge` pays the client 500, status Slashed; a real proof of the honest answer →
+  `AnswerCorrect`. **S-3** 9 rejections. **S-4** live fork-schedule drift refused.
+- **Known issue, being fixed:** the demo questions used `gasLimit = 300000`; on Tempo the
+  receive-policy diversion writes cold storage (~254k gas each), so the "blocked" transfer **ran out of
+  gas** (`success=false`, `gasUsed=300000`) instead of being diverted to `ReceivePolicyGuard`. The
+  slash was still sound (the false claim was `receiverAfter`), but the demo's story requires the
+  diversion; the gas limit is being measured and the run repeated with a required check that the true
+  answer is a diversion.
+- **Deviations:** the honest-answer challenge is shown by simulation (a reverting tx is not sent); the
+  MPP price is charged even when the answerer refuses (the SDK refuses R3.3-violating questions before
+  paying).
+- **Moderato:** Sworn and the SP1 verifier are deployed (`deployments/moderato.json`). Not yet run there.

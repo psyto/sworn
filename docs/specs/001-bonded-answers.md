@@ -1,10 +1,16 @@
-# 001 r2 — Sworn: a reserved, provable answer about a TIP-20 payment at a named Tempo block
+# 001 r3 — Sworn: a reserved, provable answer about a TIP-20 payment at a named Tempo block
 
 > **Status: spec, round 2. Written 2026-10-03.** r1 was reviewed the same day:
 > [`../reviews/001-spec-r1.md`](../reviews/001-spec-r1.md) — `VERDICT: CHANGES`, 5 BLOCKER. The
 > response table is §0. **Product name: Sworn** (founder, 2026-10-03; was the working name "Bonded
 > answers"). Local directory `/Users/hiroyusai/src/sworn` (renamed from `tempo-spike` the same day; the
-> r1/r2 reviews cite the old path). GitHub repo not yet created (§9 F-2).
+> r1/r2 reviews cite the old path). Public at github.com/psyto/sworn.
+>
+> **Implementation status (2026-10-03):** §R3–R3.8 implemented. AC-1a 5/5, AC-2 40/40, AC-7
+> 5,970,394 cycles / Groth16 391 s; contract 59/59 with a real-proof slash; full flow 30/30 on Tempo's
+> localnet (spec 002). **Deployed on Moderato** (`deployments/moderato.json`); the on-chain slash there
+> (the 10-07 gate) is not yet done. Open: §Q5 p384 substitute still linked; demo gas limit too low for the
+> receive-policy diversion path (002 §6).
 >
 > **Founder ruling, 2026-10-03:** the Crypto World's Fair entry switches to this product (Tempo
 > track). **Moderato testnet only.** No key is generated, stored or used by an agent.
