@@ -1,0 +1,67 @@
+1
+00:00:00,290 --> 00:00:02,320
+This week I changed what I'm entering.
+
+2
+00:00:02,470 --> 00:00:04,780
+Confide stays where it was submitted first.
+
+3
+00:00:04,830 --> 00:00:08,860
+For this fair, I moved to the Tempo track,
+where my Reth and Revm work fits.
+
+4
+00:00:08,980 --> 00:00:10,490
+The product is Sworn.
+
+5
+00:00:10,880 --> 00:00:15,720
+On MPP, if a paid answer is wrong,
+a refund is the server's choice.
+
+6
+00:00:16,060 --> 00:00:20,640
+Sworn makes the server reserve
+its own bond behind each answer.
+
+7
+00:00:21,140 --> 00:00:23,460
+Here a server says the payment lands;
+
+8
+00:00:23,590 --> 00:00:26,160
+Tempo's receive policy diverts it.
+
+9
+00:00:26,610 --> 00:00:29,930
+A zero-knowledge proof of Tempo's own EVM catches it,
+
+10
+00:00:30,100 --> 00:00:32,020
+and the bond pays the agent —
+
+11
+00:00:32,280 --> 00:00:34,270
+this transaction, on Moderato.
+
+12
+00:00:34,660 --> 00:00:35,540
+What I learned:
+
+13
+00:00:35,590 --> 00:00:40,020
+our first full run said "blocked",
+but the transfer had simply run out of gas —
+
+14
+00:00:40,110 --> 00:00:43,730
+Tempo prices storage about eleven times Ethereum.
+
+15
+00:00:44,290 --> 00:00:45,190
+The test caught it.
+
+16
+00:00:45,800 --> 00:00:47,830
+Next: the demo and the submission.
