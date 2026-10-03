@@ -125,6 +125,7 @@ export function TopBar({ page }: { page: "wallet" | "phone" }) {
       <a className="brand" href="/">
         Sworn
       </a>
+      <span className="built-on">built on Tempo</span>
       <nav aria-label="Views">
         <a href="/" aria-current={page === "wallet" ? "page" : undefined}>
           Agent wallet
