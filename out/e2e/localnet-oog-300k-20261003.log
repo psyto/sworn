@@ -1,0 +1,87 @@
+    Finished `release` profile [optimized] target(s) in 0.55s
+etched SP1Verifier (6741 bytes) at 0x00000000000000000000000000000000deadbeef
+wrote /tmp/sworn-localnet/genesis.json chainId=42431 timestamp=1791006420 next_activation=1791468000
+localnet up on :8546 after 2s: {"jsonrpc":"2.0","id":1,"result":"0xa5bf"}
+OVERRIDE (drifted chain for S-4): {'t12Time': 1791471600}
+etched SP1Verifier (6741 bytes) at 0x00000000000000000000000000000000deadbeef
+wrote /tmp/sworn-localnet-drift/genesis.json chainId=42431 timestamp=1791006421 next_activation=1791471600
+localnet up on :8547 after 2s: {"jsonrpc":"2.0","id":1,"result":"0xa5bf"}
+CHECK SETUP.verifier PASS Sworn.SP1_VERIFIER=0x00000000000000000000000000000000DeaDBeef has 6741 bytes, VERIFIER_HASH=0x4388a21c687fdd5f218d7e3d13190cac4c5355818d3605fd5fb811df468ee696 (SP1 v6.1.0 Groth16)
+CHECK SETUP.vkey PASS Sworn.GUEST_VKEY=0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9
+CHECK SETUP.receivePolicy PASS validateReceivePolicy(AlphaUSD, client, R')=(false, reason 2=RECEIVE_POLICY)
+CHECK SETUP.bond PASS honest server free bond 10000000000
+  05:47:13 deployment: {"rpc":"http://127.0.0.1:8546","sworn":"0x5fbdb2315678afecb367f032d93f642f64180aa3","swornCodehash":"0xdcd2b0b88f514fc559c83bb35585f724be12e9ae9ce403ec2e35ae8ea79d4f9a","otherSworn":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","verifier":"0x00000000000000000000000000000000DeaDBeef","honestServer":"0x70997970C51812dc3A010C7d01b50e0d17dc79C8","dishonestServer":"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC","client":"0x90F79bf6EB2c4f870365E785982E1f101E93b906","challenger":"0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65","blockingReceiver":"0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc","plainReceiver":"0x976EA74026E726554dB657fA54763abd0C3a0aa9","nonReserveTx":"0x3c72c2f5d03bb7b3900025fa8516d16e090b14a7938496a15d6f3b0c42e9f64f"}
+[server honest] sworn server (honest) 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 on :8787, contract 0x5FbDB2315678afecb367f032d93F642f64180aa3
+[server dishonest-demo] sworn server (dishonest-demo) 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC on :8788, contract 0x5FbDB2315678afecb367f032d93F642f64180aa3
+  05:47:17 honest response: {"question":{"blockHash":"0x601f4fd4ee1f41cf6b160eccec6577f1c0787135dbf58bc85bdfe7dcfbe07765","blockNumber":"15","chainId":"42431","data":"0xa9059cbb000000000000000000000000976ea74026e726554db657fa54763abd0c3a0aa9000000000000000000000000000000000000000000000000000000001dcd6500","feeToken":"0x20c0000000000000000000000000000000000000","from":"0x90f79bf6eb2c4f870365e785982e1f101e93b906","gasLimit":"300000","token":"0x20c0000000000000000000000000000000000001"},"answer":{"feeCharged":"717","gasUsed":"292042","receiver":"0x976ea74026e726554db657fa54763abd0c3a0aa9","receiverAfter":"18446744074209551615","receiverBefore":"18446744073709551615","returnDataHash":"0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6","success":true},"digest":"0x31a0b81399478ba8e475294de2756ffeb53f42f1e6a161a20fab58838d764c42","reserveTx":"0xe8e9437d604c2167f702e64820edcffd294c10983c7c13d2e7223f72e051bcec","coverage":"500000000","mode":"honest"}
+  05:47:17 MPP payment: {"txHash":"0x64c0a7a56c2fef8f5e35d4314376204bfce29f4d0b1ab35a9e22efb180fd09da","amount":"0.01","currency":"0x20c0000000000000000000000000000000000000","receipt":{"fundingCurrency":"0x20c0000000000000000000000000000000000000","method":"tempo","status":"success","timestamp":"2026-10-03T05:47:15.583Z","reference":"0x64c0a7a56c2fef8f5e35d4314376204bfce29f4d0b1ab35a9e22efb180fd09da"}}
+CHECK S-1.mpp PASS MPP tempo charge paid, tx 0x64c0a7a56c2fef8f5e35d4314376204bfce29f4d0b1ab35a9e22efb180fd09da (0.01 of 0x20c0000000000000000000000000000000000000)
+CHECK S-1.reserved PASS reserveTx 0xe8e9437d604c2167f702e64820edcffd294c10983c7c13d2e7223f72e051bcec digest 0x31a0b81399478ba8e475294de2756ffeb53f42f1e6a161a20fab58838d764c42 coverage 500000000
+CHECK S-1.sdkVerify PASS §3.1–3.4 passed: question=asked, R3.3, Reserved by 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 for client=self, digest local==digestOf==event, GUEST_VKEY pinned, reservation Active
+CHECK S-1.witness PASS witness protected in 332 ms; answer matches own witness: true; receiver +500000000
+  05:47:17 S-1 total 2206 ms
+CHECK S-3.wrongClient PASS rejected with WRONG_CLIENT: Reserved.client 0x90F79bf6EB2c4f870365E785982E1f101E93b906 != self 0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+CHECK S-3.digestMismatch PASS rejected with DIGEST_MISMATCH: Reserved.digest 0x31a0b81399478ba8e475294de2756ffeb53f42f1e6a161a20fab58838d764c42 != digest(q, a) 0xfed57acbfae946d5e46cffaf6ea10159daf104af27
+CHECK S-3.otherContract PASS rejected with WRONG_CONTRACT: response names 0xe7f1725e7734ce288f8367e1bb143e90bb3f0512, expected 0x5fbdb2315678afecb367f032d93f642f64180aa3
+CHECK S-3.unknownVkey PASS rejected with VKEY: response guestVkey 0x2222222222222222222222222222222222222222222222222222222222222222 != contract 0x00727936ca684413200b13362eeb1c4a173a847466026678438ccc
+CHECK S-3.unknownVkeyPinned PASS rejected with VKEY: contract GUEST_VKEY 0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9 != pinned 0x3333333333333333333333333333333333333333333333333333333
+CHECK S-3.missingReservation PASS rejected with NO_RESERVATION: no Reserved event from 0x5fbdb2315678afecb367f032d93f642f64180aa3 in 0x3c72c2f5d03bb7b3900025fa8516d16e090b14a7938496a15d6f3b0c42e9f64f
+CHECK S-3.r33ReceiverIsSender PASS rejected with RULE_R33: receiver == from
+CHECK S-3.r33RefusedBeforePaying PASS rejected with RULE_R33: receiver == from
+CHECK S-3.r33NotTip20 PASS rejected with RULE_R33: token 0x1111111111111111111111111111111111111111 is not a TIP-20 address
+CHECK S-3.controlAccepts PASS unmodified response verifies
+  05:47:18 dishonest response: {"answer":{"feeCharged":"569","gasUsed":"300000","receiver":"0x9965507d1a55bcc2695c58ba16fb37d819b0a4dc","receiverAfter":"18446744074209549930","receiverBefore":"18446744073709549930","returnDataHash":"0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470","success":false},"lie":{"claimed":"18446744074209549930","field":"receiverAfter","note":"DISHONEST DEMO: this answer is deliberately wrong so that it can be challenged","true":"18446744073709549930"},"digest":"0xa642af5186b33e7ae8e275f98f64d24204501cc0289869a42c0c63e542efcd66","reserveTx":"0x866b79185d0765152c7e83b16851e5bdbaca2452a80fec679944dd4f4daa8407"}
+CHECK S-2.dishonestReserved PASS dishonest-demo reserve 0x866b79185d0765152c7e83b16851e5bdbaca2452a80fec679944dd4f4daa8407, claims receiverAfter 18446744074209549930
+CHECK S-2.witness PASS witness protected in 37 ms; true receiverAfter 18446744073709549930 vs claimed 18446744074209549930
+  05:47:18 phase proving
+  05:47:19 [sworn-challenge] fields that differ: ["receiverAfter"]
+  05:53:36 PROVE groth16 wall: 361.01016725s
+  05:53:36 proof pv match: true
+  05:53:36 verify ok (199.831208ms)
+  05:53:37 phase submitting
+  05:53:38 challenge result: {"challenger":"0x15d34aaf54267db7d7c367839aaf71a00a2c6a65","fieldsDiffering":["receiverAfter"],"gasUsed":"0x889f9","ok":true,"proof":"/tmp/sworn-e2e-1791006426425/dishonest.proof.json","proveWallSecs":378.33187175,"slashedEvent":true,"status":"0x1","trueAnswer":{"feeCharged":"569","gasUsed":"300000","receiver":"0x9965507d1a55bcc2695c58ba16fb37d819b0a4dc","receiverAfter":"18446744073709549930","receiverBefore":"18446744073709549930","returnDataHash":"0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470","success":false},"txHash":"0x9458156eb6e3e46cc8c68fe3ca3a0a85dded1c939cf39231fae4f320de18e376","vkey":"0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9"}
+CHECK S-2.challengePays PASS challenge tx 0x9458156eb6e3e46cc8c68fe3ca3a0a85dded1c939cf39231fae4f320de18e376 status 0x1, Slashed event true, client pathUSD +500000000 (coverage 500000000), proving 378 s, total 380 s, phases proving>submitting
+CHECK S-2.slashedState PASS reservation status 2 (2 = Slashed)
+  05:53:38 [sworn-challenge] fields that differ: []
+  05:59:39 PROVE groth16 wall: 345.8387665s
+  05:59:40 [sworn-challenge] dry-run (eth_call only, nothing sent): {"error":"AnswerCorrect","reverted":true}
+  05:59:40 honest challenge result: {"dryRun":{"error":"AnswerCorrect","reverted":true},"fieldsDiffering":[],"proof":"/tmp/sworn-e2e-1791006426425/honest.proof.json","proveWallSecs":362.159475875,"trueAnswer":{"feeCharged":"717","gasUsed":"292042","receiver":"0x976ea74026e726554db657fa54763abd0c3a0aa9","receiverAfter":"18446744074209551615","receiverBefore":"18446744073709551615","returnDataHash":"0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6","success":true},"vkey":"0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9"}
+CHECK S-2.honestReverts PASS honest challenge with a real Groth16 proof (362 s): simulation reverted AnswerCorrect; nothing sent
+CHECK S-4.matchingScheduleAnswers PASS same schedule as the guest → answers (checked 16 forks)
+CHECK S-4.liveDriftRefused PASS exit 3: fork schedule mismatch: T12: live activation 1791471600 != guest 1791468000
+E2E DONE failures=0 work=/tmp/sworn-e2e-1791006426425
+    Finished `release` profile [optimized] target(s) in 0.75s
+     Running unittests src/lib.rs (target/release/deps/sworn_answerer-feaf1182f07d6a74)
+     Running unittests src/main.rs (target/release/deps/sworn_answer-8405ef22e67f0133)
+   Doc-tests sworn_answerer
+ok   SETUP.verifier
+ok   SETUP.vkey
+ok   SETUP.receivePolicy
+ok   SETUP.bond
+ok   S-1.mpp
+ok   S-1.reserved
+ok   S-1.sdkVerify
+ok   S-1.witness
+ok   S-2.dishonestReserved
+ok   S-2.witness
+ok   S-2.challengePays
+ok   S-2.slashedState
+ok   S-2.honestReverts
+ok   S-3.wrongClient
+ok   S-3.digestMismatch
+ok   S-3.otherContract
+ok   S-3.unknownVkey
+ok   S-3.unknownVkeyPinned
+ok   S-3.missingReservation
+ok   S-3.r33ReceiverIsSender
+ok   S-3.r33RefusedBeforePaying
+ok   S-3.r33NotTip20
+ok   S-3.controlAccepts
+ok   S-4.matchingScheduleAnswers
+ok   S-4.liveDriftRefused
+ok   tests::s4_accepts_identical_schedule
+ok   tests::s4_refuses_changed_activation
+ok   tests::s4_refuses_extra_live_fork
+ok   tests::s4_refuses_missing_live_fork
+ok   tests::s4_refuses_activation_within_max_age
+required: 30  verdict: PASS

@@ -63,7 +63,7 @@ the deployed contract on the explorer]**
 | Confide "submitted first" elsewhere | Confide was submitted to Stocklana on 2026-09-15 (Confide STATUS.md) |
 | MPP refunds are the server's choice | mpp.dev/advanced/refunds: *"Refund decisions are up to your service"* |
 | payment lands in ReceivePolicyGuard instead | Tempo `tip20/mod.rs:1349`; **variant A only if the Moderato run's `S-2.trueAnswerIsDiversion` passed** |
-| runs end to end on Tempo's own node | `out/e2e/localnet-full-gate.log`, 30/30 |
+| runs end to end on Tempo's own node | `out/e2e/localnet-full-gate.log`, 32/32 |
 | deployed on Moderato | `deployments/moderato.json` |
 | 40 / 40 | `out/ac2_run.log` last line |
-| ran out of gas at the limit; ~11× | localnet log `gasUsed 300000`; cold SSTORE 254,347 vs 22,147 (founder's reckn spec 011 §2.2c) |
+| ran out of gas at the limit; ~11× | `out/e2e/localnet-oog-300k-20261003.log` `gasUsed 300000`; cold SSTORE 254,347 vs 22,147 (founder's reckn spec 011 §2.2c) |

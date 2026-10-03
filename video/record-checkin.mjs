@@ -148,20 +148,24 @@ log(`• ${ac2}`);
 const LOCAL = "out/e2e/localnet-full-gate.log";
 const local = read(LOCAL, "localnet log").split("\n");
 const jsonAfter = (line, label) => JSON.parse(line.slice(line.indexOf(label) + label.length));
+// The out-of-gas lesson lives in its own, frozen log: the run at the old 300,000 limit (commit a4f3ac9's
+// localnet-full-gate.log). The current full-gate log is the fixed run, which no longer contains it.
+const LESSON = "out/e2e/localnet-oog-300k-20261003.log";
+const lesson = read(LESSON, "out-of-gas lesson log").split("\n");
 // The out-of-gas lesson: the proven true answer used the whole limit and failed, and the limit
 // itself is the question's gasLimit. Both lines are quoted with their line numbers.
 // The demo's gas limit is read from the honest response (the dishonest response line does not echo the
 // question). Both questions used the same DEFAULT_GAS_LIMIT, and the check below requires the blocked
 // transfer's proven gasUsed to equal it exactly — so the label says 'both questions', not 'honest'.
-const iLimit = local.findIndex((l) => /(^|[^s])honest response: /.test(l) && /"gasLimit":"\d+"/.test(l));
-if (iLimit < 0) fail(`${LOCAL}: no honest response line carrying the question's gasLimit`);
-if (iLimit < 0) fail(`${LOCAL}: no honest response line with a gasLimit`);
-const limit = jsonAfter(local[iLimit], "honest response: ").question.gasLimit;
-const iOog = local.findIndex((l) => /challenge result: /.test(l) && !/honest challenge/.test(l));
-if (iOog < 0) fail(`${LOCAL}: no challenge result line`);
-const ta = jsonAfter(local[iOog], "challenge result: ").trueAnswer ?? fail(`${LOCAL}:${iOog + 1}: no trueAnswer`);
+const iLimit = lesson.findIndex((l) => /(^|[^s])honest response: /.test(l) && /"gasLimit":"\d+"/.test(l));
+if (iLimit < 0) fail(`${LESSON}: no honest response line carrying the question's gasLimit`);
+if (iLimit < 0) fail(`${LESSON}: no honest response line with a gasLimit`);
+const limit = jsonAfter(lesson[iLimit], "honest response: ").question.gasLimit;
+const iOog = lesson.findIndex((l) => /challenge result: /.test(l) && !/honest challenge/.test(l));
+if (iOog < 0) fail(`${LESSON}: no challenge result line`);
+const ta = jsonAfter(lesson[iOog], "challenge result: ").trueAnswer ?? fail(`${LESSON}:${iOog + 1}: no trueAnswer`);
 if (ta.gasUsed !== limit || ta.success !== false)
-  fail(`${LOCAL}:${iOog + 1}: proven answer gasUsed ${ta.gasUsed} success ${ta.success} — not an out-of-gas at the ${limit} limit`);
+  fail(`${LESSON}:${iOog + 1}: proven answer gasUsed ${ta.gasUsed} success ${ta.success} — not an out-of-gas at the ${limit} limit`);
 const gasLines = [
   `line ${iLimit + 1}  demo gas limit (both questions)   gasLimit ${limit}`,
   `line ${iOog + 1}  blocked transfer · proven answer  gasUsed  ${ta.gasUsed}   success ${ta.success}`,
