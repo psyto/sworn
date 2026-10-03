@@ -130,6 +130,29 @@ DB** that records every account/slot touched, then fetches `eth_getProof` for th
 - **Gate for 2026-10-07 (founder-approved fallback trigger):** a fees-on proof of a deliberately wrong
   `Answer` slashes a real reservation on Moderato. If not reached, the entry reverts to the previous one.
 
+### R3.7 Amendments from the r3 review ([`../reviews/001-spec-r3.md`](../reviews/001-spec-r3.md))
+
+The review confirmed R3.2 executes as assumed (`fee_payer: None` → caller pays; explicit `fee_token`
+wins; protocol nonce = account nonce without an AA env; `Simulation` does not change validation or fee
+collection). Its findings are closed as follows — **these override R3.1–R3.6 where they differ**:
+
+- **(BLOCKER) reorg between simulation and `reserve`** → `Question` gains **`bytes32 blockHash`**
+  (after `blockNumber`). The guest asserts `keccak(rawHeader) == q.blockHash`; `reserve` requires
+  `blockhash(q.blockNumber) == q.blockHash` and stores it. An answer is about one block, by hash.
+  `publicValues` keeps its separate `blockHash` field (now equal to `q.blockHash`; the contract checks both).
+- **(MAJOR) `receiverBefore` must not perturb gas** → `receiverBefore` and `receiverAfter` are **raw
+  storage lookups** (witness DB before; committed post-state after), never EVM calls inside the
+  transaction's journal.
+- **(MAJOR) AC-1 cannot see `receiverAfter`** → AC-1 additionally compares the guest's post-state
+  against the RPC's `debug_traceCall` with `prestateTracer` in **`diffMode`** on the same R3.2 fields
+  (where the RPC accepts `feeToken`); where it cannot, the case is reported as unvalidated, not passed.
+- **(MAJOR) AC-2 pre-execution changes** → the replay applies Tempo's block-level pre-execution changes
+  (`apply_pre_execution_changes` and any activation-boundary deployments) with **B's** block
+  environment before tx 0; blocks at a hardfork activation are excluded and listed.
+- **(MAJOR) live hardfork drift** → the server reads Tempo's fork-schedule RPC
+  (`tempo/crates/node/src/rpc/fork_schedule.rs`) and **refuses to reserve** if it differs from the
+  guest's schedule, or if an activation falls within `MAX_AGE` blocks of N.
+
 ---
 
 ## 0. r1 → r2: what changed and why

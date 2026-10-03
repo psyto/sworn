@@ -1,0 +1,27 @@
+{
+ "ethersVersion": "6.13.7",
+ "domainSeparator": "0xb4d11d2956ae4972bdea51a855935d88a1cb8c7318bdeb5f9d9b47d0c4f0751d",
+ "questionHash": "0x23ce92c58caed27416865d773338752c793b9d41601bbe31ffe6df0d47253ac0",
+ "answerHash": "0xb6585b0cf764195f822d96310dbb89a30c7be3ef4fb12d11e81adf29ad04d484",
+ "encodeType": "SwornAnswer(Question question,Answer answer)Answer(bool success,bytes32 returnDataHash,uint64 gasUsed,uint256 feeCharged,address receiver,uint256 receiverBefore,uint256 receiverAfter)Question(uint64 chainId,uint64 blockNumber,bytes32 blockHash,address from,address token,bytes data,address feeToken,uint64 gasLimit)",
+ "digest": "0xeb63a2ddddd9bd16cc00817ca7f9c771921bc18bed5a8ecf1d2f50c48877bf48",
+ "q": {
+  "chainId": 42431,
+  "blockNumber": 1234567,
+  "blockHash": "0xabababababababababababababababababababababababababababababababab",
+  "from": "0x1111111111111111111111111111111111111111",
+  "token": "0x20C0000000000000000000000000000000000001",
+  "data": "0xa9059cbb0000000000000000000000002222222222222222222222222222222222222222000000000000000000000000000000000000000000000000000000001dcd6500",
+  "feeToken": "0x20C0000000000000000000000000000000000000",
+  "gasLimit": 300000
+ },
+ "a": {
+  "success": true,
+  "returnDataHash": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6",
+  "gasUsed": 51234,
+  "feeCharged": 25617,
+  "receiver": "0x2222222222222222222222222222222222222222",
+  "receiverBefore": 1000000,
+  "receiverAfter": 501000000
+ }
+}

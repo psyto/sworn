@@ -1,0 +1,429 @@
+// SPDX-License-Identifier: Apache-2.0
+pragma solidity ^0.8.20;
+
+import {ISP1Verifier} from "./vendor/sp1-contracts/ISP1Verifier.sol";
+
+/// @title Sworn — a reserved, provable answer about a TIP-20 payment at a named Tempo block.
+/// @notice Spec: docs/specs/001-bonded-answers.md, §R3 (normative; §R3.7 overrides R3.1–R3.6) and
+///         the parts of §3.3 R3 keeps. A server bonds a TIP-20, then `reserve`s part of its bond
+///         behind one (Question, Answer) pair. If a Groth16 proof of the guest shows the true answer
+///         at that block differs in any field, anyone may `challenge` and the reserved coverage goes
+///         to the client. Otherwise anyone may `release` it after CHALLENGE_PERIOD.
+///
+///         Every parameter is a constant in this file. There is no constructor, no setter and no
+///         privileged role: a new guest, verifier or token means a new contract.
+///         `scripts/no-owner.sh` enforces that at build time.
+contract Sworn {
+    // ------------------------------------------------------------------------------------------
+    // Interface shared with the Rust guest (spec R3.1 as amended by R3.7). Field order is ABI.
+    // ------------------------------------------------------------------------------------------
+
+    struct Question {
+        uint64 chainId; // must be 42431 (Moderato)
+        uint64 blockNumber; // N
+        bytes32 blockHash; // hash of N (R3.7); guest asserts keccak(rawHeader) == blockHash
+        address from;
+        address token; // a TIP-20 precompile
+        bytes data; // transfer(address,uint256) or transferWithMemo(address,uint256,bytes32)
+        address feeToken;
+        uint64 gasLimit;
+    }
+
+    struct Answer {
+        bool success;
+        bytes32 returnDataHash; // keccak256(returnData)
+        uint64 gasUsed;
+        uint256 feeCharged; // in feeToken units
+        address receiver; // decoded from `data` by the guest
+        uint256 receiverBefore; // balanceOf(receiver) in `token`, state after N
+        uint256 receiverAfter; // same, after the transaction
+    }
+
+    // publicValues = abi.encode(bytes32 GUEST_VERSION, bytes32 blockHash, Question q, Answer a)
+
+    // ------------------------------------------------------------------------------------------
+    // Constants — no constructor arguments, no setters (spec §3.3 / R3.4).
+    // ------------------------------------------------------------------------------------------
+
+    /// @notice The single bond token: PathUSD on Tempo (a TIP-20 precompile; reverts on failure).
+    address public constant BOND_TOKEN = 0x20C0000000000000000000000000000000000000;
+
+    /// @notice SP1 Groth16 verifier, sp1-contracts v6.1.0 (`SP1VerifierGroth16V6`,
+    ///         VERIFIER_HASH 0x4388a21c687fdd5f218d7e3d13190cac4c5355818d3605fd5fb811df468ee696).
+    /// @dev    PLACEHOLDER — not deployed yet. The founder deploys
+    ///         src/vendor/sp1-contracts/v6.1.0/SP1VerifierGroth16.sol on Moderato and writes its
+    ///         address here. script/Deploy.s.sol refuses to deploy Sworn while this has no code or
+    ///         the wrong VERIFIER_HASH.
+    address public constant SP1_VERIFIER = 0x00000000000000000000000000000000DeaDBeef;
+
+    /// @notice SP1 verification key of the Sworn guest program.
+    /// @dev    PLACEHOLDER — to be filled with the vkey the Rust half (program/) produces.
+    ///         Deploy.s.sol refuses to deploy while it is zero.
+    bytes32 public constant GUEST_VKEY = bytes32(0);
+
+    /// @notice Version tag the guest commits as the first public value.
+    /// @dev    = keccak256("sworn-guest-v1") = core/src/lib.rs GUEST_VERSION (Rust half, 2026-10-03).
+    bytes32 public constant GUEST_VERSION = 0x51e24160ef5467ba88166fd247c9bfb07b88e76ee08e430346c1353fda5e233d;
+
+    /// @notice Moderato. A question about any other chain is aborted by the guest (R3.3), so a
+    ///         reservation for one could never be challenged; `reserve` refuses it.
+    uint64 public constant CHAIN_ID = 42431;
+
+    /// @notice How long a reservation stays challengeable.
+    uint256 public constant CHALLENGE_PERIOD = 24 hours;
+
+    /// @notice Delay between `beginUnbond` and `withdraw`; strictly greater than CHALLENGE_PERIOD.
+    uint256 public constant UNBOND_DELAY = CHALLENGE_PERIOD + 1 hours;
+
+    /// @notice A reservation must name a block at most this many blocks old (R3.4/R3.5).
+    uint256 public constant MAX_AGE = 32;
+
+    // ------------------------------------------------------------------------------------------
+    // EIP-712 (R3.4): domain {name:"Sworn", version:"1", chainId, verifyingContract}.
+    // Primary type `SwornAnswer(Question question,Answer answer)`; referenced types are appended in
+    // alphabetical order (Answer, then Question) as EIP-712 requires. `bytes data` is hashed.
+    // ------------------------------------------------------------------------------------------
+
+    bytes32 public constant DOMAIN_TYPEHASH =
+        keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)");
+
+    bytes32 public constant QUESTION_TYPEHASH = keccak256(
+        "Question(uint64 chainId,uint64 blockNumber,bytes32 blockHash,address from,address token,bytes data,address feeToken,uint64 gasLimit)"
+    );
+
+    bytes32 public constant ANSWER_TYPEHASH = keccak256(
+        "Answer(bool success,bytes32 returnDataHash,uint64 gasUsed,uint256 feeCharged,address receiver,uint256 receiverBefore,uint256 receiverAfter)"
+    );
+
+    bytes32 public constant SWORN_ANSWER_TYPEHASH = keccak256(
+        "SwornAnswer(Question question,Answer answer)"
+        "Answer(bool success,bytes32 returnDataHash,uint64 gasUsed,uint256 feeCharged,address receiver,uint256 receiverBefore,uint256 receiverAfter)"
+        "Question(uint64 chainId,uint64 blockNumber,bytes32 blockHash,address from,address token,bytes data,address feeToken,uint64 gasLimit)"
+    );
+
+    // ------------------------------------------------------------------------------------------
+    // State
+    // ------------------------------------------------------------------------------------------
+
+    enum Status {
+        None,
+        Active,
+        Slashed,
+        Released
+    }
+
+    struct Reservation {
+        address client;
+        uint64 expiry; // last timestamp at which `challenge` is accepted
+        Status status;
+        uint256 coverage;
+        // No stored block hash: q.blockHash is inside the digest (the key) and was checked against
+        // blockhash(q.blockNumber) at reserve time, so the key already binds the canonical hash.
+    }
+
+    struct Server {
+        uint128 free; // bonded and not reserved
+        uint128 locked; // sum of Active reservations' coverage
+        uint64 unbondStart; // timestamp of beginUnbond; 0 = not unbonding
+    }
+
+    mapping(address server => Server) public servers;
+    /// @dev key = keccak256(abi.encode(server, digest)) — per server (R3.4).
+    mapping(bytes32 key => Reservation) public reservations;
+
+    // ------------------------------------------------------------------------------------------
+    // Events / errors
+    // ------------------------------------------------------------------------------------------
+
+    event Bonded(address indexed server, address indexed funder, uint256 amount);
+    event Reserved(
+        address indexed server,
+        bytes32 indexed digest,
+        address indexed client,
+        uint256 coverage,
+        uint64 blockNumber,
+        bytes32 blockHash,
+        uint64 expiry
+    );
+    event Slashed(address indexed server, bytes32 indexed digest, address indexed client, uint256 coverage);
+    event Released(address indexed server, bytes32 indexed digest, uint256 coverage);
+    event UnbondBegun(address indexed server, uint64 withdrawableAt);
+    event Withdrawn(address indexed server, uint256 amount);
+
+    error ZeroAmount();
+    error ZeroClient();
+    error AmountTooLarge();
+    error NoBond();
+    error Unbonding();
+    error InsufficientFree();
+    error WrongChain();
+    error BlockOutOfWindow();
+    error BlockHashMismatch();
+    error DigestUsed();
+    error NoReservation();
+    error Expired();
+    error NotExpired();
+    error WrongGuestVersion();
+    error PublicBlockHashMismatch();
+    error QuestionMismatch();
+    error AnswerCorrect();
+    error AlreadyUnbonding();
+    error NotUnbonding();
+    error UnbondDelayNotOver();
+    error NothingToWithdraw();
+    error TokenTransferFailed();
+    error NotTip20Token();
+    error BadCalldata();
+    error VirtualReceiver();
+    error ReceiverIsSender();
+
+    // ------------------------------------------------------------------------------------------
+    // Bond
+    // ------------------------------------------------------------------------------------------
+
+    /// @notice Anyone funds `server`'s bond with `amount` of BOND_TOKEN (requires prior approve).
+    function bond(address server, uint256 amount) external {
+        if (amount == 0) revert ZeroAmount();
+        Server storage s = servers[server];
+        uint256 newFree = uint256(s.free) + amount;
+        if (newFree + s.locked > type(uint128).max) revert AmountTooLarge();
+        s.free = uint128(newFree);
+        emit Bonded(server, msg.sender, amount);
+        _call(abi.encodeWithSelector(0x23b872dd, msg.sender, address(this), amount)); // transferFrom
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // Reserve — msg.sender is the server; its transaction is its signature.
+    // ------------------------------------------------------------------------------------------
+
+    function reserve(Question calldata q, Answer calldata a, address client, uint256 coverage)
+        external
+        returns (bytes32 digest)
+    {
+        if (client == address(0)) revert ZeroClient();
+        if (coverage == 0) revert ZeroAmount();
+        Server storage s = servers[msg.sender];
+        if (s.free == 0 && s.locked == 0) revert NoBond();
+        if (s.unbondStart != 0) revert Unbonding();
+        if (s.free < coverage) revert InsufficientFree();
+        if (q.chainId != CHAIN_ID) revert WrongChain();
+        // block.number - MAX_AGE <= q.blockNumber < block.number, written without underflow.
+        if (q.blockNumber >= block.number || uint256(q.blockNumber) + MAX_AGE < block.number) {
+            revert BlockOutOfWindow();
+        }
+        bytes32 bh = blockhash(q.blockNumber);
+        if (bh == bytes32(0) || bh != q.blockHash) revert BlockHashMismatch();
+        _checkGuestWouldAnswer(q);
+
+        digest = digestOf(q, a);
+        bytes32 key = keccak256(abi.encode(msg.sender, digest));
+        Reservation storage r = reservations[key];
+        if (r.status != Status.None) revert DigestUsed();
+
+        uint64 expiry = uint64(block.timestamp + CHALLENGE_PERIOD);
+        r.client = client;
+        r.expiry = expiry;
+        r.status = Status.Active;
+        r.coverage = coverage;
+        s.free -= uint128(coverage);
+        s.locked += uint128(coverage);
+
+        emit Reserved(msg.sender, digest, client, coverage, q.blockNumber, bh, expiry);
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // Challenge — permissionless.
+    // ------------------------------------------------------------------------------------------
+
+    function challenge(
+        address server,
+        Question calldata q,
+        Answer calldata a,
+        bytes calldata publicValues,
+        bytes calldata proof
+    ) external {
+        bytes32 digest = digestOf(q, a);
+        Reservation storage r = reservations[keccak256(abi.encode(server, digest))];
+        // Checks
+        if (r.status != Status.Active) revert NoReservation(); // none, slashed or released
+        if (block.timestamp > r.expiry) revert Expired();
+
+        _checkProof(q, a, publicValues, proof);
+
+        // Effects
+        address client = r.client;
+        uint256 coverage = r.coverage;
+        r.status = Status.Slashed;
+        servers[server].locked -= uint128(coverage);
+        emit Slashed(server, digest, client, coverage);
+
+        // Interaction
+        _call(abi.encodeWithSelector(0xa9059cbb, client, coverage)); // transfer
+    }
+
+    /// @dev Every guest abort rule of §R3.3 that is decidable from the Question alone, mirrored
+    ///      from core/src/lib.rs `check_question` and tempo crates/primitives/src/address.rs. If the
+    ///      guest aborts, no proof exists and a wrong answer could never be challenged — so a
+    ///      server must not be able to reserve such a question.
+    ///        - chainId == 42431                                   (checked in `reserve`)
+    ///        - token has the 12-byte TIP-20 prefix 0x20C000000000000000000000 (`is_tip20`,
+    ///          prefix only, exactly as Tempo; whether the token exists is state — see below)
+    ///        - data is exactly the canonical ABI encoding of transfer(address,uint256) (68 bytes)
+    ///          or transferWithMemo(address,uint256,bytes32) (100 bytes); the guest re-encodes and
+    ///          compares, so: exact length, selector, and the address word's upper 12 bytes zero
+    ///        - receiver is not virtual (TIP-1022: bytes [4:14] == 0xFD × 10, `is_virtual`)
+    ///        - receiver != from
+    ///      NOT aborts, so NOT refused here: receiver == 0 or a TIP-20-prefix receiver. Tempo's
+    ///      TIP-20 rejects them with InvalidRecipient (tip20/mod.rs `validate`); the guest proves
+    ///      that outcome (success = false), so such a reservation is fully challengeable.
+    ///
+    ///      Abort rules NOT decidable on-chain, and why they are no escape for a server:
+    ///        - keccak(rawHeader) != q.blockHash / header.number != q.blockNumber: q.blockHash is
+    ///          checked == blockhash(q.blockNumber) here, so the canonical header always matches.
+    ///        - missing account/slot in the witness, MPT proof failure: these are about the
+    ///          witness, not the question. The canonical state after N always has a complete,
+    ///          valid proof set; the client SDK fetches it itself the moment it sees `Reserved`
+    ///          (R3.5), within MAX_AGE + the RPC's ~250-block proof window. A server cannot make
+    ///          the witness incomplete.
+    ///        - a BLOCKHASH read during execution (core/src/lib.rs aborts on any block_hash DB
+    ///          read): the call target is a TIP-20 precompile, not EVM bytecode, and in the pinned
+    ///          tempo source only zone_factory/* reads block hashes — not tip20/, tip403, or the
+    ///          fee manager — so no state can steer this question into one. (Read from source at
+    ///          the vendored commit; not exercised by a test here.)
+    ///        - state-dependent outcomes (token not created, policy rejection, insufficient
+    ///          balance, fee failure) are not aborts: the guest proves the true outcome.
+    ///      The server's answering code and the client SDK apply the same rules (R3.3).
+    function _checkGuestWouldAnswer(Question calldata q) private pure {
+        if (bytes12(bytes20(q.token)) != bytes12(0x20C000000000000000000000)) revert NotTip20Token();
+        bytes calldata d = q.data;
+        bytes4 sel = d.length >= 4 ? bytes4(d[:4]) : bytes4(0);
+        if (!((sel == 0xa9059cbb && d.length == 68) || (sel == 0x95777d59 && d.length == 100))) {
+            revert BadCalldata();
+        }
+        uint256 word = uint256(bytes32(d[4:36]));
+        if (word >> 160 != 0) revert BadCalldata();
+        address receiver = address(uint160(word));
+        if (bytes10(bytes20(receiver) << 32) == bytes10(0xFDFDFDFDFDFDFDFDFDFD)) revert VirtualReceiver();
+        if (receiver == q.from) revert ReceiverIsSender();
+    }
+
+    /// @dev Every check `challenge` makes on the proof; split out only to keep the stack shallow.
+    function _checkProof(
+        Question calldata q,
+        Answer calldata a,
+        bytes calldata publicValues,
+        bytes calldata proof
+    ) private view {
+        (bytes32 version, bytes32 pvBlockHash, Question memory pq, Answer memory pa) =
+            abi.decode(publicValues, (bytes32, bytes32, Question, Answer));
+        if (version != GUEST_VERSION) revert WrongGuestVersion();
+        // q.blockHash is the canonical hash checked at reserve time (it is part of the key).
+        if (pvBlockHash != q.blockHash) revert PublicBlockHashMismatch();
+        if (keccak256(abi.encode(pq)) != keccak256(abi.encode(q))) revert QuestionMismatch();
+        ISP1Verifier(SP1_VERIFIER).verifyProof(GUEST_VKEY, publicValues, proof); // reverts if invalid
+        if (keccak256(abi.encode(pa)) == keccak256(abi.encode(a))) revert AnswerCorrect();
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // Release — permissionless after expiry.
+    // ------------------------------------------------------------------------------------------
+
+    function release(address server, bytes32 digest) external {
+        Reservation storage r = reservations[keccak256(abi.encode(server, digest))];
+        if (r.status != Status.Active) revert NoReservation();
+        if (block.timestamp <= r.expiry) revert NotExpired();
+        uint256 coverage = r.coverage;
+        r.status = Status.Released;
+        Server storage s = servers[server];
+        s.locked -= uint128(coverage);
+        s.free += uint128(coverage);
+        emit Released(server, digest, coverage);
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // Unbond / withdraw
+    // ------------------------------------------------------------------------------------------
+
+    /// @notice Permanently refuses new reservations for msg.sender and starts UNBOND_DELAY.
+    function beginUnbond() external {
+        Server storage s = servers[msg.sender];
+        if (s.free == 0 && s.locked == 0) revert NoBond();
+        if (s.unbondStart != 0) revert AlreadyUnbonding();
+        s.unbondStart = uint64(block.timestamp);
+        emit UnbondBegun(msg.sender, uint64(block.timestamp + UNBOND_DELAY));
+    }
+
+    /// @notice Sends msg.sender all of its FREE bond, only after UNBOND_DELAY. Reserved coverage
+    ///         stays until it is released (then withdraw again) or slashed.
+    function withdraw() external {
+        Server storage s = servers[msg.sender];
+        if (s.unbondStart == 0) revert NotUnbonding();
+        if (block.timestamp < uint256(s.unbondStart) + UNBOND_DELAY) revert UnbondDelayNotOver();
+        uint256 amount = s.free;
+        if (amount == 0) revert NothingToWithdraw();
+        s.free = 0;
+        emit Withdrawn(msg.sender, amount);
+        _call(abi.encodeWithSelector(0xa9059cbb, msg.sender, amount)); // transfer
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // Views
+    // ------------------------------------------------------------------------------------------
+
+    function domainSeparator() public view returns (bytes32) {
+        return keccak256(
+            abi.encode(DOMAIN_TYPEHASH, keccak256("Sworn"), keccak256("1"), block.chainid, address(this))
+        );
+    }
+
+    function hashQuestion(Question calldata q) public pure returns (bytes32) {
+        return keccak256(
+            abi.encode(
+                QUESTION_TYPEHASH,
+                q.chainId,
+                q.blockNumber,
+                q.blockHash,
+                q.from,
+                q.token,
+                keccak256(q.data),
+                q.feeToken,
+                q.gasLimit
+            )
+        );
+    }
+
+    function hashAnswer(Answer calldata a) public pure returns (bytes32) {
+        return keccak256(
+            abi.encode(
+                ANSWER_TYPEHASH,
+                a.success,
+                a.returnDataHash,
+                a.gasUsed,
+                a.feeCharged,
+                a.receiver,
+                a.receiverBefore,
+                a.receiverAfter
+            )
+        );
+    }
+
+    /// @notice The EIP-712 digest a reservation is keyed by (with the server).
+    function digestOf(Question calldata q, Answer calldata a) public view returns (bytes32) {
+        bytes32 structHash = keccak256(abi.encode(SWORN_ANSWER_TYPEHASH, hashQuestion(q), hashAnswer(a)));
+        return keccak256(abi.encodePacked("\x19\x01", domainSeparator(), structHash));
+    }
+
+    function reservationKey(address server, bytes32 digest) external pure returns (bytes32) {
+        return keccak256(abi.encode(server, digest));
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // Token call. PathUSD reverts on failure; we still require a returned `true` so that a
+    // token that returns false — or an address with no code (empty return data) — cannot pass.
+    // ------------------------------------------------------------------------------------------
+
+    function _call(bytes memory callData) private {
+        (bool ok, bytes memory ret) = BOND_TOKEN.call(callData);
+        if (!ok || ret.length != 32 || abi.decode(ret, (uint256)) != 1) revert TokenTransferFailed();
+    }
+}
