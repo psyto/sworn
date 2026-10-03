@@ -1,0 +1,29 @@
+{
+  "chainId": 42431,
+  "network": "Tempo Moderato testnet",
+  "recordedFrom": "receipts and eth_call reads on https://rpc.moderato.tempo.xyz, 2026-10-03",
+  "SP1VerifierGroth16": {
+    "address": "0x2c77329747b7C8B293514A6129404D4cefDd9B18",
+    "tx": "0x9bb70ee56a7b2e615d68405fab740326b7fafd3dc925d1bd256552938cadffb0",
+    "codehash": "0xb559d9a96182f3139ee536233c50f0b941658adef1ce298559f9f7b98a2d294e",
+    "VERSION": "v6.1.0",
+    "VERIFIER_HASH": "0x4388a21c687fdd5f218d7e3d13190cac4c5355818d3605fd5fb811df468ee696"
+  },
+  "Sworn": {
+    "address": "0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6",
+    "tx": "0x9b8afab9a20a780023737b2511bb75f09b9ddc92c4625cd3e6bf384979910f33",
+    "block": 37952107,
+    "gasUsed": 9205205,
+    "codehash": "0x9082880d4e3d089b7513f642f5b865a8ba28265108cf98e6bc9ca467d7205563",
+    "GUEST_VKEY": "0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9",
+    "GUEST_VERSION": "0x51e24160ef5467ba88166fd247c9bfb07b88e76ee08e430346c1353fda5e233d",
+    "BOND_TOKEN": "0x20C0000000000000000000000000000000000000",
+    "MAX_AGE": 32
+  },
+  "roles": {
+    "deployer_and_challenger": "0x05B4E2B72c173C47213fA3EaC33a9bcb1af25901",
+    "honest_server": "0xa5a4889b1693CBFDC6d0b701a128F5bBEEcb84f5",
+    "dishonest_demo_server": "0xD49c5ef3aD21b42f664ba65a7694D56C47535261",
+    "client": "0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F"
+  }
+}

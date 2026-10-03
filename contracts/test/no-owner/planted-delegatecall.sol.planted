@@ -54,7 +54,7 @@ contract Sworn {
     ///         src/vendor/sp1-contracts/v6.1.0/SP1VerifierGroth16.sol on Moderato and writes its
     ///         address here. script/Deploy.s.sol refuses to deploy Sworn while this has no code or
     ///         the wrong VERIFIER_HASH.
-    address public constant SP1_VERIFIER = 0x00000000000000000000000000000000DeaDBeef;
+    address public constant SP1_VERIFIER = 0x2c77329747b7C8B293514A6129404D4cefDd9B18;
 
     /// @notice SP1 verification key of the Sworn guest program.
     /// @dev    PLACEHOLDER — to be filled with the vkey the Rust half (program/) produces.

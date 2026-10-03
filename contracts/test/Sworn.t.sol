@@ -32,10 +32,11 @@ contract SwornTest is Test {
 
         vm.etch(address(0x20C0000000000000000000000000000000000000), type(MockTIP20).runtimeCode);
         token = MockTIP20(0x20C0000000000000000000000000000000000000);
-        vm.etch(address(0x00000000000000000000000000000000DeaDBeef), type(MockSP1Verifier).runtimeCode);
-        verifier = MockSP1Verifier(0x00000000000000000000000000000000DeaDBeef);
-
         sworn = new Sworn();
+        // Unit tests use a mock verifier etched at whatever address the constant names (the real,
+        // deployed SP1VerifierGroth16 v6.1.0 on Moderato); RealGroth16.t.sol uses the real verifier.
+        vm.etch(sworn.SP1_VERIFIER(), type(MockSP1Verifier).runtimeCode);
+        verifier = MockSP1Verifier(sworn.SP1_VERIFIER());
         assertEq(sworn.BOND_TOKEN(), address(token));
         assertEq(sworn.SP1_VERIFIER(), address(verifier));
 
