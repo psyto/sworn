@@ -1,0 +1,10 @@
+# Re-check of S-2.honestReverts for run moderato-20261003T064745Z (2026-10-03T07:44:35Z)
+# The run's own check FAILED because sworn-challenge produced no JSON (exit null) after a ~48 min proof under load;
+# the proof file was written. This re-runs the dry-run simulation with that same proof (--proof), nothing sent.
+# Sworn.sol:323 verifyProof precedes :324 AnswerCorrect, so AnswerCorrect means the proof verified on Moderato.
+$ sworn-challenge --witness <honest witness> --response <honest response> --proof /tmp/sworn-moderato-20261003T064745Z/honest.proof.json --dry-run
+[sworn-challenge] true answer: {"feeCharged":"174","gasUsed":"289942","receiver":"0xd49c5ef3ad21b42f664ba65a7694d56c47535261","receiverAfter":"1000500000000","receiverBefore":"1000000000000","returnDataHash":"0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6","success":true}
+[sworn-challenge] claimed:     {"feeCharged":"174","gasUsed":"289942","receiver":"0xd49c5ef3ad21b42f664ba65a7694d56c47535261","receiverAfter":"1000500000000","receiverBefore":"1000000000000","returnDataHash":"0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6","success":true}
+[sworn-challenge] fields that differ: []
+[sworn-challenge] dry-run (eth_call only, nothing sent): {"error":"AnswerCorrect","reverted":true}
+{"dryRun":{"error":"AnswerCorrect","reverted":true},"fieldsDiffering":[],"proof":"/tmp/sworn-moderato-20261003T064745Z/honest.proof.json","proveWallSecs":2.08e-7,"trueAnswer":{"feeCharged":"174","gasUsed":"289942","receiver":"0xd49c5ef3ad21b42f664ba65a7694d56c47535261","receiverAfter":"1000500000000","receiverBefore":"1000000000000","returnDataHash":"0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6","success":true},"vkey":"0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9"}

@@ -16,8 +16,9 @@ sender still succeeds, and the money lands in `ReceivePolicyGuard`. Sworn makes 
 cost the server, not the client.
 
 > **Status (2026-10-03): built for Colosseum's Crypto World's Fair, Tempo track.** Deployed on Tempo
-> **Moderato testnet** only. Unaudited. Traction: none. The first slash on Moderato itself has **not**
-> happened yet — see [What is not done](#what-is-not-done).
+> **Moderato testnet** only. Unaudited. Traction: none. **First slash on Moderato: 2026-10-03** — a
+> dishonest answer, a real payment diverted to `ReceivePolicyGuard`, a real Groth16 proof, the client paid
+> 500 ([tx](https://explore.testnet.tempo.xyz/tx/0xa7b90b8cd4909bcdae03e5e78281ceeabda7d2976e692d33888f4f006924ab9b)).
 
 ## Deployed on Moderato (chain 42431)
 
@@ -60,15 +61,29 @@ All on 2026-10-03; logs are in `out/`.
 | execution vs. RPC | **5 / 5** countable cases match RPC `eth_call` / `callTracer` / `prestateTracer` diff (fees off, since the RPC's call path charges none); 3 cases the RPC cannot express are reported, not counted (`out/ac1_run3.log`) |
 | proving | receive-policy case **5,970,394 cycles**; local Groth16 **391 s**, peak 15 GB (`out/ac7_groth16.log`) |
 | contract | **59 / 59** forge tests; the gate requires 49 named tests and was seen to fail when one is missing. A **real Groth16 proof** slashes a lying answer and cannot slash the true one (`contracts/test/RealGroth16.t.sol`) |
-| full flow | **30 / 30** checks on Tempo's own node (`tempo-localnet` at the vendored commit, chain 42431, Moderato's fork schedule): MPP charge → reserve → SDK verification → dishonest answer → own witness → local proof → challenge pays the client 500; honest answer → `AnswerCorrect`; 9 SDK rejections; live fork-schedule drift refused (`out/e2e/localnet-full-gate.log`) |
+| full flow | **32 / 32** checks on Tempo's own node (`tempo-localnet` at the vendored commit, chain 42431, Moderato's fork schedule): MPP charge → reserve → SDK verification → dishonest answer → own witness → local proof → challenge pays the client 500; honest answer → `AnswerCorrect`; 9 SDK rejections; live fork-schedule drift refused (`out/e2e/localnet-full-gate.log`) |
+
+## On Moderato — the first slash (2026-10-03)
+
+| step | tx |
+|---|---|
+| dishonest server reserves 500 behind "the receiver gets +500" | [`0x08f6…0350`](https://explore.testnet.tempo.xyz/tx/0x08f614340b1a6a7fe07dfc3923341332a33d9e9174e41c9847372a11cdb20350) |
+| the client's real payment — **diverted to `ReceivePolicyGuard`** (guard +500, receiver +0) | [`0x65bc…312a`](https://explore.testnet.tempo.xyz/tx/0x65bc66fa56f866149348cc5f7346bf4fe9345cf819642269870a94bf8183312a) |
+| challenge with a real Groth16 proof (414 s, local) → `Slashed`, **client +500** | [`0xa7b9…ab9b`](https://explore.testnet.tempo.xyz/tx/0xa7b90b8cd4909bcdae03e5e78281ceeabda7d2976e692d33888f4f006924ab9b) |
+
+The honest server's answer, challenged with a real proof, is rejected with `AnswerCorrect` — which
+`Sworn.sol` raises only after `verifyProof` succeeds. Run log `out/e2e/moderato-20261003T064745Z.log`
+(33 of 34 checks; the 34th, `S-2.honestReverts`, failed in the harness: the second proof took ~48 min under
+load and the tool's output was lost — re-checked with the same proof in
+`out/e2e/moderato-20261003T064745Z-honestReverts-recheck.log`). Recorded in
+[`deployments/moderato.json`](deployments/moderato.json).
 
 ## What is not done
 
-- **The slash on Moderato itself.** Deployed, not yet exercised there.
-- **The demo's "diverted" scene.** In the localnet run the receive-policy-blocked transfer ran out of
-  gas at the demo's 300,000 gas limit (Tempo prices cold storage ~11× Ethereum) instead of being
-  diverted to `ReceivePolicyGuard`. The slash was still sound — the false claim was the receiver's
-  balance — but the gas limit is being fixed and the run repeated.
+- **Moderato's next hardfork, T12, activates ≈ 2026-10-08 09:00 JST.** The answerer refuses on a schedule
+  it does not know, so it stops answering at T12 until the guest is checked against it.
+- The run harness treats a challenger that dies mid-proof as "did not revert"; it should report it as a
+  harness failure.
 - The p384 substitute patched into Tempo is still linked into the guest (not on the T11 path).
 - No reverting real transaction is in the 40-transaction replay.
 

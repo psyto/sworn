@@ -25,5 +25,21 @@
     "honest_server": "0xa5a4889b1693CBFDC6d0b701a128F5bBEEcb84f5",
     "dishonest_demo_server": "0xD49c5ef3aD21b42f664ba65a7694D56C47535261",
     "client": "0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F"
+  },
+  "firstSlash": {
+    "run": "out/e2e/moderato-20261003T064745Z.log",
+    "dishonestReserve": "0x08f614340b1a6a7fe07dfc3923341332a33d9e9174e41c9847372a11cdb20350",
+    "realPaymentDivertedToReceivePolicyGuard": "0x65bc66fa56f866149348cc5f7346bf4fe9345cf819642269870a94bf8183312a",
+    "challengeTx": "0xa7b90b8cd4909bcdae03e5e78281ceeabda7d2976e692d33888f4f006924ab9b",
+    "challengeBlock": 37957098,
+    "slashedEvent": "Slashed(server 0xD49c\u20265261, digest, client 0x7919\u20264b7F, coverage 500000000) emitted by Sworn",
+    "clientPathUSD": {
+      "before": "999999979942",
+      "after": "1000499979942",
+      "delta": "500000000"
+    },
+    "provingSecs": 413.7,
+    "honestAnswerChallenge": "rejected with AnswerCorrect after verifyProof (dry run, nothing sent) - out/e2e/moderato-20261003T064745Z-honestReverts-recheck.log",
+    "verifiedIndependently": "receipt status 1, Slashed topic0 matches Sworn.sol event, client balance read at block-1 and block, 2026-10-03"
   }
 }

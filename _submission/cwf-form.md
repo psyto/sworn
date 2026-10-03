@@ -169,7 +169,7 @@ No users. Built and measured inside the window:
 - Fidelity: 40 of 40 real Moderato transactions (type-2, account-abstraction and legacy) replayed with Tempo's own engine match their receipts — status, gas, fee, logs, balances.
 - A receive-policy-blocked transfer: 5.97M cycles, Groth16 proof in 391 s on a laptop.
 - Sworn.sol: bond, reserve, challenge, release; no owner; 59 tests including a real proof that slashes a wrong answer and cannot slash the right one.
-- Deployed on Moderato (Sworn 0xc54b7e52…02c6, SP1 verifier v6.1.0). [FILL AFTER MODERATO: the live slash transaction]
+- On Moderato: a dishonest answer, a real payment diverted to ReceivePolicyGuard, and a real Groth16 proof slashed the bond to the client (tx 0xa7b90b8c…ab9b); the honest answer cannot be slashed.
 - Full flow 30/30 on Tempo's own localnet: MPP charge, reserve, SDK checks, proof, slash.
 - Server, SDK and demo: [state at submission]
 ```
