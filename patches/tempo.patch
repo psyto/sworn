@@ -1,0 +1,178 @@
+diff --git a/crates/nitro-attestation/Cargo.toml b/crates/nitro-attestation/Cargo.toml
+index 09147f3..38bc6d0 100644
+--- a/crates/nitro-attestation/Cargo.toml
++++ b/crates/nitro-attestation/Cargo.toml
+@@ -27,8 +27,12 @@ serde = { workspace = true, features = ["alloc"] }
+ serde_with = { version = "=3.21.0", default-features = false, features = ["alloc"] }
+ x509-cert = { version = "=0.2.5", default-features = false }
+ 
+-# aws-lc
++# SPIKE-PATCH-2: aws-lc-rs (C) only on non-zkvm targets; pure-Rust p384/sha2 backend on zkvm.
++[target.'cfg(not(target_os = "zkvm"))'.dependencies]
+ aws-lc-rs = { workspace = true, optional = true }
++[target.'cfg(target_os = "zkvm")'.dependencies]
++p384 = { version = "0.13", default-features = false, features = ["ecdsa"] }
++sha2 = { version = "0.10", default-features = false }
+ 
+ [dev-dependencies]
+ base64.workspace = true
+diff --git a/crates/nitro-attestation/src/lib.rs b/crates/nitro-attestation/src/lib.rs
+index 256bf0f..a3b9bed 100644
+--- a/crates/nitro-attestation/src/lib.rs
++++ b/crates/nitro-attestation/src/lib.rs
+@@ -19,7 +19,11 @@ use alloc::{string::String, vec::Vec};
+ 
+ pub use error::{CertificateError, Error, FormatError, SignatureError};
+ 
+-#[cfg(feature = "aws-lc")]
++#[cfg(all(feature = "aws-lc", not(target_os = "zkvm")))]
++mod aws_lc;
++// SPIKE-PATCH-2: pure-Rust backend exported under the same name on zkvm.
++#[cfg(all(feature = "aws-lc", target_os = "zkvm"))]
++#[path = "rustcrypto_p384.rs"]
+ mod aws_lc;
+ #[cfg(feature = "aws-lc")]
+ pub use aws_lc::AwsLcP384;
+diff --git a/crates/precompiles/src/stablecoin_dex/mod.rs b/crates/precompiles/src/stablecoin_dex/mod.rs
+index 7be2c06..a214ddf 100644
+--- a/crates/precompiles/src/stablecoin_dex/mod.rs
++++ b/crates/precompiles/src/stablecoin_dex/mod.rs
+@@ -1698,7 +1698,7 @@ impl StablecoinDEX {
+     fn validate_and_build_route(&self, path: &[Address]) -> Result<Vec<(B256, bool)>> {
+         let mut route = Vec::new();
+ 
+-        for [token_in, token_out] in path.array_windows::<2>().copied() {
++        for [token_in, token_out] in path.windows(2).map(|w| [w[0], w[1]]) { // SPIKE-PATCH-3: array_windows needs rustc>=1.94; SP1 toolchain is 1.93
+             let (base, quote) = {
+                 let token_in_tip20 = TIP20Token::from_address(token_in)?;
+ 
+diff --git a/crates/primitives/Cargo.toml b/crates/primitives/Cargo.toml
+index c2c49a9..97fa298 100644
+--- a/crates/primitives/Cargo.toml
++++ b/crates/primitives/Cargo.toml
+@@ -48,12 +48,15 @@ serde_json.workspace = true
+ once_cell = { version = "1.21", default-features = false }
+ 
+ # Cryptography
+-aws-lc-rs = { workspace = true, optional = true }
+ base64.workspace = true
+ commonware-cryptography.workspace = true
+ p256 = { workspace = true, features = ["ecdsa"] }
+ sha2.workspace = true
+ 
++# SPIKE-PATCH-2: aws-lc-rs (C) only on non-zkvm targets.
++[target.'cfg(not(target_os = "zkvm"))'.dependencies]
++aws-lc-rs = { workspace = true, optional = true }
++
+ [dev-dependencies]
+ arbitrary.workspace = true
+ reth-codecs.workspace = true
+diff --git a/crates/primitives/src/transaction/tt_signature.rs b/crates/primitives/src/transaction/tt_signature.rs
+index 159bc41..523b052 100644
+--- a/crates/primitives/src/transaction/tt_signature.rs
++++ b/crates/primitives/src/transaction/tt_signature.rs
+@@ -822,7 +822,7 @@ fn concat<const N: usize>(slices: &[&[u8]]) -> [u8; N] {
+     out
+ }
+ 
+-#[cfg(feature = "std")]
++#[cfg(all(feature = "std", not(target_os = "zkvm")))] // SPIKE-PATCH-2
+ fn verify_p256_signature_with_aws_lc(
+     r: &[u8],
+     s: &[u8],
+@@ -851,7 +851,7 @@ fn verify_p256_signature_with_aws_lc(
+         .map_err(|_| "P256 signature verification failed")
+ }
+ 
+-#[cfg(any(test, not(feature = "std")))]
++#[cfg(any(test, not(feature = "std"), target_os = "zkvm"))] // SPIKE-PATCH-2
+ fn verify_p256_signature_with_p256(
+     r: &[u8],
+     s: &[u8],
+@@ -905,13 +905,13 @@ fn verify_p256_signature_internal(
+         return Err("P256 signature has high s value");
+     }
+ 
+-    #[cfg(all(feature = "std", not(test)))]
++    #[cfg(all(feature = "std", not(test), not(target_os = "zkvm")))] // SPIKE-PATCH-2
+     {
+         // production `std` builds use the `aws-lc-rs` crate
+         verify_p256_signature_with_aws_lc(r, s, pub_key_x, pub_key_y, message_hash)
+     }
+ 
+-    #[cfg(not(feature = "std"))]
++    #[cfg(any(not(feature = "std"), target_os = "zkvm"))] // SPIKE-PATCH-2
+     {
+         // production `no-std` builds use the `p256` crate
+         verify_p256_signature_with_p256(r, s, pub_key_x, pub_key_y, message_hash)
+diff --git a/crates/revm/Cargo.toml b/crates/revm/Cargo.toml
+index fab7304..07d9cf7 100644
+--- a/crates/revm/Cargo.toml
++++ b/crates/revm/Cargo.toml
+@@ -21,7 +21,7 @@ tempo-primitives = { workspace = true, features = ["reth", "evm"] }
+ tempo-contracts.workspace = true
+ tempo-chainspec.workspace = true
+ 
+-reth-evm.workspace = true
++reth-evm = { workspace = true, optional = true } # SPIKE-PATCH-1
+ reth-storage-api = { workspace = true, optional = true }
+ 
+ revm.workspace = true
+@@ -52,7 +52,7 @@ tempo-precompiles = { workspace = true, features = ["test-utils"] }
+ test-case.workspace = true
+ 
+ [features]
+-reth = ["dep:reth-storage-api"]
++reth = ["dep:reth-storage-api", "dep:reth-evm"] # SPIKE-PATCH-1
+ serde = [
+ 	"revm/serde",
+ 	"alloy-consensus/serde",
+diff --git a/crates/revm/src/handler.rs b/crates/revm/src/handler.rs
+index acf6187..40e9464 100644
+--- a/crates/revm/src/handler.rs
++++ b/crates/revm/src/handler.rs
+@@ -7,7 +7,7 @@ use std::{
+ };
+ 
+ use alloy_primitives::{Address, U256};
+-use reth_evm::EvmInternals;
++use alloy_evm::EvmInternals; // SPIKE-PATCH-1: was reth_evm::EvmInternals (re-export)
+ use revm::{
+     Database,
+     context::{
+diff --git a/crates/nitro-attestation/src/rustcrypto_p384.rs b/crates/nitro-attestation/src/rustcrypto_p384.rs
+new file mode 100644
+index 0000000..d197ebc
+--- /dev/null
++++ b/crates/nitro-attestation/src/rustcrypto_p384.rs
+@@ -0,0 +1,30 @@
++//! SPIKE-PATCH-2: pure-Rust (RustCrypto p384 + sha2) backend for zkvm targets, exported as
++//! `AwsLcP384` so callers need no change. Semantics intended to match the AWS-LC backend.
++use crate::{
++    P384_FIXED_SIGNATURE_SIZE, P384_PUBLIC_KEY_SIZE, P384Verifier, SHA384_SIZE, Sha384Hasher,
++};
++use p384::ecdsa::{Signature, VerifyingKey, signature::hazmat::PrehashVerifier};
++use sha2::{Digest, Sha384};
++
++/// Pure-Rust backend for SHA-384 hashing and P-384 verification.
++pub struct AwsLcP384;
++
++impl Sha384Hasher for AwsLcP384 {
++    fn sha384(&self, input: &[u8]) -> [u8; SHA384_SIZE] {
++        Sha384::digest(input).into()
++    }
++}
++
++impl P384Verifier for AwsLcP384 {
++    fn validate_public_key(&self, public_key: &[u8; P384_PUBLIC_KEY_SIZE]) -> bool {
++        VerifyingKey::from_sec1_bytes(public_key).is_ok()
++    }
++    fn verify_der(&self, pk: &[u8; P384_PUBLIC_KEY_SIZE], digest: &[u8; SHA384_SIZE], sig: &[u8]) -> bool {
++        let (Ok(k), Ok(s)) = (VerifyingKey::from_sec1_bytes(pk), Signature::from_der(sig)) else { return false };
++        k.verify_prehash(digest, &s).is_ok()
++    }
++    fn verify_fixed(&self, pk: &[u8; P384_PUBLIC_KEY_SIZE], digest: &[u8; SHA384_SIZE], sig: &[u8; P384_FIXED_SIGNATURE_SIZE]) -> bool {
++        let (Ok(k), Ok(s)) = (VerifyingKey::from_sec1_bytes(pk), Signature::from_slice(sig)) else { return false };
++        k.verify_prehash(digest, &s).is_ok()
++    }
++}

@@ -1,0 +1,8 @@
+cargo:warning=rustc +succinct --version: "rustc 1.93.0-dev\n"
+[sp1]     Compiling tempo-precompiles v1.14.0 (/Users/hiroyusai/src/tempo-spike/tempo/crates/precompiles)
+[sp1]     Compiling tempo-revm v1.14.0 (/Users/hiroyusai/src/tempo-spike/tempo/crates/revm)
+[sp1]     Compiling spike-core v0.1.0 (/Users/hiroyusai/src/tempo-spike/core)
+[sp1]     Compiling tempo-spike-guest v0.1.0 (/Users/hiroyusai/src/tempo-spike/program)
+[sp1]      Finished `release` profile [optimized] target(s) in 10.63s
+cargo:rustc-env=SP1_ELF_tempo-spike-guest=/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/tempo-spike-guest
+~/.sp1/bin/cargo-prove prove build --ignore-rust-version 2>&1  35.20s user 0.85s system 329% cpu 10.955 total

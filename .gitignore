@@ -1,0 +1,14 @@
+# build output
+target/
+**/target/
+# vendored upstream — reproduced by scripts/fetch-tempo.sh (pinned commit + patches/tempo.patch)
+/tempo/
+# foundry
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+# never commit keys or local env
+.env
+.env.*
+*.pem
+*keypair*.json

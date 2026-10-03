@@ -1,0 +1,796 @@
+cargo:warning=rustc +succinct --version: "rustc 1.93.0-dev\n"
+[sp1]     Compiling portable-atomic v1.13.1
+[sp1]     Compiling syn v2.0.119
+[sp1]     Compiling toml_parser v1.1.3+spec-1.1.0
+[sp1]     Compiling serde_spanned v1.1.1
+[sp1]     Compiling toml_writer v1.1.2+spec-1.1.0
+[sp1]     Compiling commonware-macros-impl v2026.9.0
+[sp1]     Compiling p3-maybe-rayon v0.4.3-succinct
+[sp1]     Compiling ff v0.14.0
+[sp1]     Compiling cpubits v0.1.1
+[sp1]     Compiling blake3 v1.8.7
+[sp1]     Compiling base16ct v1.0.0
+[sp1]     Compiling constant_time_eq v0.4.2
+[sp1]     Compiling group v0.14.0
+[sp1]     Compiling curve25519-dalek v5.0.0
+[sp1]     Compiling cmake v0.1.58
+[sp1]     Compiling fs_extra v1.3.0
+[sp1]     Compiling gcd v2.3.0
+[sp1]     Compiling dyn-clone v1.0.20
+[sp1]     Compiling pkg-config v0.3.33
+[sp1]     Compiling rand v0.10.2
+[sp1]     Compiling toml_edit v0.25.11+spec-1.1.0
+[sp1]     Compiling toml v1.1.5+spec-1.1.0
+[sp1]     Compiling p3-koala-bear v0.4.3-succinct
+[sp1]     Compiling rand_chacha v0.10.0
+[sp1]     Compiling thiserror v2.0.18
+[sp1]     Compiling aws-lc-rs v1.18.1
+[sp1]     Compiling fixedbitset v0.5.7
+[sp1]     Compiling aws-lc-sys v0.45.0
+[sp1]     Compiling minicbor v2.3.0
+[sp1]     Compiling proc-macro-crate v3.5.0
+[sp1]     Compiling base64 v0.22.1
+[sp1]     Compiling untrusted v0.7.1
+[sp1]     Compiling hex-literal v1.1.0
+[sp1]     Compiling lazy_static v1.5.0
+[sp1]     Compiling scoped-tls v1.0.1
+[sp1]     Compiling keccak-const v0.2.0
+[sp1]     Compiling libm v0.2.16
+[sp1]     Compiling elf v0.7.4
+[sp1]     Compiling getrandom v0.3.4
+[sp1]     Compiling const-default v1.0.0
+[sp1]     Compiling slop-primitives v6.8.1
+[sp1]     Compiling rlsf v0.2.3
+[sp1]     Compiling sp1-zkvm v6.8.1
+[sp1]     Compiling linked_list_allocator v0.10.6
+[sp1]     Compiling macro-string v0.2.0
+[sp1]     Compiling syn-solidity v1.7.3
+[sp1]     Compiling proc-macro-error3 v3.0.1
+[sp1]     Compiling once_cell v1.21.4
+[sp1]     Compiling tracing-core v0.1.36
+[sp1]     Compiling ahash v0.8.12
+[sp1]     Compiling serde_derive v1.0.228
+[sp1]     Compiling zeroize_derive v1.5.0
+[sp1]     Compiling der_derive v0.7.3
+[sp1]     Compiling derive_more-impl v2.1.1
+[sp1]     Compiling alloy-rlp-derive v0.3.16
+[sp1]     Compiling thiserror-impl v2.0.18
+[sp1]     Compiling zeroize v1.9.0
+[sp1]     Compiling tracing-attributes v0.1.31
+[sp1]     Compiling auto_impl v1.3.0
+[sp1]     Compiling enum-ordinalize-derive v4.3.2
+[sp1]     Compiling ark-serialize-derive v0.6.0
+[sp1]     Compiling ark-ff-macros v0.6.0
+[sp1]     Compiling enum-ordinalize v4.3.2
+[sp1]     Compiling tracing v0.1.44
+[sp1]     Compiling ark-ff-asm v0.6.0
+[sp1]     Compiling tokio-macros v2.7.0
+[sp1]     Compiling derive-where v1.6.1
+[sp1]     Compiling strum_macros v0.27.2
+[sp1]     Compiling tokio v1.52.3
+[sp1]     Compiling serde v1.0.228
+[sp1]     Compiling num_enum_derive v0.7.6
+[sp1]     Compiling hybrid-array v0.4.13
+[sp1]     Compiling generic-array v0.14.7
+[sp1]     Compiling der v0.7.10
+[sp1]     Compiling crypto-common v0.2.2
+[sp1]     Compiling block-buffer v0.12.0
+[sp1]  warning: aws-lc-sys@0.45.0: Environment Variable found 'CARGO_ENCODED_RUSTFLAGS': '-Cpasses=lower-atomic-Clink-arg=--image-base=2013265920-Cpanic=abort--cfggetrandom_backend="custom"-Cllvm-args=-misched-prera-direction=bottomup-Cllvm-args=-misched-postra-direction=bottomup'
+[sp1]  warning: aws-lc-sys@0.45.0: Emitting configuration: cargo:rustc-cfg=universal
+[sp1]  warning: aws-lc-sys@0.45.0: Building with: CC
+[sp1]  warning: aws-lc-sys@0.45.0: Symbol Prefix: Some("aws_lc_0_45_0")
+[sp1]  warning: aws-lc-sys@0.45.0: Target platform: 'riscv64im-succinct-zkvm-elf'
+[sp1]  warning: aws-lc-sys@0.45.0: No target-specific source found: zkvm-riscv64
+[sp1]  warning: aws-lc-sys@0.45.0: /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/tests/compiler_features_tests/c11.c:7:10: fatal error: 'stdlib.h' file not found
+[sp1]  warning: aws-lc-sys@0.45.0:     7 | #include <stdlib.h>
+[sp1]  warning: aws-lc-sys@0.45.0:       |          ^~~~~~~~~~
+[sp1]  warning: aws-lc-sys@0.45.0: 1 error generated.
+[sp1]  warning: aws-lc-sys@0.45.0: Compilation of 'c11.c' failed - Err(Error { kind: ToolExecError, message: "command did not execute successfully (status code exit status: 1): LC_ALL=\"C\" \"cc\" \"-O3\" \"-ffunction-sections\" \"-fdata-sections\" \"-fPIC\" \"--target=riscv64-succinct-zkvm\" \"-Werror\" \"-Wall\" \"-Wextra\" \"-Wno-unused-parameter\" \"-o\" \"/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/out-c11/7dfda64fdf5a526c-c11.o\" \"-c\" \"/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/tests/compiler_features_tests/c11.c\"" }).
+[sp1]  warning: aws-lc-sys@0.45.0: NOTICE: Build environment source paths might be visible in release binary.
+[sp1]  warning: aws-lc-sys@0.45.0: /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/tests/compiler_features_tests/stdalign_check.c:10:10: fatal error: 'stdlib.h' file not found
+[sp1]  warning: aws-lc-sys@0.45.0:    10 | #include <stdlib.h>
+[sp1]  warning: aws-lc-sys@0.45.0:       |          ^~~~~~~~~~
+[sp1]  warning: aws-lc-sys@0.45.0: 1 error generated.
+[sp1]  warning: aws-lc-sys@0.45.0: Compilation of 'stdalign_check.c' failed - Err(Error { kind: ToolExecError, message: "command did not execute successfully (status code exit status: 1): LC_ALL=\"C\" \"cc\" \"-O3\" \"-ffunction-sections\" \"-fdata-sections\" \"-fPIC\" \"--target=riscv64-succinct-zkvm\" \"-Werror\" \"-Wall\" \"-Wextra\" \"-Wno-unused-parameter\" \"-o\" \"/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/out-stdalign_check/7dfda64fdf5a526c-stdalign_check.o\" \"-c\" \"/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/tests/compiler_features_tests/stdalign_check.c\"" }).
+[sp1]  warning: aws-lc-sys@0.45.0: /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/tests/compiler_features_tests/builtin_swap_check.c:9:10: fatal error: 'stdlib.h' file not found
+[sp1]  warning: aws-lc-sys@0.45.0:     9 | #include <stdlib.h>
+[sp1]  warning: aws-lc-sys@0.45.0:       |          ^~~~~~~~~~
+[sp1]  warning: aws-lc-sys@0.45.0: 1 error generated.
+[sp1]  warning: aws-lc-sys@0.45.0: Compilation of 'builtin_swap_check.c' failed - Err(Error { kind: ToolExecError, message: "command did not execute successfully (status code exit status: 1): LC_ALL=\"C\" \"cc\" \"-O3\" \"-ffunction-sections\" \"-fdata-sections\" \"-fPIC\" \"--target=riscv64-succinct-zkvm\" \"-Werror\" \"-Wall\" \"-Wextra\" \"-Wno-unused-parameter\" \"-o\" \"/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/out-builtin_swap_check/7dfda64fdf5a526c-builtin_swap_check.o\" \"-c\" \"/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/tests/compiler_features_tests/builtin_swap_check.c\"" }).
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-base.c:33:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-gcd.h:23:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-internal.h:45:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy.h:168:
+[sp1]  warning: aws-lc-sys@0.45.0: /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy-base-user.h:52:10: fatal error: 'sys/types.h' file not found
+[sp1]  warning: aws-lc-sys@0.45.0:    52 | #include <sys/types.h>
+[sp1]  warning: aws-lc-sys@0.45.0:       |          ^~~~~~~~~~~~~
+[sp1]  warning: aws-lc-sys@0.45.0: 1 error generated.
+[sp1]  warning: aws-lc-sys@0.45.0: ToolExecError: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-base.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-base.c"cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-gcd.c:22:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-gcd.h:23:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-internal.h:45:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy.h:168:
+[sp1]  warning: aws-lc-sys@0.45.0: /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy-base-user.h:52:10: fatal error: 'sys/types.h' file not found
+[sp1]  warning: aws-lc-sys@0.45.0:    52 | #include <sys/types.h>
+[sp1]  warning: aws-lc-sys@0.45.0:       |          ^~~~~~~~~~~~~
+[sp1]  warning: aws-lc-sys@0.45.0: 1 error generated.
+[sp1]  warning: aws-lc-sys@0.45.0: ToolExecError: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-gcd.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-gcd.c"cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-health.c:22:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-health.h:23:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-internal.h:45:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy.h:168:
+[sp1]  warning: aws-lc-sys@0.45.0: /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy-base-user.h:52:10: fatal error: 'sys/types.h' file not found
+[sp1]  warning: aws-lc-sys@0.45.0:    52 | #include <sys/types.h>
+[sp1]  warning: aws-lc-sys@0.45.0:       |          ^~~~~~~~~~~~~
+[sp1]  warning: aws-lc-sys@0.45.0: 1 error generated.
+[sp1]  warning: aws-lc-sys@0.45.0: ToolExecError: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-health.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-health.c"cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-noise.c:21:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-noise.h:23:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-internal.h:45:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy.h:168:
+[sp1]  warning: aws-lc-sys@0.45.0: /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy-base-user.h:52:10: fatal error: 'sys/types.h' file not found
+[sp1]  warning: aws-lc-sys@0.45.0:    52 | #include <sys/types.h>
+[sp1]  warning: aws-lc-sys@0.45.0:       |          ^~~~~~~~~~~~~
+[sp1]  warning: aws-lc-sys@0.45.0: 1 error generated.
+[sp1]  warning: aws-lc-sys@0.45.0: ToolExecError: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-noise.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-noise.c"cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-sha3.c:21:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-sha3.h:23:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-internal.h:45:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy.h:168:
+[sp1]  warning: aws-lc-sys@0.45.0: /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy-base-user.h:52:10: fatal error: 'sys/types.h' file not found
+[sp1]  warning: aws-lc-sys@0.45.0:    52 | #include <sys/types.h>
+[sp1]  warning: aws-lc-sys@0.45.0:       |          ^~~~~~~~~~~~~
+[sp1]  warning: aws-lc-sys@0.45.0: 1 error generated.
+[sp1]  warning: aws-lc-sys@0.45.0: ToolExecError: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-sha3.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-sha3.c"cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-timer.c:22:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-timer.h:23:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-internal.h:45:
+[sp1]  warning: aws-lc-sys@0.45.0: In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy.h:168:
+[sp1]  warning: aws-lc-sys@0.45.0: /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy-base-user.h:52:10: fatal error: 'sys/types.h' file not found
+[sp1]  warning: aws-lc-sys@0.45.0:    52 | #include <sys/types.h>
+[sp1]  warning: aws-lc-sys@0.45.0:       |          ^~~~~~~~~~~~~
+[sp1]  warning: aws-lc-sys@0.45.0: 1 error generated.
+[sp1]  warning: aws-lc-sys@0.45.0: ToolExecError: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-timer.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-timer.c"
+[sp1]  error: failed to run custom build command for `aws-lc-sys v0.45.0`
+[sp1]  
+[sp1]  Caused by:
+[sp1]    process didn't exit successfully: `/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/release/build/aws-lc-sys-575042ef55d1691a/build-script-main` (exit status: 1)
+[sp1]    --- stdout
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_NO_PREFIX_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_NO_PREFIX
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_PREGENERATING_BINDINGS_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_PREGENERATING_BINDINGS
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_EXTERNAL_BINDGEN_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_EXTERNAL_BINDGEN
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_NO_ASM_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_NO_ASM
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_PREBUILT_NASM_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_PREBUILT_NASM
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_C_STD_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_C_STD
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_CMAKE_BUILDER_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_CMAKE_BUILDER
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_NO_PREGENERATED_SRC_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_NO_PREGENERATED_SRC
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_SMALL_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_SMALL
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_EFFECTIVE_TARGET_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_EFFECTIVE_TARGET
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_NO_JITTER_ENTROPY_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_NO_JITTER_ENTROPY
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_NO_U1_BINDINGS_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_NO_U1_BINDINGS
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_INCLUDES_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_INCLUDES
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_SANITIZER_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_SANITIZER
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_LINK_WHOLE_ARCHIVE_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_LINK_WHOLE_ARCHIVE
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_STATIC_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_STATIC
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_SYSTEM_DIR_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_SYSTEM_DIR
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_USE_SYSTEM_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_USE_SYSTEM
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_SYSTEM_BINDINGS_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_SYSTEM_BINDINGS
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_SYSTEM_SKIP_VERSION_CHECK_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_SYSTEM_SKIP_VERSION_CHECK
+[sp1]    cargo:rerun-if-env-changed=CARGO_ENCODED_RUSTFLAGS
+[sp1]    cargo:warning=Environment Variable found 'CARGO_ENCODED_RUSTFLAGS': '-Cpasses=lower-atomic-Clink-arg=--image-base=2013265920-Cpanic=abort--cfggetrandom_backend="custom"-Cllvm-args=-misched-prera-direction=bottomup-Cllvm-args=-misched-postra-direction=bottomup'
+[sp1]    cargo:warning=Emitting configuration: cargo:rustc-cfg=universal
+[sp1]    cargo:rustc-cfg=universal
+[sp1]    cargo:rerun-if-env-changed=OPENSSL_DIR_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=OPENSSL_DIR
+[sp1]    cargo:rerun-if-env-changed=OPENSSL_INCLUDE_DIR_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=OPENSSL_INCLUDE_DIR
+[sp1]    cargo:rerun-if-env-changed=OPENSSL_LIB_DIR_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=OPENSSL_LIB_DIR
+[sp1]    cargo:rerun-if-env-changed=OPENSSL_NO_PKG_CONFIG
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_riscv64im-succinct-zkvm-elf
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_ALLOW_CROSS
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_riscv64im-succinct-zkvm-elf
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_PKG_CONFIG
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_riscv64im-succinct-zkvm-elf
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_SYSROOT_DIR
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_NO_PKG_CONFIG
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_riscv64im-succinct-zkvm-elf
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_ALLOW_CROSS
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_riscv64im-succinct-zkvm-elf
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_PKG_CONFIG
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_riscv64im-succinct-zkvm-elf
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_SYSROOT_DIR
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR
+[sp1]    cargo:rerun-if-env-changed=LIBCRYPTO_NO_PKG_CONFIG
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_riscv64im-succinct-zkvm-elf
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_ALLOW_CROSS
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_riscv64im-succinct-zkvm-elf
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_PKG_CONFIG
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_riscv64im-succinct-zkvm-elf
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_SYSROOT_DIR
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR
+[sp1]    cargo:rerun-if-env-changed=LIBCRYPTO_AWSLC_NO_PKG_CONFIG
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_riscv64im-succinct-zkvm-elf
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_ALLOW_CROSS
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_riscv64im-succinct-zkvm-elf
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_PKG_CONFIG
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_riscv64im-succinct-zkvm-elf
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_SYSROOT_DIR
+[sp1]    cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR
+[sp1]    cargo:rerun-if-env-changed=CARGO_FEATURE_SSL
+[sp1]    cargo:warning=Building with: CC
+[sp1]    cargo:warning=Symbol Prefix: Some("aws_lc_0_45_0")
+[sp1]    cargo:rerun-if-env-changed=CARGO_FEATURE_SSL
+[sp1]    cargo:warning=Target platform: 'riscv64im-succinct-zkvm-elf'
+[sp1]    cargo:root=/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out
+[sp1]    cargo:warning=No target-specific source found: zkvm-riscv64
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_TARGET_CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_TARGET_CFLAGS
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_CFLAGS
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_FORCE_DISABLE
+[sp1]    CC_FORCE_DISABLE = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:warning=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/tests/compiler_features_tests/c11.c:7:10: fatal error: 'stdlib.h' file not found
+[sp1]    cargo:warning=    7 | #include <stdlib.h>
+[sp1]    cargo:warning=      |          ^~~~~~~~~~
+[sp1]    cargo:warning=1 error generated.
+[sp1]    cargo:warning=Compilation of 'c11.c' failed - Err(Error { kind: ToolExecError, message: "command did not execute successfully (status code exit status: 1): LC_ALL=\"C\" \"cc\" \"-O3\" \"-ffunction-sections\" \"-fdata-sections\" \"-fPIC\" \"--target=riscv64-succinct-zkvm\" \"-Werror\" \"-Wall\" \"-Wextra\" \"-Wno-unused-parameter\" \"-o\" \"/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/out-c11/7dfda64fdf5a526c-c11.o\" \"-c\" \"/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/tests/compiler_features_tests/c11.c\"" }).
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_TARGET_CC_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_TARGET_CC
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_CC_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_CC
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_TARGET_CXX_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_TARGET_CXX
+[sp1]    cargo:rerun-if-env-changed=TARGET_CXX_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=TARGET_CXX
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_CXX_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=AWS_LC_SYS_CXX
+[sp1]    cargo:rerun-if-env-changed=CXX_riscv64im_succinct_zkvm_elf
+[sp1]    cargo:rerun-if-env-changed=CXX
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:warning=NOTICE: Build environment source paths might be visible in release binary.
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_FORCE_DISABLE
+[sp1]    CC_FORCE_DISABLE = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:warning=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/tests/compiler_features_tests/stdalign_check.c:10:10: fatal error: 'stdlib.h' file not found
+[sp1]    cargo:warning=   10 | #include <stdlib.h>
+[sp1]    cargo:warning=      |          ^~~~~~~~~~
+[sp1]    cargo:warning=1 error generated.
+[sp1]    cargo:warning=Compilation of 'stdalign_check.c' failed - Err(Error { kind: ToolExecError, message: "command did not execute successfully (status code exit status: 1): LC_ALL=\"C\" \"cc\" \"-O3\" \"-ffunction-sections\" \"-fdata-sections\" \"-fPIC\" \"--target=riscv64-succinct-zkvm\" \"-Werror\" \"-Wall\" \"-Wextra\" \"-Wno-unused-parameter\" \"-o\" \"/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/out-stdalign_check/7dfda64fdf5a526c-stdalign_check.o\" \"-c\" \"/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/tests/compiler_features_tests/stdalign_check.c\"" }).
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_FORCE_DISABLE
+[sp1]    CC_FORCE_DISABLE = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:warning=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/tests/compiler_features_tests/builtin_swap_check.c:9:10: fatal error: 'stdlib.h' file not found
+[sp1]    cargo:warning=    9 | #include <stdlib.h>
+[sp1]    cargo:warning=      |          ^~~~~~~~~~
+[sp1]    cargo:warning=1 error generated.
+[sp1]    cargo:warning=Compilation of 'builtin_swap_check.c' failed - Err(Error { kind: ToolExecError, message: "command did not execute successfully (status code exit status: 1): LC_ALL=\"C\" \"cc\" \"-O3\" \"-ffunction-sections\" \"-fdata-sections\" \"-fPIC\" \"--target=riscv64-succinct-zkvm\" \"-Werror\" \"-Wall\" \"-Wextra\" \"-Wno-unused-parameter\" \"-o\" \"/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/out-builtin_swap_check/7dfda64fdf5a526c-builtin_swap_check.o\" \"-c\" \"/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/tests/compiler_features_tests/builtin_swap_check.c\"" }).
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+[sp1]    cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_FORCE_DISABLE
+[sp1]    CC_FORCE_DISABLE = None
+[sp1]    cargo:rerun-if-env-changed=CC_FORCE_DISABLE
+[sp1]    CC_FORCE_DISABLE = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-base.c:33:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-gcd.h:23:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-internal.h:45:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy.h:168:
+[sp1]    cargo:warning=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy-base-user.h:52:10: fatal error: 'sys/types.h' file not found
+[sp1]    cargo:warning=   52 | #include <sys/types.h>
+[sp1]    cargo:warning=      |          ^~~~~~~~~~~~~
+[sp1]    cargo:warning=1 error generated.
+[sp1]    exit status: 1
+[sp1]    cargo:warning=ToolExecError: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-base.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-base.c"cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-gcd.c:22:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-gcd.h:23:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-internal.h:45:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy.h:168:
+[sp1]    cargo:warning=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy-base-user.h:52:10: fatal error: 'sys/types.h' file not found
+[sp1]    cargo:warning=   52 | #include <sys/types.h>
+[sp1]    cargo:warning=      |          ^~~~~~~~~~~~~
+[sp1]    cargo:warning=1 error generated.
+[sp1]  
+[sp1]    exit status: 1
+[sp1]    cargo:warning=ToolExecError: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-gcd.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-gcd.c"cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-health.c:22:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-health.h:23:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-internal.h:45:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy.h:168:
+[sp1]    cargo:warning=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy-base-user.h:52:10: fatal error: 'sys/types.h' file not found
+[sp1]    cargo:warning=   52 | #include <sys/types.h>
+[sp1]    cargo:warning=      |          ^~~~~~~~~~~~~
+[sp1]    cargo:warning=1 error generated.
+[sp1]  
+[sp1]    exit status: 1
+[sp1]    cargo:warning=ToolExecError: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-health.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-health.c"cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-noise.c:21:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-noise.h:23:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-internal.h:45:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy.h:168:
+[sp1]    cargo:warning=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy-base-user.h:52:10: fatal error: 'sys/types.h' file not found
+[sp1]    cargo:warning=   52 | #include <sys/types.h>
+[sp1]    cargo:warning=      |          ^~~~~~~~~~~~~
+[sp1]    cargo:warning=1 error generated.
+[sp1]  
+[sp1]    exit status: 1
+[sp1]    cargo:warning=ToolExecError: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-noise.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-noise.c"cargo:rerun-if-env-changed=CC_riscv64im-succinct-zkvm-elf
+[sp1]    CC_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:rerun-if-env-changed=CC_riscv64im_succinct_zkvm_elf
+[sp1]    CC_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CC
+[sp1]    TARGET_CC = None
+[sp1]    cargo:rerun-if-env-changed=CC
+[sp1]    CC = None
+[sp1]    cargo:rerun-if-env-changed=CROSS_COMPILE
+[sp1]    CROSS_COMPILE = None
+[sp1]    cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+[sp1]    CRATE_CC_NO_DEFAULTS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS
+[sp1]    CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=TARGET_CFLAGS
+[sp1]    TARGET_CFLAGS = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im_succinct_zkvm_elf
+[sp1]    CFLAGS_riscv64im_succinct_zkvm_elf = None
+[sp1]    cargo:rerun-if-env-changed=CFLAGS_riscv64im-succinct-zkvm-elf
+[sp1]    CFLAGS_riscv64im-succinct-zkvm-elf = None
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-sha3.c:21:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-sha3.h:23:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-internal.h:45:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy.h:168:
+[sp1]    cargo:warning=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy-base-user.h:52:10: fatal error: 'sys/types.h' file not found
+[sp1]    cargo:warning=   52 | #include <sys/types.h>
+[sp1]    cargo:warning=      |          ^~~~~~~~~~~~~
+[sp1]    cargo:warning=1 error generated.
+[sp1]  
+[sp1]    exit status: 1
+[sp1]    cargo:warning=ToolExecError: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-sha3.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-sha3.c"cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-timer.c:22:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-timer.h:23:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-internal.h:45:
+[sp1]    cargo:warning=In file included from /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy.h:168:
+[sp1]    cargo:warning=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/jitterentropy-base-user.h:52:10: fatal error: 'sys/types.h' file not found
+[sp1]    cargo:warning=   52 | #include <sys/types.h>
+[sp1]    cargo:warning=      |          ^~~~~~~~~~~~~
+[sp1]    cargo:warning=1 error generated.
+[sp1]  
+[sp1]    exit status: 1
+[sp1]    cargo:warning=ToolExecError: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-timer.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-timer.c"
+[sp1]  
+[sp1]    --- stderr
+[sp1]  
+[sp1]  
+[sp1]    error occurred in cc-rs: command did not execute successfully (status code exit status: 1): LC_ALL="C" "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "--target=riscv64-succinct-zkvm" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/s2n-bignum/s2n-bignum-imported/include" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library" "-I" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src" "-Wall" "-Wextra" "-fwrapv" "--param" "ssp-buffer-size=4" "-fvisibility=hidden" "-Wcast-align" "-Wmissing-field-initializers" "-Wshadow" "-Wswitch-enum" "-Wextra" "-Wall" "-pedantic" "-O0" "-fwrapv" "-Wconversion" "--include=/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/generated-include/openssl/boringssl_prefix_symbols.h" "-DBORINGSSL_IMPLEMENTATION=1" "-DBORINGSSL_PREFIX=aws_lc_0_45_0" "-DAWSLC=1" "-o" "/Users/hiroyusai/src/tempo-spike/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/aws-lc-sys-ba67a71244797512/out/2d40dbbd793ef942-jitterentropy-timer.o" "-c" "/Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.45.0/aws-lc/third_party/jitterentropy/jitterentropy-library/src/jitterentropy-timer.c"
+[sp1]  
+[sp1]  
+[sp1]  warning: build failed, waiting for other jobs to finish...
+~/.sp1/bin/cargo-prove prove build --ignore-rust-version 2>&1  27.50s user 4.41s system 452% cpu 7.052 total

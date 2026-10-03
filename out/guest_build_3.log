@@ -1,0 +1,169 @@
+cargo:warning=rustc +succinct --version: "rustc 1.93.0-dev\n"
+[sp1]     Compiling bitvec v1.0.1
+[sp1]     Compiling arrayvec v0.7.6
+[sp1]     Compiling serdect v0.2.0
+[sp1]     Compiling bytes v1.12.1
+[sp1]     Compiling either v1.16.0
+[sp1]     Compiling block-buffer v0.10.4
+[sp1]     Compiling crypto-common v0.1.7
+[sp1]     Compiling spki v0.7.3
+[sp1]     Compiling crypto-bigint v0.5.5
+[sp1]     Compiling digest v0.11.3
+[sp1]     Compiling derive_more v2.1.1
+[sp1]     Compiling libc v0.2.186
+[sp1]     Compiling darling_core v0.23.0
+[sp1]     Compiling digest v0.10.7
+[sp1]     Compiling pkcs8 v0.10.2
+[sp1]     Compiling sec1 v0.7.3
+[sp1]     Compiling sha3 v0.11.0
+[sp1]     Compiling itertools v0.14.0
+[sp1]     Compiling nonmax v0.5.5
+[sp1]     Compiling sha2 v0.10.9
+[sp1]     Compiling hmac v0.12.1
+[sp1]     Compiling rfc6979 v0.4.0
+[sp1]     Compiling signature v2.2.0
+[sp1]     Compiling alloy-rlp v0.3.16
+[sp1]     Compiling itertools v0.12.1
+[sp1]     Compiling p3-util v0.4.3-succinct
+[sp1]     Compiling ark-serialize v0.6.0
+[sp1]     Compiling educe v0.6.0
+[sp1]     Compiling alloy-sol-type-parser v1.7.3
+[sp1]     Compiling smallvec v1.15.1
+[sp1]     Compiling ruint v1.20.0
+[sp1]     Compiling sha2 v0.11.0
+[sp1]     Compiling cc v1.2.62
+[sp1]     Compiling crypto-bigint v0.7.5
+[sp1]     Compiling cpufeatures v0.3.0
+[sp1]     Compiling p3-field v0.4.3-succinct
+[sp1]     Compiling nybbles v0.4.8
+[sp1]     Compiling ripemd v0.2.0
+[sp1]     Compiling keccak v0.2.0
+[sp1]     Compiling darling_macro v0.23.0
+[sp1]     Compiling commonware-macros v2026.9.0
+[sp1]     Compiling ff v0.13.1
+[sp1]     Compiling der v0.8.1
+[sp1]     Compiling p3-symmetric v0.4.3-succinct
+[sp1]     Compiling group v0.13.0
+[sp1]     Compiling p3-matrix v0.4.3-succinct
+[sp1]     Compiling num_enum v0.7.6
+[sp1]     Compiling darling v0.23.0
+[sp1]     Compiling elliptic-curve v0.13.8
+[sp1]     Compiling alloy-primitives v1.7.3
+[sp1]     Compiling blake3 v1.8.7
+[sp1]     Compiling ark-ff v0.6.0
+[sp1]     Compiling p3-dft v0.4.3-succinct
+[sp1]     Compiling strum v0.27.2
+[sp1]     Compiling ecdsa v0.16.9
+[sp1]     Compiling primeorder v0.13.6
+[sp1]     Compiling sec1 v0.8.1
+[sp1]     Compiling inout v0.2.2
+[sp1]     Compiling p3-mds v0.4.3-succinct
+[sp1]     Compiling k256 v0.13.4
+[sp1]     Compiling p256 v0.13.2
+[sp1]     Compiling alloy-json-abi v1.7.3
+[sp1]     Compiling elliptic-curve v0.14.1
+[sp1]     Compiling commonware-codec-macros v2026.9.0
+[sp1]     Compiling hmac v0.13.0
+[sp1]     Compiling pin-project-internal v1.1.13
+[sp1]     Compiling serde_with_macros v3.21.0
+[sp1]     Compiling alloy-tx-macros v2.5.0
+[sp1]     Compiling p3-poseidon2 v0.4.3-succinct
+[sp1]     Compiling alloy-sol-macro-input v1.7.3
+[sp1]     Compiling alloy-sol-macro-expander v1.7.3
+[sp1]     Compiling commonware-codec v2026.9.0
+[sp1]     Compiling serde_with v3.21.0
+[sp1]     Compiling rfc6979 v0.6.0
+[sp1]     Compiling pin-project v1.1.13
+[sp1]     Compiling alloy-eip7928 v0.4.11
+[sp1]     Compiling alloy-eip7702 v0.6.3
+[sp1]     Compiling revm-primitives v43.0.0
+[sp1]     Compiling alloy-eip2930 v0.2.4
+[sp1]     Compiling revm-bytecode v43.0.0
+[sp1]     Compiling alloy-eip2124 v0.2.0
+[sp1]     Compiling alloy-serde v2.5.0
+[sp1]     Compiling revm-state v43.0.1
+[sp1]     Compiling alloy-eip8141 v0.1.1
+[sp1]     Compiling alloy-trie v0.9.8
+[sp1]     Compiling revm-database-interface v43.0.1
+[sp1]     Compiling alloy-sol-macro v1.7.3
+[sp1]     Compiling alloy-chains v0.2.34
+[sp1]     Compiling primefield v0.14.0
+[sp1]     Compiling cipher v0.5.2
+[sp1]     Compiling alloy-hardforks v0.4.9
+[sp1]     Compiling alloy-sol-types v1.7.3
+[sp1]     Compiling commonware-formatting v2026.9.0
+[sp1]     Compiling wnaf v0.14.0
+[sp1]     Compiling signature v3.0.0
+[sp1]     Compiling universal-hash v0.6.1
+[sp1]     Compiling commonware-utils v2026.9.0
+[sp1]     Compiling poly1305 v0.9.1
+[sp1]     Compiling ecdsa v0.17.0
+[sp1]     Compiling primeorder v0.14.0
+[sp1]     Compiling chacha20 v0.10.0
+[sp1]     Compiling curve25519-dalek v5.0.0
+[sp1]     Compiling aead v0.6.1
+[sp1]     Compiling commonware-parallel v2026.9.0
+[sp1]     Compiling chacha20poly1305 v0.11.0
+[sp1]     Compiling p256 v0.14.0
+[sp1]     Compiling slop-symmetric v6.8.1
+[sp1]     Compiling p3-challenger v0.4.3-succinct
+[sp1]     Compiling slop-algebra v6.8.1
+[sp1]     Compiling alloy-eips v2.5.0
+[sp1]     Compiling x25519-dalek v3.0.0
+[sp1]     Compiling commonware-math v2026.9.0
+[sp1]     Compiling revm-context-interface v43.0.2
+[sp1]     Compiling revm-database v43.0.1
+[sp1]     Compiling thiserror v2.0.18
+[sp1]     Compiling commonware-cryptography v2026.9.0
+[sp1]     Compiling slop-challenger v6.8.1
+[sp1]     Compiling slop-poseidon2 v6.8.1
+[sp1]     Compiling alloy-core v1.7.3
+[sp1]     Compiling minicbor-serde v0.7.1
+[sp1]     Compiling alloy v2.5.0
+[sp1]     Compiling p3-koala-bear v0.4.3-succinct
+[sp1]     Compiling alloy-consensus v2.5.0
+[sp1]     Compiling alloy-genesis v2.5.0
+[sp1]     Compiling tempo-precompiles v1.14.0 (/Users/hiroyusai/src/tempo-spike/tempo/crates/precompiles)
+[sp1]     Compiling revm-interpreter v43.0.2
+[sp1]     Compiling revm-context v43.0.3
+[sp1]     Compiling p3-bn254-fr v0.4.3-succinct
+[sp1]     Compiling p384 v0.13.1
+[sp1]     Compiling x509-cert v0.2.5
+[sp1]     Compiling slop-koala-bear v6.8.1
+[sp1]     Compiling tempo-precompiles-macros v1.14.0 (/Users/hiroyusai/src/tempo-spike/tempo/crates/precompiles-macros)
+[sp1]     Compiling bincode v1.3.3
+[sp1]     Compiling embedded-alloc v0.6.0
+[sp1]     Compiling libm v0.2.16
+[sp1]     Compiling getrandom v0.3.4
+[sp1]     Compiling reth-primitives-traits v0.8.2
+[sp1]     Compiling tempo-nitro-attestation v1.14.0 (/Users/hiroyusai/src/tempo-spike/tempo/crates/nitro-attestation)
+[sp1]     Compiling slop-bn254 v6.8.1
+[sp1]     Compiling reth-ethereum-primitives v2.7.0 (https://github.com/paradigmxyz/reth?rev=038edab#038edab2)
+[sp1]     Compiling sp1-primitives v6.8.1
+[sp1]     Compiling sp1-lib v6.8.1
+[sp1]     Compiling sp1-zkvm v6.8.1
+[sp1]     Compiling ark-poly v0.6.0
+[sp1]     Compiling ark-ec v0.6.0
+[sp1]     Compiling ark-bls12-381 v0.6.0
+[sp1]     Compiling ark-bn254 v0.6.0
+[sp1]     Compiling revm-precompile v43.0.3
+[sp1]     Compiling revm-handler v43.0.3
+[sp1]     Compiling revm-inspector v43.0.3
+[sp1]     Compiling revm v43.0.3
+[sp1]     Compiling alloy-evm v0.39.0
+[sp1]     Compiling tempo-hardfork v1.11.0 (/Users/hiroyusai/src/tempo-spike/tempo/crates/hardfork)
+[sp1]     Compiling tempo-contracts v1.11.0 (/Users/hiroyusai/src/tempo-spike/tempo/crates/contracts)
+[sp1]     Compiling tempo-primitives v1.11.0 (/Users/hiroyusai/src/tempo-spike/tempo/crates/primitives)
+[sp1]     Compiling tempo-chainspec v1.11.0 (/Users/hiroyusai/src/tempo-spike/tempo/crates/chainspec)
+[sp1]  error[E0658]: use of unstable library feature `array_windows`
+[sp1]      --> /Users/hiroyusai/src/tempo-spike/tempo/crates/precompiles/src/stablecoin_dex/mod.rs:1701:43
+[sp1]       |
+[sp1]  1701 |         for [token_in, token_out] in path.array_windows::<2>().copied() {
+[sp1]       |                                           ^^^^^^^^^^^^^
+[sp1]       |
+[sp1]       = note: see issue #75027 <https://github.com/rust-lang/rust/issues/75027> for more information
+[sp1]       = help: add `#![feature(array_windows)]` to the crate attributes to enable
+[sp1]  
+[sp1]  For more information about this error, try `rustc --explain E0658`.
+[sp1]  error: could not compile `tempo-precompiles` (lib) due to 1 previous error
+~/.sp1/bin/cargo-prove prove build --ignore-rust-version 2>&1  138.97s user 7.72s system 428% cpu 34.217 total

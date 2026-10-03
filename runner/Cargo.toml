@@ -1,0 +1,9 @@
+[package]
+name = "spike-runner"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+sp1-sdk = { version = "=6.3.1", features = ["blocking", "native-gnark"] }
+
+[workspace]

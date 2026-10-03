@@ -1,0 +1,14 @@
+[package]
+name = "spike-core"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tempo-revm.workspace = true
+tempo-primitives.workspace = true
+tempo-chainspec.workspace = true
+revm.workspace = true
+alloy-primitives = { workspace = true, features = ["serde"] }
+alloy-rlp.workspace = true
+alloy-trie.workspace = true
+serde.workspace = true

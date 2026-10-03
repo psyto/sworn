@@ -1,0 +1,82 @@
+client init wall: 12.569217292s
+execute wall: 116.82325ms
+cycles(total_instruction_count): 3500181
+report: gas: 3440269
+opcode counts (3500181 total instructions):
+    770116 xor
+    359719 addi
+    338683 sll
+    321785 or
+    288696 ld
+    273290 sd
+    268558 srl
+    259508 and
+    162843 lbu
+     95719 sb
+     71268 add
+     59980 bne
+     40804 beq
+     27032 jalr
+     26693 bltu
+     19259 auipc
+     18699 lui
+     17043 lhu
+     15713 sub
+     13076 bgeu
+     11181 mul
+     10326 jal
+      6423 subw
+      5894 sltu
+      5510 mulhu
+      2520 srlw
+      1773 sh
+      1756 blt
+      1622 lb
+      1350 lh
+      1192 sw
+       922 addw
+       683 lw
+       290 bge
+       103 lwu
+        87 sra
+        30 ecall
+        21 slt
+        14 sllw
+syscall counts (0 total syscall instructions):
+
+GATE C output match vs native: PASS
+setup wall: 2.202441834s
+Setting environment variables took 507.417µs
+Reading R1CS took 12.154297125s
+Reading proving key took 2.732510334s
+Reading witness file took 2.062125ms
+Deserializing JSON data took 26.576375ms
+Generating witness took 362.173625ms
+[90m12:15:43[0m DBG constraint system solver done [36mnbConstraints=[0m15972262 [36mtook=[0m4010.158666
+[90m12:16:11[0m DBG prover done [36macceleration=[0mnone [36mbackend=[0mgroth16 [36mcurve=[0mbn254 [36mnbConstraints=[0m15972262 [36mtook=[0m27452.039209
+Generating proof took 31.468474459s
+[90m12:16:11[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m12:16:11[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m12:16:11[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m12:16:11[0m DBG verifier done [36mbackend=[0mgroth16 [36mcurve=[0mbn254 [36mtook=[0m1.123333
+PROVE groth16 wall: 352.166743833s
+proof pv match: true
+verify ok (198.585292ms)
+      369.75 real      3221.86 user        98.95 sys
+         15574171648  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            10434280  page reclaims
+                 515  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+               18231  signals received
+               52284  voluntary context switches
+             5549602  involuntary context switches
+      29848053911793  instructions retired
+      10121389401748  cycles elapsed
+         32980772208  peak memory footprint

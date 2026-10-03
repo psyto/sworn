@@ -1,0 +1,17 @@
+[workspace]
+members = ["core", "host"]
+exclude = ["tempo", "program"]
+resolver = "3"
+
+[workspace.dependencies]
+tempo-revm = { path = "tempo/crates/revm", default-features = false }
+tempo-primitives = { path = "tempo/crates/primitives", default-features = false }
+tempo-chainspec = { path = "tempo/crates/chainspec", default-features = false }
+revm = { version = "43.0.3", default-features = false, features = ["std", "optional_fee_charge", "optional_balance_check", "optional_block_gas_limit", "optional_eip3607", "optional_no_base_fee"] }
+alloy-primitives = { version = "1.7.3", default-features = false }
+alloy-rlp = { version = "0.3.16", default-features = false }
+alloy-trie = { version = "0.9.8", default-features = false, features = ["ethereum"] }
+serde = { version = "1", default-features = false, features = ["derive", "alloc"] }
+
+[profile.release]
+opt-level = 3

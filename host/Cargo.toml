@@ -1,0 +1,10 @@
+[package]
+name = "spike-host"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+spike-core = { path = "../core" }
+alloy-primitives = { workspace = true, features = ["serde", "std"] }
+serde_json = "1"
+bincode = "1.3"
