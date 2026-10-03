@@ -192,7 +192,7 @@ and it accepts transactions whose fee collection Tempo would reject.
 | **B5** drift: four favourable cases cannot show equivalence | AC-2: **replay real Moderato TIP-20 transactions** and match their receipts (status, gas, fee, logs, balances). The server re-runs it hourly and stops answering on any mismatch |
 | MAJOR unbond race / coverage > bond / stale block | §3.3: **`reserve()`** — the server's own on-chain commitment locks the coverage, pins the block hash, and is refused while unbonding. One mechanism closes all three |
 | MAJOR server withholds the witness | §3.5: **the client captures its own witness** within the ~150 s proof window; the server's witness is optional |
-| MAJOR "1-cent answer, 500 covered" economics | §5: answers are priced to cover the reservation (~0.4 PathUSD of gas, measured basis below); the product is **a preflight bought before a high-value payment**, not a penny API |
+| MAJOR "1-cent answer, 500 covered" economics | §5: answers are priced to cover the reservation (r2 said ~0.4 PathUSD of gas; measured 2026-10-03: ~0.0003 PathUSD — see §5); the product is **a preflight bought before a high-value payment**, not a penny API |
 | MAJOR gas equality claimed but not checked | **Correction:** r1 §2.1 said gas was identical to `debug_traceCall`. The host compares only success and return bytes (`host/src/main.rs`); **gas was never checked by code.** AC-2 now checks it |
 | MINOR p384 substitute | Q5 → decided: feature-gated **out** of the guest |
 
@@ -363,9 +363,11 @@ zero-knowledge proof, against Tempo's own block hash. No judge, no owner."*
 
 ## 5. Economics, honestly
 
-- Reservation ≈ 2–3 cold `SSTORE`s ≈ **0.6–0.8 M gas** on Tempo; at the 2026-09-08 price
-  (31 M gas ≈ 15.5 PathUSD) that is **≈ 0.3–0.4 PathUSD** per answer. The answer must be priced above
-  that, so this is **for payments where a wrong preflight costs far more than 0.50**, not for API calls.
+- ~~Reservation ≈ 0.3–0.4 PathUSD per answer~~ — **wrong by ~1,000×** (it used the 2026-09-08 gas price).
+  **Measured on Moderato, 2026-10-03:** reserve tx `0xb2bf…7529`, gasUsed **551,714** at effectiveGasPrice
+  600,000,001 → fee **331 units = 0.000331 PathUSD** (fee units = gasUsed × price / 1e12, 6 decimals). A
+  reservation costs about **three hundredths of a cent**, so fees do not set a floor on the answer's price;
+  the binding cost is the **bond locked** for `CHALLENGE_PERIOD`, not gas.
 - The bond is locked per answer for `CHALLENGE_PERIOD`; a server's capacity = bond ÷ (answers in flight
   × coverage). Who funds bonds and why (trust signal for an MPP data seller; premium as a % of
   coverage) is a hypothesis, not evidence.

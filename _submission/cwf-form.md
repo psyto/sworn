@@ -158,7 +158,7 @@ The repository starts on 2026-10-03, inside the window; every commit is CWF work
 ```
 I do not know yet, and I will not claim a user I do not have. What is measured is the gap: MPP specifies charges, sessions and subscriptions, and its refunds page says refunds are out-of-protocol and the server's decision. The nearest entries building on Tempo resolve disputes with a human or a resolver. Tempo's receive policies make "the transfer succeeded" and "the receiver was paid" different facts, which a paying agent cannot see without executing the transfer.
 
-The demand hypothesis is two-sided and testable: agents and treasuries pay for a preflight when a wrong one costs more than the answer (so: payments well above the ~0.4 PathUSD a reservation costs), and MPP data sellers bond their answers because "slashable if wrong" is a stronger claim than "trusted". The first test after the window is to offer a bonded endpoint to MPP service operators and count how many bond.
+The demand hypothesis is two-sided and testable: agents and treasuries pay for a preflight when a wrong one costs more than the answer (a reservation costs ~0.0003 PathUSD in fees on Moderato; the real cost is the bond locked while it can be challenged), and MPP data sellers bond their answers because "slashable if wrong" is a stronger claim than "trusted". The first test after the window is to offer a bonded endpoint to MPP service operators and count how many bond.
 ```
 
 ## How far along are you? Do you have users? · ≤1000
