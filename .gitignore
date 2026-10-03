@@ -22,3 +22,9 @@ video/.forge/
 video/*.raw.mp4
 video/*.marks.json
 video/scenes/
+video/takes/
+video/*.slides.mp4
+video/takes/*/*.raw.mp4
+video/*.raw.mp4
+video/demo.slides.mp4
+.DS_Store

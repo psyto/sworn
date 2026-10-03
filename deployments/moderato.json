@@ -41,5 +41,20 @@
     "provingSecs": 413.7,
     "honestAnswerChallenge": "rejected with AnswerCorrect after verifyProof (dry run, nothing sent) - out/e2e/moderato-20261003T064745Z-honestReverts-recheck.log",
     "verifiedIndependently": "receipt status 1, Slashed topic0 matches Sworn.sol event, client balance read at block-1 and block, 2026-10-03"
+  },
+  "demoLiveTake": {
+    "take": "video/takes/demo-20261003T120907Z",
+    "date": "2026-10-03",
+    "honestReserve": "0x07d7656bc70012d011900259863f61c33e5b06478e5fd4aff13e497426049c45",
+    "dishonestReserve": "0x5ffec9c634f29ed1679a75cd8279a38339ddca460b4718132b3c959e24071532",
+    "paymentDivertedToReceivePolicyGuard": "0xa298773914d722ad2ef1fface83be2e06a489f811e9e5d2b4e6652606c255b12",
+    "paymentBlock": 37988418,
+    "guardDelta": "500000000",
+    "receiverDelta": "0",
+    "challengeTx": "0xbf8ef2e317359cceee89bc29ea2ef9512bd13b9a916805751e2653c71f39f046",
+    "challengeBlock": 37989266,
+    "clientPathUSDDelta": "500000000",
+    "provingRealTime": "8 min 22 s",
+    "verifiedIndependently": "receipt status 1 and Slashed from Sworn; guard +500 / R' +0 read at payment block-1 and block; client +500 at challenge block-1 and block"
   }
 }

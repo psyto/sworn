@@ -1,60 +1,74 @@
-// Split a recorded check-in into its three scenes, each with the narration that belongs to it —
-// for adding voice scene by scene (e.g. in Google Vids).
+// Split a recorded video into its scenes, each with the narration that belongs to it — for adding the
+// founder's voice scene by scene (e.g. in Google Vids).
 //
-//   node video/split-scenes.mjs B        # or A, after `VARIANT=A … record-checkin.mjs`
+//   node video/split-scenes.mjs pitch     # after record-pitch.mjs  → video/scenes/pitch/
+//   node video/split-scenes.mjs demo      # after record-demo.mjs   → video/scenes/demo/
+//   node video/split-scenes.mjs B         # after VARIANT=B record-checkin.mjs (or A) → video/scenes/checkin-3-B/
 //
-// Reads video/checkin-3-<V>.mp4 and its .marks.json (written by record-checkin.mjs), and the
-// narration from video/CHECKIN-3.md — the same file the recorder derived the scene lengths from, so
-// the words and the clip lengths cannot drift apart. Writes video/scenes/checkin-3-<V>/:
-//   scene-1.mp4 scene-2.mp4 scene-3.mp4   (silent, re-encoded so each cut is frame-accurate)
-//   scene-1.txt scene-2.txt scene-3.txt   (the lines to read over that clip)
-//   NARRATION.md                          (all three, with target lengths)
+// Reads video/<name>.mp4 and its .marks.json (written by the recorder: the per-scene clip lengths), and
+// the narration from the same script the recorder derived those lengths from (PITCH.md / DEMO.md /
+// CHECKIN-3.md), so the words and the clip lengths cannot drift apart. Writes:
+//   scene-N.mp4   (silent, re-encoded so each cut is frame-accurate)
+//   scene-N.txt   (the lines to read over that clip)
+//   NARRATION.md  (all scenes, with target lengths)
 import path from "node:path";
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { parseScenes, countWords } from "./lib/rec.mjs";
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
-const V = (process.argv[2] || "").toUpperCase();
-if (!["A", "B"].includes(V)) throw new Error("usage: node video/split-scenes.mjs A|B");
+const arg = process.argv[2] || "";
 const FFMPEG = process.env.FFMPEG_PATH || "/opt/homebrew/bin/ffmpeg";
 const FFPROBE = FFMPEG.replace(/ffmpeg$/, "ffprobe");
 
-const src = path.join(dir, `checkin-3-${V}.mp4`);
-const marksFile = path.join(dir, `checkin-3-${V}.marks.json`);
-for (const f of [src, marksFile]) if (!existsSync(f)) throw new Error(`missing ${path.relative(dir, f)} — record variant ${V} first`);
-const { holds, variant } = JSON.parse(readFileSync(marksFile, "utf8"));
-if (variant !== V || holds?.length !== 3) throw new Error(`${path.basename(marksFile)}: expected variant ${V} with 3 holds`);
+let base, scenes, names, heading;
+if (arg === "pitch" || arg === "demo") {
+  base = arg;
+  const parsed = parseScenes(`video/${arg.toUpperCase()}.md`);
+  scenes = parsed.map((s) => s.text);
+  names = parsed.map((s) => s.title);
+  heading = `${arg === "pitch" ? "Pitch" : "Demo"} — narration by scene`;
+} else if (["A", "B"].includes(arg.toUpperCase())) {
+  const V = arg.toUpperCase();
+  base = `checkin-3-${V}`;
+  const md = readFileSync(path.join(dir, "CHECKIN-3.md"), "utf8");
+  const sec = md.split(`## Variant ${V}`)[1]?.split(/\n## /)[0];
+  if (!sec) throw new Error(`CHECKIN-3.md: no "## Variant ${V}" section`);
+  scenes = sec.split(/\*\*\[Screen \d/).slice(1).map((chunk) =>
+    chunk.split("\n").filter((l) => l.startsWith("> ")).map((l) => l.slice(2).trim()).join(" "));
+  names = ["what I changed", "what it does", "what I learned / next"];
+  heading = `Check-in 3, variant ${V} — narration by scene`;
+} else throw new Error("usage: node video/split-scenes.mjs pitch|demo|A|B");
 
-// Narration per scene, from the same script the recorder read.
-const md = readFileSync(path.join(dir, "CHECKIN-3.md"), "utf8");
-const sec = md.split(`## Variant ${V}`)[1]?.split(/\n## /)[0];
-if (!sec) throw new Error(`CHECKIN-3.md: no "## Variant ${V}" section`);
-const scenes = sec.split(/\*\*\[Screen \d/).slice(1).map((chunk) =>
-  chunk.split("\n").filter((l) => l.startsWith("> ")).map((l) => l.slice(2).trim()).join(" "));
-if (scenes.length !== 3 || scenes.some((s) => !s)) throw new Error(`CHECKIN-3.md variant ${V}: expected 3 scenes with narration`);
+const src = path.join(dir, `${base}.mp4`);
+const marksFile = path.join(dir, `${base}.marks.json`);
+for (const f of [src, marksFile]) if (!existsSync(f)) throw new Error(`missing ${path.relative(dir, f)} — record it first`);
+const marks = JSON.parse(readFileSync(marksFile, "utf8"));
+const holds = marks.holds;
+if (holds?.length !== scenes.length || scenes.some((s) => !s)) throw new Error(`${path.basename(marksFile)}: ${holds?.length} holds for ${scenes.length} scenes with narration`);
 
 const total = parseFloat(execFileSync(FFPROBE, ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", src], { encoding: "utf8" }));
 const sum = holds.reduce((a, b) => a + b, 0);
 if (Math.abs(total - sum) > 0.1) throw new Error(`${path.basename(src)} is ${total}s but holds sum to ${sum}s — re-record`);
 
-const out = path.join(dir, "scenes", `checkin-3-${V}`);
+const out = path.join(dir, "scenes", arg === "pitch" || arg === "demo" ? arg : base);
 mkdirSync(out, { recursive: true });
-const names = ["what I changed", "what it does", "what I learned / next"];
-let start = 0;
-const doc = [`# Check-in 3, variant ${V} — narration by scene\n`,
+const doc = [`# ${heading}\n`,
   `Read each block over its clip. Target pace ≈ 2.2 words/s (the clip lengths were derived from it).`,
-  `Narration is the founder's own voice. Total ${sum} s.\n`];
-for (let i = 0; i < 3; i++) {
+  `Narration is the founder's own voice. Total ${+sum.toFixed(2)} s.\n`];
+if (marks.note) doc.push(`${marks.note}\n`);
+let start = 0;
+for (let i = 0; i < scenes.length; i++) {
   const n = i + 1, hold = holds[i];
   const clip = path.join(out, `scene-${n}.mp4`);
   execFileSync(FFMPEG, ["-v", "error", "-y", "-ss", String(start), "-i", src, "-t", String(hold),
     "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "medium", "-crf", "18", clip]);
   const got = parseFloat(execFileSync(FFPROBE, ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", clip], { encoding: "utf8" }));
   if (Math.abs(got - hold) > 0.1) throw new Error(`scene-${n}.mp4 is ${got}s, expected ${hold}s`);
-  const words = scenes[i].split(/\s+/).length;
+  const words = countWords(scenes[i]);
   writeFileSync(path.join(out, `scene-${n}.txt`), scenes[i] + "\n");
-  doc.push(`## Scene ${n} — ${names[i]} · ${hold} s · ${words} words\n\n${scenes[i]}\n`);
+  doc.push(`## Scene ${n} — ${names[i]} · ${+hold.toFixed(2)} s · ${words} words\n\n${scenes[i]}\n`);
   process.stderr.write(`✓ scene-${n}.mp4  ${got.toFixed(2)} s  (${words} words)\n`);
   start += hold;
 }

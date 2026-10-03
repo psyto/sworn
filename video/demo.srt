@@ -1,0 +1,127 @@
+1
+00:00:00,000 --> 00:00:06,728
+This paying agent is about to send 500 test dollars on Tempo's testnet.
+
+2
+00:00:06,778 --> 00:00:12,984
+First it asks a preflight provider: will the receiver actually get it?
+
+3
+00:00:13,034 --> 00:00:19,762
+This provider — I configured it to lie, and it says so — answers "yes,
+
+4
+00:00:19,812 --> 00:00:26,540
+plus 500", and bonds 500 of its own money behind that answer, on-chain.
+
+5
+00:00:26,590 --> 00:00:28,104
+The agent pays.
+
+6
+00:00:28,154 --> 00:00:32,275
+The transaction succeeds — but the receiver gets nothing:
+
+7
+00:00:32,325 --> 00:00:39,574
+its policy blocks this sender, so Tempo holds the 500 in its receive-policy guard.
+
+8
+00:00:39,624 --> 00:00:41,659
+The answer was wrong.
+
+9
+00:00:41,709 --> 00:00:44,788
+A challenger — here, the agent itself
+
+10
+00:00:44,838 --> 00:00:54,172
+— re-runs that transfer with Tempo's own engine inside a zero-knowledge proof: about seven minutes, locally; sped up here.
+
+11
+00:00:54,222 --> 00:01:00,950
+The contract verifies the proof, and the provider's bond pays the agent 500.
+
+12
+00:01:01,000 --> 00:01:04,194
+The same machinery protects an honest server.
+
+13
+00:01:04,244 --> 00:01:06,511
+Here the answer was right.
+
+14
+00:01:06,561 --> 00:01:11,609
+A challenge with a real proof — simulated, so nothing is sent
+
+15
+00:01:11,659 --> 00:01:17,170
+— is rejected: the contract verifies the proof, then sees the answer matches.
+
+16
+00:01:17,220 --> 00:01:19,950
+A correct answer is never slashed.
+
+17
+00:01:20,000 --> 00:01:33,682
+Before relying on an answer, the agent's SDK checks five things: the question is the one it asked; the reservation is on-chain, for it; the digest it computes itself matches;
+
+18
+00:01:33,732 --> 00:01:49,704
+the contract and the proof key are the ones it expects; and it saved the chain's own state proofs — in about nine seconds here — so the server can't make an answer unchallengeable by withholding evidence.
+
+19
+00:01:49,754 --> 00:01:52,450
+If that fails, it says so.
+
+20
+00:01:52,500 --> 00:01:54,288
+Why trust the proof?
+
+21
+00:01:54,338 --> 00:01:59,342
+It runs Tempo's own code — tempo-revm, the engine in Tempo's node,
+
+22
+00:01:59,392 --> 00:02:03,477
+built for a zero-knowledge VM with three small patches.
+
+23
+00:02:03,527 --> 00:02:10,828
+I replayed forty real Moderato transfers through it, on state proven against the block before each:
+
+24
+00:02:10,878 --> 00:02:16,342
+forty of forty match their receipts — status, gas, fees, logs and balances.
+
+25
+00:02:16,392 --> 00:02:21,396
+Tempo's own Zones verifier says it isn't a proving guest yet.
+
+26
+00:02:21,446 --> 00:02:26,450
+The contract has no owner, no admin and no upgrade path.
+
+27
+00:02:26,500 --> 00:02:32,408
+A reservation costs about three hundredths of a cent in fees on Tempo;
+
+28
+00:02:32,458 --> 00:02:38,367
+the real cost is the server's bond, locked for a day per answer.
+
+29
+00:02:38,417 --> 00:02:43,408
+It insures the answer about one block — not a later payment.
+
+30
+00:02:43,458 --> 00:02:47,992
+Next: MPP sellers who want to stand behind their answers.
+
+31
+00:02:48,042 --> 00:02:50,283
+Open source, on Moderato today.
+
+32
+00:02:50,333 --> 00:02:53,950
+Sworn — paid answers that can be proven false.
