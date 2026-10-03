@@ -26,6 +26,23 @@ const transferEv = parseAbiItem("event Transfer(address indexed from, address in
 
 const CHUNK = 5_000n;
 
+// The public Moderato RPC rejects bursts of eth_getLogs with "Request exceeds defined limit": the three
+// queries below used to run in parallel (12 requests at once) and the phone view showed only that error.
+// They now run one after another, and a chunk that hits the limit is retried after a short backoff.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const feedCache = new Map<string, { head: bigint; reserved: any[]; slashed: any[]; diverted: any[] }>();
+
+async function withRetry<T>(f: () => Promise<T>, tries = 4): Promise<T> {
+  for (let i = 0; ; i++) {
+    try {
+      return await f();
+    } catch (e) {
+      if (i + 1 >= tries || !/exceeds defined limit|rate limit|429/i.test(String((e as Error)?.message ?? e))) throw e;
+      await new Promise((r) => setTimeout(r, 400 * 2 ** i));
+    }
+  }
+}
+
 async function chunked<T>(from: bigint, to: bigint, f: (a: bigint, b: bigint) => Promise<T[]>): Promise<T[]> {
   const out: T[] = [];
   for (let a = from; a <= to; a += CHUNK) {
@@ -45,19 +62,24 @@ export async function readOwnerFeed(
   try {
     const head = await client.getBlockNumber({ cacheTime: 0 });
     const from = head > cfg.feedLookback ? head - cfg.feedLookback : 0n;
+    // Incremental: logs already read for this (contract, owner, token) are kept; only blocks after the last
+    // head are queried again. Re-reading the whole window every poll tripped the public RPC's rate limit.
+    const key = `${cfg.sworn}|${owner}|${paymentToken}`;
+    const prev = feedCache.get(key);
+    const scanFrom = prev && prev.head >= from ? prev.head + 1n : from;
     const bondToken = (await client.readContract({
       address: cfg.sworn,
       abi: [parseAbiItem("function BOND_TOKEN() view returns (address)")],
       functionName: "BOND_TOKEN",
     })) as Address;
-    const [reserved, slashed, diverted] = await Promise.all([
-      chunked(from, head, (a, b) =>
-        client.getLogs({ address: cfg.sworn, event: reservedEv, args: { client: owner }, fromBlock: a, toBlock: b }),
-      ),
-      chunked(from, head, (a, b) =>
-        client.getLogs({ address: cfg.sworn, event: slashedEv, args: { client: owner }, fromBlock: a, toBlock: b }),
-      ),
-      chunked(from, head, (a, b) =>
+    const reservedNew = await chunked(scanFrom, head, (a, b) =>
+      withRetry(() => client.getLogs({ address: cfg.sworn, event: reservedEv, args: { client: owner }, fromBlock: a, toBlock: b })),
+    );
+    const slashedNew = await chunked(scanFrom, head, (a, b) =>
+      withRetry(() => client.getLogs({ address: cfg.sworn, event: slashedEv, args: { client: owner }, fromBlock: a, toBlock: b })),
+    );
+    const divertedNew = await chunked(scanFrom, head, (a, b) =>
+      withRetry(() =>
         client.getLogs({
           address: paymentToken,
           event: transferEv,
@@ -66,7 +88,11 @@ export async function readOwnerFeed(
           toBlock: b,
         }),
       ),
-    ]);
+    );
+    const reserved = [...(prev?.reserved ?? []), ...reservedNew];
+    const slashed = [...(prev?.slashed ?? []), ...slashedNew];
+    const diverted = [...(prev?.diverted ?? []), ...divertedNew];
+    feedCache.set(key, { head, reserved, slashed, diverted });
     const notices: Notice[] = [
       ...reserved.map((l) => ({
         kind: "reserved" as const,

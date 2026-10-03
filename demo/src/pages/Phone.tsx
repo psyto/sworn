@@ -26,7 +26,7 @@ export function PhonePage() {
   const feed = useRead(
     who.status === "ok" ? () => readOwnerFeed(client, cfg, who.value.agent, who.value.token) : null,
     [client, cfg, who.status === "ok" ? who.value.agent : null],
-    4000,
+    10000, // the feed reads incrementally (feed.ts); 10 s keeps the public RPC under its rate limit
   );
   return (
     <>

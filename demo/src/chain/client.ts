@@ -13,5 +13,5 @@ export function makeChain(c: ChainConfig) {
 }
 
 export function makePublicClient(c: ChainConfig): PublicClient {
-  return createPublicClient({ chain: makeChain(c), transport: http(c.rpcUrl, { retryCount: 1 }) }) as PublicClient;
+  return createPublicClient({ chain: makeChain(c), transport: http(c.rpcUrl, { retryCount: 6, retryDelay: 300 }) /* public Moderato RPC rate-limits (429, -32005); viem backs off */ }) as PublicClient;
 }
