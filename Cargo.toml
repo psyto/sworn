@@ -7,6 +7,8 @@ resolver = "3"
 tempo-revm = { path = "tempo/crates/revm", default-features = false }
 tempo-primitives = { path = "tempo/crates/primitives", default-features = false }
 tempo-chainspec = { path = "tempo/crates/chainspec", default-features = false }
+tempo-precompiles = { path = "tempo/crates/precompiles", default-features = false }
+alloy-sol-types = { version = "1.7.3", default-features = false }
 revm = { version = "43.0.3", default-features = false, features = ["std", "optional_fee_charge", "optional_balance_check", "optional_block_gas_limit", "optional_eip3607", "optional_no_base_fee"] }
 alloy-primitives = { version = "1.7.3", default-features = false }
 alloy-rlp = { version = "0.3.16", default-features = false }

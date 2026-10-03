@@ -1,0 +1,663 @@
+{
+  "block": 37945146,
+  "blockHash": "0x19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a",
+  "cases": [
+    {
+      "ac1b": "fees-on differs from fees-off: UNVALIDATED by RPC (validated only to the extent AC-2 covers it)",
+      "answer": {
+        "feeCharged": "19",
+        "gasUsed": 31142,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "69000411000000",
+        "receiverBefore": "69000410000000",
+        "returnDataHash": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6",
+        "success": true
+      },
+      "answer_fees_off": {
+        "feeCharged": "0",
+        "gasUsed": 37942,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "69000411000000",
+        "receiverBefore": "69000410000000",
+        "returnDataHash": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6",
+        "success": true
+      },
+      "case": "ordinary",
+      "compare": {
+        "feeCharged": {
+          "counted": false,
+          "guest_fees_on": "19",
+          "rpc": "not expressible: RPC eth_call/debug_traceCall path does not charge fees"
+        },
+        "gasUsed": {
+          "eq": true,
+          "guest_fees_off": 37942,
+          "guest_fees_on": 31142,
+          "rpc": 37942
+        },
+        "receiverAfter": {
+          "eq": true,
+          "guest_fees_off": "69000411000000",
+          "guest_fees_on": "69000411000000",
+          "rpc": "69000411000000"
+        },
+        "receiverBefore": {
+          "eq": true,
+          "guest_fees_off": "69000410000000",
+          "guest_fees_on": "69000410000000",
+          "rpc": "69000410000000"
+        },
+        "returnDataHash": {
+          "eq": true,
+          "guest_fees_off": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6",
+          "guest_fees_on": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6",
+          "rpc": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6"
+        },
+        "rpc_expressible_variant": null,
+        "success": {
+          "eq": true,
+          "guest_fees_off": true,
+          "guest_fees_on": true,
+          "rpc": true
+        }
+      },
+      "discovery_ms": 3087,
+      "invalid": null,
+      "public_values": "0x51e24160ef5467ba88166fd247c9bfb07b88e76ee08e430346c1353fda5e233d19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000001b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf600000000000000000000000000000000000000000000000000000000000079a600000000000000000000000000000000000000000000000000000000000000130000000000000000000000008624b22d64678985aaee78abff7643e58e69076c00000000000000000000000000000000000000000000000000003ec168ed6a8000000000000000000000000000000000000000000000000000003ec168fcacc0000000000000000000000000000000000000000000000000000000000000a5bf000000000000000000000000000000000000000000000000000000000242ff3a19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000067187698f30418a78a2f3f197569da694f03d65500000000000000000000000020c0000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000010000000000000000000000000020c000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000493e00000000000000000000000000000000000000000000000000000000000000044a9059cbb0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c00000000000000000000000000000000000000000000000000000000000f424000000000000000000000000000000000000000000000000000000000",
+      "question": {
+        "blockHash": "0x19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a",
+        "blockNumber": 37945146,
+        "chainId": 42431,
+        "data": "0xa9059cbb0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c00000000000000000000000000000000000000000000000000000000000f4240",
+        "feeToken": "0x20c0000000000000000000000000000000000001",
+        "from": "0x67187698f30418a78a2f3f197569da694f03d655",
+        "gasLimit": 300000,
+        "token": "0x20c0000000000000000000000000000000000001"
+      },
+      "rpc_note": "callTracer ok=true gasUsed=37942 err=None; eth_call=\"0x0000000000000000000000000000000000000000000000000000000000000001\"",
+      "status": "AC-1a MATCHED",
+      "witness_accounts": 4,
+      "witness_slots": 10
+    },
+    {
+      "ac1b": "fees-on differs from fees-off: UNVALIDATED by RPC (validated only to the extent AC-2 covers it)",
+      "answer": {
+        "feeCharged": "178",
+        "gasUsed": 295991,
+        "receiver": "0x384314c543c3cbe50d3f148f7da97d5f8be928ec",
+        "receiverAfter": "0",
+        "receiverBefore": "0",
+        "returnDataHash": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6",
+        "success": true
+      },
+      "answer_fees_off": {
+        "feeCharged": "0",
+        "gasUsed": 300000,
+        "receiver": "0x384314c543c3cbe50d3f148f7da97d5f8be928ec",
+        "receiverAfter": "0",
+        "receiverBefore": "0",
+        "returnDataHash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+        "success": false
+      },
+      "case": "receive_policy_blocked",
+      "compare": {
+        "feeCharged": {
+          "counted": false,
+          "guest_fees_on": "178",
+          "rpc": "not expressible: RPC eth_call/debug_traceCall path does not charge fees"
+        },
+        "gasUsed": {
+          "eq": true,
+          "guest_fees_off": 300000,
+          "guest_fees_on": 295991,
+          "rpc": 300000
+        },
+        "receiverAfter": {
+          "eq": true,
+          "guest_fees_off": "0",
+          "guest_fees_on": "0",
+          "rpc": "0"
+        },
+        "receiverBefore": {
+          "eq": true,
+          "guest_fees_off": "0",
+          "guest_fees_on": "0",
+          "rpc": "0"
+        },
+        "returnDataHash": {
+          "eq": true,
+          "guest_fees_off": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+          "guest_fees_on": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6",
+          "rpc": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        },
+        "rpc_expressible_variant": null,
+        "success": {
+          "eq": true,
+          "guest_fees_off": false,
+          "guest_fees_on": true,
+          "rpc": false
+        }
+      },
+      "discovery_ms": 4105,
+      "invalid": null,
+      "public_values": "0x51e24160ef5467ba88166fd247c9bfb07b88e76ee08e430346c1353fda5e233d19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000001b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6000000000000000000000000000000000000000000000000000000000004843700000000000000000000000000000000000000000000000000000000000000b2000000000000000000000000384314c543c3cbe50d3f148f7da97d5f8be928ec00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a5bf000000000000000000000000000000000000000000000000000000000242ff3a19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000067187698f30418a78a2f3f197569da694f03d65500000000000000000000000020c0000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000010000000000000000000000000020c000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000493e00000000000000000000000000000000000000000000000000000000000000044a9059cbb000000000000000000000000384314c543c3cbe50d3f148f7da97d5f8be928ec00000000000000000000000000000000000000000000000000000000000f424000000000000000000000000000000000000000000000000000000000",
+      "question": {
+        "blockHash": "0x19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a",
+        "blockNumber": 37945146,
+        "chainId": 42431,
+        "data": "0xa9059cbb000000000000000000000000384314c543c3cbe50d3f148f7da97d5f8be928ec00000000000000000000000000000000000000000000000000000000000f4240",
+        "feeToken": "0x20c0000000000000000000000000000000000001",
+        "from": "0x67187698f30418a78a2f3f197569da694f03d655",
+        "gasLimit": 300000,
+        "token": "0x20c0000000000000000000000000000000000001"
+      },
+      "rpc_note": "callTracer ok=false gasUsed=300000 err=Some(String(\"out of gas\")); eth_call={\"code\":-32003,\"message\":\"out of gas: gas exhausted during precompiled contract execution: 300000\"}",
+      "status": "AC-1a MATCHED",
+      "witness_accounts": 6,
+      "witness_slots": 14
+    },
+    {
+      "ac1b": "fees-on equals fees-off on all RPC-visible fields; feeCharged UNVALIDATED by RPC (AC-2 covers it)",
+      "answer": {
+        "feeCharged": "16",
+        "gasUsed": 25962,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "0",
+        "receiverBefore": "0",
+        "returnDataHash": "0xc4ed0b45c323202f940387239b088faa74da4c92133c451bca99023813ada630",
+        "success": false
+      },
+      "answer_fees_off": {
+        "feeCharged": "0",
+        "gasUsed": 25962,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "0",
+        "receiverBefore": "0",
+        "returnDataHash": "0xc4ed0b45c323202f940387239b088faa74da4c92133c451bca99023813ada630",
+        "success": false
+      },
+      "case": "tip403_rejected",
+      "compare": {
+        "feeCharged": {
+          "counted": false,
+          "guest_fees_on": "16",
+          "rpc": "not expressible: RPC eth_call/debug_traceCall path does not charge fees"
+        },
+        "gasUsed": {
+          "eq": true,
+          "guest_fees_off": 25962,
+          "guest_fees_on": 25962,
+          "rpc": 25962
+        },
+        "receiverAfter": {
+          "eq": true,
+          "guest_fees_off": "0",
+          "guest_fees_on": "0",
+          "rpc": "0"
+        },
+        "receiverBefore": {
+          "eq": true,
+          "guest_fees_off": "0",
+          "guest_fees_on": "0",
+          "rpc": "0"
+        },
+        "returnDataHash": {
+          "eq": true,
+          "guest_fees_off": "0xc4ed0b45c323202f940387239b088faa74da4c92133c451bca99023813ada630",
+          "guest_fees_on": "0xc4ed0b45c323202f940387239b088faa74da4c92133c451bca99023813ada630",
+          "rpc": "0xc4ed0b45c323202f940387239b088faa74da4c92133c451bca99023813ada630"
+        },
+        "rpc_expressible_variant": {
+          "answer": {
+            "feeCharged": "0",
+            "gasUsed": 25962,
+            "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+            "receiverAfter": "0",
+            "receiverBefore": "0",
+            "returnDataHash": "0xc4ed0b45c323202f940387239b088faa74da4c92133c451bca99023813ada630",
+            "success": false
+          },
+          "env": "fees off, fee_token=None (RPC-resolved)",
+          "matches_rpc": true
+        },
+        "success": {
+          "eq": true,
+          "guest_fees_off": false,
+          "guest_fees_on": false,
+          "rpc": false
+        }
+      },
+      "discovery_ms": 3232,
+      "invalid": null,
+      "public_values": "0x51e24160ef5467ba88166fd247c9bfb07b88e76ee08e430346c1353fda5e233d19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000000c4ed0b45c323202f940387239b088faa74da4c92133c451bca99023813ada630000000000000000000000000000000000000000000000000000000000000656a00000000000000000000000000000000000000000000000000000000000000100000000000000000000000008624b22d64678985aaee78abff7643e58e69076c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a5bf000000000000000000000000000000000000000000000000000000000242ff3a19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000067187698f30418a78a2f3f197569da694f03d65500000000000000000000000020c0000000000000000000005c58fc053c52e0d1000000000000000000000000000000000000000000000000000000000000010000000000000000000000000020c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000493e00000000000000000000000000000000000000000000000000000000000000044a9059cbb0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000",
+      "question": {
+        "blockHash": "0x19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a",
+        "blockNumber": 37945146,
+        "chainId": 42431,
+        "data": "0xa9059cbb0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c0000000000000000000000000000000000000000000000000000000000000001",
+        "feeToken": "0x20c0000000000000000000000000000000000000",
+        "from": "0x67187698f30418a78a2f3f197569da694f03d655",
+        "gasLimit": 300000,
+        "token": "0x20c0000000000000000000005c58fc053c52e0d1"
+      },
+      "rpc_note": "callTracer ok=false gasUsed=25962 err=Some(String(\"execution reverted\")); eth_call={\"code\":3,\"data\":\"0x54cfe659\",\"message\":\"execution reverted: TIP20 token error: PolicyForbids(PolicyForbids)\"}",
+      "status": "AC-1a NOT EXPRESSIBLE (fee token the RPC env resolves != q.feeToken) — not counted",
+      "witness_accounts": 5,
+      "witness_slots": 10
+    },
+    {
+      "ac1b": "fees-on differs from fees-off: UNVALIDATED by RPC (validated only to the extent AC-2 covers it)",
+      "answer": {
+        "feeCharged": "15",
+        "gasUsed": 24310,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "69000449230413",
+        "receiverBefore": "69000449230413",
+        "returnDataHash": "0x113d2f4e13e974308d5aee0a1a94f345399bbace7881f290abdefc0d70bd7d19",
+        "success": false
+      },
+      "answer_fees_off": {
+        "feeCharged": "0",
+        "gasUsed": 28310,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "69000449230413",
+        "receiverBefore": "69000449230413",
+        "returnDataHash": "0x0727b4caf67afdbbaee028f7a3b2dbbf39695a4248a559f87026d18d7cad3bde",
+        "success": false
+      },
+      "case": "insufficient_balance",
+      "compare": {
+        "feeCharged": {
+          "counted": false,
+          "guest_fees_on": "15",
+          "rpc": "not expressible: RPC eth_call/debug_traceCall path does not charge fees"
+        },
+        "gasUsed": {
+          "eq": true,
+          "guest_fees_off": 28310,
+          "guest_fees_on": 24310,
+          "rpc": 28310
+        },
+        "receiverAfter": {
+          "eq": true,
+          "guest_fees_off": "69000449230413",
+          "guest_fees_on": "69000449230413",
+          "rpc": "69000449230413"
+        },
+        "receiverBefore": {
+          "eq": true,
+          "guest_fees_off": "69000449230413",
+          "guest_fees_on": "69000449230413",
+          "rpc": "69000449230413"
+        },
+        "returnDataHash": {
+          "eq": true,
+          "guest_fees_off": "0x0727b4caf67afdbbaee028f7a3b2dbbf39695a4248a559f87026d18d7cad3bde",
+          "guest_fees_on": "0x113d2f4e13e974308d5aee0a1a94f345399bbace7881f290abdefc0d70bd7d19",
+          "rpc": "0x0727b4caf67afdbbaee028f7a3b2dbbf39695a4248a559f87026d18d7cad3bde"
+        },
+        "rpc_expressible_variant": null,
+        "success": {
+          "eq": true,
+          "guest_fees_off": false,
+          "guest_fees_on": false,
+          "rpc": false
+        }
+      },
+      "discovery_ms": 3512,
+      "invalid": null,
+      "public_values": "0x51e24160ef5467ba88166fd247c9bfb07b88e76ee08e430346c1353fda5e233d19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000000113d2f4e13e974308d5aee0a1a94f345399bbace7881f290abdefc0d70bd7d190000000000000000000000000000000000000000000000000000000000005ef6000000000000000000000000000000000000000000000000000000000000000f0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c00000000000000000000000000000000000000000000000000003ec16b44064d00000000000000000000000000000000000000000000000000003ec16b44064d000000000000000000000000000000000000000000000000000000000000a5bf000000000000000000000000000000000000000000000000000000000242ff3a19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000067187698f30418a78a2f3f197569da694f03d65500000000000000000000000020c0000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000010000000000000000000000000020c000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000493e00000000000000000000000000000000000000000000000000000000000000044a9059cbb0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c000000000000000000000000000000000000000000000000000000e8d4a5100100000000000000000000000000000000000000000000000000000000",
+      "question": {
+        "blockHash": "0x19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a",
+        "blockNumber": 37945146,
+        "chainId": 42431,
+        "data": "0xa9059cbb0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c000000000000000000000000000000000000000000000000000000e8d4a51001",
+        "feeToken": "0x20c0000000000000000000000000000000000002",
+        "from": "0x67187698f30418a78a2f3f197569da694f03d655",
+        "gasLimit": 300000,
+        "token": "0x20c0000000000000000000000000000000000002"
+      },
+      "rpc_note": "callTracer ok=false gasUsed=28310 err=Some(String(\"execution reverted\")); eth_call={\"code\":3,\"data\":\"0x832f98b5000000000000000000000000000000000000000000000000000000e8d4a51000000000000000000000000000000000000000000000000000000000e8d4a5100100000000000000000000000020c0000000000000000000000000000000000002\",\"message\":\"execution reverted: TIP20 token error: InsufficientBalance(InsufficientBalance { available: 1000000000000, required: 1000000000001, token: 0x20c0000000000000000000000000000000000002 })\"}",
+      "status": "AC-1a MATCHED",
+      "witness_accounts": 4,
+      "witness_slots": 10
+    },
+    {
+      "ac1b": "fees-on equals fees-off on all RPC-visible fields; feeCharged UNVALIDATED by RPC (AC-2 covers it)",
+      "answer": {
+        "feeCharged": "19",
+        "gasUsed": 30310,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "69000449230413",
+        "receiverBefore": "69000449230413",
+        "returnDataHash": "0x0727b4caf67afdbbaee028f7a3b2dbbf39695a4248a559f87026d18d7cad3bde",
+        "success": false
+      },
+      "answer_fees_off": {
+        "feeCharged": "0",
+        "gasUsed": 30310,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "69000449230413",
+        "receiverBefore": "69000449230413",
+        "returnDataHash": "0x0727b4caf67afdbbaee028f7a3b2dbbf39695a4248a559f87026d18d7cad3bde",
+        "success": false
+      },
+      "case": "insufficient_balance_other_fee_token",
+      "compare": {
+        "feeCharged": {
+          "counted": false,
+          "guest_fees_on": "19",
+          "rpc": "not expressible: RPC eth_call/debug_traceCall path does not charge fees"
+        },
+        "gasUsed": {
+          "eq": false,
+          "guest_fees_off": 30310,
+          "guest_fees_on": 30310,
+          "rpc": 28310
+        },
+        "receiverAfter": {
+          "eq": true,
+          "guest_fees_off": "69000449230413",
+          "guest_fees_on": "69000449230413",
+          "rpc": "69000449230413"
+        },
+        "receiverBefore": {
+          "eq": true,
+          "guest_fees_off": "69000449230413",
+          "guest_fees_on": "69000449230413",
+          "rpc": "69000449230413"
+        },
+        "returnDataHash": {
+          "eq": true,
+          "guest_fees_off": "0x0727b4caf67afdbbaee028f7a3b2dbbf39695a4248a559f87026d18d7cad3bde",
+          "guest_fees_on": "0x0727b4caf67afdbbaee028f7a3b2dbbf39695a4248a559f87026d18d7cad3bde",
+          "rpc": "0x0727b4caf67afdbbaee028f7a3b2dbbf39695a4248a559f87026d18d7cad3bde"
+        },
+        "rpc_expressible_variant": {
+          "answer": {
+            "feeCharged": "0",
+            "gasUsed": 28310,
+            "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+            "receiverAfter": "69000449230413",
+            "receiverBefore": "69000449230413",
+            "returnDataHash": "0x0727b4caf67afdbbaee028f7a3b2dbbf39695a4248a559f87026d18d7cad3bde",
+            "success": false
+          },
+          "env": "fees off, fee_token=None (RPC-resolved)",
+          "matches_rpc": true
+        },
+        "success": {
+          "eq": true,
+          "guest_fees_off": false,
+          "guest_fees_on": false,
+          "rpc": false
+        }
+      },
+      "discovery_ms": 4922,
+      "invalid": null,
+      "public_values": "0x51e24160ef5467ba88166fd247c9bfb07b88e76ee08e430346c1353fda5e233d19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000000000727b4caf67afdbbaee028f7a3b2dbbf39695a4248a559f87026d18d7cad3bde000000000000000000000000000000000000000000000000000000000000766600000000000000000000000000000000000000000000000000000000000000130000000000000000000000008624b22d64678985aaee78abff7643e58e69076c00000000000000000000000000000000000000000000000000003ec16b44064d00000000000000000000000000000000000000000000000000003ec16b44064d000000000000000000000000000000000000000000000000000000000000a5bf000000000000000000000000000000000000000000000000000000000242ff3a19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000067187698f30418a78a2f3f197569da694f03d65500000000000000000000000020c0000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000010000000000000000000000000020c000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000493e00000000000000000000000000000000000000000000000000000000000000044a9059cbb0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c000000000000000000000000000000000000000000000000000000e8d4a5100100000000000000000000000000000000000000000000000000000000",
+      "question": {
+        "blockHash": "0x19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a",
+        "blockNumber": 37945146,
+        "chainId": 42431,
+        "data": "0xa9059cbb0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c000000000000000000000000000000000000000000000000000000e8d4a51001",
+        "feeToken": "0x20c0000000000000000000000000000000000001",
+        "from": "0x67187698f30418a78a2f3f197569da694f03d655",
+        "gasLimit": 300000,
+        "token": "0x20c0000000000000000000000000000000000002"
+      },
+      "rpc_note": "callTracer ok=false gasUsed=28310 err=Some(String(\"execution reverted\")); eth_call={\"code\":3,\"data\":\"0x832f98b5000000000000000000000000000000000000000000000000000000e8d4a51000000000000000000000000000000000000000000000000000000000e8d4a5100100000000000000000000000020c0000000000000000000000000000000000002\",\"message\":\"execution reverted: TIP20 token error: InsufficientBalance(InsufficientBalance { available: 1000000000000, required: 1000000000001, token: 0x20c0000000000000000000000000000000000002 })\"}",
+      "status": "AC-1a NOT EXPRESSIBLE (fee token the RPC env resolves != q.feeToken) — not counted",
+      "witness_accounts": 5,
+      "witness_slots": 13
+    },
+    {
+      "ac1b": "fees-on differs from fees-off: UNVALIDATED by RPC (validated only to the extent AC-2 covers it)",
+      "answer": {
+        "feeCharged": "15",
+        "gasUsed": 24298,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "69000360000000",
+        "receiverBefore": "69000360000000",
+        "returnDataHash": "0x6198b8bdfd0ea3c342abba18ee734bfc256130138e60ee8aafa018ee791c6773",
+        "success": false
+      },
+      "answer_fees_off": {
+        "feeCharged": "0",
+        "gasUsed": 42854,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "70000360000000",
+        "receiverBefore": "69000360000000",
+        "returnDataHash": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6",
+        "success": true
+      },
+      "case": "whole_balance_in_fee_token",
+      "compare": {
+        "feeCharged": {
+          "counted": false,
+          "guest_fees_on": "15",
+          "rpc": "not expressible: RPC eth_call/debug_traceCall path does not charge fees"
+        },
+        "gasUsed": {
+          "eq": true,
+          "guest_fees_off": 42854,
+          "guest_fees_on": 24298,
+          "rpc": 42854
+        },
+        "receiverAfter": {
+          "eq": true,
+          "guest_fees_off": "70000360000000",
+          "guest_fees_on": "69000360000000",
+          "rpc": "70000360000000"
+        },
+        "receiverBefore": {
+          "eq": true,
+          "guest_fees_off": "69000360000000",
+          "guest_fees_on": "69000360000000",
+          "rpc": "69000360000000"
+        },
+        "returnDataHash": {
+          "eq": true,
+          "guest_fees_off": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6",
+          "guest_fees_on": "0x6198b8bdfd0ea3c342abba18ee734bfc256130138e60ee8aafa018ee791c6773",
+          "rpc": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6"
+        },
+        "rpc_expressible_variant": null,
+        "success": {
+          "eq": true,
+          "guest_fees_off": true,
+          "guest_fees_on": false,
+          "rpc": true
+        }
+      },
+      "discovery_ms": 3961,
+      "invalid": null,
+      "public_values": "0x51e24160ef5467ba88166fd247c9bfb07b88e76ee08e430346c1353fda5e233d19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000000006198b8bdfd0ea3c342abba18ee734bfc256130138e60ee8aafa018ee791c67730000000000000000000000000000000000000000000000000000000000005eea000000000000000000000000000000000000000000000000000000000000000f0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c00000000000000000000000000000000000000000000000000003ec165f27a0000000000000000000000000000000000000000000000000000003ec165f27a00000000000000000000000000000000000000000000000000000000000000a5bf000000000000000000000000000000000000000000000000000000000242ff3a19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000067187698f30418a78a2f3f197569da694f03d65500000000000000000000000020c0000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000010000000000000000000000000020c000000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000000493e00000000000000000000000000000000000000000000000000000000000000044a9059cbb0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c000000000000000000000000000000000000000000000000000000e8d4a5100000000000000000000000000000000000000000000000000000000000",
+      "question": {
+        "blockHash": "0x19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a",
+        "blockNumber": 37945146,
+        "chainId": 42431,
+        "data": "0xa9059cbb0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c000000000000000000000000000000000000000000000000000000e8d4a51000",
+        "feeToken": "0x20c0000000000000000000000000000000000003",
+        "from": "0x67187698f30418a78a2f3f197569da694f03d655",
+        "gasLimit": 300000,
+        "token": "0x20c0000000000000000000000000000000000003"
+      },
+      "rpc_note": "callTracer ok=true gasUsed=42854 err=None; eth_call=\"0x0000000000000000000000000000000000000000000000000000000000000001\"",
+      "status": "AC-1a MATCHED",
+      "witness_accounts": 4,
+      "witness_slots": 10
+    },
+    {
+      "ac1b": "fees-on differs from fees-off: UNVALIDATED by RPC (validated only to the extent AC-2 covers it)",
+      "answer": {
+        "feeCharged": "21",
+        "gasUsed": 33791,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "69000410000007",
+        "receiverBefore": "69000410000000",
+        "returnDataHash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+        "success": true
+      },
+      "answer_fees_off": {
+        "feeCharged": "0",
+        "gasUsed": 40591,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "69000410000007",
+        "receiverBefore": "69000410000000",
+        "returnDataHash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+        "success": true
+      },
+      "case": "transfer_with_memo",
+      "compare": {
+        "feeCharged": {
+          "counted": false,
+          "guest_fees_on": "21",
+          "rpc": "not expressible: RPC eth_call/debug_traceCall path does not charge fees"
+        },
+        "gasUsed": {
+          "eq": true,
+          "guest_fees_off": 40591,
+          "guest_fees_on": 33791,
+          "rpc": 40591
+        },
+        "receiverAfter": {
+          "eq": true,
+          "guest_fees_off": "69000410000007",
+          "guest_fees_on": "69000410000007",
+          "rpc": "69000410000007"
+        },
+        "receiverBefore": {
+          "eq": true,
+          "guest_fees_off": "69000410000000",
+          "guest_fees_on": "69000410000000",
+          "rpc": "69000410000000"
+        },
+        "returnDataHash": {
+          "eq": true,
+          "guest_fees_off": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+          "guest_fees_on": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+          "rpc": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        },
+        "rpc_expressible_variant": null,
+        "success": {
+          "eq": true,
+          "guest_fees_off": true,
+          "guest_fees_on": true,
+          "rpc": true
+        }
+      },
+      "discovery_ms": 4096,
+      "invalid": null,
+      "public_values": "0x51e24160ef5467ba88166fd247c9bfb07b88e76ee08e430346c1353fda5e233d19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000001c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a47000000000000000000000000000000000000000000000000000000000000083ff00000000000000000000000000000000000000000000000000000000000000150000000000000000000000008624b22d64678985aaee78abff7643e58e69076c00000000000000000000000000000000000000000000000000003ec168ed6a8000000000000000000000000000000000000000000000000000003ec168ed6a87000000000000000000000000000000000000000000000000000000000000a5bf000000000000000000000000000000000000000000000000000000000242ff3a19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000067187698f30418a78a2f3f197569da694f03d65500000000000000000000000020c0000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000010000000000000000000000000020c000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000493e0000000000000000000000000000000000000000000000000000000000000006495777d590000000000000000000000008624b22d64678985aaee78abff7643e58e69076c00000000000000000000000000000000000000000000000000000000000000075a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a00000000000000000000000000000000000000000000000000000000",
+      "question": {
+        "blockHash": "0x19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a",
+        "blockNumber": 37945146,
+        "chainId": 42431,
+        "data": "0x95777d590000000000000000000000008624b22d64678985aaee78abff7643e58e69076c00000000000000000000000000000000000000000000000000000000000000075a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a",
+        "feeToken": "0x20c0000000000000000000000000000000000001",
+        "from": "0x67187698f30418a78a2f3f197569da694f03d655",
+        "gasLimit": 300000,
+        "token": "0x20c0000000000000000000000000000000000001"
+      },
+      "rpc_note": "callTracer ok=true gasUsed=40591 err=None; eth_call=\"0x\"",
+      "status": "AC-1a MATCHED",
+      "witness_accounts": 4,
+      "witness_slots": 10
+    },
+    {
+      "ac1b": "invalid-by-fee: pinned by unit test tests::invalid_by_fee_is_proven_not_aborted",
+      "answer": {
+        "feeCharged": "0",
+        "gasUsed": 0,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "69000410000000",
+        "receiverBefore": "69000410000000",
+        "returnDataHash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+        "success": false
+      },
+      "answer_fees_off": {
+        "feeCharged": "0",
+        "gasUsed": 39918,
+        "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+        "receiverAfter": "69000410000001",
+        "receiverBefore": "69000410000000",
+        "returnDataHash": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6",
+        "success": true
+      },
+      "case": "invalid_fee_token_dusd",
+      "compare": {
+        "feeCharged": {
+          "counted": false,
+          "guest_fees_on": "0",
+          "rpc": "not expressible: RPC eth_call/debug_traceCall path does not charge fees"
+        },
+        "gasUsed": {
+          "eq": false,
+          "guest_fees_off": 39918,
+          "guest_fees_on": 0,
+          "rpc": 37918
+        },
+        "receiverAfter": {
+          "eq": true,
+          "guest_fees_off": "69000410000001",
+          "guest_fees_on": "69000410000000",
+          "rpc": "69000410000001"
+        },
+        "receiverBefore": {
+          "eq": true,
+          "guest_fees_off": "69000410000000",
+          "guest_fees_on": "69000410000000",
+          "rpc": "69000410000000"
+        },
+        "returnDataHash": {
+          "eq": true,
+          "guest_fees_off": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6",
+          "guest_fees_on": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+          "rpc": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6"
+        },
+        "rpc_expressible_variant": {
+          "answer": {
+            "feeCharged": "0",
+            "gasUsed": 37918,
+            "receiver": "0x8624b22d64678985aaee78abff7643e58e69076c",
+            "receiverAfter": "69000410000001",
+            "receiverBefore": "69000410000000",
+            "returnDataHash": "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6",
+            "success": true
+          },
+          "env": "fees off, fee_token=None (RPC-resolved)",
+          "matches_rpc": true
+        },
+        "success": {
+          "eq": true,
+          "guest_fees_off": true,
+          "guest_fees_on": false,
+          "rpc": true
+        }
+      },
+      "discovery_ms": 3130,
+      "invalid": "Transaction(CollectFeePreTx(Other(\"TIP20 token error: PolicyForbids(PolicyForbids)\")))",
+      "public_values": "0x51e24160ef5467ba88166fd247c9bfb07b88e76ee08e430346c1353fda5e233d19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000000c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008624b22d64678985aaee78abff7643e58e69076c00000000000000000000000000000000000000000000000000003ec168ed6a8000000000000000000000000000000000000000000000000000003ec168ed6a80000000000000000000000000000000000000000000000000000000000000a5bf000000000000000000000000000000000000000000000000000000000242ff3a19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a00000000000000000000000067187698f30418a78a2f3f197569da694f03d65500000000000000000000000020c0000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000010000000000000000000000000020c0000000000000000000005c58fc053c52e0d100000000000000000000000000000000000000000000000000000000000493e00000000000000000000000000000000000000000000000000000000000000044a9059cbb0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000",
+      "question": {
+        "blockHash": "0x19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a",
+        "blockNumber": 37945146,
+        "chainId": 42431,
+        "data": "0xa9059cbb0000000000000000000000008624b22d64678985aaee78abff7643e58e69076c0000000000000000000000000000000000000000000000000000000000000001",
+        "feeToken": "0x20c0000000000000000000005c58fc053c52e0d1",
+        "from": "0x67187698f30418a78a2f3f197569da694f03d655",
+        "gasLimit": 300000,
+        "token": "0x20c0000000000000000000000000000000000001"
+      },
+      "rpc_note": "callTracer ok=true gasUsed=37918 err=None; eth_call=\"0x0000000000000000000000000000000000000000000000000000000000000001\"",
+      "status": "AC-1a NOT EXPRESSIBLE (fee token the RPC env resolves != q.feeToken) — not counted",
+      "witness_accounts": 5,
+      "witness_slots": 5
+    }
+  ],
+  "matched": 5,
+  "mismatched": 0,
+  "not_expressible": 3,
+  "total": 8,
+  "unvalidated": 6
+}

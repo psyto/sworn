@@ -1,0 +1,53 @@
+AC-1 at block 37945146 hash 0x19cba2ec76a30707bb2ac516cdbd005beac6c821aa4fd6a7698e9c513552f02a (T=T11)
+   RPC-env resolved fee token: Some(0x20c0000000000000000000000000000000000001) (q.feeToken 0x20C0000000000000000000000000000000000001)
+   AC-1b: fees-on differs from fees-off: UNVALIDATED by RPC (validated only to the extent AC-2 covers it)
+[ordinary] AC-1a MATCHED
+   guest(fees on) = Answer { success: true, returnDataHash: 0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6, gasUsed: 31142, feeCharged: 19, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 69000410000000, receiverAfter: 69000411000000 }
+   invalid=None witness: 4 accounts 10 slots, discovery 3.087032583s, rpc calls so far 47
+   rpc: callTracer ok=true gasUsed=37942 err=None; eth_call="0x0000000000000000000000000000000000000000000000000000000000000001"
+   RPC-env resolved fee token: Some(0x20c0000000000000000000000000000000000001) (q.feeToken 0x20C0000000000000000000000000000000000001)
+   AC-1b: fees-on differs from fees-off: UNVALIDATED by RPC (validated only to the extent AC-2 covers it)
+[receive_policy_blocked] AC-1a MATCHED
+   guest(fees on) = Answer { success: true, returnDataHash: 0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6, gasUsed: 295991, feeCharged: 178, receiver: 0x384314c543c3cbe50d3f148f7da97d5f8be928ec, receiverBefore: 0, receiverAfter: 0 }
+   invalid=None witness: 6 accounts 14 slots, discovery 4.105384959s, rpc calls so far 108
+   rpc: callTracer ok=false gasUsed=300000 err=Some(String("out of gas")); eth_call={"code":-32003,"message":"out of gas: gas exhausted during precompiled contract execution: 300000"}
+   RPC-env resolved fee token: None (q.feeToken 0x20C0000000000000000000000000000000000000)
+   variant (fee_token=None, fees off) matches RPC: true  gas=25962
+   AC-1b: fees-on equals fees-off on all RPC-visible fields; feeCharged UNVALIDATED by RPC (AC-2 covers it)
+[tip403_rejected] AC-1a NOT EXPRESSIBLE (fee token the RPC env resolves != q.feeToken) — not counted
+   guest(fees on) = Answer { success: false, returnDataHash: 0xc4ed0b45c323202f940387239b088faa74da4c92133c451bca99023813ada630, gasUsed: 25962, feeCharged: 16, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 0, receiverAfter: 0 }
+   invalid=None witness: 5 accounts 10 slots, discovery 3.232921834s, rpc calls so far 157
+   rpc: callTracer ok=false gasUsed=25962 err=Some(String("execution reverted")); eth_call={"code":3,"data":"0x54cfe659","message":"execution reverted: TIP20 token error: PolicyForbids(PolicyForbids)"}
+   RPC-env resolved fee token: Some(0x20c0000000000000000000000000000000000002) (q.feeToken 0x20C0000000000000000000000000000000000002)
+   AC-1b: fees-on differs from fees-off: UNVALIDATED by RPC (validated only to the extent AC-2 covers it)
+[insufficient_balance] AC-1a MATCHED
+   guest(fees on) = Answer { success: false, returnDataHash: 0x113d2f4e13e974308d5aee0a1a94f345399bbace7881f290abdefc0d70bd7d19, gasUsed: 24310, feeCharged: 15, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 69000449230413, receiverAfter: 69000449230413 }
+   invalid=None witness: 4 accounts 10 slots, discovery 3.512438917s, rpc calls so far 200
+   rpc: callTracer ok=false gasUsed=28310 err=Some(String("execution reverted")); eth_call={"code":3,"data":"0x832f98b5000000000000000000000000000000000000000000000000000000e8d4a51000000000000000000000000000000000000000000000000000000000e8d4a5100100000000000000000000000020c0000000000000000000000000000000000002","message":"execution reverted: TIP20 token error: InsufficientBalance(InsufficientBalance { available: 1000000000000, required: 1000000000001, token: 0x20c0000000000000000000000000000000000002 })"}
+   RPC-env resolved fee token: Some(0x20c0000000000000000000000000000000000002) (q.feeToken 0x20C0000000000000000000000000000000000001)
+   variant (fee_token=None, fees off) matches RPC: true  gas=28310
+   AC-1b: fees-on equals fees-off on all RPC-visible fields; feeCharged UNVALIDATED by RPC (AC-2 covers it)
+[insufficient_balance_other_fee_token] AC-1a NOT EXPRESSIBLE (fee token the RPC env resolves != q.feeToken) — not counted
+   guest(fees on) = Answer { success: false, returnDataHash: 0x0727b4caf67afdbbaee028f7a3b2dbbf39695a4248a559f87026d18d7cad3bde, gasUsed: 30310, feeCharged: 19, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 69000449230413, receiverAfter: 69000449230413 }
+   invalid=None witness: 5 accounts 13 slots, discovery 4.922415375s, rpc calls so far 260
+   rpc: callTracer ok=false gasUsed=28310 err=Some(String("execution reverted")); eth_call={"code":3,"data":"0x832f98b5000000000000000000000000000000000000000000000000000000e8d4a51000000000000000000000000000000000000000000000000000000000e8d4a5100100000000000000000000000020c0000000000000000000000000000000000002","message":"execution reverted: TIP20 token error: InsufficientBalance(InsufficientBalance { available: 1000000000000, required: 1000000000001, token: 0x20c0000000000000000000000000000000000002 })"}
+   RPC-env resolved fee token: Some(0x20c0000000000000000000000000000000000003) (q.feeToken 0x20C0000000000000000000000000000000000003)
+   AC-1b: fees-on differs from fees-off: UNVALIDATED by RPC (validated only to the extent AC-2 covers it)
+[whole_balance_in_fee_token] AC-1a MATCHED
+   guest(fees on) = Answer { success: false, returnDataHash: 0x6198b8bdfd0ea3c342abba18ee734bfc256130138e60ee8aafa018ee791c6773, gasUsed: 24298, feeCharged: 15, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 69000360000000, receiverAfter: 69000360000000 }
+   invalid=None witness: 4 accounts 10 slots, discovery 3.961915458s, rpc calls so far 305
+   rpc: callTracer ok=true gasUsed=42854 err=None; eth_call="0x0000000000000000000000000000000000000000000000000000000000000001"
+   RPC-env resolved fee token: Some(0x20c0000000000000000000000000000000000001) (q.feeToken 0x20C0000000000000000000000000000000000001)
+   AC-1b: fees-on differs from fees-off: UNVALIDATED by RPC (validated only to the extent AC-2 covers it)
+[transfer_with_memo] AC-1a MATCHED
+   guest(fees on) = Answer { success: true, returnDataHash: 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gasUsed: 33791, feeCharged: 21, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 69000410000000, receiverAfter: 69000410000007 }
+   invalid=None witness: 4 accounts 10 slots, discovery 4.096366208s, rpc calls so far 348
+   rpc: callTracer ok=true gasUsed=40591 err=None; eth_call="0x"
+   RPC-env resolved fee token: Some(0x20c0000000000000000000000000000000000001) (q.feeToken 0x20C0000000000000000000005C58FC053C52E0D1)
+   variant (fee_token=None, fees off) matches RPC: true  gas=37918
+   AC-1b: invalid-by-fee: pinned by unit test tests::invalid_by_fee_is_proven_not_aborted
+[invalid_fee_token_dusd] AC-1a NOT EXPRESSIBLE (fee token the RPC env resolves != q.feeToken) — not counted
+   guest(fees on) = Answer { success: false, returnDataHash: 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gasUsed: 0, feeCharged: 0, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 69000410000000, receiverAfter: 69000410000000 }
+   invalid=Some("Transaction(CollectFeePreTx(Other(\"TIP20 token error: PolicyForbids(PolicyForbids)\")))") witness: 5 accounts 5 slots, discovery 3.130031083s, rpc calls so far 400
+   rpc: callTracer ok=true gasUsed=37918 err=None; eth_call="0x0000000000000000000000000000000000000000000000000000000000000001"
+AC-1a (fees off vs RPC): matched 5 / 5 counted ; mismatched 0 ; not expressible (uncounted) 3 of 8 cases. AC-1b fees-on cases not RPC-validatable: 6

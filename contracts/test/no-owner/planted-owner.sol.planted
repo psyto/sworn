@@ -59,7 +59,7 @@ contract Sworn {
     /// @notice SP1 verification key of the Sworn guest program.
     /// @dev    PLACEHOLDER — to be filled with the vkey the Rust half (program/) produces.
     ///         Deploy.s.sol refuses to deploy while it is zero.
-    bytes32 public constant GUEST_VKEY = bytes32(0);
+    bytes32 public constant GUEST_VKEY = 0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9;
 
     /// @notice Version tag the guest commits as the first public value.
     /// @dev    = keccak256("sworn-guest-v1") = core/src/lib.rs GUEST_VERSION (Rust half, 2026-10-03).

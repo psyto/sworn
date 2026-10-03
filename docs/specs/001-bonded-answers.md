@@ -153,6 +153,25 @@ collection). Its findings are closed as follows — **these override R3.1–R3.6
   (`tempo/crates/node/src/rpc/fork_schedule.rs`) and **refuses to reserve** if it differs from the
   guest's schedule, or if an activation falls within `MAX_AGE` blocks of N.
 
+### R3.8 Two rules found by running AC-1 (2026-10-03)
+
+The first AC-1 run matched **0 / 7** (`out/ac1_run1.log`) — not because the guest is wrong but because
+the oracle was: **the public RPC's `eth_call` does not charge fees** (its gas and balances are fees-off),
+and it accepts transactions whose fee collection Tempo would reject.
+
+- **Invalid-transaction encoding (normative).** If Tempo's handler rejects the transaction before
+  execution (e.g. fee collection fails: `CollectFeePreTx(... PolicyForbids)`, insufficient fee balance,
+  nonce/gas invalid), the guest **does not abort** — it proves this `Answer`: `success = false`,
+  `returnDataHash = keccak256("")`, `gasUsed = 0`, `feeCharged = 0`, `receiverAfter = receiverBefore`.
+  "This payment would be rejected" is exactly what a preflight must be able to say, and an abort here
+  would let a server answer "success" for an invalid transaction unchallengeably.
+- **AC-1 is split by what each oracle can see.** **AC-1a (execution):** the guest with fee charging
+  **off** must match RPC `eth_call` / `callTracer` (success, return bytes, gas) and `prestateTracer`
+  `diffMode` (receiver balance) on every case. **AC-1b (fees):** the fees-on deltas — fee charged, fee-token
+  balance, invalid-by-fee — are validated by **AC-2's real-transaction replay** (receipts carry
+  `feeToken`, `effectiveGasPrice`, `gasUsed`), plus, for invalid-by-fee, a unit test that pins the
+  handler error. A case neither oracle can see is reported **unvalidated**, never passed.
+
 ---
 
 ## 0. r1 → r2: what changed and why

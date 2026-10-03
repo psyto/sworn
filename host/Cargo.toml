@@ -5,6 +5,20 @@ edition = "2024"
 
 [dependencies]
 spike-core = { path = "../core" }
+tempo-chainspec.workspace = true
+tempo-contracts = { path = "../tempo/crates/contracts", default-features = false }
+alloy-trie.workspace = true
+tempo-revm.workspace = true
+tempo-primitives = { workspace = true, features = ["std"] }
+tempo-precompiles.workspace = true
+revm.workspace = true
 alloy-primitives = { workspace = true, features = ["serde", "std"] }
+alloy-sol-types.workspace = true
+alloy-rlp.workspace = true
+alloy-eips = { version = "2.5.0", default-features = false, features = ["std"] }
+alloy-consensus = { version = "2.5.0", default-features = false, features = ["std", "k256"] }
+alloy-evm = { version = "0.39.0", default-features = false, features = ["std"] }
+serde = { workspace = true, features = ["std"] }
 serde_json = "1"
 bincode = "1.3"
+ureq = { version = "2", features = ["json"] }

@@ -1,0 +1,87 @@
+client init wall: 11.915093166s
+execute wall: 175.089958ms
+cycles(total_instruction_count): 5970394
+report: gas: 5810707
+opcode counts (5970394 total instructions):
+    1321937 xor
+     611774 addi
+     581755 sll
+     554917 or
+     492581 ld
+     463215 sd
+     457717 srl
+     443014 and
+     278198 lbu
+     161288 sb
+     116913 add
+     101878 bne
+      69186 beq
+      46115 jalr
+      45315 bltu
+      32769 auipc
+      31762 lui
+      28383 lhu
+      26664 sub
+      22160 bgeu
+      17489 jal
+      15221 mul
+      10993 subw
+       9089 srlw
+       7476 sltu
+       6247 mulhu
+       2900 blt
+       2871 sh
+       2764 lb
+       2217 lh
+       2181 sw
+       1428 addw
+       1131 lw
+        403 bge
+        181 lwu
+        168 sra
+         37 slt
+         26 sllw
+         20 ecall
+         10 divu
+          1 mulh
+syscall counts (0 total syscall instructions):
+
+publicValues match native host: PASS
+setup wall: 2.414148584s
+vkey(bytes32): 0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9
+Setting environment variables took 109.375µs
+Reading R1CS took 12.513759834s
+Reading proving key took 2.433457084s
+Reading witness file took 1.960416ms
+Deserializing JSON data took 17.156375ms
+Generating witness took 367.081208ms
+[90m14:19:29[0m DBG constraint system solver done [36mnbConstraints=[0m15972262 [36mtook=[0m3901.196791
+[90m14:19:58[0m DBG prover done [36macceleration=[0mnone [36mbackend=[0mgroth16 [36mcurve=[0mbn254 [36mnbConstraints=[0m15972262 [36mtook=[0m29520.742375
+Generating proof took 33.426092958s
+[90m14:19:58[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m14:19:58[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m14:19:58[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m14:19:58[0m DBG verifier done [36mbackend=[0mgroth16 [36mcurve=[0mbn254 [36mtook=[0m1.131292
+PROVE groth16 wall: 390.802397833s
+proof pv match: true
+verify ok (196.019916ms)
+fixture written: out/fixtures/groth16_receive_policy_blocked.json
+     1108.62 real      3397.99 user       134.89 sys
+         15249375232  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            15056696  page reclaims
+                 111  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+               11830  signals received
+               99004  voluntary context switches
+             7516329  involuntary context switches
+      31985300067780  instructions retired
+      10823011857364  cycles elapsed
+         40123250952  peak memory footprint
+EXIT 0

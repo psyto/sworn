@@ -122,9 +122,11 @@ contract RealGroth16Test is Test {
         token.approve(address(sworn), 10e6);
         sworn.bond(server, 10e6);
 
-        // The server lies: receiverAfter off by one.
-        Sworn.Answer memory lie = truth;
+        // The server lies: receiverAfter off by one. Decode a second, independent copy —
+        // `lie = truth` would alias the same memory struct and corrupt `truth` too.
+        (,,, Sworn.Answer memory lie) = this.decodePv(f.publicValues);
         lie.receiverAfter = truth.receiverAfter + 1;
+        assertTrue(lie.receiverAfter != truth.receiverAfter, "lie must not alias truth");
         vm.prank(server);
         sworn.reserve(q, lie, client, 5e6);
         sworn.challenge(server, q, lie, f.publicValues, f.proof);

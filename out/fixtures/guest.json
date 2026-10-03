@@ -1,0 +1,7 @@
+{
+ "GUEST_VERSION": "0x51e24160ef5467ba88166fd247c9bfb07b88e76ee08e430346c1353fda5e233d",
+ "GUEST_VERSION_LABEL": "sworn-guest-v1",
+ "GUEST_VKEY": "0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9",
+ "sp1_sdk": "6.3.1",
+ "verifier": "SP1VerifierGroth16 v6.1.0"
+}

@@ -4128,10 +4128,13 @@ version = "0.1.0"
 dependencies = [
  "alloy-primitives",
  "alloy-rlp",
+ "alloy-sol-types",
  "alloy-trie",
  "revm",
  "serde",
+ "serde_json",
  "tempo-chainspec",
+ "tempo-precompiles",
  "tempo-primitives",
  "tempo-revm",
 ]

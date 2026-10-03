@@ -1,0 +1,28 @@
+== ordinary
+client init wall: 11.967530875s
+execute wall: 144.959666ms
+cycles(total_instruction_count): 4639432
+publicValues match native host: PASS
+setup wall: 2.312206167s
+vkey(bytes32): 0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9
+== whole_balance_in_fee_token
+client init wall: 11.935198208s
+execute wall: 140.308625ms
+cycles(total_instruction_count): 4593500
+publicValues match native host: PASS
+setup wall: 2.200273875s
+vkey(bytes32): 0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9
+== invalid_fee_token_dusd
+client init wall: 11.900158708s
+execute wall: 113.290541ms
+cycles(total_instruction_count): 2787601
+publicValues match native host: PASS
+setup wall: 2.211792875s
+vkey(bytes32): 0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9
+== receive_policy_blocked
+client init wall: 11.918754292s
+execute wall: 169.914166ms
+cycles(total_instruction_count): 5970394
+publicValues match native host: PASS
+setup wall: 2.234563417s
+vkey(bytes32): 0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9

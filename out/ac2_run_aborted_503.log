@@ -1,0 +1,15 @@
+B=37945472 tx0="0x6835dd989240db40535056ccc65f35bd2a9845533e1e201be65ebe44f7f06a7a" MATCH gas=31178 fee="19" mismatches=[]
+B=37945524 tx0="0xef4953ce08239462632ba2f0d8f38bdda3a05e10f028b76fa2a3af6cd41ea51a" MATCH gas=31166 fee="19" mismatches=[]
+B=37945537 tx0="0x93d5fae11b85a96769844ba0abbfec8d0319337ef0155dd7eb7f9b53df420da6" MATCH gas=31178 fee="19" mismatches=[]
+B=37945549 tx0="0xe5e44b5dd6482ec829f30b6c3656cf0a10ed1920fa07c5a15c9e9fdf3cb94ea1" MATCH gas=31166 fee="19" mismatches=[]
+B=37945562 tx0="0xa8197fcd8499284aefa2c6182776f4d875ffe9d9262411383744cf8d92b17cf7" MATCH gas=31166 fee="19" mismatches=[]
+B=37945571 tx0="0xe3494add80662893eae5b01b8495988a9fd5ae0f7db0cf26d01e478550872f0f" MATCH gas=26366 fee="16" mismatches=[]
+B=37945580 tx0="0x901f828898d447967b4e4d9d1f6a94787e6288a3ae78df0e74a999fc2a26c9a5" MATCH gas=31178 fee="19" mismatches=[]
+B=37945607 tx0="0x32cfd8520011c0f61e7ec013c0970cbc7dba24146a1753b05760f564fbb3001b" MATCH gas=32366 fee="20" mismatches=[]
+B=37945627 tx0="0x95647bfa6980b5e5e8ca362662a3231134073c99252bd15c8552209911461b95" MATCH gas=31178 fee="19" mismatches=[]
+B=37945640 tx0="0x9ede59b425e6484d2f113a8a0533111869950d0b715edfaddc3b71546cbc66eb" MATCH gas=31154 fee="19" mismatches=[]
+B=37945653 tx0="0x8593eaaba8a78854853c56bae44f2d4a3042824c0108d845111037944fad127f" MATCH gas=31178 fee="19" mismatches=[]
+
+thread 'main' (50395252) panicked at host/src/rpc.rs:65:48:
+batch: "https://rpc.moderato.tempo.xyz/: status code 503"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

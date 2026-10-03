@@ -1,0 +1,22 @@
+cargo:warning=rustc +succinct --version: "rustc 1.93.0-dev\n"
+[sp1]     Compiling serde_json v1.0.149
+[sp1]     Compiling tempo-precompiles-macros v1.14.0 (/Users/hiroyusai/src/sworn/tempo/crates/precompiles-macros)
+[sp1]     Compiling tempo-nitro-attestation v1.14.0 (/Users/hiroyusai/src/sworn/tempo/crates/nitro-attestation)
+[sp1]     Compiling alloy-json-abi v1.7.3
+[sp1]     Compiling tempo-precompiles v1.14.0 (/Users/hiroyusai/src/sworn/tempo/crates/precompiles)
+[sp1]     Compiling spike-core v0.1.0 (/Users/hiroyusai/src/sworn/core)
+[sp1]     Compiling alloy-sol-macro-input v1.7.3
+[sp1]     Compiling alloy-sol-macro-expander v1.7.3
+[sp1]     Compiling alloy-sol-macro v1.7.3
+[sp1]     Compiling alloy-sol-types v1.7.3
+[sp1]     Compiling alloy-evm v0.39.0
+[sp1]     Compiling alloy-core v1.7.3
+[sp1]     Compiling alloy v2.5.0
+[sp1]     Compiling tempo-hardfork v1.11.0 (/Users/hiroyusai/src/sworn/tempo/crates/hardfork)
+[sp1]     Compiling tempo-contracts v1.11.0 (/Users/hiroyusai/src/sworn/tempo/crates/contracts)
+[sp1]     Compiling tempo-primitives v1.11.0 (/Users/hiroyusai/src/sworn/tempo/crates/primitives)
+[sp1]     Compiling tempo-chainspec v1.11.0 (/Users/hiroyusai/src/sworn/tempo/crates/chainspec)
+[sp1]     Compiling tempo-revm v1.14.0 (/Users/hiroyusai/src/sworn/tempo/crates/revm)
+[sp1]     Compiling tempo-spike-guest v0.1.0 (/Users/hiroyusai/src/sworn/program)
+[sp1]      Finished `release` profile [optimized] target(s) in 26.49s
+cargo:rustc-env=SP1_ELF_tempo-spike-guest=/Users/hiroyusai/src/sworn/program/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/tempo-spike-guest

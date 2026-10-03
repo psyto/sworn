@@ -1,0 +1,30 @@
+AC-1 at block 37940154 hash 0x98c4aee3619a3106635d41dbbbd6646782c8733b6e318ea8c4600257c1be6d0f (T=T11)
+[ordinary] MISMATCH
+   guest(fees on) = Answer { success: true, returnDataHash: 0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6, gasUsed: 31142, feeCharged: 19, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 69000410000000, receiverAfter: 69000411000000 }
+   invalid=None witness: 4 accounts 10 slots, discovery 5.100757292s, rpc calls so far 32
+   rpc: callTracer ok=true gasUsed=37942 err=None; eth_call="0x0000000000000000000000000000000000000000000000000000000000000001"
+[receive_policy_blocked] MISMATCH
+   guest(fees on) = Answer { success: true, returnDataHash: 0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6, gasUsed: 50991, feeCharged: 31, receiver: 0x384314c543c3cbe50d3f148f7da97d5f8be928ec, receiverBefore: 0, receiverAfter: 0 }
+   invalid=None witness: 6 accounts 14 slots, discovery 5.042909334s, rpc calls so far 72
+   rpc: callTracer ok=true gasUsed=300000 err=None; eth_call={"code":-32003,"message":"out of gas: gas exhausted during precompiled contract execution: 300000"}
+[tip403_rejected] MISMATCH
+   guest(fees on) = Answer { success: false, returnDataHash: 0xc4ed0b45c323202f940387239b088faa74da4c92133c451bca99023813ada630, gasUsed: 25962, feeCharged: 16, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 0, receiverAfter: 0 }
+   invalid=None witness: 5 accounts 10 slots, discovery 4.704238167s, rpc calls so far 101
+   rpc: callTracer ok=true gasUsed=25962 err=None; eth_call={"code":3,"data":"0x54cfe659","message":"execution reverted: TIP20 token error: PolicyForbids(PolicyForbids)"}
+[insufficient_balance] MISMATCH
+   guest(fees on) = Answer { success: false, returnDataHash: 0x0727b4caf67afdbbaee028f7a3b2dbbf39695a4248a559f87026d18d7cad3bde, gasUsed: 30310, feeCharged: 19, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 69000449230413, receiverAfter: 69000449230413 }
+   invalid=None witness: 5 accounts 13 slots, discovery 4.889357333s, rpc calls so far 135
+   rpc: callTracer ok=true gasUsed=30310 err=None; eth_call={"code":3,"data":"0x832f98b5000000000000000000000000000000000000000000000000000000e8d4a51000000000000000000000000000000000000000000000000000000000e8d4a5100100000000000000000000000020c0000000000000000000000000000000000002","message":"execution reverted: TIP20 token error: InsufficientBalance(InsufficientBalance { available: 1000000000000, required: 1000000000001, token: 0x20c0000000000000000000000000000000000002 })"}
+[whole_balance_in_fee_token] MISMATCH
+   guest(fees on) = Answer { success: false, returnDataHash: 0x6198b8bdfd0ea3c342abba18ee734bfc256130138e60ee8aafa018ee791c6773, gasUsed: 24298, feeCharged: 15, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 69000360000000, receiverAfter: 69000360000000 }
+   invalid=None witness: 4 accounts 10 slots, discovery 4.349105083s, rpc calls so far 165
+   rpc: callTracer ok=true gasUsed=42854 err=None; eth_call="0x0000000000000000000000000000000000000000000000000000000000000001"
+[transfer_with_memo] UNVALIDATED (differs only where fees-on differs from fees-off; RPC does not charge fees)
+   guest(fees on) = Answer { success: true, returnDataHash: 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gasUsed: 33791, feeCharged: 21, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 69000410000000, receiverAfter: 69000410000007 }
+   invalid=None witness: 4 accounts 10 slots, discovery 6.10298025s, rpc calls so far 193
+   rpc: callTracer ok=true gasUsed=40591 err=None; eth_call="0x"
+[invalid_fee_token_dusd] MISMATCH
+   guest(fees on) = Answer { success: false, returnDataHash: 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gasUsed: 0, feeCharged: 0, receiver: 0x8624b22d64678985aaee78abff7643e58e69076c, receiverBefore: 69000410000000, receiverAfter: 69000410000000 }
+   invalid=Some("Transaction(CollectFeePreTx(Other(\"TIP20 token error: PolicyForbids(PolicyForbids)\")))") witness: 5 accounts 5 slots, discovery 3.249556792s, rpc calls so far 219
+   rpc: callTracer ok=true gasUsed=39918 err=None; eth_call="0x0000000000000000000000000000000000000000000000000000000000000001"
+AC-1: matched 0 / 7 ; unvalidated 1 ; mismatched 6

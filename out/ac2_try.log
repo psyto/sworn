@@ -1,0 +1,4 @@
+B=37945378 tx0="0x9eaf7582748b4e2feee5bae4d240ab9dd11ffd7e41c97295f146d610d91932dc" MATCH gas=31142 fee="19" mismatches=[]
+B=37945428 tx0="0x49fc8519de17d1b66ac4787920bea8d3b092778fe34343a69ebef5c6d82e3a68" MATCH gas=26366 fee="16" mismatches=[]
+B=37945445 tx0="0x923fe5e640035e19d0230c43e85211a40e9fd9d3d66661f93d6687f4277c8bdd" MATCH gas=31166 fee="19" mismatches=[]
+AC-2: matched 3 / 3 (scanned 62 head blocks, excluded 0)
