@@ -21,3 +21,4 @@ video/node_modules/
 video/.forge/
 video/*.raw.mp4
 video/*.marks.json
+video/scenes/

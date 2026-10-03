@@ -28,3 +28,15 @@ Record the narration from `CHECKIN-3.md` (the `.srt` shows where each line falls
 ```sh
 ffmpeg -i video/checkin-3-B.mp4 -i voice.m4a -c:v copy -c:a aac -shortest video/checkin-3-B-voice.mp4
 ```
+
+## Adding voice scene by scene (e.g. Google Vids)
+
+```bash
+node video/split-scenes.mjs A        # after VARIANT=A … record-checkin.mjs  (or B)
+```
+
+Writes `video/scenes/checkin-3-<V>/scene-{1,2,3}.mp4` (silent, frame-accurate cuts at the recorder's
+scene boundaries), `scene-{1,2,3}.txt` (the lines for that clip) and `NARRATION.md`. Import the three
+clips in order, record each scene's lines over its clip in your own voice, export one video. Each clip's
+length was derived from its word count at ≈ 2.2 words/s, so reading at a natural pace fits; if a take
+runs long, trim a pause rather than speeding the video.
