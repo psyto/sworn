@@ -6,6 +6,7 @@ import { short } from "../chain/format.ts";
 const REPO = "https://github.com/psyto/sworn";
 const DEPLOYMENTS = `${REPO}/blob/main/deployments/moderato.json`;
 const SPEC = `${REPO}/blob/main/docs/specs/003-zone-verifier.md`;
+const SPEC4 = `${REPO}/blob/main/docs/specs/004-tee-plus-zk.md`;
 
 type Theme = "system" | "light" | "dark";
 
@@ -49,7 +50,8 @@ export function Topbar() {
   );
 }
 
-const ZONE_TX = deployments.SwornZoneVerifier.attest.tx;
+/** The primary Zone evidence: the attest of the batch with a withdrawal. */
+const ZONE_TX = deployments.SwornZoneVerifierWithdrawal.attest.tx;
 /** YouTube links for the two submission videos; null until published (then the links appear). */
 const VIDEOS: { pitch: string | null; demo: string | null } = { pitch: null, demo: null };
 const DOCS = "https://tempo.xyz/developers/docs/protocol/zones/proving";
@@ -70,7 +72,7 @@ export function Hero() {
           <a className="chip" href={txUrl(MODERATO, ZONE_TX)} target="_blank" rel="noreferrer">
             <span className="chip-mark" aria-hidden>✓</span>
             <span>
-              Zone batch verified on Moderato
+              Zone batch with a withdrawal, verified on Moderato
               <span className="chip-sub mono">tx {short(ZONE_TX)} ↗</span>
             </span>
           </a>
@@ -140,7 +142,8 @@ export function Footer() {
       <ul className="disclosures" aria-label="Disclosures">
         <li>Moderato testnet only</li>
         <li>Unaudited</li>
-        <li>Zone batch from Tempo's integration tests</li>
+        <li>Zone batches from Tempo's integration tests (dev chain)</li>
+        <li>Does not protect withdrawals today</li>
         <li>No revenue, users or mainnet</li>
         <li>A slash pays at most the reserved bond</li>
       </ul>
@@ -158,6 +161,11 @@ export function Footer() {
         <li>
           <a href={SPEC} target="_blank" rel="noreferrer">
             Spec 003: Zone verifier
+          </a>
+        </li>
+        <li>
+          <a href={SPEC4} target="_blank" rel="noreferrer">
+            Spec 004: TEE + ZK (proposal)
           </a>
         </li>
         {VIDEOS.pitch && (

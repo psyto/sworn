@@ -7,8 +7,12 @@ export interface ChainConfig {
   chainId: number;
   networkLabel: string;
   sworn: Address;
-  /** SwornZoneVerifier (spec 003). */
+  /** SwornZoneVerifier (spec 003), pinned to the hardfork_t13_recovery genesis. */
   zoneVerifier: Address;
+  /** The same verifier code, pinned to the genesis of the batch with a withdrawal (the page's primary evidence). */
+  zoneVerifierWithdrawal: Address;
+  /** Moderato's shared Zone verifier today: the pre-T13 reference stub (tempo ZONE_VERIFIER_RUNTIME). */
+  preT13Verifier: Address;
   explorerUrl: string;
 }
 
@@ -21,6 +25,9 @@ export const MODERATO: ChainConfig = {
   networkLabel: "Tempo Moderato testnet",
   sworn: getAddress(deployments.Sworn.address),
   zoneVerifier: getAddress(deployments.SwornZoneVerifier.address),
+  zoneVerifierWithdrawal: getAddress(deployments.SwornZoneVerifierWithdrawal.address),
+  // tempo crates/contracts/src/precompiles/zone_factory.rs ZONE_VERIFIER_ADDRESS; every Moderato Zone uses it
+  preT13Verifier: getAddress("0x5A56000000000000000000000000000000000000"),
   explorerUrl: "https://explore.testnet.tempo.xyz",
 };
 

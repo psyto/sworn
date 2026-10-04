@@ -1,38 +1,69 @@
 <!doctype html>
 <!--
-  Sworn demo v2 (video/DEMO.md) — the authored slides record-demo.mjs drives: scene 1's explorer insert
-  (e1), scene 3 (d3a honest answer, d3b the eth_simulateV1 line) and scene 4 (d4 limits + close). Scene 1's
-  page footage and scene 2's live take are not slides. NO FIGURE IS WRITTEN HERE: every hash, amount,
-  log line, URL and screenshot arrives through window.__fill() from its source at record time, and
-  __fill throws if a slot is left empty. Look: Sworn's own palette (slides.css), Sworn's mark. Never
-  Tempo's logo or wordmark (the explorer is cropped below its header); no other chain is named.
-  v1 (five scenes, bonded answers first) is in git history: d6996a3:video/demo.html.
+  Sworn demo v2.1 (video/DEMO.md) — the authored slides record-demo.mjs drives: scene 1 (d1, a withdrawal
+  needs a trusted check), scene 3's explorer insert (e1), scene 4 (dz, said plainly) and scene 6 (d6, next
+  and where to look). Scenes 2–3's page footage and scene 5's live take are not slides. NO FIGURE IS WRITTEN
+  HERE: every hash, line number, URL, quote and screenshot arrives through window.__fill() from its source
+  at record time, and __fill throws if a slot is left empty. Text here is labels and the plain-language
+  lines of DEMO.md's screen notes only. Look: Sworn's own palette (slides.css), Sworn's mark. Never Tempo's
+  logo or wordmark (the explorer is cropped below its header); no other chain is named.
+  v2 (four scenes) is in git history: HEAD:video/demo.html before v2.1.
 -->
 <meta charset="utf-8" />
 <title>Sworn demo</title>
 <link rel="stylesheet" href="slides.css" />
 <style>
-.term pre{font-size:14px}
 .mark{width:120px;height:120px;display:block}
 .limits{display:flex;flex-wrap:wrap}
-.limits span{border:1px solid var(--border);background:var(--surface);padding:12px 20px;font-size:26px;letter-spacing:-.02em;margin:0 -1px -1px 0}
+.limits span{border:1px solid var(--border);background:var(--surface);padding:10px 18px;font-size:22px;letter-spacing:-.02em;margin:0 -1px -1px 0}
 .close{display:flex;align-items:center;gap:28px}
 .links{font-family:var(--mono);font-size:22px;margin-top:10px;line-height:1.5}
 .links b{font-weight:500;color:var(--accent)}
 .excols{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0;align-items:start}
 .excols>*+*{margin-left:-1px}
 .excols img{display:block;border:1px solid var(--border)}
-.sim{font-family:var(--mono);font-size:17px;line-height:1.7}
-.sim .ok{font-weight:500}
-.why{font-size:34px;font-weight:400;letter-spacing:-.025em;line-height:1.2;max-width:1100px}
-.why b{font-weight:500;color:var(--accent)}
+.flow{display:flex;align-items:stretch;gap:0}
+.flow .box{border:1px solid var(--border);background:var(--surface);padding:14px 18px;font-size:22px;letter-spacing:-.02em;line-height:1.2}
+.flow .box small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.flow .arr{align-self:center;font-size:16px;padding:0 10px;color:var(--muted);white-space:nowrap;font-family:var(--mono)}
+.flow .gate{border:2px solid var(--accent);color:var(--accent);background:var(--surface);padding:14px 18px;font-size:22px;line-height:1.2}
+.flow .gate small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.big2{font-size:44px;font-weight:400;letter-spacing:-.03em;line-height:1.08}
+.big2 b{font-weight:500;color:var(--accent)}
+.code3 pre{font-size:13.5px}
+.plain{display:grid;gap:0}
+.plain .card+.card{margin-top:-1px}
+.plain .card{font-size:25px;letter-spacing:-.02em;line-height:1.3;padding:16px 22px}
+.plain .card b{font-weight:500}
+.plain .card.warn{background:#fff7e6;border-left:3px solid var(--warn)}
+.next{font-size:34px;font-weight:400;letter-spacing:-.03em;line-height:1.15;max-width:1120px}
+.next span{display:block;margin-bottom:6px;font-family:var(--mono);font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 </style>
 
 <div class="header"><span class="brand">Sworn</span><span class="lbl">Built on Tempo</span></div>
 <div class="badge">Moderato testnet</div>
-<div class="foot">Moderato testnet · unaudited · Zone batch from Tempo's integration tests · no users or revenue</div>
+<div class="foot">Moderato testnet · unaudited · Zone batches from Tempo's integration tests · no users or revenue</div>
 
-<!-- scene 1, segment 1d — the attest tx on the explorer (cropped below its header) -->
+<!-- scene 1 — a withdrawal needs a trusted check -->
+<div class="scene" id="d1">
+  <div class="kicker fade">A Tempo Zone · a withdrawal</div>
+  <div class="flow fade">
+    <div class="box"><small>Zone user</small>asks to withdraw</div>
+    <span class="arr">→</span>
+    <div class="box"><small>Zone batch</small>includes the withdrawal</div>
+    <span class="arr">→</span>
+    <div class="gate"><small>the Zone's verifier</small>verify(batch) → true?</div>
+    <span class="arr">→</span>
+    <div class="box"><small>Tempo · ZonePortal</small>pays it out</div>
+  </div>
+  <div class="big2 fade" data-at="5">Tempo must <b>trust the check</b> on the batch.</div>
+  <div class="term code3 fade" data-at="6">
+    <div class="bar"><b>Tempo's zones code</b> · <span data-k="portalSrc"></span> · read while recording</div>
+    <pre data-k="portalLines"></pre>
+  </div>
+</div>
+
+<!-- scene 3, insert — the attest tx on the explorer (cropped below its header) -->
 <div class="scene" id="e1">
   <div class="kicker fade">The same transaction · on the explorer · <span data-k="exUrl"></span></div>
   <div class="excols">
@@ -40,7 +71,7 @@
       <div class="t"><b>Transaction</b> · captured while recording</div>
       <img data-src="exCard" style="height:390px" alt="" />
     </div>
-    <div class="card fade" data-at="4">
+    <div class="card fade" data-at="2">
       <div class="t"><b>Its Events tab</b> · event 0</div>
       <img data-src="exEvent" style="width:100%" alt="" />
       <div class="src" style="margin-top:10px" data-k="exTopic"></div>
@@ -49,44 +80,24 @@
   </div>
 </div>
 
-<!-- scene 3a — the honest provider cannot be slashed (v1 scene 2, the same sources) -->
-<div class="scene" id="d3a">
-  <div class="kicker">Same machinery, honest answer</div>
-  <h1 class="fade" style="font-size:38px">A correct answer is never slashed.</h1>
-  <div class="two">
-    <div class="card fade">
-      <div class="t"><b>Preflight provider (answers + bonds)</b> · honest server · <span data-k="honestSrc"></span></div>
-      <img class="shot" data-src="honestShot" alt="" />
-    </div>
-    <div class="term fade">
-      <div class="bar"><b>Challenger (proves)</b> · <span data-k="recheckSrc"></span></div>
-      <pre data-k="recheckLines"></pre>
-    </div>
+<!-- scene 4 — said plainly -->
+<div class="scene" id="dz">
+  <div class="kicker fade">Said plainly</div>
+  <div class="plain">
+    <div class="card warn fade">This batch comes from <b>Tempo's zones integration tests</b> (<span class="mono" style="font-size:19px" data-k="itest"></span>), on a <b>dev chain (1337)</b>. Its withdrawal is a test withdrawal, <b>not a Moderato Zone's</b>.</div>
+    <div class="card warn fade">No ZonePortal calls this contract. It <b>does not protect withdrawals today</b>.</div>
+    <div class="card warn fade">Holding withdrawals until ZK finality: <b>a proposal (spec 004)</b>, not built.</div>
   </div>
-  <div class="term fade">
-    <div class="bar">contracts/src/Sworn.sol · read while recording · the proof is verified first, then the answer compared</div>
-    <pre data-k="solLines"></pre>
-  </div>
+  <div class="src fade" data-k="plainSrc"></div>
 </div>
 
-<!-- scene 3b — why this question: anyone can simulate it -->
-<div class="scene" id="d3b">
-  <div class="kicker fade">Why this question</div>
-  <div class="why fade">Anyone can check it with <b>eth_simulateV1</b>. That's why it makes a good demo. The point is the proof underneath.</div>
-  <div class="term fade" data-at="3">
-    <div class="bar"><b>eth_simulateV1</b> · rpc.moderato.tempo.xyz · run while recording, nothing sent</div>
-    <div class="sim" data-k="simAsk"></div>
-    <div class="sim ok" data-k="simGot"></div>
-    <div class="sim" data-k="simNot"></div>
-  </div>
-</div>
-
-<!-- scene 4 — honest limits, and where to look -->
-<div class="scene" id="d4">
-  <div class="kicker fade">Honest limits</div>
-  <div class="limits fade"><span>Testnet</span><span>unaudited</span><span>Zone batch from Tempo's integration tests</span><span>no users or revenue</span></div>
-  <div class="note fade" data-at="6">The bond caps what a client can be paid · it covers the answer about one block</div>
-  <div class="src fade" data-at="6" data-k="limitsSrc"></div>
+<!-- scene 6 — next, and where to look -->
+<div class="scene" id="d6">
+  <div class="next fade"><span>Next · a proposal</span>A TEE and a ZK proof together; payouts wait for ZK.</div>
+  <div class="src fade" data-k="specSrc"></div>
+  <div class="note fade" data-at="5">That needs Tempo: <span data-k="factoryLine"></span></div>
+  <div class="limits fade" data-at="9"><span>Testnet</span><span>unaudited</span><span>Zone batches from Tempo's integration tests</span><span>no users or revenue</span><span>the bond caps what a client can be paid</span></div>
+  <div class="src fade" data-at="9" data-k="limitsSrc"></div>
   <div class="close fade" data-at="15">
     <img class="mark" src="../_submission/brand/mark.svg" alt="" />
     <div>

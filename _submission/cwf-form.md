@@ -32,9 +32,9 @@ https://psyto.github.io/sworn/
 ```
 Sworn proves Tempo's execution in zero knowledge, so a contract on Tempo can act on it without trusting whoever ran it.
 
-The first use is Tempo Zones: private blockchains anchored to Tempo. A Zone's withdrawals are only as trustworthy as the check on each batch. Today that check is an AWS Nitro attestation, which means trusting one vendor's hardware, and Tempo's reference verifier returns true without checking. Tempo's docs: ZK proof generation "is not implemented".
+The first use is Tempo Zones: private blockchains anchored to Tempo. A Zone's withdrawals are only as trustworthy as the check on each batch. Today that check is an AWS Nitro attestation, trusting one vendor's hardware, and Tempo's reference verifier returns true without checking. Tempo's docs: ZK proof generation "is not implemented".
 
-What is built: Tempo's own Zone batch verifier (zone_spf::prove_zone_batch) runs inside SP1. The proof is bound to every input Tempo's IVerifier receives, plus the chain and the genesis. SwornZoneVerifier, with IVerifier's exact signature, verified a real batch on Moderato (tx 0xb14b7127…3b80).
+What is built: Tempo's own Zone batch verifier (zone_spf::prove_zone_batch) runs inside SP1. The proof is bound to every input Tempo's IVerifier receives, plus the chain and the genesis. SwornZoneVerifier, with IVerifier's exact signature, verified a test batch with a withdrawal on Moderato (tx 0xa63009fd…f770).
 
 It is for Tempo first, since Tempo chooses each Zone's verifier: ZK as a second, independent check beside the attestation. Then it is for the Zones that need a proof for every batch, on time, through every Tempo upgrade.
 ```
@@ -169,7 +169,7 @@ The next test is direct: put a TEE plus ZK design in front of Tempo and the firs
 
 ```
 No users, no revenue. Built and measured inside the window, all on Moderato testnet:
-- Tempo Zones: Tempo's own batch verifier runs in SP1 on 5 real batches from Tempo's zones integration tests, matching native output (19-26M cycles; tampering rejected). Proofs bound to IVerifier's inputs were verified on Moderato, including a batch with a withdrawal (txs 0xb14b7127…3b80, 0xa63009fd…f770).
+- Tempo Zones: Tempo's own batch verifier runs in SP1 on 5 real batches from Tempo's zones integration tests, matching native output (19-26M cycles; tampering rejected). Proofs bound to IVerifier's inputs were verified on Moderato, including a batch with a withdrawal (tx 0xa63009fd…f770; also 0xb14b7127…3b80).
 - tempo-revm in SP1: 40 of 40 real Moderato transactions re-executed match their receipts.
 - Three real slashes on Moderato: a lying answer server's bond paid the client, each by a Groth16 proof.
 - 64 forge tests, including real proofs; contracts with no owner.

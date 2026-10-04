@@ -8,7 +8,8 @@
 //   Tempo's docs page (zones/proving.md) for both quoted sentences; tempoxyz/zones @ ac49071f via `gh api`
 //   (README sentence, the reference Verifier.sol `return true`); the pinned checkout spikes/zone-spf/zones
 //   (IVerifier.verify signature, NatSpec) against contracts/src/SwornZoneVerifier.sol (same selector);
-//   deployments/moderato.json ↔ Moderato (SwornZoneVerifier codehash, the attest receipt and its decoded
+//   deployments/moderato.json ↔ Moderato (SwornZoneVerifierWithdrawal codehash, the attest 0xa630… of the batch
+//   with a withdrawal — batch counts, withdrawalQueueHash = fixture = calldata — and its decoded
 //   ZoneBatchVerified event, the three slash receipts with Sworn's Slashed event); the explorer page of the
 //   attest tx (screenshot cropped to the transaction card — no logo — plus its Events tab's topic0);
 //   the proving log; the vendored zone_factory; README (T12 date, the "is not, yet" section);
@@ -55,10 +56,12 @@ log(`• docs: both quotes present; ${VERIFIER_SOL}:${vi + 1} return true`);
 
 // ── scene 2: the Zone proof on Moderato ──────────────────────────────────────────────────────────
 const M = await moderato();
-const Z = M.dep.SwornZoneVerifier ?? fail("moderato.json: no SwornZoneVerifier");
+// v2.1: scene 2 shows the attest of the Zone batch WITH A WITHDRAWAL (0xa630…), not the hardfork batch (0xb14b…).
+const Z = M.dep.SwornZoneVerifierWithdrawal ?? fail("moderato.json: no SwornZoneVerifierWithdrawal");
 const ZV = getAddress(Z.address);
 const zcode = await rpc("eth_getCode", [ZV, "latest"]);
-if (keccak256(zcode) !== Z.codehash) fail("SwornZoneVerifier codehash on chain != moderato.json");
+if (keccak256(zcode) !== Z.codehash) fail("SwornZoneVerifierWithdrawal codehash on chain != moderato.json");
+if (!Z.attest.tx.startsWith("0xa63009fd")) fail(`withdrawal attest is ${Z.attest.tx}, expected 0xa630…`);
 const zsol = read("contracts/src/SwornZoneVerifier.sol", "SwornZoneVerifier source");
 const zev = parseAbiItem(`event ${flat(zsol.match(/event (ZoneBatchVerified\([^)]*\));/)?.[1] ?? fail("no ZoneBatchVerified in SwornZoneVerifier.sol"))}`);
 const atR = await receipt(Z.attest.tx, "attest");
@@ -76,6 +79,14 @@ agrees("prevBlockHash", ev.prevBlockHash); agrees("nextBlockHash", ev.nextBlockH
 if (!evLine.includes(`zoneId ${ev.zoneId}`) || !evLine.includes(`nextZoneHeight ${ev.nextZoneHeight}`)) fail("attest event zoneId/height disagree with moderato.json");
 const fx = JSON.parse(read(Z.attest.fixture, "zone fixture"));
 if (fx.digest.toLowerCase() !== ev.digest.toLowerCase()) fail("attest digest != fixture digest");
+// what the batch contains: counts from moderato.json's record, its withdrawalQueueHash = fixture = attest calldata, non-zero
+const bm = Z.batch.match(/\(dev chain (\d+)\).*?(\d+) withdrawals?, (\d+) user transactions?, withdrawalQueueHash (0x[0-9a-f]+)…([0-9a-f]+)/) ?? fail(`moderato.json batch line changed: ${Z.batch}`);
+const WQH = fx.args.withdrawalQueueHash.toLowerCase();
+if (!WQH.startsWith(bm[4]) || !WQH.endsWith(bm[5]) || /^0x0+$/.test(WQH)) fail("withdrawalQueueHash: moderato.json / fixture disagree, or zero");
+const atTx = await rpc("eth_getTransactionByHash", [Z.attest.tx]);
+const atInput = (atTx.calls?.length === 1 ? atTx.calls[0].input : atTx.input).toLowerCase();
+if (!atInput.includes(WQH.slice(2))) fail("attest calldata does not carry the fixture's withdrawalQueueHash");
+if (+bm[2] !== 1 || +bm[3] !== 2 || bm[1] !== "1337") fail(`batch: ${bm[2]} withdrawals, ${bm[3]} user txs, chain ${bm[1]}`);
 log(`• attest ${short(Z.attest.tx)} block ${atBlock}: ZoneBatchVerified zone ${ev.zoneId} height ${ev.nextZoneHeight} digest ${short(ev.digest)}`);
 
 // verify(…) in SwornZoneVerifier has IVerifier.verify's selector, taken from the pinned zones checkout.
@@ -195,6 +206,9 @@ const data = {
 
   proveSrc: `zone_spf::prove_zone_batch from tempoxyz/zones @ ${ZONES_REF} · ${cycles.toLocaleString("en-US")} cycles · Groth16 in ${Math.round(wall)} s, locally`,
   atStatus: "✓ status 1 · ZoneBatchVerified emitted", atTx: short(Z.attest.tx, 8),
+  batchLine: `${bm[2]} withdrawal · ${bm[3]} user transactions`,
+  batchFrom: `Tempo's zones integration tests · dev chain ${bm[1]}`,
+  evWqh: `${short(WQH, 10)} (non-zero)`,
   atBlock: `${atBlock.toLocaleString("en-US")} · ${parseInt(atR.gasUsed, 16).toLocaleString("en-US")} gas`,
   evZone: String(ev.zoneId), evHeight: String(ev.nextZoneHeight),
   evPrev: short(ev.prevBlockHash, 10), evNext: short(ev.nextBlockHash, 10), evDigest: short(ev.digest, 10),

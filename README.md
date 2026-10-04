@@ -18,8 +18,11 @@ that engine:
    client. No judge, no owner. This has slashed a lying server **three times on Moderato**.
 
 > **For judges, the fast path:** the [live page](https://psyto.github.io/sworn/) ·
-> [the Moderato proof tx](https://explore.testnet.tempo.xyz/tx/0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80) ·
-> "Verify it again" on the page (two live `eth_call`s: the real proof → true; one field changed → `InvalidProof`) ·
+> [the Moderato proof tx](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770)
+> (a Zone batch with one withdrawal, from Tempo's integration tests) ·
+> "Verify again" on the page (three live `eth_call`s: Sworn, the real proof → true; one field changed →
+> `InvalidProof`; for comparison, Moderato's current prototype verifier, the pre-T13 reference stub, returns
+> true for an equivalent malformed batch) ·
 > pitch (2 min) and demo (2:35) videos: *links added once published*.
 >
 > **Status (2026-10-04): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato

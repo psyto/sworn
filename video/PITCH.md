@@ -23,7 +23,11 @@ checking execution."]**
 ## Scene 2: it works · ≈ 25 s
 
 **[Screen 2: Tempo's Zone batch verifier → SP1 zkVM → Groth16 → `SwornZoneVerifier` on Moderato, then the
-explorer: `attest` tx `0xb14b…3b80`, event `ZoneBatchVerified`. Then a strip: "3 slashes on Moderato".]**
+attest of the Zone batch **with a withdrawal**: tx `0xa630…f770`, "1 withdrawal · 2 user transactions",
+`withdrawalQueueHash` (non-zero), labelled "Tempo's zones integration tests · dev chain 1337", the decoded
+`ZoneBatchVerified`, and the explorer. Then a strip: "3 slashes on Moderato". (v2.1, 10-04: this was the
+hardfork batch `0xb14b…3b80` before; the narration is unchanged and still fits: "verified it. Here is the
+transaction.")]**
 
 > So I built it. Sworn runs Tempo's own Zone batch verifier inside a zero-knowledge VM, binds the proof to
 > the exact inputs Tempo's verifier takes, and a contract on Tempo's testnet verified it. Here
@@ -76,7 +80,9 @@ for every batch, on time, re-verified at every Tempo upgrade".]**
 | ZK proving for Zones is not implemented | Tempo docs, same page: *"ZK proof generation is not implemented"* (checked on the live page 2026-10-04) |
 | runs Tempo's own Zone batch verifier inside a zkVM | `spikes/zone-spf/` (zones `ac49071f`, `prove_zone_batch`, zkVM build patches to zones, tempo and two dependency crates); spec 003 AC-Z1 |
 | bound to the exact inputs Tempo's verifier interface takes | `SwornZoneVerifier.sol` has `IVerifier.verify`'s exact signature (`IZone.sol:306-345`); the digest covers every `NitroBatchAttestation` field plus the destination chain and genesis artifact (spec 003 §3) |
-| a contract on Tempo's testnet verified it; "here is the transaction" | Moderato tx `0xb14b7127…3b80`, block 38080441, `ZoneBatchVerified` (`deployments/moderato.json`) |
+| a contract on Tempo's testnet verified it; "here is the transaction" | Moderato tx `0xa63009fd…f770`, block 38097996, 260,863 gas, `ZoneBatchVerified` from `0xF2e1…BA11` (`deployments/moderato.json` `SwornZoneVerifierWithdrawal`; receipt, event and codehash read at record time; digest = fixture `zone-deposit_and_withdrawal_blocks5-6-sworn-sp1-groth16-v1.json`) |
+| on screen: 1 withdrawal · 2 user transactions · withdrawalQueueHash non-zero · dev chain 1337 | counts and chain from `SwornZoneVerifierWithdrawal.batch`; its `withdrawalQueueHash` prefix/suffix = the fixture = the attest calldata (checked at record time) |
+| on screen: 24,443,996 cycles · Groth16 in 891 s | `spikes/zone-spf/z-logs/prove-moderato-deposit_and_withdrawal_blocks5-6.log` = `SwornZoneVerifierWithdrawal.attest.proving` |
 | re-runs Tempo's EVM; slashed a lying server three times on Moderato | `firstSlash` `0xa7b9…ab9b`, `demoLiveTakeFirst` `0xbf8e…f046`, `demoLiveTake` `0x69ab…5188` (`deployments/moderato.json`) |
 | withdrawals are only as trustworthy as the check on the batch | `IVerifier` NatSpec: the proof validates the state transition, deposits and withdrawal queue (`IZone.sol:308-318`); ZonePortal calls `verify` on `submitBatch` |
 | attestation = trusting one vendor's chip | the native verifier is AWS Nitro (Tempo docs, same page) |

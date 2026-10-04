@@ -1,161 +1,163 @@
-# Demo video: Sworn (≤ 3 min, founder's voice), v2, 2026-10-04
+# Demo video: Sworn (≤ 3 min, founder's voice), v2.1, 2026-10-04
 
-**Status: RECORDED (2026-10-04) — `video/demo.mp4` is v2: 2:35 (154.97 s), 1920×1080, silent**, made by
-`node video/record-demo.mjs` (then `node video/split-scenes.mjs demo` → `video/scenes/demo/`). The founder
-approved this order on 10-04; it replaces the brief's rule "the whole bonded-answer story by 0:60" (the
-story now lands at 1:02–1:44). The narration (294 words) is recorded later in the founder's voice;
-`demo.srt` and `scenes/demo/NARRATION.md` give the timing. v1 (bonded answers first, 2:49) is in git
-history: `d6996a3:video/demo.mp4`, recorder `d6996a3:video/record-demo.mjs`.
+**Status: v2.1 RECORDED (2026-10-04), silent picture + script + subtitles.** `video/demo.mp4`, 1920×1080, made
+by `DEMO_PAGE_URL=http://localhost:4173/ node video/record-demo.mjs`, then `node video/split-scenes.mjs demo`
+→ `video/scenes/demo/`. The narration is recorded later in the founder's own voice; `demo.srt` and
+`scenes/demo/NARRATION.md` give the timing. Exact length, word count and the three live verify results of
+the take are in `demo.marks.json`.
 
-**As recorded** (scene length = max(the "≈ N s" target below, words ÷ 2.2 w/s)):
+**Recorded from a local build, not the published page.** v2.1 needs the page's new "Verify again" (three
+rows, with Moderato's pre-T13 verifier) and the withdrawal batch as primary evidence. Those changes are in
+`site/` but not yet published, so the page was captured from `vite preview` of this working tree (the same
+build `pages.yml` publishes). The browser shows no URL bar. After the page is published, re-record with
+the default `DEMO_PAGE_URL` (https://psyto.github.io/sworn/) and nothing else changes.
 
-| scene | span | words | picture, as recorded |
+v2 (Zone proof first, the hardfork batch `0xb14b…3b80`, 2:35) is in git history: `HEAD:video/DEMO.md`,
+`HEAD:video/record-demo.mjs`. v1 (bonded answers first) is `d6996a3`.
+
+**What changed from v2.** The primary Zone evidence is the batch **with a withdrawal** (attest
+`0xa630…f770`). Before it, the page calls **Moderato's current prototype verifier** (the pre-T13
+reference stub) with a malformed batch, live, and it returns true. The disclosure gets its own scene. The
+bonded answers are a separate demonstration of the same engine, now told from the user's side. The old
+scene 3 (a right answer is safe, `eth_simulateV1`) is cut for time; the page still says that the demo
+question can be checked with `eth_simulateV1`.
+
+**Word budget:** ≈ 2.2 words/s; hard cap 330 (the recorder refuses more). Scene length = max(the "≈ N s"
+target, words ÷ 2.2 rounded up to 0.5 s).
+
+| scene | span | target | picture |
 |---|---|---|---|
-| 1 the Zone proof | 0:00–1:02 (62 s) | 120 | the **published** page https://psyto.github.io/sworn/ (Zone section, light, 125 %) 0:00–0:44: head 0:00, pipeline 0:03, attest card 0:10, decoded event 0:16, immutables + codehash 0:23, "Check it yourself" 0:28.5, **click "Verify again"** 0:31.2 → "Calling…" → ✓ true / ✗ `InvalidProof()` 0:31.6 (burned-in label "“Verify again” clicked · live — the page also ran this check when it loaded"); explorer insert 0:44–0:56 (transaction card + event row, cropped below the header); "What it is not, yet" 0:56–1:02 |
-| 2 the same engine, on a lying answer | 1:02–1:44 (42 s) | 81 | the 10-03 take: roles 1:02–1:07.3; MPP charge + reserve **×6.3, labelled "this run: 18.8 s real → 3 s"** 1:07.3–1:10.3; then **uncut** from the claimed +500 through Send 500 → "✓ transaction succeeded" → receiver +0.00 / ReceivePolicyGuard +500.00 → Challenge → the take's own time-lapse ("9 min 00 s → 10 s") → "You were paid 500.00 from the server's bond"; last frame held 1.5 s |
-| 3 a right answer is safe | 1:44–2:08 (24 s) | 42 | slide d3a (the take's honest card, the recheck log `AnswerCorrect`, `Sworn.sol` 322–324) 1:44–1:57; slide d3b (the `eth_simulateV1` line + that simulation, run while recording) 1:57–2:08 |
-| 4 honest limits, and where to look | 2:08–2:35 (27 s) | 51 | limits; "The bond caps what a client can be paid · it covers the answer about one block"; mark, "Sworn: Tempo's execution, proven.", github.com/psyto/sworn, psyto.github.io/sworn |
+| 1 a withdrawal needs a trusted check | 0:00–0:12 | 12 s | **authored slide** `d1` |
+| 2 Moderato's prototype verifier, live | 0:12–0:40 | 28 s | **page**, "Verify again" clicked, row 3 |
+| 3 Sworn on the batch with a withdrawal | 0:40–1:14 | 34 s | **page** (attest card, batch contents) 14 s → **explorer** `0xa630` 8 s → **page** (click, rows 1–2, the comparison line) 12 s |
+| 4 said plainly | 1:14–1:26 | 12 s | **authored slide** `dz` |
+| 5 the same engine, bonded answers | 1:26–2:09 | 43 s | **reused** live take, re-cut as in v2 |
+| 6 next, and where to look | 2:09–2:35 | 26 s | **authored slide** `d6` |
 
-**One deviation from the page as published.** The page's pipeline caption says the proof "took 25.5M
-cycles and **816 s**"; that is the superseded deployment's proof (`prove-moderato.log`). This attest's
-proving log says **701 s**. The recorder compares them, hides that caption in the capture and burns in
-"25.5M cycles · Groth16 proof in 701 s, locally · proving log of this attest" instead (`demo.marks.json`
-`scene1.hiddenCaption`). Once `site/src/ui/Zone.tsx` says 701 s and is republished, a re-record shows the
-page's own caption and no label.
+Scene 3 is longer and scene 6 shorter than the brief's spans (1:10 / 2:05) because scene 3 carries the
+explorer insert and the comparison sentence; the total stays 2:35.
+
+**Wording rules kept here and on screen** (from the founder's brief, 10-04):
+- Never "the same input" for Moderato's verifier. Its ABI is the pre-T13 10-argument `verify`
+  (selector `0x7106a43e`); ours is T13's 12-argument `IVerifier.verify`. The call is **equivalent, not
+  identical**.
+- Moderato's verifier is described only as: "On Moderato today, the pre-T13 Solidity reference verifier is a
+  prototype stub: it returns true without checking execution. Sworn demonstrates the missing ZK check."
+  Wherever shown, it is labelled "Moderato, pre-T13" with the live call time. Never "broken".
+- Never that Sworn protects or secures withdrawals today. Holding withdrawals until ZK finality is spec
+  004's **proposal**.
+- The withdrawal batch is a Tempo zones integration-test batch on a dev chain (1337), not a Moderato Zone's
+  withdrawal: said once, clearly (scene 4).
 
 ---
 
-*The plan as reviewed follows (narration lines are the script the recorder reads).*
+## Scene 1 — a withdrawal needs a trusted check · ≈ 12 s
 
-**Form field:** *Demo video · ≤ 3 min · required* — *"how the product works"*. Target **≈ 2:35 (155 s)**.
-Order follows v2 of the pitch (`PITCH.md`): the Zone proof first, then the same engine slashing a lying
-answer, then honest limits.
+**[Authored slide `d1`: Zone user → "withdraw" → the Zone batch → the Zone's verifier, `verify(…)` → Tempo
+pays out. Under it, Tempo's code at the pinned zones commit, read while recording: `submitBatch` calls
+`verify` and reverts `InvalidProof` if it is false; the batch's withdrawals are queued only after that; the
+payout (`processWithdrawals`) reads that queue. Headline: "Tempo must trust the check on the batch."]**
 
-**Narration word budget** (≈ 2.2 words/s, as for every Sworn video): **294 words as recorded (≈ 134 s of voice), hard cap 330 (the recorder refuses more)**
-(330 words ≈ 150 s of voice inside a 155 s cut leaves room for the silent time-lapse and the click).
+> A Zone user asks to withdraw. Tempo pays it out only from a batch that passed the Zone's verifier, so
+> Tempo has to trust that check.
 
-| scene | span | words (draft) | picture |
-|---|---|---|---|
-| 1 the Zone proof | 0:00–1:02 | 113 | **NEW** read-only captures: the public page's Zone section + the explorer |
-| 2 the same engine, on a lying answer | 1:02–1:44 | 81 | **REUSE** live take `takes/demo-20261003T131156Z/scene1.mp4`, shortened |
-| 3 a right answer is safe | 1:44–2:08 | 42 | **REUSE** `demo.mp4` v1 scene 2, shortened; one **NEW** authored line |
-| 4 honest limits, and where to look | 2:08–2:35 | 50 | **NEW** authored slide (pitch v2 scene 6 look) |
+## Scene 2 — Moderato's prototype verifier, live · ≈ 28 s
 
----
+**[The page, "Check it yourself, now" (light theme, 1024×576 CSS px at 1.875× = 1920×1080, page zoom
+125 %). At ≈ 2.5 s **"Verify again" is clicked** (burned-in label "“Verify again” clicked · live"). Then
+the third row is centred: "Moderato's current prototype verifier (pre-T13 reference stub), an equivalent
+malformed batch", "Moderato, pre-T13 · called <time> UTC", `0x5A56….verify(zone 99, every block number 0,
+every hash 0x00…00, verifierConfig 0xdead, proof 0xbeef)`, "selector 0x7106a43e: 10 arguments, not
+IVerifier's 12", **returns true**, and the explanation line.]**
 
-## Scene 1 — the Zone proof · ≈ 62 s
+> This is Sworn's public page, reading Moderato, Tempo's testnet. Nothing is signed. On Moderato today,
+> the pre-T13 Solidity reference verifier is a prototype stub: it returns true without checking
+> execution. I call it live with a malformed batch: zone ninety-nine, config dead, proof beef. It returns
+> true. Sworn demonstrates the missing ZK check.
 
-**[NEW, read-only capture of the site (as recorded: the published page, not `vite preview`), light theme, 1024×576 CSS px at 1.875× = 1920×1080,
-i.e. page zoom 125 % so the mono values read at 1080p. Nothing is signed or sent; the page only
-makes `eth_call` / receipt reads to rpc.moderato.tempo.xyz.]**
+## Scene 3 — Sworn on the batch with a withdrawal · ≈ 34 s
 
-| t | segment | on screen | source of what is shown |
-|---|---|---|---|
-| 0:00–0:10 | 1a | the page's Zone section head, then the pipeline: Zone batch verifier → SP1 zkVM → Groth16 → SwornZoneVerifier; caption "25.5M cycles and 701 s" (as recorded: the published caption still says 816 s, so it is hidden and the log's figure burned in) | `site/src/ui/Zone.tsx`; `spikes/zone-spf/z-logs/prove-moderato-sworn-sp1-groth16-v1.log` (`prove-moderato.log` is the superseded proof's) |
-| 0:10–0:28 | 1b | "The attest transaction": ✓ succeeded · ZoneBatchVerified emitted, tx `0xb14b…3b80`, block 38080441, then **Event ZoneBatchVerified, decoded** (zoneId 1, nextZoneHeight 10, prev/next block hash, digest ✓ "the digest the zkVM guest committed"), then the immutables ✓ match / codehash ✓ | read live by the page; = `deployments/moderato.json` `SwornZoneVerifier.attest` |
-| 0:28–0:44 | 1c | scroll to "Check it yourself, now", **click "Verify again"**: "Calling…" (≈ 0.5 s), then `verify(zone 1, height 10, …, proof)` **✓ true** and `verify(zone 1, height 11, …, proof)` **✗ reverts InvalidProof()**, "Called at … UTC" | two `eth_call`s from the browser, same 356-byte proof as the attest tx |
-| 0:44–0:56 | 1d | the explorer, `explore.testnet.tempo.xyz/tx/0xb14b…3b80`: **cropped to the transaction card** (Status Success, Hash, Block, Time in UTC, From, To = SwornZoneVerifier), then its Events tab: topic0 `0x6bb1…7007` (= `ZoneBatchVerified`) from `0x00F6…64e5` (SwornZoneVerifier) | the explorer, captured at record time; crop and checks as in `record-pitch.mjs` `explorerShot()` (never the header: it carries Tempo's wordmark) |
-| 0:56–1:02 | 1e | back on the page: "What it is not, yet" — **The batch is not from Moderato** | `site/src/ui/Zone.tsx`; README "What the Zone verifier is, and is not" |
+**[Page: "The attest transaction · the batch with a withdrawal" (✓ succeeded, tx `0xa630…f770`, block,
+gas, contract `0xF2e1E7…DcBA11`), then "What the batch contains": withdrawals 1, user transactions 2,
+`withdrawalQueueHash 0xcf74…02e7` ✓ non-zero, from `deposit_and_withdrawal_blocks5-6`. Explorer insert
+(8 s): the explorer's transaction card for `0xa630…f770` and its Events tab row (topic0 = `ZoneBatchVerified`,
+emitter `0xF2e1…BA11`), cropped below the explorer's header. Page again: **"Verify again" clicked a second
+time**, row 1 "Sworn · the real withdrawal batch" ✓ true, row 2 "Sworn · one field changed" (height 7) ✗
+reverts `InvalidProof()`, then the comparison line under the three rows.]**
 
-**Note on 1c.** The page runs both calls once on load, so ✓ / ✗ are already there when the card scrolls in.
-The click re-runs them and the "Called at" time changes. Decided: (a), narrated as "again, live", with a
-burned-in label saying the page also ran the check on load; the recorder requires "Called at" to change.
+> Now Sworn, on a real batch from Tempo's integration tests: two user transactions and one withdrawal.
+> Tempo's own batch verifier ran inside a zero-knowledge VM, and this contract checked the proof. Here it
+> is on the explorer. Again, live: the real batch, true. Change one field, and it reverts: invalid proof.
+> An equivalent malformed batch is accepted by Moderato's current prototype verifier, while Sworn rejects
+> a mutation of its proven batch.
 
-> This is Sworn's public page. The evidence on it is read live from Moderato, Tempo's testnet, and nothing
-> is signed. Tempo's own Zone batch verifier ran inside a zero-knowledge VM, and a contract with the exact
-> signature of Tempo's verifier checked the proof. Here is that transaction. It succeeded, and its event
-> carries the Zone, the height and the digest the proof committed to. The page ran this check when it
-> loaded; I run it again, live: two read-only calls with the same proof. The real batch: true. Change one
-> field, the height, and the proof
-> no longer fits. The same transaction, on Tempo's explorer. One limit, up front: this batch comes from
-> Tempo's integration tests, not from a live Zone.
+## Scene 4 — said plainly · ≈ 12 s
 
-## Scene 2 — the same engine, on a lying answer · ≈ 42 s
+**[Authored slide `dz`: "This batch comes from Tempo's zones integration tests (`l1_e2e::test_deposit_and_withdrawal`),
+on a dev chain (1337). Its withdrawal is a test withdrawal, not a Moderato Zone's." · "No ZonePortal calls
+this contract. It does not protect withdrawals today." · "Holding withdrawals until ZK finality: a
+proposal (spec 004), not built."]**
 
-**[REUSE, no new transaction: the live take `video/takes/demo-20261003T131156Z/scene1.mp4` (56.2 s, already
-edited, with its own burned-in time-lapse label). Cut points from that take's `take.json` events,
-in that clip's time:]**
+> To be clear: this batch comes from a dev chain, not a Moderato Zone. No portal uses it, and it does not
+> protect withdrawals yet.
 
-| take time | keep as | what is on screen | change |
-|---|---|---|---|
-| 0.0–4.0 | 4.0 s | the role strip: Paying agent (asks) · Preflight provider (answers + bonds) · Challenger (proves) | none |
-| 5.3–24.1 | 3.0 s | Step 2 card "demo: this server is configured to lie", "Buying preflight…" (MPP charge + `reserve` tx) | **speed-up ×6.3, burned-in label "×6 · paying over MPP and reserving, 18.8 s"** (same rule as the time-lapse: label it, same run) |
-| 24.1–37.4 | 13.3 s | "receiver +500.00 (claimed) · Reserved 500.00 … Active" → Send 500 to R′ → **"✓ transaction succeeded"** → **receiver +0.00 / ReceivePolicyGuard +500.00** → "Challenge the answer" | none: this is the moment the brief says must stay |
-| 37.4–56.2 | 18.8 s | the existing time-lapse ("time-lapse · this challenge · 9 min 00 s → 10 s", the app's clock to 9:02), submit, **"You were paid 500.00 from the server's bond"**, agent balance → +500 at block 37995577 | none |
+## Scene 5 — the same engine, bonded answers · ≈ 43 s
 
-Total ≈ 39 s of picture + ≈ 3 s hold on the payout card = 42 s.
+**[REUSE, no new transaction: the live take `video/takes/demo-20261003T131156Z/scene1.mp4`, cut as in v2.
+Role strip 0–5.3 s; the MPP charge + `reserve` span sped up ×6.3 with the burned-in label "this run: 18.8 s
+real → 3 s"; then **uncut** from the claimed +500 through Send 500 → "✓ transaction succeeded" → **receiver
++0.00 / ReceivePolicyGuard +500.00** → Challenge → the take's own time-lapse ("9 min 00 s → 10 s") → **"You
+were paid 500.00 from the server's bond"**; the last frame held.]**
 
-> The same engine re-runs Tempo's EVM. A paying agent asks a preflight provider: will the receiver get
-> 500? This provider is configured to lie. It answers plus 500, and reserves 500 of its bond. The agent
-> pays. The transaction succeeds, but
-> the receiver gets nothing: its policy blocks this sender, so Tempo's guard holds the 500. A challenger
-> re-runs that transfer inside a zero-knowledge proof, nine minutes here, sped up. The contract verifies
-> it, and the bond pays the agent 500.
+> Separately, the same engine re-runs Tempo's EVM for bonded answers. A paying agent asks a provider: will
+> the receiver get 500? This provider is configured to lie. Before answering, it reserves 500 of its bond
+> as coverage. The agent pays. The transaction succeeds, but the receiver gets zero; Tempo's guard holds
+> the money. Without Sworn, the agent sees success and chases a refund. Here, a challenger proves it in
+> zero knowledge, sped up, and the bond pays the agent 500 automatically. That's compensation, not
+> prevention.
 
-## Scene 3 — a right answer is safe · ≈ 24 s
+## Scene 6 — next, and where to look · ≈ 26 s
 
-**[As recorded: v1 scene 2's slide re-rendered from the same sources, read again at record time, rather than cut from v1's file. Plan: REUSE `demo.mp4` v1 scene 2 (56.2–75.2 s): the honest Step 1 card "+500.00 · reserved 500", the dry-run
-challenge → `AnswerCorrect`, `Sworn.sol` 323–324 highlighted; trimmed to ≈ 14 s (drop the first 5 s of
-card hold). Then NEW, an authored line (pitch look) for ≈ 10 s: "Why this question: anyone can check it
-with `eth_simulateV1`. The point is the proof."]**
+**[Authored slide `d6`: "Next · a proposal (spec 004): a TEE and a ZK proof together; payouts wait for
+ZK" with spec 004's own words; "That needs Tempo: Tempo's factory fixes each Zone's verifier". Then the
+limits: Testnet · unaudited · Zone batches from Tempo's integration tests · no users or revenue; "The bond
+caps what a client can be paid". Then the mark, "Sworn: Tempo's execution, proven.", `github.com/psyto/sworn`
+and `psyto.github.io/sworn`.]**
 
-> A correct answer can't be slashed. A challenge against the honest provider verifies the proof, and
-> then reverts: the answer was right. This question makes a good demo because anyone can check it
-> with a simulation. The point is the proof underneath.
-
-## Scene 4 — honest limits, and where to look · ≈ 27 s
-
-**[NEW authored slide, the pitch v2 scene 6 look and mark: "Testnet · unaudited · Zone batch from Tempo's
-integration tests · no users or revenue"; "The bond caps what a client can be paid · it covers the answer
-about one block"; then the mark, "Sworn: Tempo's execution, proven.", `github.com/psyto/sworn` and the
-page's URL, psyto.github.io/sworn.]**
-
-> The honest limits. This is testnet and unaudited. The Zone batch comes from Tempo's integration
-> tests. The bond caps what a client can be paid, and there are no users or revenue yet. Everything you
-> saw is open source, and the public page reads the evidence from chain and re-runs the check. Sworn: Tempo's execution, proven.
-
----
-
-## What needs recording, and what is reused
-
-- **New screen recording (read-only, no keys, no transactions):** scene 1 segments 1a–1c and 1e (the
-  published page's Zone section), segment 1d (the explorer page, cropped). A test capture on
-  2026-10-04: the attest card loads in ≈ 2 s, "Verify again" returns in ≈ 0.5 s, so the 62 s scene is
-  bound by the narration, not by the chain.
-- **New authored slides:** scene 3's one line, scene 4. Recorded like the pitch (slides.css, figures
-  filled at record time).
-- **Reused footage:** scene 2 = the 2026-10-03 live take (`demoLiveTake` in `deployments/moderato.json`:
-  payment `0x5d76…de62`, challenge `0x69ab…5188`); scene 3 = `demo.mp4` v1 scene 2.
-- **Tooling: done.** `record-demo.mjs` is the v2 recorder (published-page capture, take re-cut with the
-  labelled ×6.3 speed-up, slides e1 / d3a / d3b / d4 in `demo.html`); `split-scenes.mjs demo` runs on it.
-
-## Resolved: the 0:60 rule
-
-The brief's completion condition said that **by 0:60** the viewer has seen asker, answerer, wrong answer,
-the guard diversion, the proof and the payout. The founder approved v2's order on 10-04, which supersedes
-it: the bonded-answer chain lands at 1:02–1:44.
+> The next step is a proposal, spec 004: run a TEE and a ZK proof together, and hold withdrawals until
+> both have checked the batch. That needs Tempo. Today this is testnet and unaudited, with no users or
+> revenue. The page re-runs these checks from chain, and the code is open source. Sworn: Tempo's
+> execution, proven.
 
 ---
 
 ## Claims and sources
 
-| claim | source |
-|---|---|
-| read live from Moderato; nothing signed | `site/src/chain/zone.ts` (receipt, `eth_getTransactionByHash`, `readContract`, `eth_call` only) |
-| Tempo's own Zone batch verifier inside a zkVM | `spikes/zone-spf/` (`prove_zone_batch`, zones `ac49071f`); spec 003 AC-Z1 |
-| contract with the exact signature of Tempo's verifier | `verify` selector `0xebb2ddc9` equal in `SwornZoneVerifier.sol` and zones `IZone.sol` (`record-pitch.mjs` checks it) |
-| it succeeded; event carries zone, height, digest | attest `0xb14b7127…3b80`, block 38080441, `ZoneBatchVerified` (`deployments/moderato.json`) |
-| true / change one field → no longer fits | the page's two `eth_call`s; `readOnlyChecks` in `deployments/moderato.json` (`nextZoneHeight+1 reverts InvalidProof()`) |
-| batch from Tempo's integration tests, not a live Zone | README "What the Zone verifier is, and is not"; `SwornZoneVerifier.deviations` |
-| configured to lie; reserves 500 | take `demo-20261003T131156Z`; reserve `0xaa1d…e45d` (`demoLiveTake.dishonestReserve`) |
-| succeeds, receiver +0, guard holds 500 | payment `0x5d76…de62`, block 37994663: guard +500 / R′ +0 at block−1 / block (`demoLiveTake`) |
-| nine minutes, sped up | `demoLiveTake.provingRealTime` "9 min 00 s"; take's burned-in label |
-| bond pays the agent 500 | challenge `0x69ab…5188`, block 37995577, client +500 (`demoLiveTake`) |
-| correct answer can't be slashed (reverts after verifying) | `out/e2e/moderato-20261003T064745Z-honestReverts-recheck.log`; `Sworn.sol:323–324` |
-| anyone can check the question with a simulation | `eth_simulateV1` of the agent's same transfer at the question's block (37,994,626), run while recording: status 1, Transfer 500.00 → `ReceivePolicyGuard` (`tempo/crates/contracts/src/precompiles/mod.rs` `RECEIVE_POLICY_GUARD_ADDRESS`), nothing to R′ (CRITERIA-MAP: say once, "that's why it's a good demo") |
-| bond caps payment; about one block | README; brief "担保額は補償の上限" |
-| testnet, unaudited, no users or revenue; open source | README; Apache-2.0; `github.com/psyto/sworn` public |
+Every figure on screen is checked by `record-demo.mjs` at record time against the source in its row; a
+missing source or a different value stops the recording. Rows marked *(narration)* have no figure on screen.
 
-**Not said, on purpose:** that a Zone settles with it or that it secures withdrawals; that the batch is
-from Moderato; "verification layer"; production, mainnet, audited; any user, customer or revenue; other
-chains by name.
+| claim / on-screen figure | source, read at record time |
+|---|---|
+| Tempo pays a withdrawal only from a batch that passed the Zone's verifier | `spikes/zone-spf/zones` @ `ac49071f`, `crates/contracts/src/runtime/tempo/ZonePortal.sol`: `submitBatch` → `.verify(` → `if (!valid) revert InvalidProof();` → `_withdrawalQueue.enqueue(withdrawalQueueHash)`; `processWithdrawals` (line numbers read, order checked) |
+| reading Moderato; nothing is signed | `site/src/chain/zone.ts` (receipt, `eth_getTransactionByHash`, `readContract`, `eth_call` only) |
+| Moderato's Zone verifier is the pre-T13 reference stub | `eth_getCode(0x5A56…)` = tempo `crates/contracts/src/zones.rs` `ZONE_VERIFIER_RUNTIME`; its dispatcher holds only `0x7106a43e`; `zone_factory.rs` `ZONE_VERIFIER_ADDRESS`; source `zones/…/tempo/Verifier.sol` "Stub implementation that always returns true for prototyping" (`docs/research/moderato-zone-feasibility-20261004.md` §1) |
+| pre-T13 selector `0x7106a43e`, 10 arguments, not IVerifier's 12 | selector computed from the recorder's pre-T13 ABI = the one in `ZONE_VERIFIER_RUNTIME`; `IVerifier.verify` selector from `IZone.sol` @ `ac49071f` = `SwornZoneVerifier.sol`'s, and differs |
+| row 3: malformed batch (zone 99, 0s, `0xdead`, `0xbeef`) → returns true; "Moderato, pre-T13 · called <time>" | the recorder's own `eth_call`; the page's row, which must show the same values and a call time within 120 s of now, changed by the click |
+| a real batch from Tempo's integration tests: 2 user transactions, 1 withdrawal | `deployments/moderato.json` `SwornZoneVerifierWithdrawal.batch` (counts; its `withdrawalQueueHash` prefix/suffix = fixture) |
+| `withdrawalQueueHash` non-zero | fixture `contracts/test/vectors/zone-deposit_and_withdrawal_blocks5-6-sworn-sp1-groth16-v1.json` = the attest calldata (page ✓) |
+| this contract checked the proof; tx, block, gas, event | attest `0xa63009fd…f770`, block 38097996, 260,863 gas, `ZoneBatchVerified` from `0xF2e1…BA11` (receipt ↔ `deployments/moderato.json` ↔ fixture digest); codehash on chain |
+| here it is on the explorer | `explore.testnet.tempo.xyz/tx/0xa630…`, captured while recording: Success, block, topic0 of `ZoneBatchVerified`, emitter; cropped below the header |
+| real batch → true; height + 1 → `InvalidProof()` | the recorder's own two `eth_call`s to `0xF2e1…BA11`; the page's rows 1–2 after a second click |
+| the comparison sentence | the founder's wording rule; shown on the page only while row 3 returns true |
+| dev chain, not a Moderato Zone; no portal; does not protect withdrawals; spec 004 is a proposal | `SwornZoneVerifierWithdrawal.deviations` and `.batch`; README "What the Zone verifier is, and is not"; spec 004 header "A proposal for Tempo, not something Sworn can deploy" |
+| configured to lie; reserves 500 before answering | take `demo-20261003T131156Z`; reserve `0xaa1d…e45d` (`demoLiveTake.dishonestReserve`, `Reserved` coverage 500); the answer is the reserve's own argument |
+| succeeds, receiver +0, guard holds 500 | payment `0x5d76…de62`, block 37994663: guard +500 / R′ +0 at block−1 / block (`demoLiveTake`) |
+| without Sworn: success, then chase a refund *(narration)* | the same payment: status 1 and R′ +0; a refund over MPP is the merchant's action (`mpp.dev/advanced/refunds`, cited in the v1 pitch sources) |
+| a proof, sped up; the bond pays 500 automatically | `demoLiveTake.provingRealTime` "9 min 00 s" (take's label); challenge `0x69ab…5188`, `Slashed` 500, client +500 at block−1 / block |
+| compensation, not prevention | the payment still went to the guard; the slash pays the bond, capped at the reserved coverage (README) |
+| next: TEE + ZK together, payouts wait for ZK; needs Tempo | `docs/specs/004-tee-plus-zk.md` (status line, "Payouts wait for ZK", "A proposal for Tempo") |
+| testnet, unaudited, no users or revenue; open source; the page re-runs the checks | README Status; Apache-2.0; `github.com/psyto/sworn` public (`gh api`); the page (HTTP 200, `<title>Sworn`) |
+
+**Not said, on purpose:** that Sworn protects or secures withdrawals; that a Zone settles with it; that the
+batch or its withdrawal is from Moderato; "the same input"; that Moderato or Tempo is broken; "verification
+layer"; production, mainnet, audited; any user, customer or revenue; other chains by name.

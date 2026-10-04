@@ -1,135 +1,139 @@
 1
-00:00:00,000 --> 00:00:02,512
-This is Sworn's public page.
+00:00:00,000 --> 00:00:02,719
+A Zone user asks to withdraw.
 
 2
-00:00:02,562 --> 00:00:10,198
-The evidence on it is read live from Moderato, Tempo's testnet, and nothing is signed.
+00:00:02,769 --> 00:00:08,719
+Tempo pays it out only from a batch that passed the Zone's verifier,
 
 3
-00:00:10,248 --> 00:00:15,322
-Tempo's own Zone batch verifier ran inside a zero-knowledge VM,
+00:00:08,769 --> 00:00:11,950
+so Tempo has to trust that check.
 
 4
-00:00:15,372 --> 00:00:21,983
-and a contract with the exact signature of Tempo's verifier checked the proof.
+00:00:12,000 --> 00:00:16,705
+This is Sworn's public page, reading Moderato, Tempo's testnet.
 
 5
-00:00:22,033 --> 00:00:24,033
-Here is that transaction.
+00:00:16,755 --> 00:00:18,290
+Nothing is signed.
 
 6
-00:00:24,083 --> 00:00:28,132
-It succeeded, and its event carries the Zone,
+00:00:18,340 --> 00:00:24,629
+On Moderato today, the pre-T13 Solidity reference verifier is a prototype stub:
 
 7
-00:00:28,182 --> 00:00:32,743
-the height and the digest the proof committed to.
+00:00:24,679 --> 00:00:27,799
+it returns true without checking execution.
 
 8
-00:00:32,793 --> 00:00:36,843
-The page ran this check when it loaded;
+00:00:27,849 --> 00:00:35,195
+I call it live with a malformed batch: zone ninety-nine, config dead, proof beef.
 
 9
-00:00:36,893 --> 00:00:42,991
-I run it again, live: two read-only calls with the same proof.
+00:00:35,245 --> 00:00:36,780
+It returns true.
 
 10
-00:00:43,041 --> 00:00:45,041
-The real batch: true.
+00:00:36,830 --> 00:00:39,950
+Sworn demonstrates the missing ZK check.
 
 11
-00:00:45,091 --> 00:00:50,677
-Change one field, the height, and the proof no longer fits.
+00:00:40,000 --> 00:00:47,612
+Now Sworn, on a real batch from Tempo's integration tests: two user transactions and one withdrawal.
 
 12
-00:00:50,727 --> 00:00:53,752
-The same transaction, on Tempo's explorer.
+00:00:47,662 --> 00:00:54,795
+Tempo's own batch verifier ran inside a zero-knowledge VM, and this contract checked the proof.
 
 13
-00:00:53,802 --> 00:01:01,950
-One limit, up front: this batch comes from Tempo's integration tests, not from a live Zone.
+00:00:54,845 --> 00:00:57,668
+Here it is on the explorer.
 
 14
-00:01:02,000 --> 00:01:05,061
-The same engine re-runs Tempo's EVM.
+00:00:57,718 --> 00:01:00,542
+Again, live: the real batch, true.
 
 15
-00:01:05,111 --> 00:01:11,283
-A paying agent asks a preflight provider: will the receiver get 500?
+00:01:00,592 --> 00:01:04,373
+Change one field, and it reverts: invalid proof.
 
 16
-00:01:11,333 --> 00:01:14,394
-This provider is configured to lie.
+00:01:04,423 --> 00:01:09,640
+An equivalent malformed batch is accepted by Moderato's current prototype verifier,
 
 17
-00:01:14,444 --> 00:01:19,580
-It answers plus 500, and reserves 500 of its bond.
+00:01:09,690 --> 00:01:13,950
+while Sworn rejects a mutation of its proven batch.
 
 18
-00:01:19,630 --> 00:01:21,135
-The agent pays.
+00:01:14,000 --> 00:01:20,670
+To be clear: this batch comes from a dev chain, not a Moderato Zone.
 
 19
-00:01:21,185 --> 00:01:25,283
-The transaction succeeds, but the receiver gets nothing:
+00:01:20,720 --> 00:01:25,950
+No portal uses it, and it does not protect withdrawals yet.
 
 20
-00:01:25,333 --> 00:01:30,987
-its policy blocks this sender, so Tempo's guard holds the 500.
+00:01:26,000 --> 00:01:31,009
+Separately, the same engine re-runs Tempo's EVM for bonded answers.
 
 21
-00:01:31,037 --> 00:01:38,246
-A challenger re-runs that transfer inside a zero-knowledge proof, nine minutes here, sped up.
+00:01:31,059 --> 00:01:36,574
+A paying agent asks a provider: will the receiver get 500?
 
 22
-00:01:38,296 --> 00:01:43,950
-The contract verifies it, and the bond pays the agent 500.
+00:01:36,624 --> 00:01:39,609
+This provider is configured to lie.
 
 23
-00:01:44,000 --> 00:01:47,379
-A correct answer can't be slashed.
+00:01:39,659 --> 00:01:44,668
+Before answering, it reserves 500 of its bond as coverage.
 
 24
-00:01:47,429 --> 00:01:56,521
-A challenge against the honest provider verifies the proof, and then reverts: the answer was right.
+00:01:44,718 --> 00:01:46,185
+The agent pays.
 
 25
-00:01:56,571 --> 00:02:04,521
-This question makes a good demo because anyone can check it with a simulation.
+00:01:46,235 --> 00:01:52,762
+The transaction succeeds, but the receiver gets zero; Tempo's guard holds the money.
 
 26
-00:02:04,571 --> 00:02:07,950
-The point is the proof underneath.
+00:01:52,812 --> 00:01:57,821
+Without Sworn, the agent sees success and chases a refund.
 
 27
-00:02:08,000 --> 00:02:09,396
-The honest limits.
+00:01:57,871 --> 00:02:01,868
+Here, a challenger proves it in zero knowledge,
 
 28
-00:02:09,446 --> 00:02:11,807
-This is testnet and unaudited.
+00:02:01,918 --> 00:02:06,926
+sped up, and the bond pays the agent 500 automatically.
 
 29
-00:02:11,857 --> 00:02:15,664
-The Zone batch comes from Tempo's integration tests.
+00:02:06,976 --> 00:02:08,950
+That's compensation, not prevention.
 
 30
-00:02:15,714 --> 00:02:20,004
-The bond caps what a client can be paid,
+00:02:09,000 --> 00:02:16,379
+The next step is a proposal, spec 004: run a TEE and a ZK proof together,
 
 31
-00:02:20,054 --> 00:02:23,861
-and there are no users or revenue yet.
+00:02:16,429 --> 00:02:20,557
+and hold withdrawals until both have checked the batch.
 
 32
-00:02:23,911 --> 00:02:26,754
-Everything you saw is open source,
+00:02:20,607 --> 00:02:21,950
+That needs Tempo.
 
 33
-00:02:26,804 --> 00:02:33,021
-and the public page reads the evidence from chain and re-runs the check.
+00:02:22,000 --> 00:02:27,057
+Today this is testnet and unaudited, with no users or revenue.
 
 34
-00:02:33,071 --> 00:02:34,950
+00:02:27,107 --> 00:02:33,093
+The page re-runs these checks from chain, and the code is open source.
+
+35
+00:02:33,143 --> 00:02:34,950
 Sworn: Tempo's execution, proven.

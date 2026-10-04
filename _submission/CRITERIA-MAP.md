@@ -16,7 +16,7 @@ surface follows the pitch's order and wording.
 
 **Sworn proves Tempo's own execution in zero knowledge.** Tempo's docs say ZK proving for Zones "is not
 implemented". Sworn runs Tempo's Zone batch verifier inside SP1, and a contract on Moderato verified the
-proof (tx `0xb14b…3b80`). The same engine has slashed a lying server three times on Moderato.
+proof of a test batch with a withdrawal (tx `0xa630…f770`; the first batch, `0xb14b…3b80`, too). The same engine has slashed a lying server three times on Moderato.
 
 ## Matrix
 
@@ -24,7 +24,7 @@ proof (tx `0xb14b…3b80`). The same engine has slashed a lying server three tim
 |---|---|---|---|
 | **Founder + Market Fit** | Reth/Revm/Alloy/Foundry depth: rethlab (Reth source-reading courses), rdk; Reckn took a Uniswap Foundation prize at ETHGlobal Tokyo; the zkVM patches to Tempo's own code | solo; pre-revenue | pitch 1:25–1:45; README "Who"; form "why now" |
 | **Insight** | Zone verification today is a TEE attestation or a stub returning `true`; Tempo's docs say ZK "is not implemented"; Tempo's factory fixes each Zone's verifier, so adoption runs through Tempo | — | pitch 0:00–0:15; README top; site hero |
-| **Product + Execution / Functionality** | Zone proof verified on Moderato; three real slashes; 40/40 replay; 64 forge tests incl. real Groth16; every claim re-checkable from chain | batch from Tempo's integration tests, not a Moderato Zone | pitch 0:15–0:40; demo 0:00–1:00; site "Verify again" |
+| **Product + Execution / Functionality** | Zone proof verified on Moderato; three real slashes; 40/40 replay; 64 forge tests incl. real Groth16; every claim re-checkable from chain | batch from Tempo's integration tests, not a Moderato Zone | pitch 0:15–0:40; demo 0:12–1:14; site "Verify again" (three rows, incl. Moderato's pre-T13 stub) |
 | **Novelty** | no public zkVM proof of `tempo-revm` or `zone-spf` found | Succinct could do it (Paradigm led its round) | pitch 0:15; README prior art |
 | **Potential Market Size / Impact** | every Zone holding money needs withdrawals the parent chain can trust; ecosystem impact: a second, independent check beside the TEE | no TAM number we can source for Zones yet | pitch 0:40–1:00; form "market" |
 | **Viability / Business Plan** | Stage 1: Tempo adopts ZK as a second check (contract or grant). Stage 2: proving operations, i.e. a proof per batch on an SLA, re-verified every hardfork (T12 10-08, T13 next) | Tempo is the adoption gate; the first payer is open | pitch 1:00–1:25; form GTM |
