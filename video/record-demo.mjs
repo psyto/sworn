@@ -361,7 +361,7 @@ if (tr.some((x) => getAddress(x.to) === RPRIME)) fail("eth_simulateV1: a Transfe
 log(`• eth_simulateV1 at block ${qBlock}: status 1, Transfer ${fmt2(toGuard.amount, tdec)} → ReceivePolicyGuard, none to R′`);
 
 // ── scene 4 ─────────────────────────────────────────────────────────────────────────────────────
-for (const s of ["**The batch is not from Moderato.**", "Tempo's zones integration tests", "Unaudited.", "Traction: none.", "Revenue today: zero.", "`challenge()` pays the reserved coverage to the client"])
+for (const s of ["**The batches are not from Moderato.**", "Tempo's zones integration tests", "Unaudited.", "Traction: none.", "Revenue today: zero.", "`challenge()` pays the reserved coverage to the client"])
   if (!flat(readmeText).includes(flat(s))) fail(`README no longer says "${s}"`);
 const repoUrl = ghRepoPublic("psyto/sworn", "repo");
 

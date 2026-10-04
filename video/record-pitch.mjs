@@ -181,7 +181,7 @@ const prize = eg.match(/<h4[^>]*>\s*(Uniswap Foundation)\s*-\s*(.*?)\s*(3rd plac
 if (!/ETHGlobal Tokyo 2026/.test(eg)) fail(`${EG}: does not say ETHGlobal Tokyo 2026`);
 
 // ── scene 6 ──────────────────────────────────────────────────────────────────────────────────────
-for (const s of ["## What the Zone verifier is, and is not", "**The batch is not from Moderato.**", "Tempo's zones integration tests"])
+for (const s of ["## What the Zone verifier is, and is not", "**The batches are not from Moderato.**", "Tempo's zones integration tests"])
   if (!flat(readme).includes(flat(s))) fail(`README no longer says "${s}"`);
 const repoUrl = ghRepoPublic("psyto/sworn", "repo");
 log(`• README limits section present; ${repoUrl} public; ETHGlobal: ${prize[1]} ${prize[3]}`);
