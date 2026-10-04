@@ -1,4 +1,4 @@
-# CWF submission form: Sworn (draft v2, 2026-10-04, follows video/PITCH.md v2 and _submission/CRITERIA-MAP.md)
+# CWF submission form: Sworn (draft v3.2, 2026-10-04, follows video/PITCH.md v3.2 and _submission/CRITERIA-MAP.md)
 
 **Every field below is written to be pasted.** Limits are the form's own (field list and limits taken
 from the copy of this form kept for the previous entry); `scripts/cwf-form.sh` counts them.
@@ -18,7 +18,7 @@ Sworn
 ## Brief description · Public · ≤500
 
 ```
-Zero-knowledge proofs of Tempo's own execution. Tempo's docs say ZK proving for Tempo Zones "is not implemented": today a Zone batch is checked by a hardware attestation, or by a reference contract that returns true. Sworn runs Tempo's own Zone batch verifier inside SP1, binds the proof to the exact inputs of Tempo's IVerifier, and a contract on Moderato verified it. The same engine re-runs Tempo's EVM and has slashed a lying server three times on Moderato.
+Tempo Zones are private blockchains on Tempo: the operator sees everything, each user only their own account, so no one outside can check the operator ran the ledger correctly. Sworn makes that checkable: for a batch the operator supplies, a zero-knowledge proof that Tempo's own Zone code accepts it, verifiable by anyone on chain, exposing hashes, not transactions. A contract on Tempo's testnet verified one for a test batch with a withdrawal.
 ```
 
 ## Project website · Public
@@ -30,13 +30,9 @@ https://psyto.github.io/sworn/
 ## What are you building, and who is it for? · ≤1000
 
 ```
-Sworn proves Tempo's execution in zero knowledge, so a contract on Tempo can act on it without trusting whoever ran it.
+Sworn runs Tempo's own Zone batch verifier (zone_spf::prove_zone_batch) inside the SP1 zkVM. For a batch the operator supplies, it produces a proof that Tempo's code accepts that batch, bound to the inputs of Tempo's IVerifier. Anyone can verify it on chain; its public values are hashes and batch metadata, not transaction contents. On Moderato, SwornZoneVerifier verified a test batch with a withdrawal (tx 0xa63009fd…f770); change one field and it is rejected.
 
-The first use is Tempo Zones: private blockchains anchored to Tempo. A Zone's withdrawals are only as trustworthy as the check on each batch. Today that check is an AWS Nitro attestation, trusting one vendor's hardware, and Tempo's reference verifier returns true without checking. Tempo's docs: ZK proof generation "is not implemented".
-
-What is built: Tempo's own Zone batch verifier (zone_spf::prove_zone_batch) runs inside SP1. The proof is bound to every input Tempo's IVerifier receives, plus the chain and the genesis. SwornZoneVerifier, with IVerifier's exact signature, verified a test batch with a withdrawal on Moderato (tx 0xa63009fd…f770).
-
-It is for Tempo first, since Tempo chooses each Zone's verifier: ZK as a second, independent check beside the attestation. Then it is for the Zones that need a proof for every batch, on time, through every Tempo upgrade.
+Who it is for. Near term: businesses that run Zones and answer to auditors. They get independent evidence they can match to each batch they settle. It is evidence, not yet a guarantee: no portal calls the verifier and it stores nothing. Later: if Tempo builds proofs into settlement, withdrawals can wait for them (spec 004: written, not built). Either way, the service is running provers on time and rebuilding them at each Tempo upgrade.
 ```
 
 ## Why did you decide to build this, and why build it now? · ≤1000
@@ -48,7 +44,7 @@ Reading Tempo's Zones docs, I found the gap: the check on a Zone batch is an att
 
 On 2026-10-03, tempo-revm ran in SP1 and matched 40 of 40 real Moderato transactions. On 10-04, Tempo's Zone batch verifier ran in SP1, and a contract on Moderato verified the proof.
 
-Why now: Zones are on testnet and Tempo's attestation verifier arrives with the T13 upgrade. A second, independent check is cheapest to add before Zones hold real money.
+Why now: Zones are on testnet, before operators settle real money and before their auditors settle on what evidence to ask for. Tempo's attestation verifier arrives with T13; a check anyone can re-run is easiest to add beside it now.
 ```
 
 ## How does your product use these chains? · ≤500
@@ -158,11 +154,11 @@ https://psyto.github.io/sworn/ reads Moderato in your browser. Nothing to sign o
 ## How do you know people actually need, or will need this product? · ≤1000
 
 ```
-I do not have a user yet, and I will not claim one. What I can show is the gap, in Tempo's own words and code. The Zones reference verifier returns true without checking execution. The native verifier is a Nitro attestation, whose approved measurements were unset at the reviewed commit. Tempo's docs say ZK proof generation "is not implemented". Zones are on Tempo testnet now, and every Zone that holds money needs withdrawals the parent chain can trust.
+I have no customers, and I will not claim one. Moderato has one Zone operator today, and Zone creation is owner-gated.
 
-The need is clearest for Tempo itself, which chooses each Zone's verifier, and for institutions that will run Zones and must show their withdrawals are backed by correct execution, not one vendor's chip.
+What I can show is the gap, in Tempo's own words and code. A Zone's operator sees everything and each user sees only their own account, so no outsider can check the ledger. Tempo's design checks batches with a Nitro attestation (T13); today's testnet verifier returns true for any input; Tempo's docs say ZK proof generation "is not implemented". The Zones README says the operator keeps full visibility "for compliance", which is where auditors come in.
 
-The next test is direct: put a TEE plus ZK design in front of Tempo and the first Zone operators, and ask whether they would run it.
+The need is a hypothesis to test with one party: a business running a Zone that must show an auditor its batches were executed correctly, and would value independent evidence it can match to each batch it settles. The next step is one design partner, and a proof of a batch they supply. If no operator wants that evidence, the later route is Tempo building proofs into settlement (spec 004).
 ```
 
 ## How far along are you? Do you have users? · ≤1000
@@ -179,17 +175,17 @@ No users, no revenue. Built and measured inside the window, all on Moderato test
 ## Who else is building in this space, and what are they getting wrong? · ≤1000
 
 ```
-Tempo itself: Zones use an AWS Nitro attestation. That is fast, but it is trust in one vendor's hardware, and Tempo's docs say ZK proving is not implemented. Tempo could build ZK in-house; Sworn is the working version today, offered as a second check, not a replacement.
+Tempo itself: Zones' design (T13) checks batches with an AWS Nitro attestation. It is fast, but it is trust in one vendor's hardware, and an outsider cannot re-check it. Tempo's docs say ZK proving is not implemented. Tempo could build ZK in-house; Sworn is a working version today, offered beside the attestation, not instead of it.
 
-General-purpose provers (Succinct SP1, RISC Zero, Boundless) prove programs. Someone still has to port Tempo's code (Sworn needed patches to tempo-revm, zone-spf and two crates) and re-verify it at every Tempo upgrade. Succinct's rsp proves reth blocks, not Tempo.
+General-purpose provers (Succinct SP1, RISC Zero, Boundless) prove programs. Someone still has to port Tempo's code (Sworn needed patches to tempo-revm, zone-spf and two crates), bind the proof to exactly what a Zone's portal checks, and rebuild it at each Tempo upgrade. Succinct's rsp proves reth blocks, not Tempo.
 
-Nobody is getting the engine wrong. What is missing is the Tempo-specific work: a guest that tracks Tempo's hardforks, a proof bound to exactly what the ZonePortal checks, and someone accountable for running it on time.
+What is missing is not the engine but the Tempo-specific service: someone accountable for running the provers on time for an operator, and keeping them in step with Tempo's hardforks. That service is what we want to validate.
 ```
 
 ## How do you make money, or how do you plan to? · ≤500
 
 ```
-Step 1: Tempo adds ZK as a second check. Revenue is a contract or grant to build and maintain the verifier. Step 2: proving operations, a fee per batch proved on an SLA plus maintenance at every Tempo upgrade, paid by Tempo or by Zone operators. That is still open. Today: zero revenue, and no payer has agreed.
+Near term: Zone operators that answer to auditors pay for the service: proving the batches they supply, on time, plus rebuilding the prover at each Tempo upgrade. Later, if Tempo builds proofs into settlement (spec 004, written, not built), the same service runs for Tempo's design. Today: no customers, no revenue, and no payer has agreed. Next: one design partner.
 ```
 
 ## How long have you each been working on this? Full time? · ≤500

@@ -115,25 +115,25 @@ sped up, and the bond pays the agent 500 automatically.
 That's compensation, not prevention.
 
 30
-00:02:09,000 --> 00:02:16,379
-The next step is a proposal, spec 004: run a TEE and a ZK proof together,
+00:02:09,000 --> 00:02:13,521
+Near term: businesses that run Zones and answer to auditors,
 
 31
-00:02:16,429 --> 00:02:20,557
-and hold withdrawals until both have checked the batch.
+00:02:13,571 --> 00:02:19,464
+with evidence they match to each batch they settle, not yet a guarantee.
 
 32
-00:02:20,607 --> 00:02:21,950
-That needs Tempo.
+00:02:19,514 --> 00:02:25,407
+Later, Tempo could build proofs into settlement; that design is written, not built.
 
 33
-00:02:22,000 --> 00:02:27,057
-Today this is testnet and unaudited, with no users or revenue.
+00:02:25,457 --> 00:02:29,521
+The service: provers on time, rebuilt at each upgrade.
 
 34
-00:02:27,107 --> 00:02:33,093
-The page re-runs these checks from chain, and the code is open source.
+00:02:29,571 --> 00:02:35,464
+It's testnet and unaudited, with one Zone operator on Moderato and no customers.
 
 35
-00:02:33,143 --> 00:02:34,950
-Sworn: Tempo's execution, proven.
+00:02:35,514 --> 00:02:40,950
+Next: one design partner, and a proof of a batch they supply.

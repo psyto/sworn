@@ -65,7 +65,7 @@ export function Hero() {
         <a href={DOCS} target="_blank" rel="noreferrer">
           “is not implemented”
         </a>
-        . Sworn runs Tempo's own Zone batch verifier inside a zero-knowledge VM, and a contract on Moderato verified it.
+        . Sworn runs Tempo's own Zone batch verifier inside a zero-knowledge VM, and a contract on Moderato verified the proof of a test batch.
       </p>
       <ul className="chips" aria-label="Results on Moderato">
         <li>
@@ -115,23 +115,42 @@ export function WhyItMatters() {
         <p className="eyebrow">The point</p>
         <h2 id="why">Why it matters</h2>
         <p className="lede">
-          Zones hold money, and money has to come back out. Withdrawals are only as trustworthy as the check on the batch. Today that check is a hardware attestation, or, in the
-          reference contract, nothing at all. A hardware attestation means trusting one vendor's chip; a zero-knowledge proof,
-          anyone can check.
+          Tempo Zones are private: the operator sees everything, and each user sees only their own account. So no one
+          outside can check that the operator ran the ledger correctly. Sworn makes that checkable: for a batch the
+          operator supplies, a zero-knowledge proof that Tempo's own Zone code accepts it, which anyone can verify on
+          chain. The proof exposes hashes and batch metadata, not transaction contents.
         </p>
       </div>
-      <ol className="roles steps" aria-label="Next steps">
+      <ol className="roles steps" aria-label="Who it is for">
         <li>
-          <span className="role-tag">Step 1</span>
-          <b>ZK as a second, independent check</b>
-          <span>Tempo decides which verifier its Zones use, so step one is Tempo: a proof next to the attestation.</span>
+          <span className="role-tag">Near term</span>
+          <b>Businesses that run Zones and answer to auditors</b>
+          <span>
+            Independent evidence they can match to each batch they settle. Evidence, not yet a guarantee: no Zone's portal
+            calls this contract, and it stores nothing.
+          </span>
         </li>
         <li>
-          <span className="role-tag">Step 2</span>
-          <b>Proving operations</b>
-          <span>Running the provers: a proof for every batch, on time, re-verified at every Tempo upgrade.</span>
+          <span className="role-tag">Later</span>
+          <b>Tempo builds proofs into settlement</b>
+          <span>
+            Withdrawals could wait for a proof.{" "}
+            <a href={SPEC4} target="_blank" rel="noreferrer">
+              Spec 004
+            </a>
+            : written, not built.
+          </span>
+        </li>
+        <li>
+          <span className="role-tag">Either way</span>
+          <b>The service</b>
+          <span>Running the provers on time, and rebuilding them at each Tempo upgrade. Still to be validated.</span>
         </li>
       </ol>
+      <p className="note">
+        <b>Today:</b> Moderato has one Zone operator, and we have no customers. <b>Next:</b> one design partner, and a proof
+        of a batch they supply.
+      </p>
     </section>
   );
 }
@@ -144,7 +163,7 @@ export function Footer() {
         <li>Unaudited</li>
         <li>Zone batches from Tempo's integration tests (dev chain)</li>
         <li>Does not protect withdrawals today</li>
-        <li>No revenue, users or mainnet</li>
+        <li>No customers, revenue or mainnet</li>
         <li>A slash pays at most the reserved bond</li>
       </ul>
       <ul className="links">

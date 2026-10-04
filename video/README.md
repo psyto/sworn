@@ -56,14 +56,14 @@ record with a fallback font; never Tempo's logo, wordmark or Pilat).
 node video/record-pitch.mjs              # → video/pitch.mp4 + pitch.srt + pitch.marks.json   (reads only)
 node video/split-scenes.mjs pitch        # → video/scenes/pitch/scene-{1..6}.mp4|.txt + NARRATION.md
 
-DEMO_PAGE_URL=http://localhost:4173/ node video/record-demo.mjs   # demo v2.1 → demo.mp4 + demo.srt + demo.marks.json + frames/demo-scene{1..6}.png (reads only)
+DEMO_PAGE_URL=http://127.0.0.1:4180/ node video/record-demo.mjs   # demo v2.2 (local vite preview of site/) → demo.mp4 + demo.srt + demo.marks.json + frames/demo-scene{1..6}.png (reads only)
 PREVIEW=<dir> node video/record-demo.mjs # the four authored slides as PNGs + all source checks; records nothing
 node video/split-scenes.mjs demo         # → video/scenes/demo/scene-{1..6}.mp4|.txt + NARRATION.md
 ```
 
-Pitch **v2** (six scenes, Zone proof first) sources: Tempo's docs page `zones/proving.md` (both quoted sentences), `tempoxyz/zones` @ `ac49071f` via `gh api` (README, reference `Verifier.sol` `return true`), the pinned checkout `spikes/zone-spf/zones` (`IVerifier.verify` selector = `SwornZoneVerifier`'s), Moderato (SwornZoneVerifier codehash, the attest receipt and decoded `ZoneBatchVerified`, the three `Slashed` receipts), the explorer page of the attest tx (screenshot cropped to its transaction card, never the header with Tempo's wordmark; its Events tab must show the event's topic0), the proving log, vendored `zone_factory`, README (T12, "is / is not"), the patch files, GitHub, ethglobal.com. `PREVIEW=<dir> node video/record-pitch.mjs` writes one PNG per scene instead of recording. `DEMO.md` is the **v2.1 demo, recorded 2026-10-04** (2:35, six scenes).
+Pitch **v3.2** (six scenes, 118 s, 257 words; the founder's final narration, verbatim) sources, all read at record time (any mismatch throws): `tempoxyz/zones` README @ `ac49071f` via `gh api` ("private blockchains anchored to", the operator's full visibility, users see only their own state); Tempo's docs page `zones/proving.md` (Nitro "activated by T13", the reference verifier returns true); the Moderato research note (outsiders cannot build a witness); the recorder's **own** `eth_call`s: Moderato's pre-T13 `0x5A56…` (code = tempo `ZONE_VERIFIER_RUNTIME`) with an equivalent malformed batch = true, Sworn `verify(real)` = true, `verify(height+1)` reverts `InvalidProof()`; Tempo's ZoneFactory on Moderato (`nextZoneId`, every Zone's verifier, admin and sequencers, the owner Safe's owners and threshold: "one Zone operator today" stops the recording if it stops being true); spec 003 §3/§5, `SwornZoneVerifier.sol` (`verify` is `view`), the attest `0xa630…` receipt, event, calldata and fixture, the explorer card, the proving log; spec 004 (header, "Payouts wait for ZK.", §5 upgrades, §6 "not built"); README (T12, limits, "Who", "Traction: none."); vendored `tempo/Cargo.toml` (reth, revm); GitHub; ethglobal.com. The narration is checked for the wording rules. `PREVIEW=<dir> node video/record-pitch.mjs` writes one PNG per scene instead of recording. `DEMO.md` is the **v2.2 demo** (2:41; scene 6 follows the v3.2 route).
 
-Demo **v2.1** (six scenes, 2:35; `DEMO.md`) sources, all read at record time (any mismatch throws): zones
+Demo **v2.2** (six scenes, 2:41; `DEMO.md`; v2.1 plus a new scene 6 from the v3.2 route, whose "one Zone operator" is read from Tempo's ZoneFactory) sources, all read at record time (any mismatch throws): zones
 @ `ac49071f` `ZonePortal.sol` (submitBatch → verify → revert → enqueue; processWithdrawals → dequeue);
 the page (`DEMO_PAGE_URL`; until the new page is published, `vite preview` of `site/` on :4173) recorded in a
 real browser, every value its Zone section shows compared with `deployments/moderato.json`
@@ -71,7 +71,7 @@ real browser, every value its Zone section shows compared with `deployments/mode
 (digest, `withdrawalQueueHash`) and the recorder's **own three `eth_call`s**: Sworn `verify(real)` = true,
 `verify(height+1)` reverts `InvalidProof()`, and Moderato's `0x5A56…` (code = tempo `ZONE_VERIFIER_RUNTIME`,
 pre-T13 selector `0x7106a43e` ≠ IVerifier's) with a malformed batch = true. "Verify again" is clicked twice
-and "Called at" must change each time; the wording rules (no "the same input", the exact stub sentence and
+and "Called at" must change each time; the wording rules (the banned "same input" wording, the exact stub sentence and
 comparison line) are checked on the page and in the narration. The explorer page of `0xa630` is cropped to
 its transaction card and event row. Scene 5 re-cuts the 10-03 take exactly as v2 did. Scenes 4 and 6 read
 `SwornZoneVerifierWithdrawal.deviations`, README, spec 004 and `zone_factory`. v2 (four scenes, hardfork

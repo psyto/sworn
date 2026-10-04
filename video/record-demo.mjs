@@ -21,7 +21,8 @@
 //            change "Called at". The superseded verifier must appear nowhere. Explorer of 0xa630, cropped.
 //   scene 4  deployments/moderato.json SwornZoneVerifierWithdrawal (batch, deviations), README, spec 004.
 //   scene 5  the live take video/takes/demo-20261003T131156Z (take.json ↔ demoLiveTake ↔ Moderato), as in v2.
-//   scene 6  spec 004, zone_factory, README limits, the repo (public), the page (HTTP 200).
+//   scene 6  (v2.2: the pitch v3.2 route) spec 004 (header, §6 "not built"), zone_factory, Tempo's ZoneFactory on Moderato
+//            (one admin, 1-of-1 Safe owner), README limits, the repo (public), the page (HTTP 200).
 // v2 (four scenes, hardfork batch) is in git: HEAD:video/record-demo.mjs before v2.1.
 import path from "node:path";
 import { mkdirSync, rmSync } from "node:fs";
@@ -52,13 +53,13 @@ if (targets.length !== 6) fail("DEMO.md: every scene heading needs its \"≈ N s
 const holds = scenes.map((s, i) => Math.max(s.hold, targets[i]));
 const TOTAL = holds.reduce((a, b) => a + b, 0);
 const words = scenes.reduce((a, s) => a + s.words, 0);
-log(`• demo v2.1: scene lengths = max(target, words ÷ 2.2)`);
+log(`• demo v2.2: scene lengths = max(target, words ÷ 2.2)`);
 for (const [i, s] of scenes.entries()) log(`    scene ${s.n}: ${String(s.words).padStart(3)} words (${s.hold} s of voice) → ${holds[i]} s  (${s.title})`);
 log(`    total ${TOTAL} s, ${words} words`);
 if (words > 330) fail(`DEMO.md narration is ${words} words > the plan's hard cap 330`);
 if (TOTAL > MAX_TOTAL) fail(`demo runs ${TOTAL} s > ${MAX_TOTAL} s`);
 const narr = scenes.map((s) => s.text).join(" ");
-for (const banned of [/the same input/i, /\bbroken\b/i, /secures? withdrawals/i, /protects withdrawals(?! yet)/i])
+for (const banned of [/the same input/i, /\bbroken\b/i, /secures? withdrawals/i, /protects withdrawals(?! yet)/i, /every batch/i, /our customers are/i])
   if (banned.test(narr)) fail(`DEMO.md narration says ${banned}`);
 // Scene 2 is page; scene 3 is page (A) + explorer + page (C).
 const S3 = { pageA: 14, explorer: 8 };
@@ -395,6 +396,21 @@ const fv = fac.findIndex((l) => l.trim() === "verifier: ZONE_VERIFIER_ADDRESS,")
 if (fv < 0) fail(`${FACTORY}: verifier assignment moved`);
 for (const s of ["**The batches are not from Moderato.**", "Tempo's zones integration tests", "It does not secure withdrawals", "Unaudited.", "Traction: none.", "Revenue today: zero.", "`challenge()` pays the reserved coverage to the client"])
   if (!flat(readmeText).includes(flat(s))) fail(`README no longer says "${s}"`);
+// v3.2 route (scene 6): "one Zone operator" read now from Tempo's ZoneFactory on Moderato.
+const FADDR = getAddress((read("tempo/crates/contracts/src/precompiles/zone_factory.rs", "zone_factory.rs").match(/ZONE_FACTORY_ADDRESS: Address = address!\("(0x[0-9a-fA-F]{40})"\)/) ?? fail("zone_factory.rs: no ZONE_FACTORY_ADDRESS"))[1]);
+const nZones = Number(await call(FADDR, "nextZoneId() view returns (uint32)")) - 1;
+if (nZones < 1) fail("ZoneFactory: no Zones");
+const zs = [];
+for (let i = 1; i <= nZones; i++) zs.push(await call(FADDR, "zones(uint32 id) view returns ((uint32 zoneId,address portal,bool accessMode,bool gatewayMode,address admin,address[] sequencers,uint8 threshold,address verifier,string rpcUrl))", [i]));
+const zAdmin = getAddress(zs[0].admin);
+for (const z of zs) if (getAddress(z.admin) !== zAdmin || z.sequencers.map(getAddress).sort().join() !== zs[0].sequencers.map(getAddress).sort().join()) fail(`zone ${z.zoneId}: another admin or sequencer set — "one Zone operator" no longer true`);
+const fOwner = getAddress(await call(FADDR, "owner() view returns (address)"));
+const sOwners = (await call(fOwner, "getOwners() view returns (address[])")).map(getAddress);
+if (sOwners.length !== 1 || sOwners[0] !== zAdmin || (await call(fOwner, "getThreshold() view returns (uint256)")) !== 1n) fail("factory owner is not a 1-of-1 Safe of the Zones' admin");
+log(`• ZoneFactory: ${nZones} Zones, one admin ${short(zAdmin)}; owner ${short(fOwner)} = 1-of-1 Safe of that admin`);
+const s6 = read("docs/specs/004-tee-plus-zk.md", "spec 004").split("## 6. Status")[1]?.split("\n## ")[0] ?? fail("spec 004: no §6");
+if ((s6.match(/\| not built/g) ?? []).length < 5) fail("spec 004 §6: fewer than 5 rows not built");
+for (const s of ["Moderato has one Zone operator today, and we have no customers.", "evidence, not yet a guarantee"]) if (!flat(readmeText).includes(s)) fail(`README no longer says "${s}"`);
 const repoUrl = ghRepoPublic("psyto/sworn", "repo");
 const pub = await fetchText(PUBLISHED, "published page");
 if (!/<title>Sworn/.test(pub)) fail(`${PUBLISHED}: no "<title>Sworn"`);
@@ -407,9 +423,8 @@ const data = {
   exFrom: `contract ${short(ZV, 6)} = SwornZoneVerifierWithdrawal in deployments/moderato.json`,
   itest: ITEST,
   plainSrc: "deployments/moderato.json SwornZoneVerifierWithdrawal (batch, deviations D1–D4) · README “What the Zone verifier is, and is not” · docs/specs/004-tee-plus-zk.md",
-  specSrc: "docs/specs/004-tee-plus-zk.md: “A proposal for Tempo, not something Sworn can deploy.” · “Payouts wait for ZK.”",
-  factoryLine: `Tempo's factory fixes each Zone's verifier (${FACTORY.replace(/^tempo\//, "")}:${fv + 1})`,
-  limitsSrc: "README: Status (Moderato testnet only, unaudited, traction none, revenue zero) · the slash pays the reserved coverage",
+  specSrc: `spec 004: “A proposal for Tempo, not something Sworn can deploy.” · “Payouts wait for ZK.” · Tempo's factory fixes each Zone's verifier (${FACTORY.replace(/^tempo\//, "")}:${fv + 1})`,
+  operatorSrc: `README Status · Tempo's Zone factory on Moderato, read now: ${nZones} Zones, one admin and one sequencer set, factory owned by a 1-of-1 Safe with that signer`,
   repo: repoUrl, pageUrl: PUBLISHED.replace(/^https:\/\//, "").replace(/\/$/, ""),
 };
 for (const [k, v] of Object.entries(data)) if (typeof v === "string") assertFresh(v, `slot ${k}`);
@@ -520,7 +535,7 @@ const cues = writeSrt(scenes, starts, path.join(dir, "demo.srt"));
 for (let i = 0; i < 6; i++) ff(["-ss", (starts[i + 1] - 0.2).toFixed(2), "-i", out, "-frames:v", "1", path.join(dir, "frames", `demo-scene${i + 1}.png`)]);
 const r2 = (e) => +K(e).toFixed(2);
 writeJson(path.join(dir, "demo.marks.json"), {
-  name: "demo", script: "video/DEMO.md", version: "2.1", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
+  name: "demo", script: "video/DEMO.md", version: "2.2", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
   page: PAGE, published: PUBLISHED, recordedFromPublishedPage: PAGE === PUBLISHED, take: TAKE,
   zoneAttest: Z.attest.tx, liveCalls,
   pageMarks: { click1: r2("click1"), stub: r2("stub"), s3a: r2("s3a"), contains: r2("contains"), s3c: r2("s3c"), click2: r2("click2"), compare: r2("compare") },

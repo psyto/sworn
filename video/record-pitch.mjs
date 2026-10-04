@@ -1,26 +1,34 @@
-// Records video/pitch.mp4 — Sworn's ≤ 2 min CWF pitch v2, six scenes, SILENT, 1920×1080 — and
+// Records video/pitch.mp4 — Sworn's ≤ 2 min CWF pitch v3.2, six scenes, SILENT, 1920×1080 — and
 // video/pitch.srt with the narration of video/PITCH.md timed to where each scene landed.
 //
 //   node video/record-pitch.mjs            # then: node video/split-scenes.mjs pitch
+//   PREVIEW=<dir> node video/record-pitch.mjs   # one PNG per scene + all source checks; records nothing
 //
-// Scene holds come from PITCH.md (words ÷ 2.2 w/s, rounded up to 0.5 s). Every figure and quote on screen
-// is read now from the source PITCH.md's claims table names; a missing or changed source THROWS:
-//   Tempo's docs page (zones/proving.md) for both quoted sentences; tempoxyz/zones @ ac49071f via `gh api`
-//   (README sentence, the reference Verifier.sol `return true`); the pinned checkout spikes/zone-spf/zones
-//   (IVerifier.verify signature, NatSpec) against contracts/src/SwornZoneVerifier.sol (same selector);
-//   deployments/moderato.json ↔ Moderato (SwornZoneVerifierWithdrawal codehash, the attest 0xa630… of the batch
-//   with a withdrawal — batch counts, withdrawalQueueHash = fixture = calldata — and its decoded
-//   ZoneBatchVerified event, the three slash receipts with Sworn's Slashed event); the explorer page of the
-//   attest tx (screenshot cropped to the transaction card — no logo — plus its Events tab's topic0);
-//   the proving log; the vendored zone_factory; README (T12 date, the "is not, yet" section);
-//   patches/tempo.patch and spikes/zone-spf/patches/; GitHub (repos public); ethglobal.com.
+// Scene holds come from PITCH.md (words ÷ 2.2 w/s, rounded up to 0.5 s; total ≤ 118 s). Every figure, quote
+// and call result on screen is read now from the source PITCH.md's claims table names; a missing or changed
+// source THROWS:
+//   scene 1  tempoxyz/zones README @ ac49071f (via `gh api`): "private blockchains anchored to", the operator's
+//            full visibility, users see only their own state; Tempo's docs page zones/proving.md (Nitro activated
+//            by T13; the reference verifier returns true); docs/research/moderato-zone-feasibility-20261004.md
+//            (outsiders cannot build a witness); the recorder's OWN eth_call to Moderato's 0x5A56… (code = tempo
+//            ZONE_VERIFIER_RUNTIME, pre-T13 selector 0x7106a43e ≠ IVerifier's) with an equivalent malformed batch
+//            = true; Tempo's ZoneFactory: nextZoneId, zones(1..n).verifier / admin / sequencers, owner() Safe.
+//   scene 2  spec 003 §3 (public values), SwornZoneVerifier.sol (verify is view).
+//   scene 3  deployments/moderato.json ↔ Moderato (SwornZoneVerifierWithdrawal codehash, the attest 0xa630… —
+//            batch counts, withdrawalQueueHash = fixture = calldata — and its ZoneBatchVerified event); the
+//            explorer page of the attest (cropped to its transaction card, no header); the proving log; the
+//            recorder's OWN two eth_calls: verify(real) = true, verify(height+1) reverts InvalidProof().
+//   scene 4  spec 003 §5 D2/D4, spec 004 (header, "Payouts wait for ZK.", §5 upgrades, §6 "not built"), README T12.
+//   scene 5  vendored tempo/Cargo.toml (reth, revm), GitHub (rethlab public), ethglobal.com, README "Who".
+//   scene 6  README status and limits, the factory reads above, GitHub (repo public).
+// The narration is checked for the wording rules (no "the same input", "broken", "protects/secures
+// withdrawals", "every batch", "our customers are").
 // Reads only. No keys, no transactions.
 import path from "node:path";
-import { readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
-import { parseAbiItem, decodeEventLog, getAddress, formatUnits, toEventSelector, toFunctionSelector, keccak256 } from "viem";
+import { parseAbiItem, decodeEventLog, getAddress, toEventSelector, toFunctionSelector, keccak256, encodeFunctionData } from "viem";
 import {
-  dir, repo, read, fail, log, rel, short, EXPLORER, parseScenes, rpc, call, receipt, fetchText, ghFile, ghRepoPublic,
+  dir, repo, read, fail, log, rel, short, EXPLORER, RPC, parseScenes, rpc, call, receipt, fetchText, ghFile, ghRepoPublic,
   moderato, recordSlides, checkOverflow, writeSrt, writeJson, duration, sleep,
 } from "./lib/rec.mjs";
 
@@ -28,90 +36,160 @@ const MAX_TOTAL = 118;
 const scenes = parseScenes("video/PITCH.md");
 if (scenes.length !== 6) fail(`PITCH.md has ${scenes.length} scenes, expected 6`);
 const TOTAL = scenes.reduce((a, s) => a + s.hold, 0);
-log(`• pitch: scene holds (words ÷ 2.2 w/s, rounded up to 0.5 s)`);
+const WORDS = scenes.reduce((a, s) => a + s.words, 0);
+log(`• pitch v3.2: scene holds (words ÷ 2.2 w/s, rounded up to 0.5 s)`);
 for (const s of scenes) log(`    scene ${s.n}: ${String(s.words).padStart(3)} words → ${s.hold.toFixed(1)} s  (${s.title})`);
-log(`    total ${TOTAL.toFixed(1)} s`);
+log(`    total ${TOTAL.toFixed(1)} s, ${WORDS} words`);
 if (TOTAL > MAX_TOTAL) fail(`pitch runs ${TOTAL} s > ${MAX_TOTAL} s — cut words in PITCH.md`);
+const narr = scenes.map((s) => s.text).join(" ");
+for (const banned of [/the same input/i, /\bbroken\b/i, /protects? withdrawals/i, /secures? withdrawals/i, /every batch/i, /our customers are/i])
+  if (banned.test(narr)) fail(`PITCH.md narration says ${banned}`);
+for (const must of ["evidence, not yet a guarantee", "written, not built", "one Zone operator today", "we have no customers", "the service we want to validate"])
+  if (!narr.includes(must)) fail(`PITCH.md narration no longer says "${must}"`);
 
 const ZONES_REF = "ac49071f";
 const ZONES_DIR = "spikes/zone-spf/zones";
 const flat = (s) => s.replace(/\s+/g, " ").trim();
+const lc = (s) => s.toLowerCase();
+const utc = (d) => d.toISOString().slice(11, 19);
 
-// ── scene 1: Tempo's own words ───────────────────────────────────────────────────────────────────
+// ── scene 1: who sees what, and today's check ────────────────────────────────────────────────────
 const zonesReadme = flat(ghFile("tempoxyz/zones", "README.md", "tempoxyz/zones README", ZONES_REF));
 const ZONES_LINE = "Zones are private blockchains anchored to";
-if (!zonesReadme.includes(ZONES_LINE)) fail(`tempoxyz/zones README @ ${ZONES_REF} no longer says "${ZONES_LINE}"`);
+const OP_Q = "The Zone operator maintains full visibility into state for compliance.";
+const USER_Q = "only the authorized account holder can access balances and transaction history.";
+for (const q of [ZONES_LINE, OP_Q, USER_Q]) if (!zonesReadme.includes(q)) fail(`tempoxyz/zones README @ ${ZONES_REF} no longer says "${q}"`);
 const DOCS = "https://tempo.xyz/developers/docs/protocol/zones/proving.md";
 const docs = flat(await fetchText(DOCS, "Tempo docs (zones/proving)"));
 if (!/^# Tempo Zone proving and settlement/.test(docs)) fail(`${DOCS}: title changed`);
 const STUB = "The Zones Solidity reference verifier still returns `true` without checking execution.";
-const ZK = "ZK proof generation is not implemented.";
-const NITRO = "Tempo also implements a native Nitro attestation verifier";
-for (const q of [STUB, ZK, NITRO]) if (!docs.includes(q)) fail(`${DOCS} no longer says "${q}"`);
-const VERIFIER_SOL = "crates/contracts/src/runtime/tempo/Verifier.sol";
-const vsol = ghFile("tempoxyz/zones", VERIFIER_SOL, "zones reference verifier", ZONES_REF).split("\n");
-const vi = vsol.findIndex((l) => l.trim() === "return true;");
-if (vi < 0) fail(`${VERIFIER_SOL} @ ${ZONES_REF} has no "return true;"`);
-log(`• docs: both quotes present; ${VERIFIER_SOL}:${vi + 1} return true`);
+const NITRO = "Tempo also implements a native Nitro attestation verifier activated by T13.";
+for (const q of [STUB, NITRO]) if (!docs.includes(q)) fail(`${DOCS} no longer says "${q}"`);
+const RESEARCH = "docs/research/moderato-zone-feasibility-20261004.md";
+const OUTSIDER = "An outsider cannot build a `BatchWitness` for someone else's Zone.";
+if (!flat(read(RESEARCH, "Moderato Zone research")).includes(OUTSIDER)) fail(`${RESEARCH} no longer says "${OUTSIDER}"`);
 
-// ── scene 2: the Zone proof on Moderato ──────────────────────────────────────────────────────────
+// Moderato's pre-T13 verifier, called now with an equivalent malformed batch (never "the same input").
+const T = (name, components) => ({ name, type: "tuple", components });
+const BT = T("blockTransition", [{ name: "prevBlockHash", type: "bytes32" }, { name: "nextBlockHash", type: "bytes32" }]);
+const DQ = T("depositQueueTransition", [{ name: "prevProcessedHash", type: "bytes32" }, { name: "nextProcessedHash", type: "bytes32" }, { name: "prevDepositNumber", type: "uint64" }, { name: "nextDepositNumber", type: "uint64" }]);
+const head5 = [{ name: "zoneId", type: "uint32" }, { name: "tempoBlockNumber", type: "uint64" }, { name: "anchorBlockNumber", type: "uint64" }, { name: "anchorBlockHash", type: "bytes32" }, { name: "expectedWithdrawalBatchIndex", type: "uint64" }];
+const tail3 = [{ name: "withdrawalQueueHash", type: "bytes32" }, { name: "verifierConfig", type: "bytes" }, { name: "proof", type: "bytes" }];
+const zoneInputs = [...head5, { name: "nextZoneHeight", type: "uint256" }, BT, DQ, T("tokenEnablementTransition", [{ name: "prevProcessedTokenCount", type: "uint64" }, { name: "nextProcessedTokenCount", type: "uint64" }]), ...tail3];
+const verifyAbi = [{ type: "function", name: "verify", stateMutability: "view", inputs: zoneInputs, outputs: [{ name: "", type: "bool" }] }];
+const preAbi = [{ type: "function", name: "verify", stateMutability: "pure", inputs: [...head5, BT, DQ, ...tail3], outputs: [{ name: "", type: "bool" }] }];
+const PRE_SEL = toFunctionSelector(preAbi[0]);
+const IV_SEL = toFunctionSelector(verifyAbi[0]);
+if (PRE_SEL !== "0x7106a43e" || PRE_SEL === IV_SEL) fail(`pre-T13 selector ${PRE_SEL} (IVerifier ${IV_SEL})`);
+const PRE = getAddress((read("tempo/crates/contracts/src/precompiles/zone_factory.rs", "zone_factory.rs").match(/ZONE_VERIFIER_ADDRESS: Address = address!\("(0x[0-9a-fA-F]{40})"\)/) ?? fail("zone_factory.rs: no ZONE_VERIFIER_ADDRESS"))[1]);
+const FACTORY_ADDR = getAddress((read("tempo/crates/contracts/src/precompiles/zone_factory.rs", "zone_factory.rs").match(/ZONE_FACTORY_ADDRESS: Address = address!\("(0x[0-9a-fA-F]{40})"\)/) ?? fail("zone_factory.rs: no ZONE_FACTORY_ADDRESS"))[1]);
+const zrs = read("tempo/crates/contracts/src/zones.rs", "tempo zones.rs");
+const rtm = zrs.match(/pub const ZONE_VERIFIER_RUNTIME: Bytes = bytes!\(([\s\S]*?)\);/) ?? fail("zones.rs: no ZONE_VERIFIER_RUNTIME");
+const RUNTIME = lc("0x" + [...rtm[1].matchAll(/"([^"]*)"/g)].map((x) => x[1].replace(/^0x/, "")).join(""));
+if (!RUNTIME.includes(`63${PRE_SEL.slice(2)}`)) fail("ZONE_VERIFIER_RUNTIME does not dispatch 0x7106a43e");
+if (lc(await rpc("eth_getCode", [PRE, "latest"])) !== RUNTIME) fail(`code at ${PRE} != tempo ZONE_VERIFIER_RUNTIME (Moderato's verifier changed — T13?)`);
+async function rawCall(to, data) {
+  const res = await fetch(RPC, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to, data }, "latest"] }) });
+  return res.json();
+}
+const Z32 = "0x" + "00".repeat(32);
+const malformed = [99, 0n, 0n, Z32, 0n, { prevBlockHash: Z32, nextBlockHash: Z32 }, { prevProcessedHash: Z32, nextProcessedHash: Z32, prevDepositNumber: 0n, nextDepositNumber: 0n }, Z32, "0xdead", "0xbeef"];
+const stubCall = await rawCall(PRE, encodeFunctionData({ abi: preAbi, functionName: "verify", args: malformed }));
+const stubAt = new Date();
+if (stubCall.error || BigInt(stubCall.result) !== 1n) fail(`eth_call Moderato pre-T13 verify(malformed) did not return true: ${JSON.stringify(stubCall.error ?? stubCall.result)}`);
+log(`• Moderato ${short(PRE)} pre-T13 ${PRE_SEL} verify(zone 99, zeros, 0xdead, 0xbeef) = true at ${stubAt.toISOString()}`);
+
+// Moderato's Zones today: how many, who runs them, which verifier.
+const ZI = "zones(uint32 id) view returns ((uint32 zoneId,address portal,bool accessMode,bool gatewayMode,address admin,address[] sequencers,uint8 threshold,address verifier,string rpcUrl))";
+const nextId = Number(await call(FACTORY_ADDR, "nextZoneId() view returns (uint32)"));
+const nZones = nextId - 1;
+if (nZones < 1) fail("ZoneFactory: no Zones on Moderato");
+const zones = [];
+for (let i = 1; i <= nZones; i++) zones.push(await call(FACTORY_ADDR, ZI, [i]));
+const admin = getAddress(zones[0].admin);
+const seqs = (z) => z.sequencers.map(getAddress).sort().join();
+for (const z of zones) {
+  if (getAddress(z.verifier) !== PRE) fail(`zone ${z.zoneId} verifier ${z.verifier} != ${PRE}`);
+  if (getAddress(z.admin) !== admin || seqs(z) !== seqs(zones[0])) fail(`zone ${z.zoneId} has another admin or sequencer set — "one Zone operator" is no longer true`);
+}
+const fOwner = getAddress(await call(FACTORY_ADDR, "owner() view returns (address)"));
+const safeOwners = (await call(fOwner, "getOwners() view returns (address[])")).map(getAddress);
+const safeT = await call(fOwner, "getThreshold() view returns (uint256)");
+if (safeOwners.length !== 1 || safeOwners[0] !== admin || safeT !== 1n) fail(`factory owner ${fOwner}: owners ${safeOwners} threshold ${safeT} — not a 1-of-1 Safe of the Zones' admin`);
+log(`• ZoneFactory ${short(FACTORY_ADDR)}: ${nZones} Zones, one admin ${short(admin)} and one sequencer set, verifier ${short(PRE)}; owner ${short(fOwner)} = 1-of-1 Safe of that admin`);
+
+// ── scene 2: what is public ──────────────────────────────────────────────────────────────────────
+const spec3 = flat(read("docs/specs/003-zone-verifier.md", "spec 003"));
+for (const s of ["**Public values** = `abi.encode(bytes32 ZONE_GUEST_VERSION, bytes32 digest)`", "**D2 no caller check:**", "`attest` moves nothing and stores nothing"])
+  if (!spec3.includes(s)) fail(`spec 003 no longer says "${s}"`);
+const zsol = read("contracts/src/SwornZoneVerifier.sol", "SwornZoneVerifier source");
+const zstrip = zsol.replace(/\/\/[^\n]*/g, "");
+const vdef = zstrip.slice(zstrip.lastIndexOf("function verify("));
+if (!/^function verify\([^)]*\)\s*external\s+view\s+returns\s*\(bool\)/.test(vdef)) fail("SwornZoneVerifier.verify is no longer `external view returns (bool)`");
+
+// ── scene 3: the Zone proof on Moderato ──────────────────────────────────────────────────────────
 const M = await moderato();
-// v2.1: scene 2 shows the attest of the Zone batch WITH A WITHDRAWAL (0xa630…), not the hardfork batch (0xb14b…).
 const Z = M.dep.SwornZoneVerifierWithdrawal ?? fail("moderato.json: no SwornZoneVerifierWithdrawal");
 const ZV = getAddress(Z.address);
-const zcode = await rpc("eth_getCode", [ZV, "latest"]);
-if (keccak256(zcode) !== Z.codehash) fail("SwornZoneVerifierWithdrawal codehash on chain != moderato.json");
+if (keccak256(await rpc("eth_getCode", [ZV, "latest"])) !== Z.codehash) fail("SwornZoneVerifierWithdrawal codehash on chain != moderato.json");
 if (!Z.attest.tx.startsWith("0xa63009fd")) fail(`withdrawal attest is ${Z.attest.tx}, expected 0xa630…`);
-const zsol = read("contracts/src/SwornZoneVerifier.sol", "SwornZoneVerifier source");
 const zev = parseAbiItem(`event ${flat(zsol.match(/event (ZoneBatchVerified\([^)]*\));/)?.[1] ?? fail("no ZoneBatchVerified in SwornZoneVerifier.sol"))}`);
 const atR = await receipt(Z.attest.tx, "attest");
 const atBlock = parseInt(atR.blockNumber, 16);
 if (atBlock !== Z.attest.block) fail(`attest block ${atBlock} != moderato.json ${Z.attest.block}`);
+if (getAddress(atR.to) !== ZV) fail(`attest is to ${atR.to}, not ${ZV}`);
+const atGas = parseInt(atR.gasUsed, 16);
+if (atGas !== Z.attest.gasUsed) fail(`attest gas ${atGas} != moderato.json ${Z.attest.gasUsed}`);
 const atLog = atR.logs.find((l) => getAddress(l.address) === ZV && l.topics[0] === toEventSelector(zev)) ?? fail("attest: no ZoneBatchVerified from SwornZoneVerifier");
 const ev = decodeEventLog({ abi: [zev], data: atLog.data, topics: atLog.topics }).args;
-// moderato.json's summary line must agree with what the chain says (prefixes / suffixes as written there).
-const evLine = Z.attest.event;
-const agrees = (label, v) => {
-  const m = evLine.match(new RegExp(`${label} (0x[0-9a-f]+)…([0-9a-f]+)`));
-  if (!m || !v.startsWith(m[1]) || !v.endsWith(m[2])) fail(`attest event ${label} ${v} disagrees with moderato.json "${evLine}"`);
-};
-agrees("prevBlockHash", ev.prevBlockHash); agrees("nextBlockHash", ev.nextBlockHash); agrees("digest", ev.digest);
-if (!evLine.includes(`zoneId ${ev.zoneId}`) || !evLine.includes(`nextZoneHeight ${ev.nextZoneHeight}`)) fail("attest event zoneId/height disagree with moderato.json");
 const fx = JSON.parse(read(Z.attest.fixture, "zone fixture"));
-if (fx.digest.toLowerCase() !== ev.digest.toLowerCase()) fail("attest digest != fixture digest");
-// what the batch contains: counts from moderato.json's record, its withdrawalQueueHash = fixture = attest calldata, non-zero
+if (lc(fx.digest) !== lc(ev.digest)) fail("attest digest != fixture digest");
+if (lc(fx.verifier) !== lc(ZV)) fail(`fixture verifier ${fx.verifier} != deployed ${ZV}`);
 const bm = Z.batch.match(/\(dev chain (\d+)\).*?(\d+) withdrawals?, (\d+) user transactions?, withdrawalQueueHash (0x[0-9a-f]+)…([0-9a-f]+)/) ?? fail(`moderato.json batch line changed: ${Z.batch}`);
-const WQH = fx.args.withdrawalQueueHash.toLowerCase();
+const WQH = lc(fx.args.withdrawalQueueHash);
 if (!WQH.startsWith(bm[4]) || !WQH.endsWith(bm[5]) || /^0x0+$/.test(WQH)) fail("withdrawalQueueHash: moderato.json / fixture disagree, or zero");
 const atTx = await rpc("eth_getTransactionByHash", [Z.attest.tx]);
-const atInput = (atTx.calls?.length === 1 ? atTx.calls[0].input : atTx.input).toLowerCase();
+const atInput = lc(atTx.calls?.length === 1 ? atTx.calls[0].input : atTx.input);
 if (!atInput.includes(WQH.slice(2))) fail("attest calldata does not carry the fixture's withdrawalQueueHash");
 if (+bm[2] !== 1 || +bm[3] !== 2 || bm[1] !== "1337") fail(`batch: ${bm[2]} withdrawals, ${bm[3]} user txs, chain ${bm[1]}`);
 log(`• attest ${short(Z.attest.tx)} block ${atBlock}: ZoneBatchVerified zone ${ev.zoneId} height ${ev.nextZoneHeight} digest ${short(ev.digest)}`);
 
-// verify(…) in SwornZoneVerifier has IVerifier.verify's selector, taken from the pinned zones checkout.
+// IVerifier.verify's selector, from the pinned zones checkout, = SwornZoneVerifier's = the recorder's ABI.
 const head = execFileSync("git", ["-C", path.join(repo, ZONES_DIR), "rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 if (!head.startsWith(ZONES_REF)) fail(`${ZONES_DIR} is at ${head}, not ${ZONES_REF}`);
-const IZONE = `${ZONES_DIR}/crates/contracts/src/runtime/interfaces/IZone.sol`;
-const izone = read(IZONE, "zones IZone.sol");
-function verifySelector(src, what) {
+function solSelector(src, what) {
   const strip = src.replace(/\/\/[^\n]*/g, "").replace(/\/\*[\s\S]*?\*\//g, "");
   const structs = {};
-  for (const m of strip.matchAll(/struct (\w+)\s*\{([^}]*)\}/g))
-    structs[m[1]] = m[2].split(";").map((f) => f.trim().split(/\s+/)[0]).filter(Boolean);
+  for (const m of strip.matchAll(/struct (\w+)\s*\{([^}]*)\}/g)) structs[m[1]] = m[2].split(";").map((f) => f.trim().split(/\s+/)[0]).filter(Boolean);
   const body = (strip.match(/function verify\(([^)]*)\)/) ?? fail(`${what}: no verify(`))[1];
   const ty = (t) => (structs[t] ? `(${structs[t].map(ty).join(",")})` : t);
-  const types = body.split(",").map((p) => ty(p.trim().split(/\s+/)[0]));
-  return { sel: toFunctionSelector(`verify(${types.join(",")})`), n: types.length };
+  return toFunctionSelector(`verify(${body.split(",").map((p) => ty(p.trim().split(/\s+/)[0])).join(",")})`);
 }
-const a = verifySelector(izone, IZONE), b = verifySelector(zsol, "SwornZoneVerifier.sol");
-if (a.sel !== b.sel) fail(`verify selector differs: zones ${a.sel} vs Sworn ${b.sel}`);
-log(`• verify selector ${a.sel} (${a.n} params) = IVerifier.verify @ ${ZONES_REF}`);
+const izone = read(`${ZONES_DIR}/crates/contracts/src/runtime/interfaces/IZone.sol`, "zones IZone.sol");
+if (solSelector(izone, "IZone.sol") !== IV_SEL || solSelector(zsol, "SwornZoneVerifier.sol") !== IV_SEL) fail("verify selector: zones / Sworn / recorder disagree");
+
+// Change one field: the recorder's own two eth_calls.
+const a = fx.args;
+const H = BigInt(a.nextZoneHeight);
+if (H !== ev.nextZoneHeight) fail("fixture nextZoneHeight != event");
+const fxArgs = (h) => [a.zoneId, BigInt(a.tempoBlockNumber), BigInt(a.anchorBlockNumber), a.anchorBlockHash, BigInt(a.expectedWithdrawalBatchIndex), h,
+  { prevBlockHash: a.prevBlockHash, nextBlockHash: a.nextBlockHash },
+  { prevProcessedHash: a.prevProcessedHash, nextProcessedHash: a.nextProcessedHash, prevDepositNumber: BigInt(a.prevDepositNumber), nextDepositNumber: BigInt(a.nextDepositNumber) },
+  { prevProcessedTokenCount: BigInt(a.prevProcessedTokenCount), nextProcessedTokenCount: BigInt(a.nextProcessedTokenCount) },
+  a.withdrawalQueueHash, fx.verifierConfig, fx.proof];
+const okCall = await rawCall(ZV, encodeFunctionData({ abi: verifyAbi, functionName: "verify", args: fxArgs(H) }));
+if (okCall.error || BigInt(okCall.result) !== 1n) fail(`eth_call verify(real) did not return true: ${JSON.stringify(okCall.error ?? okCall.result)}`);
+const badCall = await rawCall(ZV, encodeFunctionData({ abi: verifyAbi, functionName: "verify", args: fxArgs(H + 1n) }));
+const callAt = new Date();
+if (!/error InvalidProof\(\);/.test(zsol)) fail("SwornZoneVerifier.sol declares no InvalidProof()");
+if (!badCall.error || !String(badCall.error.data ?? "").startsWith(toFunctionSelector("InvalidProof()"))) fail(`eth_call verify(height+1) did not revert InvalidProof(): ${JSON.stringify(badCall)}`);
+log(`• our eth_calls at ${callAt.toISOString()}: verify(height ${H}) = true; verify(height ${H + 1n}) reverts InvalidProof()`);
 
 const plog = read(Z.attest.proving.log, "Zone proving log");
 const cycles = +(plog.match(/cycles\(total_instruction_count\): (\d+)/) ?? fail("proving log: no cycle count"))[1];
 const wall = +(plog.match(/PROVE groth16 wall: ([\d.]+)s/) ?? fail("proving log: no groth16 wall time"))[1];
 if (cycles !== Z.attest.proving.cycles) fail(`proving log cycles ${cycles} != moderato.json`);
+if (Math.abs(wall - Z.attest.proving.groth16WallSecs) > 0.5) fail(`proving log Groth16 ${wall} s != moderato.json ${Z.attest.proving.groth16WallSecs}`);
 
 // The explorer, captured now, cropped to its transaction card (the site header carries Tempo's wordmark).
 const exUrl = `${EXPLORER}/tx/${Z.attest.tx}`;
@@ -122,14 +200,13 @@ async function explorerShot() {
   try {
     const p = await br.newPage();
     await p.emulateTimezone("UTC");
+    await p.emulateMediaFeatures([{ name: "prefers-color-scheme", value: "light" }]);
     await p.goto(`${exUrl}?tab=events`, { waitUntil: "networkidle2", timeout: 120000 });
-    await p.waitForFunction((t) => document.body.innerText.includes("Success") && document.body.innerText.toLowerCase().includes(t), { timeout: 90000 }, topic0.toLowerCase());
-    const text = await p.evaluate(() => document.body.innerText);
-    for (const want of [Z.attest.tx.toLowerCase(), String(atBlock), "success", topic0.toLowerCase(), ZV.toLowerCase()])
-      if (!text.toLowerCase().includes(want)) fail(`explorer page does not show ${want}`);
-    // Absolute time (UTC) instead of "N min. ago": the explorer's own toggle, clicked until it leaves "relative".
+    await p.waitForFunction((t) => document.body.innerText.includes("Success") && document.body.innerText.toLowerCase().includes(t), { timeout: 90000 }, lc(topic0));
+    const text = lc(await p.evaluate(() => document.body.innerText));
+    for (const want of [Z.attest.tx, String(atBlock), "success", topic0, ZV]) if (!text.includes(lc(want))) fail(`explorer page does not show ${want}`);
     for (let i = 0; i < 3; i++) {
-      const t = await p.evaluate(() => { const b = document.querySelector('button[title^="Showing "][title$="click to change"]'); return b ? b.title : null; });
+      const t = await p.evaluate(() => document.querySelector('button[title^="Showing "][title$="click to change"]')?.title ?? null);
       if (!t || !/relative/i.test(t)) break;
       await p.click('button[title^="Showing "][title$="click to change"]');
       await sleep(500);
@@ -152,91 +229,79 @@ async function explorerShot() {
 const shot = await explorerShot();
 log(`• explorer: ${short(Z.attest.tx)} Success, block ${atBlock}, topic0 ${short(topic0)} on its Events tab; card ${Math.round(shot.w)}×${Math.round(shot.h)}`);
 
-// Three slashes by the same engine.
-const sol = read("contracts/src/Sworn.sol", "Sworn source");
-const slashedEv = parseAbiItem(`event ${flat(sol.match(/^\s*event (Slashed\([^)]*\));/m)?.[1] ?? fail("Sworn.sol declares no Slashed"))}`);
-const slashTxs = [M.dep.firstSlash.challengeTx, M.dep.demoLiveTakeFirst.challengeTx, M.dep.demoLiveTake.challengeTx];
-const fmt = (v, d) => { const [i, f = ""] = formatUnits(v, d).split("."); return `${i}.${(f + "00").slice(0, 2)}`; };
-const slashes = [];
-for (const tx of slashTxs) {
-  const r = await receipt(tx, "slash");
-  const lg = r.logs.find((l) => getAddress(l.address) === M.SWORN && l.topics[0] === toEventSelector(slashedEv)) ?? fail(`${tx}: no Slashed from Sworn`);
-  const args = decodeEventLog({ abi: [slashedEv], data: lg.data, topics: lg.topics }).args;
-  slashes.push([`${short(tx)} · block ${parseInt(r.blockNumber, 16).toLocaleString("en-US")}`, `+${fmt(args.coverage, M.bondDecimals)} ${M.bondSymbol} to the client`]);
-}
-log(`• slashes: ${slashTxs.map((t) => short(t)).join(", ")} — Slashed from Sworn, status 1`);
-
-// ── scene 3 ──────────────────────────────────────────────────────────────────────────────────────
-const nat = izone.match(/\/\/\/\s+1\. (Valid state transition[^\n]*)[\s\S]*?\/\/\/\s+6\. ([^\n]*withdrawalQueueHash[^\n]*)/) ?? fail(`${IZONE}: IVerifier NatSpec changed`);
-
-// ── scene 4 ──────────────────────────────────────────────────────────────────────────────────────
-const FACTORY = "tempo/crates/precompiles/src/zone_factory/mod.rs";
-const fac = read(FACTORY, "vendored zone_factory").split("\n");
-const fv = fac.findIndex((l) => l.trim() === "verifier: ZONE_VERIFIER_ADDRESS,");
-const fo = fac.findIndex((l) => l.includes("if msg_sender != self.owner()?"));
-if (fv < 0 || fo < 0) fail(`${FACTORY}: verifier assignment or owner check moved`);
+// ── scene 4: the route ───────────────────────────────────────────────────────────────────────────
+const spec4 = flat(read("docs/specs/004-tee-plus-zk.md", "spec 004"));
+for (const s of ["A proposal for Tempo, not something Sworn can deploy.", "Payouts wait for ZK.", "each hardfork that changes Zone execution needs a new guest and vkey", "on time, on an SLA"])
+  if (!spec4.includes(s)) fail(`spec 004 no longer says "${s}"`);
+const s6 = read("docs/specs/004-tee-plus-zk.md", "spec 004").split("## 6. Status")[1]?.split("\n## ")[0] ?? fail("spec 004: no §6 Status");
+const notBuilt = (s6.match(/\| not built/g) ?? []).length;
+if (notBuilt < 5 || /\|\s*\*\*built\*\*/.test(s6)) fail(`spec 004 §6: ${notBuilt} rows "not built" (expected ≥ 5, none built)`);
 const readme = read("README.md", "README");
 const t12 = readme.match(/T12, activates at (\d{4}-\d\d-\d\d \d\d:\d\d UTC)/) ?? fail("README: no T12 activation date");
 
-// ── scene 5 ──────────────────────────────────────────────────────────────────────────────────────
-const tp = read("patches/tempo.patch", "tempo.patch");
-const ids = [...new Set([...tp.matchAll(/SPIKE-PATCH-(\d+)/g)].map((m) => +m[1]))].sort();
-if (ids.join() !== "1,2,3") fail(`patches/tempo.patch SPIKE-PATCH ids ${ids}`);
-const zp = readdirSync(path.join(repo, "spikes/zone-spf/patches")).filter((f) => f.endsWith(".patch")).sort();
-const zkvm = zp.filter((f) => /-zkvm\.patch$/.test(f));
-if (zkvm.length !== 4) fail(`spikes/zone-spf/patches: ${zkvm.length} *-zkvm.patch files, expected 4`);
+// ── scene 5: why me ──────────────────────────────────────────────────────────────────────────────
+const cargo = read("tempo/Cargo.toml", "vendored tempo Cargo.toml");
+if (!/^reth-[\w-]+ = \{ git = "https:\/\/github\.com\/paradigmxyz\/reth"/m.test(cargo) || !/^revm = \{ version = "([\d.]+)"/m.test(cargo)) fail("tempo/Cargo.toml no longer depends on paradigmxyz/reth and revm");
+const revmV = cargo.match(/^revm = \{ version = "([\d.]+)"/m)[1];
 const rethlabRepo = ghRepoPublic("psyto/rethlab", "rethlab");
 const EG = "https://ethglobal.com/showcase/reckn-47t6m";
 const eg = (await fetchText(EG, "ETHGlobal showcase")).replace(/<!-- -->/g, "");
 const prize = eg.match(/<h4[^>]*>\s*(Uniswap Foundation)\s*-\s*(.*?)\s*(3rd place)\s*<\/h4>/) ?? fail(`${EG}: no "Uniswap Foundation … 3rd place" prize`);
 if (!/ETHGlobal Tokyo 2026/.test(eg)) fail(`${EG}: does not say ETHGlobal Tokyo 2026`);
+const BANK = "15 years building banking systems in Japan";
+if (!flat(readme).includes(BANK)) fail(`README "Who" no longer says "${BANK}"`);
 
-// ── scene 6 ──────────────────────────────────────────────────────────────────────────────────────
-for (const s of ["## What the Zone verifier is, and is not", "**The batches are not from Moderato.**", "Tempo's zones integration tests"])
+// ── scene 6: limits ──────────────────────────────────────────────────────────────────────────────
+for (const s of ["## What the Zone verifier is, and is not", "**The batches are not from Moderato.**", "Tempo's zones integration tests", "Unaudited.", "Traction: none.", "It does not secure withdrawals"])
   if (!flat(readme).includes(flat(s))) fail(`README no longer says "${s}"`);
 const repoUrl = ghRepoPublic("psyto/sworn", "repo");
-log(`• README limits section present; ${repoUrl} public; ETHGlobal: ${prize[1]} ${prize[3]}`);
+log(`• README limits present; ${repoUrl} public; ETHGlobal: ${prize[1]} ${prize[3]}; tempo: reth + revm ${revmV}`);
 
 const data = {
   scenes: ["p1", "p2", "p3", "p4", "p5", "p6"],
-  zonesLine: `Tempo Zones: “${ZONES_LINE} Tempo.”`,
-  zonesSrc: `tempoxyz/zones README @ ${ZONES_REF} · GitHub API, read while recording`,
-  docStub: STUB.replace(/`/g, ""), stubLine: `tempoxyz/zones · ${VERIFIER_SOL}:${vi + 1}   return true;`,
-  docsSrc: DOCS.replace(/^https:\/\//, "").replace(/\.md$/, ""), docZk: ZK,
-
-  proveSrc: `zone_spf::prove_zone_batch from tempoxyz/zones @ ${ZONES_REF} · ${cycles.toLocaleString("en-US")} cycles · Groth16 in ${Math.round(wall)} s, locally`,
+  // 1
+  zonesLine: "Tempo Zones: private blockchains on Tempo.",
+  opQuote: OP_Q, userQuote: USER_Q.replace(/^only/, "Only"),
+  zonesSrc: `tempoxyz/zones README @ ${ZONES_REF}: “${ZONES_LINE} Tempo” · GitHub API, read while recording`,
+  outsiderSrc: `${RESEARCH} §2: an outsider cannot build a Zone's batch witness; the Zone RPC needs an operator credential`,
+  nitroQuote: NITRO, docsSrc: `Tempo's docs · ${DOCS.replace(/^https:\/\//, "").replace(/\.md$/, "")} · read while recording`,
+  stubWhen: `Moderato, pre-T13 · called ${utc(stubAt)} UTC`,
+  stubCall: `${short(PRE)}.verify(…) with an equivalent malformed batch: zone 99, every hash 0x00…00, config 0xdead, proof 0xbeef → true`,
+  stubSrc: `eth_call, read-only · selector ${PRE_SEL} (pre-T13, 10 arguments) · the verifier of all ${nZones} Zones on Moderato (Tempo's Zone factory, read now)`,
+  // 2
+  pubSrc: "spec 003 §3: the proof's public values are a guest version and one digest of these fields · SwornZoneVerifier.verify(…) is a view function: any address can call it",
+  // 3
+  proveSrc: `Tempo's zone_spf::prove_zone_batch @ ${ZONES_REF} in SP1 · ${cycles.toLocaleString("en-US")} cycles · Groth16 proof in ${Math.round(wall)} s, locally`,
+  batchFrom: `a test batch from Tempo's zones integration tests · dev chain ${bm[1]}`,
   atStatus: "✓ status 1 · ZoneBatchVerified emitted", atTx: short(Z.attest.tx, 8),
+  atBlock: `${atBlock.toLocaleString("en-US")} · ${atGas.toLocaleString("en-US")} gas`,
   batchLine: `${bm[2]} withdrawal · ${bm[3]} user transactions`,
-  batchFrom: `Tempo's zones integration tests · dev chain ${bm[1]}`,
-  evWqh: `${short(WQH, 10)} (non-zero)`,
-  atBlock: `${atBlock.toLocaleString("en-US")} · ${parseInt(atR.gasUsed, 16).toLocaleString("en-US")} gas`,
-  evZone: String(ev.zoneId), evHeight: String(ev.nextZoneHeight),
-  evPrev: short(ev.prevBlockHash, 10), evNext: short(ev.nextBlockHash, 10), evDigest: short(ev.digest, 10),
-  sigSrc: `verify(…) selector ${a.sel} = Tempo's IVerifier.verify (${a.n} inputs) · codehash matches deployment`,
+  atTo: `SwornZoneVerifier ${short(ZV, 6)}`,
   exUrl: `explore.testnet.tempo.xyz/tx/${short(Z.attest.tx)}`, exShot: shot.png,
   exNote: `captured while recording · its Events tab: topic0 ${short(topic0, 6)} = ZoneBatchVerified`,
-  slash1: slashes[0][0], paid1: slashes[0][1], slash2: slashes[1][0], paid2: slashes[1][1], slash3: slashes[2][0], paid3: slashes[2][1],
-
-  ivSrc: `Tempo's IVerifier: “The proof validates: 1. ${nat[1].trim()} … 6. ${nat[2].trim()}”`,
-  nitroSrc: "Tempo's native Nitro attestation verifier",
-
-  factorySrc: `Tempo picks the verifier: ${FACTORY}:${fv + 1}  verifier: ZONE_VERIFIER_ADDRESS  · zones created by the factory owner only (:${fo + 1})`,
-  upgradeSrc: `Next Tempo upgrade: T12 on Moderato, ${t12[1]} · Sworn's answerer stops there until its guest is re-checked (README)`,
-
-  rethlab: `rethlab — Reth source-reading courses · ${rethlabRepo}`,
-  ethglobal: `ETHGlobal Tokyo 2026 — ${prize[1]}, ${prize[3]}`,
+  callReal: "✓ verify(…) → true",
+  callBadWhat: `one field changed: height ${H} → ${H + 1n}`,
+  callBad: "✗ rejected: reverts InvalidProof()",
+  callSrc: `eth_call, read-only, to ${short(ZV, 6)} · called ${utc(callAt)} UTC`,
+  // 4
+  nearSrc: "Checked off to the side: no Zone's portal calls this contract and it stores nothing (spec 003 §5 D2, D4). Matching a proof to a settled batch is the operator's and auditor's step.",
+  laterSrc: `spec 004: “A proposal for Tempo, not something Sworn can deploy.” · “Payouts wait for ZK.” · §6: ${notBuilt} parts, not built`,
+  serviceSrc: `spec 004 §5: each hardfork that changes Zone execution needs a new guest and vkey · next Tempo upgrade: T12 on Moderato, ${t12[1]}`,
+  // 5
+  stackSrc: `Tempo's own Cargo.toml: reth from github.com/paradigmxyz/reth · revm ${revmV}`,
+  rethlab: `rethlab: Reth source-reading courses · ${rethlabRepo}`,
+  ethglobal: `ETHGlobal Tokyo 2026: ${prize[1]}, ${prize[3]}`,
   ethglobalSrc: `with Reckn · ${prize[2].trim()} · ${EG.replace(/^https:\/\//, "")}`,
-  patchTempo: `patches/tempo.patch — SPIKE-PATCH-1, -2, -3`,
-  patchZone: `spikes/zone-spf/patches/ — ${[...zkvm.filter((f) => /^(tempo|zones)-/.test(f)), ...zkvm.filter((f) => !/^(tempo|zones)-/.test(f))].map((f) => f.replace(/\.patch$/, "")).join(" · ")}`,
-
-  limitsSrc: "README: “What the Zone verifier is, and is not” · Moderato is Tempo's testnet",
+  banking: BANK, bankingSrc: "README “Who” · read while recording",
+  // 6
+  limitsSrc: "README: “What the Zone verifier is, and is not” · Status: Moderato testnet only, unaudited, traction none",
+  operatorSrc: `Tempo's Zone factory on Moderato, read now: ${nZones} Zones, one admin and one sequencer set; the factory's owner is a 1-of-1 Safe with that same signer`,
   repo: repoUrl,
 };
 
 // ── layout check, then record ────────────────────────────────────────────────────────────────────
-// PREVIEW=<dir>: write one PNG per scene (everything faded in) and the overflow report, record nothing.
 if (process.env.PREVIEW) {
-  const { launch } = await import("./lib/rec.mjs");
+  const { launch, fontsReady } = await import("./lib/rec.mjs");
   const { mkdirSync } = await import("node:fs");
   const outDir = path.resolve(process.env.PREVIEW);
   mkdirSync(outDir, { recursive: true });
@@ -245,7 +310,7 @@ if (process.env.PREVIEW) {
     const page = await br.newPage();
     await page.goto("file://" + path.join(dir, "pitch.html"), { waitUntil: "load" });
     await page.evaluate((d) => window.__fill(d), data);
-    await page.evaluate(() => document.fonts.ready);
+    await fontsReady(page);
     for (const id of data.scenes) {
       const bad = await page.evaluate((x) => window.__overflow(x), id);
       if (bad.length) log(`  #${id}: ${bad.join("; ")}`);
@@ -261,12 +326,19 @@ const out = path.join(dir, "pitch.mp4");
 const marks = await recordSlides({ html: "pitch.html", data, ids: data.scenes, holds: scenes.map((s) => s.hold), raw: path.join(dir, "pitch.raw.mp4"), out });
 const got = duration(out);
 if (Math.abs(got - TOTAL) > 0.1) fail(`pitch.mp4 is ${got} s, expected ${TOTAL} s`);
+if (got > MAX_TOTAL + 0.05) fail(`pitch.mp4 is ${got} s > ${MAX_TOTAL} s`);
 const starts = scenes.reduce((acc, s) => [...acc, acc.at(-1) + s.hold], [0]);
 const cues = writeSrt(scenes, starts, path.join(dir, "pitch.srt"));
+const ffmpeg = process.env.FFMPEG_PATH || "/opt/homebrew/bin/ffmpeg";
+for (let i = 0; i < 6; i++) execFileSync(ffmpeg, ["-v", "error", "-ss", (starts[i + 1] - 0.2).toFixed(2), "-i", out, "-frames:v", "1", path.join(dir, "frames", `pitch-scene${i + 1}.png`), "-y"]);
 writeJson(path.join(dir, "pitch.marks.json"), {
-  name: "pitch", script: "video/PITCH.md", version: 2, holds: scenes.map((s) => s.hold), titles: scenes.map((s) => s.title),
+  name: "pitch", script: "video/PITCH.md", version: "3.2", holds: scenes.map((s) => s.hold), titles: scenes.map((s) => s.title),
+  words: scenes.map((s) => s.words), totalWords: WORDS,
+  liveCalls: { moderatoPreT13Malformed: "true", moderatoPreT13At: stubAt.toISOString(), swornReal: "true", swornMutated: "InvalidProof()", swornAt: callAt.toISOString(), preT13Selector: PRE_SEL },
+  moderatoZones: { count: nZones, admin, factoryOwner: fOwner, safeOwners, safeThreshold: Number(safeT) },
+  zoneAttest: Z.attest.tx,
   recorderMarks: marks.map((m) => +m.toFixed(3)), recordedAt: new Date().toISOString(),
 });
-log(`\n✓ ${rel(out)}  (${got.toFixed(2)} s, holds ${scenes.map((s) => s.hold).join(" / ")})`);
-log(`✓ video/pitch.srt  (${cues} cues)`);
+log(`\n✓ ${rel(out)}  (${got.toFixed(2)} s, holds ${scenes.map((s) => s.hold).join(" / ")}, ${WORDS} words)`);
+log(`✓ video/pitch.srt  (${cues} cues) · video/pitch.marks.json · video/frames/pitch-scene{1..6}.png`);
 log(`  next: node video/split-scenes.mjs pitch`);

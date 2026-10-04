@@ -17,6 +17,19 @@
 .limits{display:flex;flex-wrap:wrap}
 .limits span{border:1px solid var(--border);background:var(--surface);padding:10px 18px;font-size:22px;letter-spacing:-.02em;margin:0 -1px -1px 0}
 .close{display:flex;align-items:center;gap:28px}
+#d6{gap:12px}
+.route{display:grid;gap:0}
+.route .card+.card{margin-top:-1px}
+.route .card{display:grid;grid-template-columns:130px 1fr auto;column-gap:18px;align-items:start;padding:10px 20px}
+.route .when{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:500;padding-top:5px}
+.route .h{font-size:23px;font-weight:400;letter-spacing:-.025em;line-height:1.15}
+.route .b{font-size:17px;font-weight:300;margin-top:2px}
+.route .src{margin-top:4px}
+.route .tag{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--warn);color:var(--warn);background:#fff7e6;padding:5px 9px;white-space:nowrap}
+.next2{font-size:28px;font-weight:400;letter-spacing:-.03em}
+.mark.sm{width:72px;height:72px}
+.closing.sm{font-size:40px}
+.links.sm{font-size:17px;margin-top:4px}
 .links{font-family:var(--mono);font-size:22px;margin-top:10px;line-height:1.5}
 .links b{font-weight:500;color:var(--accent)}
 .excols{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0;align-items:start}
@@ -42,7 +55,7 @@
 
 <div class="header"><span class="brand">Sworn</span><span class="lbl">Built on Tempo</span></div>
 <div class="badge">Moderato testnet</div>
-<div class="foot">Moderato testnet · unaudited · Zone batches from Tempo's integration tests · no users or revenue</div>
+<div class="foot">Moderato testnet · unaudited · Zone batches from Tempo's integration tests · no customers or revenue</div>
 
 <!-- scene 1 — a withdrawal needs a trusted check -->
 <div class="scene" id="d1">
@@ -91,18 +104,22 @@
   <div class="src fade" data-k="plainSrc"></div>
 </div>
 
-<!-- scene 6 — next, and where to look -->
+<!-- scene 6 — who it is for, and next (v3.2 route) -->
 <div class="scene" id="d6">
-  <div class="next fade"><span>Next · a proposal</span>A TEE and a ZK proof together; payouts wait for ZK.</div>
-  <div class="src fade" data-k="specSrc"></div>
-  <div class="note fade" data-at="5">That needs Tempo: <span data-k="factoryLine"></span></div>
-  <div class="limits fade" data-at="9"><span>Testnet</span><span>unaudited</span><span>Zone batches from Tempo's integration tests</span><span>no users or revenue</span><span>the bond caps what a client can be paid</span></div>
-  <div class="src fade" data-at="9" data-k="limitsSrc"></div>
-  <div class="close fade" data-at="15">
-    <img class="mark" src="../_submission/brand/mark.svg" alt="" />
+  <div class="kicker fade">Who it is for</div>
+  <div class="route">
+    <div class="card fade"><div class="when">Near term</div><div><div class="h">Businesses that run Zones and answer to auditors</div><div class="b">Evidence they can match to each batch they settle.</div></div><div class="tag">Not yet a guarantee</div></div>
+    <div class="card fade" data-at="10.5"><div class="when">Later</div><div><div class="h">Tempo builds proofs into settlement</div><div class="src" data-k="specSrc"></div></div><div class="tag">Written, not built</div></div>
+    <div class="card fade" data-at="16"><div class="when">Either way</div><div><div class="h">The service: provers on time, rebuilt at each Tempo upgrade</div></div><div class="tag">To be validated</div></div>
+  </div>
+  <div class="limits fade" data-at="20"><span>Testnet</span><span>unaudited</span><span>Zone batches from Tempo's integration tests</span><span>Moderato: one Zone operator</span><span>no customers</span><span>a slash pays at most the bond</span></div>
+  <div class="src fade" data-at="20" data-k="operatorSrc"></div>
+  <div class="next2 fade" data-at="26">Next: one design partner, and a proof of a batch they supply.</div>
+  <div class="close fade" data-at="29.5">
+    <img class="mark sm" src="../_submission/brand/mark.svg" alt="" />
     <div>
-      <div class="closing">Sworn: Tempo's execution, proven.</div>
-      <div class="links"><span data-k="repo"></span><br /><b data-k="pageUrl"></b></div>
+      <div class="closing sm">Sworn: Tempo's execution, proven.</div>
+      <div class="links sm"><span data-k="repo"></span> · <b data-k="pageUrl"></b></div>
     </div>
   </div>
 </div>

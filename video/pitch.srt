@@ -1,99 +1,103 @@
 1
-00:00:00,000 --> 00:00:03,657
-Tempo Zones are private blockchains anchored to Tempo.
+00:00:00,000 --> 00:00:03,164
+Tempo Zones are private blockchains on Tempo.
 
 2
-00:00:03,707 --> 00:00:10,145
-Today, the check that a Zone batch was executed correctly is a hardware attestation,
+00:00:03,214 --> 00:00:08,215
+The operator sees everything; each user sees only their own account.
 
 3
-00:00:10,195 --> 00:00:13,852
-or, in the reference contract, nothing at all.
+00:00:08,265 --> 00:00:14,185
+So no one outside can check that the operator ran the ledger correctly.
 
 4
-00:00:13,902 --> 00:00:18,950
-Tempo's own docs say zero-knowledge proving for Zones is not implemented.
+00:00:14,235 --> 00:00:17,858
+Tempo's design checks batches with a hardware attestation;
 
 5
-00:00:19,000 --> 00:00:20,768
-So I built it.
+00:00:17,908 --> 00:00:22,450
+on testnet today, a placeholder verifier returns true for anything.
 
 6
-00:00:20,818 --> 00:00:25,768
-Sworn runs Tempo's own Zone batch verifier inside a zero-knowledge VM,
+00:00:22,500 --> 00:00:24,279
+Sworn makes that checkable.
 
 7
-00:00:25,818 --> 00:00:33,950
-binds the proof to the exact inputs Tempo's verifier takes, and a contract on Tempo's testnet verified it.
+00:00:24,329 --> 00:00:27,021
+For a batch the operator supplies,
 
 8
-00:00:34,000 --> 00:00:35,768
-Here is the transaction.
+00:00:27,071 --> 00:00:32,507
+it produces a zero-knowledge proof that Tempo's own Zone code accepts it.
 
 9
-00:00:35,818 --> 00:00:38,495
-The same engine re-runs Tempo's EVM,
+00:00:32,557 --> 00:00:38,450
+Anyone can verify the proof on chain, and it exposes hashes, not transactions.
 
 10
-00:00:38,545 --> 00:00:43,950
-and it has already slashed a lying server three times on Moderato.
+00:00:38,500 --> 00:00:42,669
+On testnet, it worked: Tempo's own Zone verification code,
 
 11
-00:00:44,000 --> 00:00:48,521
-Zones hold money, and money has to come back out.
+00:00:42,719 --> 00:00:48,763
+on a test batch that contains a withdrawal, verified by a contract there.
 
 12
-00:00:48,571 --> 00:00:53,550
-Withdrawals are only as trustworthy as the check on the batch.
+00:00:48,813 --> 00:00:50,638
+Here is the transaction.
 
 13
-00:00:53,600 --> 00:00:59,950
-A hardware attestation means trusting one vendor's chip; a zero-knowledge proof, anyone can check.
+00:00:50,688 --> 00:00:53,450
+Change one field, and it's rejected.
 
 14
-00:01:00,000 --> 00:01:05,470
-Tempo decides which verifier its Zones use, so step one is Tempo:
+00:00:53,500 --> 00:00:59,832
+The first customers we're after are businesses that run Zones and answer to auditors:
 
 15
-00:01:05,520 --> 00:01:10,070
-ZK as a second, independent check next to the attestation.
+00:00:59,882 --> 00:01:06,671
+independent evidence they can match to each batch they settle — evidence, not yet a guarantee.
 
 16
-00:01:10,120 --> 00:01:13,750
-Step two is the business: running the provers,
+00:01:06,721 --> 00:01:09,862
+Later, if Tempo builds proofs into settlement,
 
 17
-00:01:13,800 --> 00:01:19,730
-with a proof for every batch, on time, re-verified at every Tempo upgrade.
+00:01:09,912 --> 00:01:14,876
+withdrawals can wait for them; that design is written, not built.
 
 18
-00:01:19,780 --> 00:01:22,950
-Specialist work that grows with every Zone.
+00:01:14,926 --> 00:01:21,715
+Either way, the provers must run on time and be rebuilt at each Tempo upgrade:
 
 19
-00:01:23,000 --> 00:01:30,365
-Tempo is built on Reth and Revm, the stack I work in and teach in rethlab,
+00:01:21,765 --> 00:01:24,450
+the service we want to validate.
 
 20
-00:01:30,415 --> 00:01:35,926
-and my last project won a Uniswap Foundation prize at ETHGlobal Tokyo.
+00:01:24,500 --> 00:01:30,850
+Tempo is built on Reth and Revm, the stack I work in and teach,
 
 21
-00:01:35,976 --> 00:01:41,950
-Getting Tempo's code into a zkVM meant patching it, which takes reading it.
+00:01:30,900 --> 00:01:36,336
+and my last project won a Uniswap Foundation prize at ETHGlobal Tokyo.
 
 22
-00:01:42,000 --> 00:01:47,536
-It's testnet and unaudited, the batch comes from Tempo's own integration tests,
+00:01:36,386 --> 00:01:40,450
+Fifteen years in banking taught me why auditability matters.
 
 23
-00:01:47,586 --> 00:01:50,329
-and there is no revenue yet.
+00:01:40,500 --> 00:01:45,516
+It's testnet and unaudited, the batches come from Tempo's integration tests,
 
 24
-00:01:50,379 --> 00:01:53,588
-Next: running both checks together, with Tempo.
+00:01:45,566 --> 00:01:50,582
+Moderato has one Zone operator today, and we have no customers.
 
 25
-00:01:53,638 --> 00:01:55,450
+00:01:50,632 --> 00:01:56,108
+Next: one design partner, and a proof of a batch they supply.
+
+26
+00:01:56,158 --> 00:01:57,950
 Sworn: Tempo's execution, proven.

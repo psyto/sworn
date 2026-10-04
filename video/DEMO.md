@@ -1,6 +1,12 @@
-# Demo video: Sworn (≤ 3 min, founder's voice), v2.1, 2026-10-04
+# Demo video: Sworn (≤ 3 min, founder's voice), v2.2, 2026-10-04
 
-**Status: v2.1 RECORDED (2026-10-04), silent picture + script + subtitles.** `video/demo.mp4`, 1920×1080, made
+**v2.2 (2026-10-04): scene 6 only follows pitch v3.2's route.** Scenes 1–5 are unchanged from v2.1. Scene 6
+("next") becomes the v3.2 route (near term: businesses that run Zones and answer to auditors, evidence not yet
+a guarantee; later: Tempo builds proofs into settlement, spec 004 written, not built; the service, to be
+validated) and the honest line (testnet, unaudited, one Zone operator on Moderato, no customers; next, one
+design partner and a proof of a batch they supply). Narration 330 words, the cap.
+
+**Status: v2.2 RECORDED (2026-10-04), silent picture + script + subtitles.** `video/demo.mp4`, 1920×1080, made
 by `DEMO_PAGE_URL=http://localhost:4173/ node video/record-demo.mjs`, then `node video/split-scenes.mjs demo`
 → `video/scenes/demo/`. The narration is recorded later in the founder's own voice; `demo.srt` and
 `scenes/demo/NARRATION.md` give the timing. Exact length, word count and the three live verify results of
@@ -10,7 +16,9 @@ the take are in `demo.marks.json`.
 rows, with Moderato's pre-T13 verifier) and the withdrawal batch as primary evidence. Those changes are in
 `site/` but not yet published, so the page was captured from `vite preview` of this working tree (the same
 build `pages.yml` publishes). The browser shows no URL bar. After the page is published, re-record with
-the default `DEMO_PAGE_URL` (https://psyto.github.io/sworn/) and nothing else changes.
+the default `DEMO_PAGE_URL` (https://psyto.github.io/sworn/) and nothing else changes. **v2.2 was recorded
+from `vite preview` of this working tree on `http://127.0.0.1:4180/` (the page's "Why it matters" also
+changed for v3.2). It must be re-recorded from the live page after the page is published.**
 
 v2 (Zone proof first, the hardfork batch `0xb14b…3b80`, 2:35) is in git history: `HEAD:video/DEMO.md`,
 `HEAD:video/record-demo.mjs`. v1 (bonded answers first) is `d6996a3`.
@@ -32,10 +40,10 @@ target, words ÷ 2.2 rounded up to 0.5 s).
 | 3 Sworn on the batch with a withdrawal | 0:40–1:14 | 34 s | **page** (attest card, batch contents) 14 s → **explorer** `0xa630` 8 s → **page** (click, rows 1–2, the comparison line) 12 s |
 | 4 said plainly | 1:14–1:26 | 12 s | **authored slide** `dz` |
 | 5 the same engine, bonded answers | 1:26–2:09 | 43 s | **reused** live take, re-cut as in v2 |
-| 6 next, and where to look | 2:09–2:35 | 26 s | **authored slide** `d6` |
+| 6 who it is for, and next | 2:09–2:41 | 32 s | **authored slide** `d6` (v2.2) |
 
 Scene 3 is longer and scene 6 shorter than the brief's spans (1:10 / 2:05) because scene 3 carries the
-explorer insert and the comparison sentence; the total stays 2:35.
+explorer insert and the comparison sentence; v2.1 totalled 2:35; v2.2's longer scene 6 makes it 2:41.
 
 **Wording rules kept here and on screen** (from the founder's brief, 10-04):
 - Never "the same input" for Moderato's verifier. Its ABI is the pre-T13 10-argument `verify`
@@ -116,18 +124,23 @@ were paid 500.00 from the server's bond"**; the last frame held.]**
 > zero knowledge, sped up, and the bond pays the agent 500 automatically. That's compensation, not
 > prevention.
 
-## Scene 6 — next, and where to look · ≈ 26 s
+## Scene 6 — who it is for, and next · ≈ 32 s
 
-**[Authored slide `d6`: "Next · a proposal (spec 004): a TEE and a ZK proof together; payouts wait for
-ZK" with spec 004's own words; "That needs Tempo: Tempo's factory fixes each Zone's verifier". Then the
-limits: Testnet · unaudited · Zone batches from Tempo's integration tests · no users or revenue; "The bond
-caps what a client can be paid". Then the mark, "Sworn: Tempo's execution, proven.", `github.com/psyto/sworn`
-and `psyto.github.io/sworn`.]**
+**[Authored slide `d6` (v2.2): "Who it is for", three rows appearing with the narration. **Near term:
+businesses that run Zones and answer to auditors**, "evidence they can match to each batch they settle", tag
+**Not yet a guarantee**. **Later: Tempo builds proofs into settlement**, with spec 004's own words ("A
+proposal for Tempo, not something Sworn can deploy.", "Payouts wait for ZK.") and that Tempo's factory fixes
+each Zone's verifier, tag **Written, not built**. **Either way: the service, provers on time, rebuilt at each
+Tempo upgrade**, tag **To be validated**. Then the limits: Testnet · unaudited · Zone batches from Tempo's
+integration tests · Moderato: one Zone operator · no customers · a slash pays at most the bond, with the
+operator chip's source read now from Tempo's Zone factory. Then "Next: one design partner, and a proof of a
+batch they supply." Then the mark, "Sworn: Tempo's execution, proven.", `github.com/psyto/sworn` and
+`psyto.github.io/sworn`.]**
 
-> The next step is a proposal, spec 004: run a TEE and a ZK proof together, and hold withdrawals until
-> both have checked the batch. That needs Tempo. Today this is testnet and unaudited, with no users or
-> revenue. The page re-runs these checks from chain, and the code is open source. Sworn: Tempo's
-> execution, proven.
+> Near term: businesses that run Zones and answer to auditors, with evidence they match to each batch they
+> settle, not yet a guarantee. Later, Tempo could build proofs into settlement; that design is written, not
+> built. The service: provers on time, rebuilt at each upgrade. It's testnet and unaudited, with one Zone
+> operator on Moderato and no customers. Next: one design partner, and a proof of a batch they supply.
 
 ---
 
@@ -155,9 +168,13 @@ missing source or a different value stops the recording. Rows marked *(narration
 | without Sworn: success, then chase a refund *(narration)* | the same payment: status 1 and R′ +0; a refund over MPP is the merchant's action (`mpp.dev/advanced/refunds`, cited in the v1 pitch sources) |
 | a proof, sped up; the bond pays 500 automatically | `demoLiveTake.provingRealTime` "9 min 00 s" (take's label); challenge `0x69ab…5188`, `Slashed` 500, client +500 at block−1 / block |
 | compensation, not prevention | the payment still went to the guard; the slash pays the bond, capped at the reserved coverage (README) |
-| next: TEE + ZK together, payouts wait for ZK; needs Tempo | `docs/specs/004-tee-plus-zk.md` (status line, "Payouts wait for ZK", "A proposal for Tempo") |
-| testnet, unaudited, no users or revenue; open source; the page re-runs the checks | README Status; Apache-2.0; `github.com/psyto/sworn` public (`gh api`); the page (HTTP 200, `<title>Sworn`) |
+| near term: businesses that run Zones and answer to auditors; evidence they match to each batch they settle, not yet a guarantee *(narration)* | the founder's v3.2 route (intent, no customer exists); spec 003 §5 D2/D4 and README "Is not, yet" (no portal calls it, `attest` stores nothing); README "The plan" |
+| later, Tempo could build proofs into settlement; written, not built | `docs/specs/004-tee-plus-zk.md` (read now: "A proposal for Tempo, not something Sworn can deploy.", "Payouts wait for ZK.", §6 ≥ 5 rows "not built"); `zone_factory` (verifier fixed per Zone) |
+| the service: provers on time, rebuilt at each upgrade *(narration)* | spec 004 §5 ("each hardfork that changes Zone execution needs a new guest and vkey", "on time, on an SLA"); README "The plan" ("what we want to validate") |
+| testnet, unaudited; one Zone operator on Moderato; no customers | README Status (read now: "Unaudited.", "Traction: none.", "Moderato has one Zone operator today, and we have no customers."); Tempo's ZoneFactory on Moderato, read now: `nextZoneId()` − 1 Zones, all with one admin and sequencer set, `owner()` a 1-of-1 Safe of that admin |
+| next: one design partner, and a proof of a batch they supply | the founder's next step; only an operator can supply a witness (`docs/research/moderato-zone-feasibility-20261004.md` §2) |
+| open source; the page re-runs the checks *(screen)* | Apache-2.0; `github.com/psyto/sworn` public (`gh api`); the page (HTTP 200, `<title>Sworn`) |
 
-**Not said, on purpose:** that Sworn protects or secures withdrawals; that a Zone settles with it; that the
+**Not said, on purpose:** "a proof for every batch" or "every batch of a live Zone"; "our customers are…"; that Sworn protects or secures withdrawals; that a Zone settles with it; that the
 batch or its withdrawal is from Moderato; "the same input"; that Moderato or Tempo is broken; "verification
 layer"; production, mainnet, audited; any user, customer or revenue; other chains by name.
