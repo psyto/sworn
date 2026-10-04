@@ -1,57 +1,65 @@
 <!doctype html>
 <!--
-  Sworn demo (video/DEMO.md), scenes 2–5 — and scene 1's placeholder when record-demo.mjs runs without
-  --live. NO FIGURE IS WRITTEN HERE: every hash, amount, log line and source line arrives through
-  window.__fill() from its source at record time, and __fill throws if a slot is left empty.
-  Role names are the ones the demo app shows: Paying agent (asks) · Preflight provider (answers + bonds) ·
-  Challenger (proves).
+  Sworn demo v2 (video/DEMO.md) — the authored slides record-demo.mjs drives: scene 1's explorer insert
+  (e1), scene 3 (d3a honest answer, d3b the eth_simulateV1 line) and scene 4 (d4 limits + close). Scene 1's
+  page footage and scene 2's live take are not slides. NO FIGURE IS WRITTEN HERE: every hash, amount,
+  log line, URL and screenshot arrives through window.__fill() from its source at record time, and
+  __fill throws if a slot is left empty. Look: Sworn's own palette (slides.css), Sworn's mark. Never
+  Tempo's logo or wordmark (the explorer is cropped below its header); no other chain is named.
+  v1 (five scenes, bonded answers first) is in git history: d6996a3:video/demo.html.
 -->
 <meta charset="utf-8" />
 <title>Sworn demo</title>
 <link rel="stylesheet" href="slides.css" />
 <style>
-.check{display:grid;grid-template-columns:28px 330px 1fr;gap:12px;align-items:baseline;font-size:20px;line-height:1.5}
-.check .ok{color:var(--ok);font-weight:500}
-.check .lab{color:var(--text)}
-.check .ev{font-family:var(--mono);font-size:14px;color:var(--muted);overflow-wrap:anywhere}
 .term pre{font-size:14px}
-.ph{border:1px dashed var(--muted);background:var(--surface);padding:48px;text-align:center}
-.ph .big{font-size:40px;font-weight:400;color:var(--warn)}
-.fee{font-size:52px;font-weight:300;letter-spacing:-.03em;line-height:1.1}
+.mark{width:120px;height:120px;display:block}
+.limits{display:flex;flex-wrap:wrap}
+.limits span{border:1px solid var(--border);background:var(--surface);padding:12px 20px;font-size:26px;letter-spacing:-.02em;margin:0 -1px -1px 0}
+.close{display:flex;align-items:center;gap:28px}
+.links{font-family:var(--mono);font-size:22px;margin-top:10px;line-height:1.5}
+.links b{font-weight:500;color:var(--accent)}
+.excols{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0;align-items:start}
+.excols>*+*{margin-left:-1px}
+.excols img{display:block;border:1px solid var(--border)}
+.sim{font-family:var(--mono);font-size:17px;line-height:1.7}
+.sim .ok{font-weight:500}
+.why{font-size:34px;font-weight:400;letter-spacing:-.025em;line-height:1.2;max-width:1100px}
+.why b{font-weight:500;color:var(--accent)}
 </style>
 
 <div class="header"><span class="brand">Sworn</span><span class="lbl">Built on Tempo</span></div>
 <div class="badge">Moderato testnet</div>
-<div class="foot">Tempo Moderato testnet · unaudited · no users, revenue or mainnet · compensation is capped by the reserved bond</div>
+<div class="foot">Moderato testnet · unaudited · Zone batch from Tempo's integration tests · no users or revenue</div>
 
-<!-- scene 1 placeholder (record-demo.mjs without --live) -->
-<div class="scene" id="d1p">
-  <div class="ph">
-    <div class="big">Scene 1 recorded separately with --live</div>
-    <div class="lede" style="margin:18px auto 0">The demo app on Moderato: question → wrong answer + bond → real payment →
-      receiver +0 / ReceivePolicyGuard +500 → proof (time-lapsed, labelled) → bond paid to the agent.</div>
-    <div class="src mono" style="margin-top:18px">placeholder · <span data-k="placeholderHold"></span> · nothing on this card is a result</div>
+<!-- scene 1, segment 1d — the attest tx on the explorer (cropped below its header) -->
+<div class="scene" id="e1">
+  <div class="kicker fade">The same transaction · on the explorer · <span data-k="exUrl"></span></div>
+  <div class="excols">
+    <div class="card fade">
+      <div class="t"><b>Transaction</b> · captured while recording</div>
+      <img data-src="exCard" style="height:390px" alt="" />
+    </div>
+    <div class="card fade" data-at="4">
+      <div class="t"><b>Its Events tab</b> · event 0</div>
+      <img data-src="exEvent" style="width:100%" alt="" />
+      <div class="src" style="margin-top:10px" data-k="exTopic"></div>
+      <div class="src" style="margin-top:4px" data-k="exFrom"></div>
+    </div>
   </div>
 </div>
 
-<!-- scene 2 — the honest provider cannot be slashed -->
-<div class="scene" id="d2">
+<!-- scene 3a — the honest provider cannot be slashed (v1 scene 2, the same sources) -->
+<div class="scene" id="d3a">
   <div class="kicker">Same machinery, honest answer</div>
   <h1 class="fade" style="font-size:38px">A correct answer is never slashed.</h1>
   <div class="two">
-    <div class="card fade" id="d2live">
+    <div class="card fade">
       <div class="t"><b>Preflight provider (answers + bonds)</b> · honest server · <span data-k="honestSrc"></span></div>
       <img class="shot" data-src="honestShot" alt="" />
     </div>
-    <div class="card fade" id="d2log">
-      <div class="t"><b>Preflight provider (answers + bonds)</b> · honest server · <span data-k="honestSrc"></span></div>
-      <div class="row"><span class="k">as of block</span><span class="v mono" data-k="honestBlock"></span></div>
-      <div class="row"><span class="k">answer</span><span class="v mono" style="font-size:28px;color:var(--ok)" data-k="honestAnswer"></span></div>
-      <div class="row"><span class="k">bond reserved</span><span class="v mono" data-k="honestReserved"></span></div>
-      <div class="row"><span class="k">reserve tx</span><span class="v mono src" data-k="honestReserveTx"></span></div>
-    </div>
     <div class="term fade">
-      <div class="bar"><b style="color:var(--acc)">Challenger (proves)</b> · <span data-k="recheckSrc"></span></div>
+      <div class="bar"><b>Challenger (proves)</b> · <span data-k="recheckSrc"></span></div>
       <pre data-k="recheckLines"></pre>
     </div>
   </div>
@@ -61,78 +69,31 @@
   </div>
 </div>
 
-<!-- scene 3 — what the paying agent checks -->
-<div class="scene" id="d3">
-  <div class="kicker">Paying agent (asks) · its SDK, before trusting the answer</div>
-  <div class="card fade">
-    <div class="t"><b>Five checks</b> · from the Moderato run log · <span class="mono" data-k="runSrc"></span></div>
-    <div class="check"><span class="ok">✓</span><span class="lab">the question is the one it asked</span><span class="ev" data-k="c1"></span></div>
-    <div class="check"><span class="ok">✓</span><span class="lab">reserved on-chain, for this agent</span><span class="ev" data-k="c2"></span></div>
-    <div class="check"><span class="ok">✓</span><span class="lab">digest it computes = on-chain</span><span class="ev" data-k="c3"></span></div>
-    <div class="check"><span class="ok">✓</span><span class="lab">contract and proof key pinned</span><span class="ev" data-k="c4"></span></div>
-    <div class="check"><span class="ok">✓</span><span class="lab">own state proofs saved — <span data-k="witnessSecs"></span></span><span class="ev" data-k="c5"></span></div>
-  </div>
-  <div class="card fade">
-    <div class="t"><b>If a check fails, it says so</b> · <span data-k="rejectCount"></span> rejections exercised on Moderato (S-3)</div>
-    <div class="src mono" data-k="rejectCodes"></div>
-  </div>
-  <div class="card fade">
-    <div class="t"><b>Read from the contract</b> · eth_call, now</div>
-    <div class="row"><span class="k">MAX_AGE</span><span class="v mono" data-k="maxAge"></span></div>
-    <div class="row"><span class="k">GUEST_VKEY</span><span class="v mono" style="font-size:16px" data-k="vkey"></span></div>
+<!-- scene 3b — why this question: anyone can simulate it -->
+<div class="scene" id="d3b">
+  <div class="kicker fade">Why this question</div>
+  <div class="why fade">Anyone can check it with <b>eth_simulateV1</b>. That's why it makes a good demo. The point is the proof underneath.</div>
+  <div class="term fade" data-at="3">
+    <div class="bar"><b>eth_simulateV1</b> · rpc.moderato.tempo.xyz · run while recording, nothing sent</div>
+    <div class="sim" data-k="simAsk"></div>
+    <div class="sim ok" data-k="simGot"></div>
+    <div class="sim" data-k="simNot"></div>
   </div>
 </div>
 
-<!-- scene 4 — why the proof can be trusted -->
+<!-- scene 4 — honest limits, and where to look -->
 <div class="scene" id="d4">
-  <div class="kicker">Why trust the proof · Tempo's own code</div>
-  <div class="two">
-    <div class="term fade">
-      <div class="bar">out/ac2_run.log · tail</div>
-      <pre data-k="ac2Tail"></pre>
-    </div>
-    <div class="term fade">
-      <div class="bar">patches/tempo.patch · <span data-k="patchCount"></span></div>
-      <pre data-k="patchLines"></pre>
-    </div>
-  </div>
-  <div class="two">
-    <div class="card fade">
-      <div class="t"><b>Tempo Zones</b> · <span class="mono" data-k="zonesSrc"></span></div>
-      <div class="quote" style="font-size:19px" data-k="zonesB"></div>
-    </div>
-    <div class="card fade">
-      <div class="t"><b>Deployed on Moderato</b> · eth_call / eth_getCode, now</div>
-      <!-- addresses on one line each: the label column is narrowed and the version sits under its label -->
-      <div class="row addr"><span class="k">Sworn</span><span class="v mono" data-k="sworn"></span></div>
-      <div class="row addr"><span class="k">SP1 verifier<br><span class="src" data-k="verifierVersion"></span></span><span class="v mono" data-k="verifier"></span></div>
-      <div class="row addr"><span class="k">no owner</span><span class="v mono" data-k="noOwner"></span></div>
+  <div class="kicker fade">Honest limits</div>
+  <div class="limits fade"><span>Testnet</span><span>unaudited</span><span>Zone batch from Tempo's integration tests</span><span>no users or revenue</span></div>
+  <div class="note fade" data-at="6">The bond caps what a client can be paid · it covers the answer about one block</div>
+  <div class="src fade" data-at="6" data-k="limitsSrc"></div>
+  <div class="close fade" data-at="15">
+    <img class="mark" src="../_submission/brand/mark.svg" alt="" />
+    <div>
+      <div class="closing">Sworn: Tempo's execution, proven.</div>
+      <div class="links"><span data-k="repo"></span><br /><b data-k="pageUrl"></b></div>
     </div>
   </div>
-</div>
-
-<!-- scene 5 — cost, limits, next -->
-<div class="scene" id="d5">
-  <div class="kicker">What it costs</div>
-  <div class="two">
-    <div class="card fade">
-      <div class="t"><b>Reserve tx, receipt read now</b> · <span class="mono" data-k="feeTx"></span></div>
-      <div class="fee" data-k="feeAmount"></div>
-      <pre data-k="feeCalc" style="margin-top:6px"></pre>
-    </div>
-    <div class="card fade">
-      <div class="t"><b>The real cost: the provider's bond</b></div>
-      <div class="row"><span class="k">locked per answer</span><span class="v mono" data-k="challengeHours"></span></div>
-      <div class="row"><span class="k">pays at most</span><span class="v">the bond reserved behind that answer</span></div>
-      <div class="row"><span class="k">covers</span><span class="v">the answer about one block — not a later payment</span></div>
-    </div>
-  </div>
-  <div class="card fade">
-    <div class="t"><b>README</b> · <span class="mono" data-k="repo"></span></div>
-    <div style="font-size:30px;font-weight:400;letter-spacing:-.025em" data-k="hero"></div>
-  </div>
-  <div class="lede fade">Next: MPP sellers who want to stand behind their answers.</div>
-  <div class="src fade">Tempo Moderato testnet only · unaudited · no users, customers, revenue or mainnet</div>
 </div>
 
 <script src="slides.js"></script>

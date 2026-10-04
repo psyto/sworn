@@ -56,13 +56,28 @@ record with a fallback font; never Tempo's logo, wordmark or Pilat).
 node video/record-pitch.mjs              # → video/pitch.mp4 + pitch.srt + pitch.marks.json   (reads only)
 node video/split-scenes.mjs pitch        # → video/scenes/pitch/scene-{1..6}.mp4|.txt + NARRATION.md
 
-node video/record-demo.mjs --no-live     # scenes 2–5 for real, scene 1 a labelled PLACEHOLDER (reads only)
-DEMO_LIVE_OK=1 node video/record-demo.mjs --live           # scene 1 = live take — SENDS MODERATO TXs
-node video/record-demo.mjs --from-take video/takes/demo-…  # re-edit a saved take (sends nothing)
-node video/split-scenes.mjs demo         # → video/scenes/demo/
+node video/record-demo.mjs               # demo v2 → video/demo.mp4 + demo.srt + demo.marks.json + frames/demo-scene{1..4}.png (reads only)
+PREVIEW=<dir> node video/record-demo.mjs # the four authored slides as PNGs + all source checks; records nothing
+node video/split-scenes.mjs demo         # → video/scenes/demo/scene-{1..4}.mp4|.txt + NARRATION.md
 ```
 
-Pitch **v2** (six scenes, Zone proof first) sources: Tempo's docs page `zones/proving.md` (both quoted sentences), `tempoxyz/zones` @ `ac49071f` via `gh api` (README, reference `Verifier.sol` `return true`), the pinned checkout `spikes/zone-spf/zones` (`IVerifier.verify` selector = `SwornZoneVerifier`'s), Moderato (SwornZoneVerifier codehash, the attest receipt and decoded `ZoneBatchVerified`, the three `Slashed` receipts), the explorer page of the attest tx (screenshot cropped to its transaction card, never the header with Tempo's wordmark; its Events tab must show the event's topic0), the proving log, vendored `zone_factory`, README (T12, "is / is not"), the patch files, GitHub, ethglobal.com. `PREVIEW=<dir> node video/record-pitch.mjs` writes one PNG per scene instead of recording. `DEMO.md` is now the **v2 edit plan** (not yet recorded; `demo.mp4` is still v1).
+Pitch **v2** (six scenes, Zone proof first) sources: Tempo's docs page `zones/proving.md` (both quoted sentences), `tempoxyz/zones` @ `ac49071f` via `gh api` (README, reference `Verifier.sol` `return true`), the pinned checkout `spikes/zone-spf/zones` (`IVerifier.verify` selector = `SwornZoneVerifier`'s), Moderato (SwornZoneVerifier codehash, the attest receipt and decoded `ZoneBatchVerified`, the three `Slashed` receipts), the explorer page of the attest tx (screenshot cropped to its transaction card, never the header with Tempo's wordmark; its Events tab must show the event's topic0), the proving log, vendored `zone_factory`, README (T12, "is / is not"), the patch files, GitHub, ethglobal.com. `PREVIEW=<dir> node video/record-pitch.mjs` writes one PNG per scene instead of recording. `DEMO.md` is the **v2 demo, recorded 2026-10-04** (2:35, four scenes, Zone proof first).
+
+Demo **v2** sources, all read at record time (any mismatch throws): the **published page**
+(`DEMO_PAGE_URL`, default https://psyto.github.io/sworn/) recorded in a real browser — every value its Zone
+section shows (attest tx, block, gas, contract, decoded `ZoneBatchVerified`, the ✓ lines, immutables,
+codehash, proof size, `verify(…)` ✓ true / ✗ `InvalidProof()`) is compared with `deployments/moderato.json`
+↔ Moderato, the fixture and the recorder's own two `eth_call`s; "Verify again" is clicked and its "Called
+at" must change. Nothing on the page, the explorer, `DEMO.md` or any slide may name the superseded verifier
+or its attest tx. The page's pipeline caption must match the proving log, else it is hidden and the log's
+figure burned in (today it says 816 s, the superseded proof; the log says 701 s). The explorer page of the
+attest tx is cropped to its transaction card and event row (no header). Scene 2 re-cuts the 10-03 take
+(`takes/demo-20261003T131156Z`, gitignored — keep it): take.json ↔ `demoLiveTake` ↔ Moderato (reserve 500,
+payment with guard +500 / R′ +0 at block−1/block, `Slashed` 500 with client +500); one speed-up (MPP charge +
+reserve, ×6.3) labelled with its real 18.8 s from the take's marks; the proving time-lapse is the take's own.
+Scene 3 adds an `eth_simulateV1` of the agent's same transfer at the question's block (→ `ReceivePolicyGuard`,
+whose address is read from vendored `tempo/…/precompiles/mod.rs`). Scene 4: README limits, the repo (public),
+the page (HTTP 200). v1 (five scenes, `--live` / `--no-live` / `--from-take`) is `d6996a3:video/record-demo.mjs`.
 
 v1 pitch sources: `deployments/moderato.json` ↔ Moderato (codehash, GUEST_VKEY, SP1 verifier VERSION, MAX_AGE,
 CHALLENGE_PERIOD); the three first-slash receipts (reserve `0x08f6…0350`, payment `0x65bc…312a` with guard /
@@ -76,7 +91,7 @@ src/Sworn.sol` (source scan, run now). Demo scenes 2–5 add: the honest re-chec
 receipt `0xb2bf…7529` (fee = gasUsed × effectiveGasPrice / 1e12 base units of the fee token) and the README's
 bold line.
 
-## Demo scene 1 — the live take
+## Demo v1 scene 1 — the live take (how `takes/demo-20261003T131156Z` was made; v1 recorder at `d6996a3`)
 
 - **Record before Moderato T12: 2026-10-08 14:00 UTC = 23:00 JST** (`1791468000`). The recorder refuses
   within 45 min of it; after it the answerer refuses until the guest is re-checked.

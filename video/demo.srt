@@ -1,127 +1,131 @@
 1
-00:00:00,000 --> 00:00:06,198
-This paying agent is about to send 500 test dollars on Tempo's testnet.
+00:00:00,000 --> 00:00:02,533
+This is Sworn's public page.
 
 2
-00:00:06,248 --> 00:00:11,966
-First it asks a preflight provider: will the receiver actually get it?
+00:00:02,583 --> 00:00:09,767
+Everything on it is read live from Moderato, Tempo's testnet, and nothing is signed.
 
 3
-00:00:12,016 --> 00:00:18,214
-This provider — I configured it to lie, and it says so — answers "yes,
+00:00:09,817 --> 00:00:14,933
+Tempo's own Zone batch verifier ran inside a zero-knowledge VM,
 
 4
-00:00:18,264 --> 00:00:24,462
-plus 500", and bonds 500 of its own money behind that answer, on-chain.
+00:00:14,983 --> 00:00:21,650
+and a contract with the exact signature of Tempo's verifier checked the proof.
 
 5
-00:00:24,512 --> 00:00:25,904
-The agent pays.
+00:00:21,700 --> 00:00:23,717
+Here is that transaction.
 
 6
-00:00:25,954 --> 00:00:29,749
-The transaction succeeds — but the receiver gets nothing:
+00:00:23,767 --> 00:00:27,850
+It succeeded, and its event carries the Zone,
 
 7
-00:00:29,799 --> 00:00:36,477
-its policy blocks this sender, so Tempo holds the 500 in its receive-policy guard.
+00:00:27,900 --> 00:00:32,500
+the height and the digest the proof committed to.
 
 8
-00:00:36,527 --> 00:00:38,400
-The answer was wrong.
+00:00:32,550 --> 00:00:36,633
+The page ran this check when it loaded;
 
 9
-00:00:38,450 --> 00:00:46,571
-A challenger — here, the agent itself — re-runs that transfer with Tempo's own engine inside a zero-knowledge proof:
+00:00:36,683 --> 00:00:42,833
+I run it again, live: two read-only calls with the same proof.
 
 10
-00:00:46,621 --> 00:00:49,935
-about eight minutes, locally — sped up here.
+00:00:42,883 --> 00:00:44,900
+The real batch: true.
 
 11
-00:00:49,985 --> 00:00:56,183
-The contract verifies the proof, and the provider's bond pays the agent 500.
+00:00:44,950 --> 00:00:50,583
+Change one field, the height, and the proof no longer fits.
 
 12
-00:00:56,233 --> 00:00:59,427
-The same machinery protects an honest server.
+00:00:50,633 --> 00:00:53,683
+The same transaction, on Tempo's explorer.
 
 13
-00:00:59,477 --> 00:01:01,744
-Here the answer was right.
+00:00:53,733 --> 00:01:01,950
+One limit, up front: this batch comes from Tempo's integration tests, not from a live Zone.
 
 14
-00:01:01,794 --> 00:01:06,842
-A challenge with a real proof — simulated, so nothing is sent
+00:01:02,000 --> 00:01:05,061
+The same engine re-runs Tempo's EVM.
 
 15
-00:01:06,892 --> 00:01:12,403
-— is rejected: the contract verifies the proof, then sees the answer matches.
+00:01:05,111 --> 00:01:11,283
+A paying agent asks a preflight provider: will the receiver get 500?
 
 16
-00:01:12,453 --> 00:01:15,183
-A correct answer is never slashed.
+00:01:11,333 --> 00:01:14,394
+This provider is configured to lie.
 
 17
-00:01:15,233 --> 00:01:28,915
-Before relying on an answer, the agent's SDK checks five things: the question is the one it asked; the reservation is on-chain, for it; the digest it computes itself matches;
+00:01:14,444 --> 00:01:19,580
+It answers plus 500, and reserves 500 of its bond.
 
 18
-00:01:28,965 --> 00:01:44,937
-the contract and the proof key are the ones it expects; and it saved the chain's own state proofs — in about nine seconds here — so the server can't make an answer unchallengeable by withholding evidence.
+00:01:19,630 --> 00:01:21,135
+The agent pays.
 
 19
-00:01:44,987 --> 00:01:47,683
-If that fails, it says so.
+00:01:21,185 --> 00:01:25,283
+The transaction succeeds, but the receiver gets nothing:
 
 20
-00:01:47,733 --> 00:01:49,521
-Why trust the proof?
+00:01:25,333 --> 00:01:30,987
+its policy blocks this sender, so Tempo's guard holds the 500.
 
 21
-00:01:49,571 --> 00:01:54,575
-It runs Tempo's own code — tempo-revm, the engine in Tempo's node,
+00:01:31,037 --> 00:01:38,246
+A challenger re-runs that transfer inside a zero-knowledge proof, nine minutes here, sped up.
 
 22
-00:01:54,625 --> 00:01:58,710
-built for a zero-knowledge VM with three small patches.
+00:01:38,296 --> 00:01:43,950
+The contract verifies it, and the bond pays the agent 500.
 
 23
-00:01:58,760 --> 00:02:06,061
-I replayed forty real Moderato transfers through it, on state proven against the block before each:
+00:01:44,000 --> 00:01:47,379
+A correct answer can't be slashed.
 
 24
-00:02:06,111 --> 00:02:11,575
-forty of forty match their receipts — status, gas, fees, logs and balances.
+00:01:47,429 --> 00:01:56,521
+A challenge against the honest provider verifies the proof, and then reverts: the answer was right.
 
 25
-00:02:11,625 --> 00:02:16,629
-Tempo's own Zones verifier says it isn't a proving guest yet.
+00:01:56,571 --> 00:02:04,521
+This question makes a good demo because anyone can check it with a simulation.
 
 26
-00:02:16,679 --> 00:02:21,683
-The contract has no owner, no admin and no upgrade path.
+00:02:04,571 --> 00:02:07,950
+The point is the proof underneath.
 
 27
-00:02:21,733 --> 00:02:27,641
-A reservation costs about three hundredths of a cent in fees on Tempo;
+00:02:08,000 --> 00:02:09,538
+The honest limits.
 
 28
-00:02:27,691 --> 00:02:33,600
-the real cost is the server's bond, locked for a day per answer.
+00:02:09,588 --> 00:02:12,185
+This is testnet and unaudited.
 
 29
-00:02:33,650 --> 00:02:38,641
-It insures the answer about one block — not a later payment.
+00:02:12,235 --> 00:02:16,421
+The Zone batch comes from Tempo's integration tests.
 
 30
-00:02:38,691 --> 00:02:43,225
-Next: MPP sellers who want to stand behind their answers.
+00:02:16,471 --> 00:02:21,185
+The bond caps what a client can be paid,
 
 31
-00:02:43,275 --> 00:02:45,516
-Open source, on Moderato today.
+00:02:21,235 --> 00:02:25,421
+and there are no users or revenue yet.
 
 32
-00:02:45,566 --> 00:02:49,183
-Sworn — paid answers that can be proven false.
+00:02:25,471 --> 00:02:32,832
+Everything you saw is open source, and the public page re-checks it from chain.
+
+33
+00:02:32,882 --> 00:02:34,950
+Sworn: Tempo's execution, proven.

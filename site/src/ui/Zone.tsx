@@ -4,6 +4,9 @@ import type { Loadable } from "../chain/loadable.ts";
 import { FIXTURE, type VerifyNow, type ZoneAttest } from "../chain/zone.ts";
 import { AddrLink, ErrorBox, TxLink, utc } from "./common.tsx";
 import { Pipeline, type PipeNode } from "./ProofDiagram.tsx";
+import deployments from "../../../deployments/moderato.json";
+
+const PROVING = deployments.SwornZoneVerifier.attest.proving;
 
 const ZONE_NODES: PipeNode[] = [
   { title: "Zone batch verifier", sub: ["Tempo's own code", "prove_zone_batch"] },
@@ -47,7 +50,7 @@ export function ZoneSection({ attest, check, onRetry, onVerify }: Props) {
         />
         <figcaption>
           <code>zone_spf::prove_zone_batch</code> from Tempo's zones repository, with small build patches so it builds for the
-          zkVM. The proof of this batch took 25.5M cycles and 816 s to make locally. The heavy edge is on Tempo.
+          zkVM. The proof of this batch took {(PROVING.cycles / 1e6).toFixed(1)}M cycles and {Math.round(PROVING.groth16WallSecs)} s to make locally. The heavy edge is on Tempo.
         </figcaption>
       </figure>
 
