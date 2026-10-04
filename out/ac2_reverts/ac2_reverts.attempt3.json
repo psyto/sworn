@@ -1,0 +1,211 @@
+{
+  "done": false,
+  "matched": 3,
+  "results": [
+    {
+      "block": 38095357,
+      "class": "dex:0x4f8f0218",
+      "fee": "15",
+      "feePayer": "0x5c495d1ecff50b363049de97fabca32cf647fcea",
+      "feeToken": "0x20c0000000000000000000000000000000000000",
+      "from": "0x5c495d1ecff50b363049de97fabca32cf647fcea",
+      "gasLimit": 250000,
+      "gasUsed": 22620,
+      "index": 0,
+      "mismatches": [],
+      "post": [
+        {
+          "atB": "70000354012515",
+          "ours": "70000354012515",
+          "owner": "0x5c495d1ecff50b363049de97fabca32cf647fcea",
+          "token": "0x20c0000000000000000000000000000000000000"
+        }
+      ],
+      "postNotAttributable": [],
+      "priorTxs": 0,
+      "reason": "revert 0xaa4bc69a (36 bytes)",
+      "replay_ms": 16664,
+      "status": false,
+      "traceError": "execution reverted",
+      "transfer": null,
+      "tx": "0x08591516ecb50c2a52b9bf68814d78b4a8dff3967beb6f6d697f3ef615c95d0c",
+      "type": "0x0",
+      "witness_accounts": 15,
+      "witness_slots": 9
+    },
+    {
+      "block": 38095357,
+      "class": "dex:0x4f8f0218",
+      "fee": "15",
+      "feePayer": "0x717c95d33b99288b0cd289a531957a86fd359c96",
+      "feeToken": "0x20c0000000000000000000000000000000000000",
+      "from": "0x717c95d33b99288b0cd289a531957a86fd359c96",
+      "gasLimit": 250000,
+      "gasUsed": 22620,
+      "index": 1,
+      "mismatches": [],
+      "post": [
+        {
+          "atB": "70000523305723",
+          "ours": "70000523305723",
+          "owner": "0x717c95d33b99288b0cd289a531957a86fd359c96",
+          "token": "0x20c0000000000000000000000000000000000000"
+        }
+      ],
+      "postNotAttributable": [],
+      "priorTxs": 1,
+      "reason": "revert 0xaa4bc69a (36 bytes)",
+      "replay_ms": 46904,
+      "status": false,
+      "traceError": "execution reverted",
+      "transfer": null,
+      "tx": "0xa795838ed99ab19bb108e68965dbb9ff2a08373c5b5d9b7de317ed817bb7e81a",
+      "type": "0x0",
+      "witness_accounts": 16,
+      "witness_slots": 17
+    },
+    {
+      "block": 38095387,
+      "class": "tip20:0x095ea7b3",
+      "fee": "67",
+      "feePayer": "0x717c95d33b99288b0cd289a531957a86fd359c96",
+      "feeToken": "0x20c0000000000000000000000000000000000000",
+      "from": "0x717c95d33b99288b0cd289a531957a86fd359c96",
+      "gasLimit": 100000,
+      "gasUsed": 100000,
+      "index": 0,
+      "mismatches": [],
+      "post": [
+        {
+          "atB": "70000523305559",
+          "ours": "70000523305559",
+          "owner": "0x717c95d33b99288b0cd289a531957a86fd359c96",
+          "token": "0x20c0000000000000000000000000000000000000"
+        }
+      ],
+      "postNotAttributable": [],
+      "priorTxs": 0,
+      "reason": "halt OutOfGas(Precompile)",
+      "replay_ms": 16951,
+      "status": false,
+      "traceError": "out of gas",
+      "transfer": null,
+      "tx": "0xa703dddbdc895f3fa7a747e1252f770c75b92e6011f46b79e83c7fdbc9de7e1a",
+      "type": "0x0",
+      "witness_accounts": 14,
+      "witness_slots": 12
+    }
+  ],
+  "scanned_blocks": 4,
+  "skipped": [
+    {
+      "block": 38095358,
+      "reason": "fell out of the proof window (head 38095525)"
+    },
+    {
+      "block": 38095359,
+      "reason": "fell out of the proof window (head 38095526)"
+    },
+    {
+      "block": 38095360,
+      "reason": "fell out of the proof window (head 38095526)"
+    },
+    {
+      "block": 38095361,
+      "reason": "fell out of the proof window (head 38095526)"
+    },
+    {
+      "block": 38095362,
+      "reason": "fell out of the proof window (head 38095527)"
+    },
+    {
+      "block": 38095363,
+      "reason": "fell out of the proof window (head 38095527)"
+    },
+    {
+      "block": 38095364,
+      "reason": "fell out of the proof window (head 38095527)"
+    },
+    {
+      "block": 38095365,
+      "reason": "fell out of the proof window (head 38095528)"
+    },
+    {
+      "block": 38095366,
+      "reason": "fell out of the proof window (head 38095528)"
+    },
+    {
+      "block": 38095367,
+      "reason": "fell out of the proof window (head 38095528)"
+    },
+    {
+      "block": 38095368,
+      "reason": "fell out of the proof window (head 38095529)"
+    },
+    {
+      "block": 38095369,
+      "reason": "fell out of the proof window (head 38095529)"
+    },
+    {
+      "block": 38095370,
+      "reason": "fell out of the proof window (head 38095530)"
+    },
+    {
+      "block": 38095371,
+      "reason": "fell out of the proof window (head 38095530)"
+    },
+    {
+      "block": 38095372,
+      "reason": "fell out of the proof window (head 38095530)"
+    },
+    {
+      "block": 38095373,
+      "reason": "fell out of the proof window (head 38095530)"
+    },
+    {
+      "block": 38095374,
+      "reason": "fell out of the proof window (head 38095531)"
+    },
+    {
+      "block": 38095375,
+      "reason": "fell out of the proof window (head 38095531)"
+    },
+    {
+      "block": 38095376,
+      "reason": "fell out of the proof window (head 38095531)"
+    },
+    {
+      "block": 38095377,
+      "reason": "fell out of the proof window (head 38095532)"
+    },
+    {
+      "block": 38095378,
+      "reason": "fell out of the proof window (head 38095532)"
+    },
+    {
+      "block": 38095379,
+      "reason": "fell out of the proof window (head 38095532)"
+    },
+    {
+      "block": 38095380,
+      "reason": "fell out of the proof window (head 38095533)"
+    },
+    {
+      "block": 38095381,
+      "reason": "fell out of the proof window (head 38095533)"
+    },
+    {
+      "block": 38095382,
+      "reason": "fell out of the proof window (head 38095533)"
+    },
+    {
+      "block": 38095383,
+      "reason": "fell out of the proof window (head 38095534)"
+    },
+    {
+      "block": 38095385,
+      "reason": "fell out of the proof window (head 38095536)"
+    }
+  ],
+  "total": 3
+}

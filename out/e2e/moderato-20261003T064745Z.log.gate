@@ -1,0 +1,41 @@
+    Finished `release` profile [optimized] target(s) in 0.71s
+     Running unittests src/lib.rs (target/release/deps/sworn_answerer-feaf1182f07d6a74)
+     Running unittests src/main.rs (target/release/deps/sworn_answer-8405ef22e67f0133)
+   Doc-tests sworn_answerer
+ok   SETUP.verifier
+ok   SETUP.vkey
+ok   SETUP.receivePolicy
+ok   SETUP.bond
+ok   S-1.mpp
+ok   S-1.reserved
+ok   S-1.sdkVerify
+ok   S-1.witness
+ok   S-1.honestNotOutOfGas
+ok   S-2.dishonestReserved
+ok   S-2.witness
+ok   S-2.trueAnswerIsDiversion
+ok   S-2.challengePays
+ok   S-2.slashedState
+MISSING/FAILED S-2.honestReverts
+ok   S-3.wrongClient
+ok   S-3.digestMismatch
+ok   S-3.otherContract
+ok   S-3.unknownVkey
+ok   S-3.unknownVkeyPinned
+ok   S-3.missingReservation
+ok   S-3.r33ReceiverIsSender
+ok   S-3.r33RefusedBeforePaying
+ok   S-3.r33NotTip20
+ok   S-3.controlAccepts
+ok   S-4.matchingScheduleAnswers
+ok   SETUP.chain
+ok   SETUP.codehash
+ok   SETUP.clientFunded
+ok   tests::s4_accepts_identical_schedule
+ok   tests::s4_refuses_changed_activation
+ok   tests::s4_refuses_extra_live_fork
+ok   tests::s4_refuses_missing_live_fork
+ok   tests::s4_refuses_activation_within_max_age
+a check FAILED:
+CHECK S-2.honestReverts FAIL honest challenge with a real Groth16 proof (0 s): simulation did NOT revert; nothing sent
+set: moderato  required: 34  verdict: FAIL

@@ -166,22 +166,28 @@ export async function verifyResponse(resp: PreflightResponse, exp: Expected, pc:
 // Rust CLIs
 // ------------------------------------------------------------------------------------------------
 
-export type RunResult = { code: number | null; json: any; stderr: string; ms: number }
+/** `code` null ⇒ the process died by `signal` (`timedOut` ⇒ we killed it at `timeoutMs`). `jsonMissing` ⇒
+ *  its last stdout line was not JSON, so `json` is a synthesized `{ok:false,error}` and NOT the tool's output. */
+export type RunResult = { code: number | null; signal: NodeJS.Signals | null; timedOut: boolean; jsonMissing: boolean; json: any; stderr: string; ms: number }
 export function runJson(bin: string, args: string[], opts: { env?: NodeJS.ProcessEnv; stdin?: string; timeoutMs: number; onStderr?: (s: string) => void }): Promise<RunResult> {
   return new Promise((res) => {
     const t0 = Date.now()
     const p = spawn(bin, args, { env: opts.env ?? process.env, stdio: ['pipe', 'pipe', 'pipe'] })
-    let out = '', err = ''
-    const timer = setTimeout(() => p.kill('SIGKILL'), opts.timeoutMs)
+    let out = '', err = '', timedOut = false
+    const timer = setTimeout(() => { timedOut = true; p.kill('SIGKILL') }, opts.timeoutMs)
     p.stdout.on('data', (d) => (out += d))
     p.stderr.on('data', (d) => { err += d; opts.onStderr?.(String(d)) })
     p.on('error', (e) => { err += String(e) })
-    p.on('close', (code) => {
+    p.on('close', (code, signal) => {
       clearTimeout(timer)
       const line = out.trim().split('\n').filter(Boolean).pop() ?? ''
-      let json: any = null
-      try { json = JSON.parse(line) } catch { json = { ok: false, error: `no JSON output (exit ${code}): ${err.slice(-500)}` } }
-      res({ code, json, stderr: err, ms: Date.now() - t0 })
+      let json: any = null, jsonMissing = false
+      try { json = JSON.parse(line) } catch { jsonMissing = true }
+      if (jsonMissing || json === null || typeof json !== 'object') {
+        jsonMissing = true
+        json = { ok: false, error: `no JSON output (exit ${code}${signal ? `, signal ${signal}` : ''}${timedOut ? `, killed at ${opts.timeoutMs} ms timeout` : ''}): ${err.slice(-500)}` }
+      }
+      res({ code, signal, timedOut, jsonMissing, json, stderr: err, ms: Date.now() - t0 })
     })
     p.stdin.end(opts.stdin ?? '')
   })
@@ -219,10 +225,47 @@ export type ChallengeCtx = {
   proof?: string
   /** eth_call only; nothing is sent (used to show an honest answer's challenge reverts). */
   dryRun?: boolean
+  /** Kill the challenger after this long (default 30 min); a kill is a harness failure, not an outcome. */
+  timeoutMs?: number
   onProgress?: (e: ChallengeEvent) => void
   [k: string]: unknown
 }
-export type ChallengeResult = { txHash?: Hex; ok: boolean; exitCode: number | null; result: any }
+/**
+ * `harnessFailure` is set when the challenger PROCESS did not produce an outcome: it timed out, died by a
+ * signal, printed no JSON, or exited for a reason that is not a contract result (e.g. the prover failed).
+ * Then `result` says nothing about Sworn: a harness must report HARNESS-FAILURE, never "did not revert".
+ */
+export type ChallengeResult = { txHash?: Hex; ok: boolean; exitCode: number | null; result: any; harnessFailure?: string }
+
+/** Thrown by a non-dry-run challenge() when the challenger process itself failed (see ChallengeResult). */
+export class ChallengerHarnessError extends Error {
+  result: ChallengeResult
+  constructor(reason: string, result: ChallengeResult) { super(`HARNESS-FAILURE: ${reason}`); this.name = 'ChallengerHarnessError'; this.result = result }
+}
+
+/**
+ * Classify one `sworn-challenge` run. Returns a reason when the run is a HARNESS failure, undefined when
+ * its output is a contract outcome. The only contract outcomes are:
+ *   dry run: exit 0 with dryRun.reverted=false, or exit 2 with dryRun.reverted=true and an error name;
+ *   sent:    a txHash (mined, any status), or exit 2 (the send itself was refused, e.g. simulation revert).
+ */
+export function challengerHarnessFailure(r: RunResult, dryRun: boolean): string | undefined {
+  const tail = (r.stderr.trim().split('\n').pop() ?? '').replace(/\x1b\[[0-9;]*m/g, '').slice(0, 200)
+  if (r.timedOut) return `challenger killed at its timeout after ${(r.ms / 1000).toFixed(0)} s (no outcome); last stderr: ${tail}`
+  if (r.code === null) return `challenger died by signal ${r.signal ?? '?'} after ${(r.ms / 1000).toFixed(0)} s (no outcome); last stderr: ${tail}`
+  if (r.jsonMissing) return `challenger exited ${r.code} with no JSON on stdout (output lost); last stderr: ${tail}`
+  const j = r.json
+  if (dryRun) {
+    const d = j?.dryRun
+    if (!d || typeof d.reverted !== 'boolean') return `challenger exited ${r.code} without a dry-run result: ${String(j?.error ?? JSON.stringify(j)).slice(0, 300)}`
+    if (d.reverted && (r.code !== 2 || typeof d.error !== 'string' || !d.error)) return `inconsistent dry-run output (exit ${r.code}, reverted, error ${d.error})`
+    if (!d.reverted && r.code !== 0) return `inconsistent dry-run output (exit ${r.code}, not reverted)`
+    return undefined
+  }
+  if (j?.txHash) return undefined
+  if (r.code === 2) return undefined
+  return `challenger exited ${r.code} before sending: ${String(j?.error ?? JSON.stringify(j)).slice(0, 300)}`
+}
 
 /** Witness paths captured by preflight() in this process, by digest. */
 const witnessByDigest = new Map<string, string>()
@@ -231,6 +274,8 @@ const witnessByDigest = new Map<string, string>()
  * Prove locally (SP1 Groth16, ≈6.5 min) and send challenge(server, q, a, publicValues, proof) via
  * `sworn-challenge`. SWORN_CHALLENGER_KEY must be in this process's environment.
  * Throws unless a challenge transaction was mined successfully (dryRun: returns the simulation).
+ * A challenger that dies, times out or loses its output throws ChallengerHarnessError (dryRun: returns
+ * `harnessFailure` set) — never a contract outcome.
  */
 export async function challenge(response: PreflightResponse, ctx: ChallengeCtx): Promise<ChallengeResult> {
   const on = ctx.onProgress ?? (() => {})
@@ -250,7 +295,7 @@ export async function challenge(response: PreflightResponse, ctx: ChallengeCtx):
   on({ phase: 'proving' })
   let submitted = false
   const r = await runJson(ctx.bin ?? join(REPO, 'target/release/sworn-challenge'), args, {
-    env: { ...process.env, SWORN_RPC_URL: ctx.rpcUrl }, timeoutMs: 30 * 60_000,
+    env: { ...process.env, SWORN_RPC_URL: ctx.rpcUrl }, timeoutMs: ctx.timeoutMs ?? 30 * 60_000,
     onStderr: (chunk) => {
       for (const line of chunk.split('\n').filter(Boolean)) {
         if (!submitted && line.includes('[sworn-challenge] submitting')) { submitted = true; on({ phase: 'submitting', line }) }
@@ -258,8 +303,11 @@ export async function challenge(response: PreflightResponse, ctx: ChallengeCtx):
       }
     },
   })
-  const out: ChallengeResult = { txHash: r.json?.txHash, ok: r.code === 0 && (ctx.dryRun ? true : r.json?.ok === true), exitCode: r.code, result: r.json }
+  const harnessFailure = challengerHarnessFailure(r, !!ctx.dryRun)
+  const out: ChallengeResult = { txHash: r.json?.txHash, ok: !harnessFailure && r.code === 0 && (ctx.dryRun ? true : r.json?.ok === true), exitCode: r.code, result: r.json,
+    ...(harnessFailure ? { harnessFailure } : {}) }
   if (ctx.dryRun) return out
+  if (harnessFailure) throw new ChallengerHarnessError(harnessFailure, out)
   if (!out.ok || !out.txHash) throw new Error(`challenge failed (exit ${r.code}): ${r.json?.error ?? JSON.stringify(r.json)}`)
   return out
 }

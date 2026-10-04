@@ -2,9 +2,11 @@
 //!
 //!   spike-host ac1                 AC-1: ≥6 questions at the latest block, guest(core)=host, vs RPC
 //!   spike-host ac2 <count>         AC-2: replay first-tx TIP-20 transfers on MPT-verified B−1 state
+//!   spike-host ac2-reverts <count> [lookback]   AC-2 on recent REVERTED real txs (ac2_reverts.rs)
 //!
 //! Read-only RPC only. Every witness is discovered by running the SAME executor over an RPC-backed
 //! lazy DB (R3.5) whose every account/slot is an `eth_getProof` at N verified against N's stateRoot.
+mod ac2_reverts;
 mod rpc;
 
 use alloy_consensus::transaction::SignerRecoverable;
@@ -37,8 +39,12 @@ fn main() {
     match args.get(1).map(String::as_str) {
         Some("ac1") => ac1(),
         Some("ac2") => ac2(args.get(2).map(|s| s.parse().unwrap()).unwrap_or(30)),
+        Some("ac2-reverts") => ac2_reverts::ac2_reverts(
+            args.get(2).map(|s| s.parse().unwrap()).unwrap_or(5),
+            args.get(3).map(|s| s.parse().unwrap()).unwrap_or(60),
+        ),
         _ => {
-            eprintln!("usage: spike-host ac1 | ac2 <count>");
+            eprintln!("usage: spike-host ac1 | ac2 <count> | ac2-reverts <count> [lookback]");
             std::process::exit(2)
         }
     }

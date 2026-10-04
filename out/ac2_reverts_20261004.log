@@ -1,0 +1,45 @@
+# spike-host ac2-reverts 6 — started 2026-10-04T05:58:44Z, rpc https://rpc.moderato.tempo.xyz, read-only, nothing sent
+# earlier attempts (tool fixes only, no semantics): #1 05:56:57Z aborted on HTTP 413 (one large JSON-RPC batch);
+#   #2 05:57:22Z: B=38095080 dex:0x4f8f0218 revert MATCH; B=38095103 hit 'distance to target block exceeds maximum proof window' (lookback 200 too close to the ~250-block window), then aborted on HTTP 413; lookback→60, raw txs fetched one by one, proof-window errors listed as skipped
+ac2-reverts: target 6 reverted TIP-20 transfers; scanning from block 38095357 (head 38095417, lookback 60) then following head
+B=38095357 idx=0 tx="0x08591516ecb50c2a52b9bf68814d78b4a8dff3967beb6f6d697f3ef615c95d0c" class=dex:0x4f8f0218 MATCH status ours=false gas=22620 fee="15" reason="revert 0xaa4bc69a (36 bytes)" prior_txs=0 balances_checked=1 mismatches=[]
+B=38095357 idx=1 tx="0xa795838ed99ab19bb108e68965dbb9ff2a08373c5b5d9b7de317ed817bb7e81a" class=dex:0x4f8f0218 MATCH status ours=false gas=22620 fee="15" reason="revert 0xaa4bc69a (36 bytes)" prior_txs=1 balances_checked=1 mismatches=[]
+B=38095387 idx=0 tx="0xa703dddbdc895f3fa7a747e1252f770c75b92e6011f46b79e83c7fdbc9de7e1a" class=tip20:0x095ea7b3 MATCH status ours=false gas=100000 fee="67" reason="halt OutOfGas(Precompile)" prior_txs=0 balances_checked=1 mismatches=[]
+
+thread 'main' (51686713) panicked at host/src/rpc.rs:65:48:
+batch: "https://rpc.moderato.tempo.xyz/: status code 413"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+# finished 2026-10-04T06:00:35Z
+
+# ---- attempt 4 (attempt 3 above aborted on HTTP 413 in the block-wide prestate prefetch; prefetch now one account / ≤32 slots per request) started 2026-10-04T06:01:19Z
+ac2-reverts: target 6 reverted TIP-20 transfers; scanning from block 38095614 (head 38095674, lookback 60) then following head
+B=38095616 idx=0 tx="0xbcb9a5334a409a3c9e61b13e29ac55542dc25140fd4a2e04cfae6a6c944c8f1f" class=dex:0x4f8f0218 MATCH status ours=false gas=22650 fee="15" reason="revert 0xaa4bc69a (36 bytes)" prior_txs=0 balances_checked=1 mismatches=[]
+B=38095616 idx=1 tx="0xe44d117c8509486f7759875d39c2544cc4ca7189b09eed890ab21f933be3a07c" class=dex:0x4f8f0218 MATCH status ours=false gas=22620 fee="15" reason="revert 0xaa4bc69a (36 bytes)" prior_txs=1 balances_checked=1 mismatches=[]
+B=38095630 idx=2 tx="0x0dedd69c5aa4e8be013c27b062c7b2c9b06651e2be2007f1d9d7519b575fa4af" class=tip20:0x095ea7b3 MATCH status ours=false gas=100000 fee="61" reason="halt OutOfGas(Precompile)" prior_txs=2 balances_checked=1 mismatches=[]
+B=38095634 idx=1 tx="0x12e9cba409128adadb3d96bde45aa441ff11a3385689f5e0acd650f89fdb8166" class=other:0x84a3bb6b MATCH status ours=false gas=295695 fee="178" reason="revert empty (0 bytes)" prior_txs=1 balances_checked=1 mismatches=[]
+B=38095643 idx=5 tx="0xf554a5b1b6f04edf846e411ebdd1fad74376ae713242c1a8b54d5a08fad3a748" class=tip20:0x095ea7b3 MATCH status ours=false gas=100000 fee="61" reason="halt OutOfGas(Precompile)" prior_txs=5 balances_checked=1 mismatches=[]
+B=38095647 idx=1 tx="0xb89eb68caf41302308cfbd205528ff4b2609f3ae8c6aa0ae9cd6f56d336152ef" class=other:0x84a3bb6b MATCH status ours=false gas=295695 fee="178" reason="revert empty (0 bytes)" prior_txs=1 balances_checked=1 mismatches=[]
+B=38095755 idx=0 tx="0x4a54cf348fb774b82c948891944142fab8c143662b4c13e0d5c27fbe03a6350e" class=other:0x3161b7f6 MATCH status ours=false gas=217985 fee="157" reason="revert empty (0 bytes)" prior_txs=0 balances_checked=0 mismatches=[]
+B=38095755 idx=1 tx="0xf7d1bee863b643e72826b85d29c0472cac971b388e9d251d8e9803ffeeda4a4c" class=other:0x3161b7f6 MATCH status ours=false gas=217985 fee="157" reason="revert empty (0 bytes)" prior_txs=1 balances_checked=0 mismatches=[]
+B=38096047 idx=0 tx="0x6df635c2a12d54e9fc9d5291423badeff47e9301b7f875313e8bf5aab5020ffe" class=other:0x67d42a8b MATCH status ours=false gas=31714 fee="39" reason="revert 0xbaf3f0f7 (4 bytes)" prior_txs=0 balances_checked=1 mismatches=[]
+B=38096118 idx=0 tx="0x577d9623d8e41d162f02f64642ad36fa9ea7ff5214e9097aaa52d650bf9f8b95" class=tip20:0xa9059cbb MATCH status ours=false gas=24274 fee="39" reason="revert 0x832f98b5 (100 bytes)" prior_txs=0 balances_checked=2 mismatches=[]
+B=38096142 idx=0 tx="0x2f972a6658eceb5ccca28b917ae251d2f2980adaf681d96d6085cebcccb59a74" class=tip20:0xa9059cbb MATCH status ours=false gas=274274 fee="439" reason="revert 0x832f98b5 (100 bytes)" prior_txs=0 balances_checked=2 mismatches=[]
+B=38096550 idx=0 tx="0x3092ec49d3303409c0abbcfea05ea225025d9cee8b9032d8bb8d39a5e357aab8" class=other:0x67d42a8b MATCH status ours=false gas=31714 fee="39" reason="revert 0xbaf3f0f7 (4 bytes)" prior_txs=0 balances_checked=1 mismatches=[]
+B=38096759 idx=1 tx="0xea31816c025b5f35e500dba19bb2cb136430949e047c8573ad97ea62b77c7144" class=other:0x7dc438a4 MATCH status ours=false gas=217986 fee="157" reason="revert empty (0 bytes)" prior_txs=1 balances_checked=1 mismatches=[]
+B=38097232 idx=1 tx="0x4f99bea0e310b7fe5f4ee50dbc4756a2fe46380b25e2a956f91b0ffe9d7d5a42" class=other:0x7dc438a4 MATCH status ours=false gas=217985 fee="157" reason="revert empty (0 bytes)" prior_txs=1 balances_checked=0 mismatches=[]
+B=38098555 idx=13 tx="0x44f3d9bc5c527d8be95cff47a6622f026f99f3013e3d18e1da0eae0f6e9c34a6" class=tip20:0xa9059cbb MATCH status ours=false gas=101375 fee="61" reason="halt OutOfGas(Precompile)" prior_txs=13 balances_checked=2 mismatches=[]
+B=38098605 idx=3 tx="0xf4ac8d9f36a572535c543604f58112643f8026e8d47e1987a91c94d6aca5ad8f" class=tip20:0xa9059cbb MATCH status ours=false gas=109816 fee="66" reason="halt OutOfGas(Precompile)" prior_txs=3 balances_checked=2 mismatches=[]
+B=38098834 idx=2 tx="0xaa28a7af01d1e7b1a5d62f75e16f1d6c91efda80dca906455bcb9d4fb0b456f5" class=tip20:0xa9059cbb MATCH status ours=false gas=108112 fee="65" reason="halt OutOfGas(Precompile)" prior_txs=2 balances_checked=2 mismatches=[]
+B=38098866 idx=0 tx="0x8d237212182bed147faea6d7770aa7712f5f72be68abc7f07356a371270e2ca2" class=tip20:0xa9059cbb MATCH status ours=false gas=109812 fee="66" reason="halt OutOfGas(Precompile)" prior_txs=0 balances_checked=2 mismatches=[]
+AC-2 reverts: matched 18 / 18 reverted txs (6 TIP-20 transfers, 6 matched) (scanned 2131 blocks, skipped 1123)
+# finished 2026-10-04T06:34:43Z
+
+# ---- summary (attempt 4 = the result; JSON: out/ac2_reverts/ac2_reverts.json)
+# 18 / 18 reverted real Moderato txs MATCH (status, gasUsed, logs exact, fee token, fee charged, revert data vs callTracer,
+#   21 post balances MPT-verified at B; 3 balances not compared because a later tx in B names the owner).
+# 6 are TIP-20 transfer(): 4 x out of gas (gas limits 101,375-109,816, receiver balance 0 before and after, gasUsed = gas limit)
+#   and 2 x InsufficientBalance(uint256,uint256,address) (0x832f98b5). Other reverts: TIP-20 approve OOG x2,
+#   StablecoinDEX UnknownFunctionSelector(bytes4) (0xaa4bc69a) x2, non-precompile contracts x8 (empty revert x6, 0xbaf3f0f7 x2).
+# 12 type-2 + 6 legacy txs; 31 earlier txs of the same blocks were executed first (each also matched its receipt status and gasUsed).
+# Coverage: 2,131 blocks inspected; 1,122 skipped because the scanner fell >150 blocks behind head (proof window ~250 blocks),
+#   1 receipts timeout. Skipped blocks were never looked at (selection by time, not by result). Mismatches: none.

@@ -6,6 +6,8 @@
 //            Bond/policy only if missing (read from chain first). SWORN_E2E_DRY_RUN=1 = reads only,
 //            prints the plan, sends nothing. Run by scripts/moderato-run.sh (under with-keys.sh).
 // Every result is printed as `CHECK <id> PASS|FAIL <detail>`; scripts/check-e2e.sh asserts the set.
+// A challenger that dies / times out / loses its output prints `CHECK <id> HARNESS-FAILURE <reason>`
+// instead (sdk/test/harness.ts): that is a broken run, never a contract outcome.
 // Every transaction is printed as `TX <label> <hash> <explorer link>` on Moderato.
 //
 // Keys come ONLY from env, never printed:
@@ -23,9 +25,10 @@ import { fileURLToPath } from 'node:url'
 import { createWalletClient, getAddress, http, keccak256, type Address, type Hex } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import {
-  DEFAULT_GAS_LIMIT, GUEST_VKEY, PATH_USD, RECEIVE_POLICY_GUARD, SwornCheckError, TIP403_REGISTRY, challenge, encodeTransfer, preflight, publicClientFor, runJson,
-  swornAbi, swornChain, tip20Abi, tip403Abi, verifyResponse, type PreflightParams, type PreflightResponse,
+  ChallengerHarnessError, DEFAULT_GAS_LIMIT, GUEST_VKEY, PATH_USD, RECEIVE_POLICY_GUARD, SwornCheckError, TIP403_REGISTRY, challenge, encodeTransfer, preflight, publicClientFor, runJson,
+  swornAbi, swornChain, tip20Abi, tip403Abi, verifyResponse, type ChallengeResult, type PreflightParams, type PreflightResponse,
 } from '../src/index.ts'
+import { formatCheck, honestRevertsCheck } from './harness.ts'
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const TARGET = (process.env.SWORN_E2E_TARGET ?? 'local') as 'local' | 'moderato'
@@ -57,8 +60,13 @@ const wc = (a: ReturnType<typeof acct>) => createWalletClient({ account: a, chai
 
 let failures = 0
 function check(id: string, ok: boolean, detail: string) {
-  console.log(`CHECK ${id} ${ok ? 'PASS' : 'FAIL'} ${detail}`)
+  console.log(formatCheck({ id, status: ok ? 'PASS' : 'FAIL', detail }))
   if (!ok) failures++
+}
+/** The challenger process died / timed out / lost its output: not a contract outcome (see harness.ts). */
+function harnessFailure(id: string, detail: string) {
+  console.log(formatCheck({ id, status: 'HARNESS-FAILURE', detail }))
+  failures++
 }
 const log = (s: string) => console.log(`  ${new Date().toISOString().slice(11, 19)} ${s}`)
 const tx = (label: string, h: string | undefined) => { if (h) console.log(`TX ${label} ${h} ${MOD ? EXPLORER + h : '(local chain, no explorer)'}`) }
@@ -290,23 +298,29 @@ async function main() {
       let phases: string[] = []
       const ch = await challenge(r.response, { rpcUrl: RPC, witnessPath: wit.path, proofOut: join(WORK, 'dishonest.proof.json'),
         onProgress: (e) => { if (e.phase !== 'log') { phases.push(e.phase); log(`phase ${e.phase}`) } else if (/PROVE|verify ok|pv match|fields that differ|submitting/.test(e.line)) log(e.line) } })
-        .catch((e) => ({ ok: false, txHash: undefined, exitCode: -1, result: { error: String(e) } }))
+        .catch((e): ChallengeResult => e instanceof ChallengerHarnessError ? e.result : { ok: false, txHash: undefined, exitCode: -1, result: { error: String(e) } })
       const after = await pc.readContract({ address: PATH_USD, abi: tip20Abi, functionName: 'balanceOf', args: [client.address] })
       log(`challenge result: ${JSON.stringify(ch.result)}`)
       tx('S-2-challenge', ch.txHash)
-      check('S-2.challengePays', ch.ok && ch.result?.slashedEvent === true && after - before === 500_000_000n,
-        `challenge tx ${ch.txHash} status ${ch.result?.status}, Slashed event ${ch.result?.slashedEvent}, client pathUSD +${after - before} (coverage 500000000), proving ${(ch.result?.proveWallSecs ?? 0).toFixed?.(0)} s, total ${((Date.now() - t0) / 1000).toFixed(0)} s, phases ${phases.join('>')}`)
       const key = await pc.readContract({ address: dep.sworn, abi: swornAbi, functionName: 'reservationKey', args: [r.response.server, r.response.digest] })
       const st = (await pc.readContract({ address: dep.sworn, abi: swornAbi, functionName: 'reservations', args: [key] }))[2]
-      check('S-2.slashedState', st === 2, `reservation status ${st} (2 = Slashed)`)
+      if (ch.harnessFailure) {
+        harnessFailure('S-2.challengePays', `challenger produced no outcome — ${ch.harnessFailure}; client pathUSD +${after - before}; re-run`)
+        harnessFailure('S-2.slashedState', `no challenge was made (challenger failed); reservation status ${st}`)
+      } else {
+        check('S-2.challengePays', ch.ok && ch.result?.slashedEvent === true && after - before === 500_000_000n,
+          `challenge tx ${ch.txHash} status ${ch.result?.status}, Slashed event ${ch.result?.slashedEvent}, client pathUSD +${after - before} (coverage 500000000), proving ${(ch.result?.proveWallSecs ?? 0).toFixed?.(0)} s, total ${((Date.now() - t0) / 1000).toFixed(0)} s, phases ${phases.join('>')}`)
+        check('S-2.slashedState', st === 2, `reservation status ${st} (2 = Slashed)`)
+      }
       // honest answer: a real proof of the honest question; challenge simulation must revert AnswerCorrect
       if (!honestResp || !honestWitness) check('S-2.honestReverts', false, 'no honest response/witness from S-1')
       else {
         const hc = await challenge(honestResp, { rpcUrl: RPC, witnessPath: honestWitness, dryRun: true, proofOut: join(WORK, 'honest.proof.json'),
           onProgress: (e) => { if (e.phase === 'log' && /PROVE|dry-run|fields that differ/.test(e.line)) log(e.line) } })
         log(`honest challenge result: ${JSON.stringify(hc.result)}`)
-        check('S-2.honestReverts', hc.result?.dryRun?.reverted === true && hc.result?.dryRun?.error === 'AnswerCorrect',
-          `honest challenge with a real Groth16 proof (${(hc.result?.proveWallSecs ?? 0).toFixed?.(0)} s): simulation ${hc.result?.dryRun?.reverted ? 'reverted ' + hc.result?.dryRun?.error : 'did NOT revert'}; nothing sent`)
+        const c = honestRevertsCheck(hc)
+        if (c.status === 'HARNESS-FAILURE') harnessFailure(c.id, c.detail)
+        else check(c.id, c.status === 'PASS', c.detail)
       }
     }
     // ======================= S-4 =======================

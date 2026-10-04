@@ -1,0 +1,4 @@
+Sworn 0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6 (codehash ok) chain 42431 head 38099122 time 2026-10-04T06:35:39Z / 2026-10-04 15:35:39 JST; CHALLENGE_PERIOD 86400 s, UNBOND_DELAY 90000 s; mode withdraw (read-only: nothing is sent)
+PLAN withdraw: actor roles.client 0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F; free 0 locked 0 unbondStart 0 (not unbonding: run the unbond step first)
+  cast send 0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6 "withdraw()"   # from 0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F; simulate now: reverts Execution reverted for an unknown reason.
+DONE withdraw (read-only) verify-failures=0

@@ -177,10 +177,21 @@ Two more slashes were recorded live for the demo video, on the same day:
 
 - **Moderato's next hardfork, T12, activates at 2026-10-08 14:00 UTC (23:00 JST)** (`1791468000`). The answerer refuses on a schedule
   it does not know, so it stops answering at T12 until the guest is checked against it.
-- The run harness treats a challenger that dies mid-proof as "did not revert"; it should report it as a
-  harness failure.
-- The p384 substitute patched into Tempo is still linked into the guest (not on the T11 path).
-- No reverting real transaction is in the 40-transaction replay.
+- The p384 substitute patched into Tempo is still linked into the guest. It is not on the T11 path, and
+  removing it would change `GUEST_VKEY`, so it stays until the next redeploy
+  ([`docs/notes/p384-substitute.md`](docs/notes/p384-substitute.md)).
+- `release`, `beginUnbond` and `withdraw` have not been exercised on Moderato yet. They are prepared in
+  `scripts/moderato-release-withdraw.sh`, which only reads unless it is run with `--send`.
+
+Fixed 2026-10-04:
+- A challenger that dies, times out or loses its output is now reported as `HARNESS-FAILURE`
+  (gate exit 3), not as "did not revert" (`sdk/test/harness-selftest.ts`). Re-gated, the
+  2026-10-03 Moderato run's `S-2.honestReverts` now reads as a harness failure. Its recheck with the
+  same proof reverted `AnswerCorrect`.
+- Reverting transactions: **18 / 18** recent reverted Moderato transactions match their receipts when
+  replayed the same way as AC-2 (`spike-host ac2-reverts`, `out/ac2_reverts_20261004.log`). Six are
+  TIP-20 transfers: 4 ran out of gas with ~100–110k gas limits to empty receivers, and 2 hit
+  `InsufficientBalance`.
 
 ## Prior art
 

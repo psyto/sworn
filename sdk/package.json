@@ -9,7 +9,8 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "e2e": "node test/e2e.ts"
+    "e2e": "node test/e2e.ts",
+    "selftest:harness": "node test/harness-selftest.ts"
   },
   "dependencies": {
     "mppx": "^0.13.1",

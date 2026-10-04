@@ -13,11 +13,13 @@
 #   SWORN_CHALLENGER_KEY SWORN_HONEST_KEY SWORN_DISHONEST_KEY DEMO_CLIENT_KEY
 # MPP_SECRET_KEY: from env, else generated for this run (kept in memory only).
 # Log: out/e2e/moderato-<UTC timestamp>.log, then gated with scripts/check-e2e.sh --set moderato.
+# Gate exit 3 = HARNESS-FAILURE: the challenger died/timed out/lost its output; no contract outcome
+# was observed for those checks (selftest: node sdk/test/harness-selftest.ts).
 # Server ports: SWORN_E2E_PORTS (default 8787,8788).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 case "${1:-}" in
-  -h|--help) sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+  -h|--help) sed -n '2,18p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
   --dry-run) DRY=1 ;;
   "") DRY= ;;
   *) echo "unknown argument $1 (try --help)"; exit 2 ;;

@@ -1,0 +1,15 @@
+Sworn 0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6 (codehash ok) chain 42431 head 38099126 time 2026-10-04T06:35:41Z / 2026-10-04 15:35:41 JST; CHALLENGE_PERIOD 86400 s, UNBOND_DELAY 90000 s; mode release (read-only: nothing is sent)
+Reserved events on Sworn since block 37952107: 7
+  Active   server honest digest 0x68f8b9f5d5cc398a3d1695b733ad8069013f3bd6286b76a694e74eed60c12453 coverage 500000000 expiry 2026-10-04T06:48:07Z releasable after 2026-10-04T06:48:07Z / 2026-10-04 15:48:07 JST (reserve tx 0xb2bf1aec2cf0214b7b266c01984b3d27974b9f959d8c211c6008800bea6c7529)
+  Slashed  server dishonest digest 0x65311be71c61d321e2e4b7d7a3e9ee6ed9acbdfb8a5a13e6427c61b2a41275a6 coverage 500000000 expiry 2026-10-04T06:48:33Z  (reserve tx 0x08f614340b1a6a7fe07dfc3923341332a33d9e9174e41c9847372a11cdb20350)
+  Active   server honest digest 0x2089294bf5982926781b4d6af9941fb437f547cd5e5479f50207203df332a8ee coverage 500000000 expiry 2026-10-04T08:43:50Z releasable after 2026-10-04T08:43:50Z / 2026-10-04 17:43:50 JST (reserve tx 0xa82ef08f2a55a112b41cd629c51296913f657912b4e19cdf453babf1cb233368)
+  Active   server honest digest 0xa8af6a6b4921a1a57ee4457790e3aa73265f806b70241e28f2a31563633f11fd coverage 500000000 expiry 2026-10-04T12:09:19Z releasable after 2026-10-04T12:09:19Z / 2026-10-04 21:09:19 JST (reserve tx 0x07d7656bc70012d011900259863f61c33e5b06478e5fd4aff13e497426049c45)
+  Slashed  server dishonest digest 0x031d8ad5bacfddd01284606ddd5065b41ef751181c22f67a49eeba40ddea4c93 coverage 500000000 expiry 2026-10-04T12:09:49Z  (reserve tx 0x5ffec9c634f29ed1679a75cd8279a38339ddca460b4718132b3c959e24071532)
+  Active   server honest digest 0x25f5d59dcbec65bbb793c85295fe5d08bfa18242b0f27e158c545998ac5c2d26 coverage 500000000 expiry 2026-10-04T13:12:08Z releasable after 2026-10-04T13:12:08Z / 2026-10-04 22:12:08 JST (reserve tx 0x5c06912ec295019d0f369a2ba2adcea9f878aa45c032b31c1d94a89606ec4643)
+  Slashed  server dishonest digest 0x9e08f8dacde81e916d1c92a383f2960d4f15304ec4172fec6abca827e4ee9349 coverage 500000000 expiry 2026-10-04T13:12:34Z  (reserve tx 0xaa1daae5d552bcd7580a080a34f89bce5ddc4c2256f9cbb2bccaffe03464e45d)
+  servers(honest 0xa5a4889b1693CBFDC6d0b701a128F5bBEEcb84f5) free 0 locked 2000000000 unbondStart 0; balance 998000038174
+  servers(dishonest 0xD49c5ef3aD21b42f664ba65a7694D56C47535261) free 500000000 locked 0 unbondStart 0; balance 998000028507
+  servers(client 0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F) free 0 locked 0 unbondStart 0; balance 1001499929797
+  Sworn 0x20C0000000000000000000000000000000000000 balance 2500000000
+PLAN release: 0 reservation(s), sent from roles.deployer 0x05B4E2B72c173C47213fA3EaC33a9bcb1af25901 (release is permissionless)
+DONE release (read-only) verify-failures=0
