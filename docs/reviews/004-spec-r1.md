@@ -1,0 +1,25 @@
+## Verified
+
+- §1 is materially right, with one qualification: `verifierConfig` is calldata to `submitBatch`, callable by a sequencer, and its hash is in the quorum-signed settlement attestation. It is therefore selected per batch by the sequencer quorum—not unilaterally by one sequencer. [ZonePortal.sol:1313-1327](spikes/zone-spf/zones/crates/contracts/src/runtime/tempo/ZonePortal.sol:1313), [ZonePortal.sol:1482-1522](spikes/zone-spf/zones/crates/contracts/src/runtime/tempo/ZonePortal.sol:1482)
+
+- Settlement and payout are separate, but “one condition” understates B. `submitBatch` enqueues a withdrawal hash-chain slot; `processWithdrawals` can only dequeue FIFO head slots. [ZonePortal.sol:1090-1125](spikes/zone-spf/zones/crates/contracts/src/runtime/tempo/ZonePortal.sol:1090), [ZonePortal.sol:1442-1455](spikes/zone-spf/zones/crates/contracts/src/runtime/tempo/ZonePortal.sol:1442) Empty batches consume no slot, so batch index and queue-slot index are not interchangeable. [WithdrawalQueueLib.sol:13-18](spikes/zone-spf/zones/crates/contracts/src/runtime/libraries/WithdrawalQueueLib.sol:13), [WithdrawalQueueLib.sol:53-61](spikes/zone-spf/zones/crates/contracts/src/runtime/libraries/WithdrawalQueueLib.sol:53)
+
+- **BLOCKER — B’s proposed ZK proof cannot currently be “for the same batch digest.”** Spec 003 hard-binds a `SwornZoneVerifier` address and `"sworn-sp1-groth16-v1"` config, and aborts for any other config. [003-zone-verifier.md:53-56](docs/specs/003-zone-verifier.md:53), [003-zone-verifier.md:75-83](docs/specs/003-zone-verifier.md:75) B instead settles using Nitro/`0x01`. [004-tee-plus-zk.md:53-57](docs/specs/004-tee-plus-zk.md:53) A standalone finalizer needs a new statement that binds an immutable, Nitro-settled portal batch commitment—not the present verifier/config digest.
+
+- **BLOCKER — no defined binding prevents a proof-for-B from unlocking A.** The portal stores only queue hashes/indices, while settlement fields are overwritten global state or emitted in events. [ZonePortal.sol:580-589](spikes/zone-spf/zones/crates/contracts/src/runtime/tempo/ZonePortal.sol:580), [ZonePortal.sol:1430-1455](spikes/zone-spf/zones/crates/contracts/src/runtime/tempo/ZonePortal.sol:1430) B must store an immutable per-batch commitment, batch→optional-slot mapping, and define exact equality checks. A range proof must commit every included batch (or a Merkle/vector commitment); endpoints/ranges permit omission or substitution.
+
+- **MAJOR — G4 is not achieved.** Existing `pause()` is discretionary (admin, sequencer, or guardian), pauses deposits too, expires after 30 days, and admin can resume. It is neither permissionless nor proof-triggered nor payout-only. [ZonePortal.sol:622-645](spikes/zone-spf/zones/crates/contracts/src/runtime/tempo/ZonePortal.sol:622) A matching finalizer normally rejects a differing proof; B lacks a separate on-chain “prove mismatch” path that verifies the same inputs and records conflicting outputs. Without it, “anyone can post it” is false.
+
+- **MAJOR — G2/G3 are conditional, not delivered.** A sequencer/operator can withhold the witness/ZK indefinitely. The research finds outsiders cannot obtain zone blocks, state witness, or genesis; the only shadow prover is operator-configured. [moderato-zone-feasibility-20261004.md:121-142](docs/research/moderato-zone-feasibility-20261004.md:121), [moderato-zone-feasibility-20261004.md:152-160](docs/research/moderato-zone-feasibility-20261004.md:152) Thus permissionless *submission* does not make proving permissionless. FIFO also means one unfinalized head slot blocks every later payout.
+
+- **MAJOR — the “guardian exception” defeats G1/G3** if it releases funds without ZK: it gives guardians a new unilateral payout-approval path. “Keep waiting” preserves safety but makes the withdrawal lock indefinite. Direct withdrawal, deposit-bounceback, and later `claimRefund` payouts must all be covered; refunds are transferable outside `processWithdrawals`. [ZonePortal.sol:1129-1139](spikes/zone-spf/zones/crates/contracts/src/runtime/tempo/ZonePortal.sol:1129), [ZonePortal.sol:1215-1247](spikes/zone-spf/zones/crates/contracts/src/runtime/tempo/ZonePortal.sol:1215)
+
+## Inferred / reporting issues
+
+- **MINOR:** §004 attributes “25.5M cycles, 701 s” to spec 003, but spec 003 reports 22,659,079 cycles and 706.6 s. [004-tee-plus-zk.md:48-50](docs/specs/004-tee-plus-zk.md:48), [003-zone-verifier.md:3-6](docs/specs/003-zone-verifier.md:3)
+
+- The “Tempo proposal, not deployable by Sworn alone” framing is honest and supported: Zone creation is owner-gated and Sworn cannot create a Moderato Zone. [moderato-zone-feasibility-20261004.md:165-174](docs/research/moderato-zone-feasibility-20261004.md:165) But “smaller than it sounds” is not.
+
+The single missing credibility piece is a complete portal-level state machine: immutable settlement commitments; exact ZK statement; batch/slot/range mapping; mismatch proof; payout-only freeze/resolution; witness availability; and migration semantics.
+
+VERDICT: CHANGES
