@@ -1,53 +1,53 @@
 1
-00:00:00,000 --> 00:00:02,533
+00:00:00,000 --> 00:00:02,512
 This is Sworn's public page.
 
 2
-00:00:02,583 --> 00:00:09,767
-Everything on it is read live from Moderato, Tempo's testnet, and nothing is signed.
+00:00:02,562 --> 00:00:10,198
+The evidence on it is read live from Moderato, Tempo's testnet, and nothing is signed.
 
 3
-00:00:09,817 --> 00:00:14,933
+00:00:10,248 --> 00:00:15,322
 Tempo's own Zone batch verifier ran inside a zero-knowledge VM,
 
 4
-00:00:14,983 --> 00:00:21,650
+00:00:15,372 --> 00:00:21,983
 and a contract with the exact signature of Tempo's verifier checked the proof.
 
 5
-00:00:21,700 --> 00:00:23,717
+00:00:22,033 --> 00:00:24,033
 Here is that transaction.
 
 6
-00:00:23,767 --> 00:00:27,850
+00:00:24,083 --> 00:00:28,132
 It succeeded, and its event carries the Zone,
 
 7
-00:00:27,900 --> 00:00:32,500
+00:00:28,182 --> 00:00:32,743
 the height and the digest the proof committed to.
 
 8
-00:00:32,550 --> 00:00:36,633
+00:00:32,793 --> 00:00:36,843
 The page ran this check when it loaded;
 
 9
-00:00:36,683 --> 00:00:42,833
+00:00:36,893 --> 00:00:42,991
 I run it again, live: two read-only calls with the same proof.
 
 10
-00:00:42,883 --> 00:00:44,900
+00:00:43,041 --> 00:00:45,041
 The real batch: true.
 
 11
-00:00:44,950 --> 00:00:50,583
+00:00:45,091 --> 00:00:50,677
 Change one field, the height, and the proof no longer fits.
 
 12
-00:00:50,633 --> 00:00:53,683
+00:00:50,727 --> 00:00:53,752
 The same transaction, on Tempo's explorer.
 
 13
-00:00:53,733 --> 00:01:01,950
+00:00:53,802 --> 00:01:01,950
 One limit, up front: this batch comes from Tempo's integration tests, not from a live Zone.
 
 14
@@ -103,29 +103,33 @@ This question makes a good demo because anyone can check it with a simulation.
 The point is the proof underneath.
 
 27
-00:02:08,000 --> 00:02:09,538
+00:02:08,000 --> 00:02:09,396
 The honest limits.
 
 28
-00:02:09,588 --> 00:02:12,185
+00:02:09,446 --> 00:02:11,807
 This is testnet and unaudited.
 
 29
-00:02:12,235 --> 00:02:16,421
+00:02:11,857 --> 00:02:15,664
 The Zone batch comes from Tempo's integration tests.
 
 30
-00:02:16,471 --> 00:02:21,185
+00:02:15,714 --> 00:02:20,004
 The bond caps what a client can be paid,
 
 31
-00:02:21,235 --> 00:02:25,421
+00:02:20,054 --> 00:02:23,861
 and there are no users or revenue yet.
 
 32
-00:02:25,471 --> 00:02:32,832
-Everything you saw is open source, and the public page re-checks it from chain.
+00:02:23,911 --> 00:02:26,754
+Everything you saw is open source,
 
 33
-00:02:32,882 --> 00:02:34,950
+00:02:26,804 --> 00:02:33,021
+and the public page reads the evidence from chain and re-runs the check.
+
+34
+00:02:33,071 --> 00:02:34,950
 Sworn: Tempo's execution, proven.

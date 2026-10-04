@@ -61,7 +61,7 @@ makes `eth_call` / receipt reads to rpc.moderato.tempo.xyz.]**
 The click re-runs them and the "Called at" time changes. Decided: (a), narrated as "again, live", with a
 burned-in label saying the page also ran the check on load; the recorder requires "Called at" to change.
 
-> This is Sworn's public page. Everything on it is read live from Moderato, Tempo's testnet, and nothing
+> This is Sworn's public page. The evidence on it is read live from Moderato, Tempo's testnet, and nothing
 > is signed. Tempo's own Zone batch verifier ran inside a zero-knowledge VM, and a contract with the exact
 > signature of Tempo's verifier checked the proof. Here is that transaction. It succeeded, and its event
 > carries the Zone, the height and the digest the proof committed to. The page ran this check when it
@@ -112,7 +112,7 @@ page's URL, psyto.github.io/sworn.]**
 
 > The honest limits. This is testnet and unaudited. The Zone batch comes from Tempo's integration
 > tests. The bond caps what a client can be paid, and there are no users or revenue yet. Everything you
-> saw is open source, and the public page re-checks it from chain. Sworn: Tempo's execution, proven.
+> saw is open source, and the public page reads the evidence from chain and re-runs the check. Sworn: Tempo's execution, proven.
 
 ---
 
