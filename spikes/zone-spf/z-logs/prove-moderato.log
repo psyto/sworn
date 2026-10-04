@@ -13,3 +13,10 @@ warning: unused import: `num::NonZeroU32`
    |     ^^^^^^^^^^^^^^^
 
 native host public values: 6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f311337e71b07cb19399d06f78b6d7c15f3f52264ea0738588344a8c15e89c951bd
+fixture written: contracts/test/vectors/zone-hardfork.json
+cycles(total_instruction_count): 25531739
+PROVE groth16 wall: 816.024617791s
+proof pv match: true
+verify ok (211.361916ms)
+         19931070464  maximum resident set size
+      17490731686933  cycles elapsed

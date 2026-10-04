@@ -10,7 +10,8 @@ that engine:
    SP1, and the proof is bound to the same inputs Tempo's `IVerifier` receives from a ZonePortal.
    `SwornZoneVerifier` is deployed on Moderato. Tempo's docs say ZK proving for Zones *"is not
    implemented"*: today the reference verifier returns `true` without checking execution, and the
-   native verifier is a Nitro TEE attestation.
+   native verifier is a Nitro TEE attestation. **On 2026-10-04 a contract on Moderato verified a real
+   Zone batch proof** ([tx](https://explore.testnet.tempo.xyz/tx/0x9aa938e8c311c0a9b62c50a312129dde4cc1223c45f3b72ff41ff89503d5dfbd)).
 2. **Bonded answers (the demo).** A server sells an answer about a TIP-20 transfer over
    [MPP](https://mpp.dev) and reserves bond behind it. A wrong answer is proven false by re-running
    **Tempo's own EVM (`tempo-revm`)** inside SP1 against Tempo's own block hash, and the bond pays the
@@ -99,7 +100,8 @@ no access key), and a transaction Tempo would reject before execution is itself 
 |---|---|
 | four real batches from Tempo's zones integration tests | guest public values equal the native host's; batch outputs equal the integration tests' own; 19.1M–25.5M cycles |
 | rejection | a tampered deposit, and each of the six public inputs changed one at a time, are rejected by Tempo's own code |
-| proving | `hardfork_t13_recovery`: local Groth16 **877 s**, peak 21.7 GB |
+| proving | `hardfork_t13_recovery`: 25.5M cycles, local Groth16 **816 s**, peak 19.9 GB |
+| on Moderato | `verify` returns true for the real proof and reverts when one field changes; `attest` emitted `ZoneBatchVerified` for zone 1, height 10 ([`0x9aa9…dfbd`](https://explore.testnet.tempo.xyz/tx/0x9aa938e8c311c0a9b62c50a312129dde4cc1223c45f3b72ff41ff89503d5dfbd), block 38071845, 260,152 gas) |
 | contract | every digest field, the immutables (via clone deployments), the chain id, the proof and the vkey are each shown to matter, against the **real** SP1 Groth16 verifier |
 
 **Bonded answers** (2026-10-03; logs in `out/`):
@@ -134,8 +136,6 @@ Two more slashes were recorded live for the demo video, on the same day:
 
 ## What is not done
 
-- **The Zone proof has not yet been sent on chain.** `SwornZoneVerifier` is deployed; the real proof for
-  its address and the `attest` transaction come next (`scripts/zone-prove.sh`, `scripts/zone-attest.sh`).
 - **No TEE + ZK design yet.** How a ZK proof would sit alongside Tempo's Nitro attestation (one verifier
   checking both, what happens when they disagree or one is late, who pays for proving) is unwritten.
 

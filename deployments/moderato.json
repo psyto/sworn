@@ -90,6 +90,23 @@
       "pinnedGenesisArtifact": "spikes/zone-spf/genesis/hardfork_t13_recovery.genesis.json"
     },
     "noOwnerOnDeployedCode": "OK (2837 bytes sans metadata, STATICCALL x1, forbidden opcodes 0)",
-    "deviations": "D1 parentChainId=1337 dev chain; D2 no portal caller check; D3 one pinned zone+genesis artifact; D4 write-nothing demonstration. Batch = hardfork_t13_recovery from Tempo zones integration tests (zones ac49071f), not a Moderato zone."
+    "deviations": "D1 parentChainId=1337 dev chain; D2 no portal caller check; D3 one pinned zone+genesis artifact; D4 write-nothing demonstration. Batch = hardfork_t13_recovery from Tempo zones integration tests (zones ac49071f), not a Moderato zone.",
+    "attest": {
+      "tx": "0x9aa938e8c311c0a9b62c50a312129dde4cc1223c45f3b72ff41ff89503d5dfbd",
+      "block": 38071845,
+      "status": 1,
+      "gasUsed": 260152,
+      "from": "roles.deployer",
+      "event": "ZoneBatchVerified(zoneId 1, nextZoneHeight 10, prevBlockHash 0x578542fc\u2026b569, nextBlockHash 0xc517a760\u20268065, digest 0x1337e71b\u202651bd)",
+      "batch": "hardfork_t13_recovery (Tempo zones integration tests, dev chain 1337)",
+      "fixture": "contracts/test/vectors/zone-hardfork.json",
+      "proving": {
+        "cycles": 25531739,
+        "groth16WallSecs": 816.0,
+        "peakRssGB": 19.9,
+        "log": "spikes/zone-spf/z-logs/prove-moderato.log"
+      },
+      "readOnlyChecks": "immutables match fixture; attestationDigest matches; eth_call verify(real proof)=true; nextZoneHeight+1 reverts InvalidProof()"
+    }
   }
 }

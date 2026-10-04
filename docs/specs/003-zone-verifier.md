@@ -230,7 +230,7 @@ Logs are in `spikes/zone-spf/z-logs/`.
 - `contracts/scripts/gate.sh` passes: 49/49 required, 64 tests run (59 existing + 5 new). Log: `gate.log`.
 - Sworn's compiled runtime keccak is still `0x9082880d…5563`, the deployed codehash.
 
-## Results (AC-Z5, in progress)
+## Results (AC-Z5)
 
 - **Deployed on Moderato, 2026-10-04.**
   - `SwornZoneVerifier` at `0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De`, tx `0x1a0c3bda046cffabcd888588f832f84f9eccbbe2ac73d6e1a070adfe502b189b`.
@@ -238,4 +238,13 @@ Logs are in `spikes/zone-spf/z-logs/`.
   - The runtime codehash is `0xefc8799a…14ab`.
   - `no-owner.sh --zone-verifier` passes on the deployed code (2,837 bytes, one STATICCALL, no forbidden opcodes).
   - Recorded in `deployments/moderato.json` under `SwornZoneVerifier`.
-- **Pending:** the real proof for this address (`scripts/zone-prove.sh`), the `eth_call verify` and mutated-field checks, and the `attest` transaction.
+- **Real proof for this address:** 25,531,739 cycles, Groth16 816.0 s, peak RSS 19.9 GB; public values equal the
+  native host's (`spikes/zone-spf/z-logs/prove-moderato.log`, fixture `contracts/test/vectors/zone-hardfork.json`).
+- **Read-only checks on Moderato** (`scripts/zone-attest.sh`):
+  - the immutables match the fixture;
+  - `attestationDigest` = `0x1337e71b…51bd` matches;
+  - `eth_call verify` with the real proof returns true;
+  - with `nextZoneHeight+1` it reverts `InvalidProof()`.
+- **`attest` sent, 2026-10-04:** tx `0x9aa938e8c311c0a9b62c50a312129dde4cc1223c45f3b72ff41ff89503d5dfbd`, block 38071845,
+  status 1, gasUsed 260,152. One `ZoneBatchVerified(1, 10, 0x578542fc…b569, 0xc517a760…8065, 0x1337e71b…51bd)` from the
+  verifier, matching the batch's native output.

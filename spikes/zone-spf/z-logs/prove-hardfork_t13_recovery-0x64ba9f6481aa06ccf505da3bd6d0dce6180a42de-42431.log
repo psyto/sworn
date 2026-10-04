@@ -52,3 +52,39 @@ publicValues match native host: PASS
 setup wall: 3.385553583s
 vkey(bytes32): 0x006c15314d326e27d72c1c1f83fd2bc0eaf5fb2053e2fe5b3e9415a2d037293d
 stderr: WARNING: Using insecure random number generator.
+Setting environment variables took 613.667µs
+Reading R1CS took 12.452154166s
+Reading proving key took 2.750812167s
+Reading witness file took 1.901209ms
+Deserializing JSON data took 19.739458ms
+Generating witness took 371.582583ms
+[90m11:00:38[0m DBG constraint system solver done [36mnbConstraints=[0m15972262 [36mtook=[0m3766.212583
+[90m11:01:09[0m DBG prover done [36macceleration=[0mnone [36mbackend=[0mgroth16 [36mcurve=[0mbn254 [36mnbConstraints=[0m15972262 [36mtook=[0m31255.945708
+Generating proof took 35.027223417s
+[90m11:01:09[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m11:01:09[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m11:01:09[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m11:01:09[0m DBG verifier done [36mbackend=[0mgroth16 [36mcurve=[0mbn254 [36mtook=[0m1.143875
+PROVE groth16 wall: 816.024617791s
+proof pv match: true
+verify ok (211.361916ms)
+fixture written: /Users/hiroyusai/src/sworn/spikes/zone-spf/zin/prove-0x64ba9f6481aa06ccf505da3bd6d0dce6180a42de-42431/groth16.json
+      833.47 real      5144.99 user       547.77 sys
+         19931070464  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            57565787  page reclaims
+                 350  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+               11880  signals received
+             4109416  voluntary context switches
+            23679656  involuntary context switches
+      52265013943135  instructions retired
+      17490731686933  cycles elapsed
+         86457236552  peak memory footprint
+EXIT 0
