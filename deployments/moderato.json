@@ -187,5 +187,21 @@
       },
       "readOnlyChecks": "immutables, verifierConfig and genesis match fixture; attestationDigest matches; eth_call verify(real proof)=true; nextZoneHeight+1 reverts InvalidProof()"
     }
+  },
+  "bondLifecycle": {
+    "actor": "roles.client (own unused server entry; beginUnbond() takes no amount and retires a server)",
+    "approve": "0xe6dca06d2b8dc00e2f3e5d2d764298e4703cb81a50fd64524454d30ccadd7660",
+    "bond": {
+      "tx": "0x752572d2bd1a133da9ec374f8077c771a03db648e4555e5904b7b196511a41ac",
+      "block": 38113269,
+      "amount": "1000000"
+    },
+    "beginUnbond": {
+      "tx": "0xb0d13b79adedb0d3ea259e5ebbc6d2b3d9c07fb90f6de93efeb3229190cd7b1b",
+      "block": 38113272,
+      "unbondStart": 1791104213
+    },
+    "earliestWithdraw": "2026-10-05T09:56:53Z (2026-10-05 18:56:53 JST)",
+    "log": "out/release-withdraw/unbond-20261004T085647Z-sent.log"
   }
 }

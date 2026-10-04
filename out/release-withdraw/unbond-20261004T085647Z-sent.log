@@ -1,0 +1,20 @@
+Sworn 0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6 (codehash ok) chain 42431 head 38113263 time 2026-10-04T08:56:48Z / 2026-10-04 17:56:48 JST; CHALLENGE_PERIOD 86400 s, UNBOND_DELAY 90000 s; mode unbond SEND
+PLAN unbond: actor roles.client 0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F; servers() free 0 locked 0 unbondStart 0; receive policy for Sworn→actor in 0x20C0000000000000000000000000000000000000: [true,0]
+  cast send 0x20C0000000000000000000000000000000000000 "approve(address,uint256)" 0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6 1000000   # from 0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F
+  cast send 0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6 "bond(address,uint256)" 0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F 1000000   # from 0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F; bonds 1000000 (= 1 pathUSD)
+  cast send 0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6 "beginUnbond()"   # from 0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F; simulate now: reverts NoBond until bonded (expected)
+  withdraw becomes possible at (beginUnbond block time) + 90000 s; if sent now: 2026-10-05T09:56:48Z / 2026-10-05 18:56:48 JST
+TX approve 0xe6dca06d2b8dc00e2f3e5d2d764298e4703cb81a50fd64524454d30ccadd7660 https://explore.testnet.tempo.xyz/tx/0xe6dca06d2b8dc00e2f3e5d2d764298e4703cb81a50fd64524454d30ccadd7660
+VERIFY approve.receipt OK status success block 38113267 gasUsed 277942
+TX bond 0x752572d2bd1a133da9ec374f8077c771a03db648e4555e5904b7b196511a41ac https://explore.testnet.tempo.xyz/tx/0x752572d2bd1a133da9ec374f8077c771a03db648e4555e5904b7b196511a41ac
+VERIFY bond.receipt OK status success block 38113269 gasUsed 299275
+VERIFY bond.event OK Bonded(0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F, 0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F, 1000000)
+VERIFY bond.accounting OK servers(actor) free 1000000 locked 0
+VERIFY bond.balances OK Sworn +1000000; actor −1000347 (= 1000000 bond + 347 fees in 0x20C0000000000000000000000000000000000000)
+TX beginUnbond 0xb0d13b79adedb0d3ea259e5ebbc6d2b3d9c07fb90f6de93efeb3229190cd7b1b https://explore.testnet.tempo.xyz/tx/0xb0d13b79adedb0d3ea259e5ebbc6d2b3d9c07fb90f6de93efeb3229190cd7b1b
+VERIFY beginUnbond.receipt OK status success block 38113272 gasUsed 279624
+VERIFY unbond.event OK UnbondBegun(0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F, withdrawableAt 1791194213 = block time 1791104213 + 90000)
+VERIFY unbond.accounting OK unbondStart 1791104213, free 1000000, locked 0
+VERIFY unbond.withdrawNotYet OK withdraw() simulated now reverts UnbondDelayNotOver
+EARLIEST WITHDRAW 2026-10-05T09:56:53Z / 2026-10-05 18:56:53 JST (block time 1791104213 + 90000 s). Then: scripts/with-keys.sh scripts/moderato-release-withdraw.sh withdraw --send
+DONE unbond (sent) verify-failures=0
