@@ -1,58 +1,69 @@
-# Pitch video — Sworn (≤ 2 min, founder's voice)
+# Pitch video: Sworn (≤ 2 min, founder's voice), v2, 2026-10-04
 
-**Form field:** *Pitch video · Public · ≤ 2 min · required.* Target **≈ 110 s** narration (≈ 2.2 words/s →
-≈ 240 words), leaving margin under 120 s. The judges listed for CWF are not from Tempo: say what it is
-in plain words first, the mechanism second, the proof of it third.
-
-Every claim is mapped to its source in the table at the end. **A sentence without a row there is not
-said.**
+**Form field:** *Pitch video · Public · ≤ 2 min · required.* The page says it is *"one of the first resources
+judges review."*
+- **Length:** target ≈ 115 s of narration (≈ 2.2 words/s, ≈ 250 words).
+- **Order** follows `_submission/CRITERIA-MAP.md`: insight → proof it works → why it matters → business →
+  founder → honest limits and next.
+- **Every claim maps to the source table at the end.** A sentence without a row there is not said.
+- v1 (bonded answers first) is in git history (`8e40a6a`).
 
 ---
 
-## Scene 1 — what users want · ≈ 20 s
+## Scene 1: the gap · ≈ 17 s
 
-**[Screen 1: an agent wallet on Tempo — "Pay 500 to R?" — and a small "Ask first" button. mpp.dev's line
-"agents, apps, or humans pay as part of their request" underneath.]**
+**[Screen 1: "Tempo Zones: private blockchains anchored to Tempo." Below it, Tempo's docs quoted in large type:
+"ZK proof generation is not implemented." and "The Zones Solidity reference verifier still returns true without
+checking execution."]**
 
-> On Tempo, MPP lets agents and apps pay per request — including paying for an answer before they send
-> money. "Will this payment actually reach the receiver?" is worth paying for. But today, if that
-> answer is wrong, MPP leaves the refund to the server.
+> Tempo Zones are private blockchains anchored to Tempo. Today, the check that a Zone
+> batch was executed correctly is a hardware attestation, or, in the reference contract, nothing at all.
+> Tempo's own docs say zero-knowledge proving for Zones is not implemented.
 
-## Scene 2 — why the answer is worth money on Tempo · ≈ 18 s
+## Scene 2: it works · ≈ 25 s
 
-**[Screen 2: the Moderato explorer — a transfer with status "success", and the 500 held by
-ReceivePolicyGuard, not by R]**
+**[Screen 2: Tempo's Zone batch verifier → SP1 zkVM → Groth16 → `SwornZoneVerifier` on Moderato, then the
+explorer: `attest` tx `0x9aa9…dfbd`, event `ZoneBatchVerified`. Then a strip: "3 slashes on Moderato".]**
 
-> On Tempo, a transfer can succeed while the receiver gets nothing: receive policies send it to a guard
-> instead. Policies, fee tokens and balances all change the outcome — so a good answer is valuable, and a
-> wrong one is costly.
+> So I built it. Sworn runs Tempo's own Zone batch verifier inside a zero-knowledge VM, binds the proof to
+> the exact inputs Tempo's verifier takes, and a contract on Tempo's testnet verified it. Here
+> is the transaction. The same engine re-runs Tempo's EVM, and it has already slashed a lying server three
+> times on Moderato.
 
-## Scene 3 — Sworn · ≈ 27 s
+## Scene 3: why it matters · ≈ 18 s
 
-**[Screen 3: three steps — Ask · Reserve · Prove — and two faces: the agent ("covered") and the seller
-("stands behind its answer")]**
+**[Screen 3: a Zone, money moving out to Tempo; beside it, two checks: "TEE: trust the hardware" and
+"ZK: anyone can check".]**
 
-> Sworn lets the seller back its answer with money. The agent buys an answer about the current block; the
-> seller locks part of its bond behind exactly that answer. If it's false, anyone can prove it, and the
-> bond pays the agent. The agent gets an answer it can rely on; the seller gets proof it can be trusted.
-> No judge, no owner.
+> Zones hold money, and money has to come back out. Withdrawals are only as trustworthy as the check on the
+> batch. A hardware attestation means trusting one vendor's chip; a zero-knowledge proof, anyone can
+> check.
 
-## Scene 4 — built from Tempo's own parts · ≈ 30 s
+## Scene 4: the business · ≈ 25 s
 
-**[Screen 4: tempo-revm → SP1 → Groth16 → verified on Tempo; beside it, Tempo's Zones code re-executing
-Tempo against a state witness. Then "40 / 40" and the Moderato slash transaction.]**
+**[Screen 4: Step 1, "Tempo adds ZK as a second, independent check". Step 2, "Proving operations: a proof
+for every batch, on time, re-verified at every Tempo upgrade".]**
 
-> It's built from Tempo's own parts. Tempo's Zones work already re-runs Tempo's EVM against a proven state
-> — Tempo needs this primitive too. I took it into a zero-knowledge proof: tempo-revm, proven against
-> Tempo's own block hash. It matched forty of forty real Moderato transfers, and on Moderato it has
-> already slashed a lying server.
+> Tempo decides which verifier its Zones use, so step one is Tempo: ZK as a second, independent check
+> next to the attestation. Step two is the business: running the provers, with a proof for every batch,
+> on time, re-verified at every Tempo upgrade. Specialist work that grows with every Zone.
 
-## Scene 5 — who, and what's next · ≈ 18 s
+## Scene 5: why me · ≈ 17 s
 
-**[Screen 5: github.com/psyto/sworn; rethlab; ETHGlobal Tokyo — Uniswap Foundation 3rd place]**
+**[Screen 5: Reth · Revm · Alloy · Foundry; rethlab; "ETHGlobal Tokyo 2026: Uniswap Foundation, 3rd place
+(Reckn)"; the zkVM patches to Tempo's code.]**
 
-> I build on Reth and Revm; I teach them in rethlab. Next: a bonded-answer method any MPP seller on Tempo
-> can switch on. Sworn — answers you can hold to account.
+> Tempo is built on Reth and Revm, the stack I work in and teach in rethlab, and my last project
+> won a Uniswap Foundation prize at ETHGlobal Tokyo. Getting Tempo's code into a zkVM meant patching it,
+> which takes reading it.
+
+## Scene 6: honest, and next · ≈ 13 s
+
+**[Screen 6: "Testnet · unaudited · batch from Tempo's integration tests · no revenue yet". Then
+"Next: TEE + ZK together, with Tempo." Then "Sworn: Tempo's execution, proven."]**
+
+> It's testnet and unaudited, the batch comes from Tempo's own integration tests, and there is no revenue
+> yet. Next: running both checks together, with Tempo. Sworn: Tempo's execution, proven.
 
 ---
 
@@ -60,17 +71,29 @@ Tempo against a state witness. Then "40 / 40" and the Moderato slash transaction
 
 | claim | source |
 |---|---|
-| MPP lets agents and apps pay per request | mpp.dev (`/llms-full.txt`, read while recording 2026-10-03): *"MPP lets any client—agents, apps, or humans—pay for any service in the same HTTP request."* (the earlier wording "pay as part of their request" is no longer on the site) |
-| MPP leaves the refund to the server | mpp.dev/advanced/refunds: *"Refund decisions are up to your service."* |
-| succeeded ≠ paid; held by the guard | `tempo/crates/precompiles/src/tip20/mod.rs:1349`; Moderato tx `0x65bc…312a` (guard +500, receiver +0) |
-| seller locks part of its own bond behind exactly that answer, on Tempo | `Sworn.sol` `reserve()`; Moderato reserve `0x08f6…0350` |
-| no judge, no owner | `contracts/scripts/no-owner.sh` (gate); `challenge()` is permissionless |
-| Tempo's own engine in a ZK proof against Tempo's own block hash | `core/`, `program/`; `Sworn.sol` checks `blockhash(N) == q.blockHash` |
-| Tempo's Zones work re-runs Tempo's EVM against a proven state (so Tempo needs the primitive) | `tempoxyz/zones` `crates/spf/src/lib.rs`: *"Stateless state transition function for Tempo Zones"*, uses `tempo-revm` with a witness DB and MPT checks; *"presently a normal Rust verifier rather than a `no_std` proving guest"* (GitHub API, 2026-10-03). **Framed as shared direction, not as Tempo lagging.** |
-| forty of forty | `out/ac2_run.log`: `AC-2: matched 40 / 40` |
-| already slashed a lying server on Moderato | tx `0xa7b9…ab9b`, client +500 (`deployments/moderato.json`) |
-| rethlab | github.com/psyto/rethlab, rethlab.fabrknt.com |
-| (not narrated — on screen only) ETHGlobal Tokyo, Uniswap Foundation 3rd place — **with Reckn**, the founder's earlier project, not Sworn | ethglobal.com/showcase/reckn-47t6m, checked while recording |
+| Zones are private blockchains anchored to Tempo | `tempoxyz/zones` README @ `ac49071f`: *"Zones are private blockchains anchored to Tempo"* |
+| today the check is a hardware attestation, or nothing in the reference contract | Tempo docs "Tempo Zone proving and settlement": *"The Zones Solidity reference verifier still returns `true` without checking execution. Tempo also implements a native Nitro attestation verifier activated by T13."*; `zones/crates/contracts/src/runtime/tempo/Verifier.sol` (`return true`) |
+| ZK proving for Zones is not implemented | Tempo docs, same page: *"ZK proof generation is not implemented"* (checked on the live page 2026-10-04) |
+| runs Tempo's own Zone batch verifier inside a zkVM | `spikes/zone-spf/` (zones `ac49071f`, `prove_zone_batch`, five zkVM patches); spec 003 AC-Z1 |
+| bound to the exact inputs Tempo's verifier interface takes | `SwornZoneVerifier.sol` has `IVerifier.verify`'s exact signature (`IZone.sol:306-345`); the digest covers every `NitroBatchAttestation` field plus the destination chain and genesis artifact (spec 003 §3) |
+| a contract on Tempo's testnet verified it; "here is the transaction" | Moderato tx `0x9aa938e8…dfbd`, block 38071845, `ZoneBatchVerified` (`deployments/moderato.json`) |
+| re-runs Tempo's EVM; slashed a lying server three times on Moderato | `firstSlash` `0xa7b9…ab9b`, `demoLiveTakeFirst` `0xbf8e…f046`, `demoLiveTake` `0x69ab…5188` (`deployments/moderato.json`) |
+| withdrawals are only as trustworthy as the check on the batch | `IVerifier` NatSpec: the proof validates the state transition, deposits and withdrawal queue (`IZone.sol:308-318`); ZonePortal calls `verify` on `submitBatch` |
+| attestation = trusting one vendor's chip | the native verifier is AWS Nitro (Tempo docs, same page) |
+| Tempo decides which verifier its Zones use | `zone_factory/mod.rs:110,172` (verifier fixed to `ZONE_VERIFIER_ADDRESS` at creation, factory owner creates zones) |
+| re-verified at every Tempo upgrade | T12 activates on Moderato at 2026-10-08 14:00 UTC; the Sworn answerer refuses unknown schedules (README "What is not done") |
+| rethlab; Uniswap Foundation prize at ETHGlobal Tokyo (with Reckn) | github.com/psyto/rethlab; ethglobal.com/showcase/reckn-47t6m |
+| patching Tempo's code for the zkVM | `patches/tempo.patch` (3), `spikes/zone-spf/patches/` (5) |
+| testnet, unaudited, integration-test batch, no revenue | README "What the Zone verifier is, and is not" |
 
-**Not said, on purpose:** any user, customer, partner or revenue (there are none); "mainnet";
-"production"; a market size.
+**Not said, on purpose:**
+- that a Zone settles with it, that it secures withdrawals, or that the batch is from Moderato;
+- "verification layer";
+- that Tempo is the only buyer or will pay;
+- acquisition;
+- other chains;
+- any user, customer, partner or revenue;
+- "mainnet".
+
+The bonded-answer demo question is self-checkable (`eth_simulateV1`). The pitch does not sell that
+answer. It cites the slashes only as proof the engine works on the live chain.

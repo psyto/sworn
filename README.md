@@ -20,15 +20,32 @@ that engine:
 > **Status (2026-10-04): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
 > testnet** only. Unaudited. Traction: none.
 
-### An honest note on the demo
+## Why it matters
 
-The demo's question ("if I send this transfer, what is the receiver credited?") is one a client can
-check for itself: `eth_simulateV1` with `validation: true` and a fee token reproduces the answer,
-including the fee charge and a receive-policy block (measured 2026-10-04). That is why it makes a good
-demo: anyone can check that the server lied, without trusting us. It is not the product. The product is
-the engine behind the slash: proving Tempo's execution so that a contract on Tempo can act on it.
+Zones are private blockchains anchored to Tempo. Money comes back out through withdrawals, and those are
+only as trustworthy as the check on each batch. A hardware attestation means trusting one vendor's chip.
+A zero-knowledge proof can be checked by anyone, on chain.
 
-### What the Zone verifier is, and is not
+## The plan
+
+1. **Tempo adds ZK as a second, independent check** next to the Nitro attestation. Tempo's factory fixes
+   each Zone's verifier, so adoption runs through Tempo. Next deliverable: a design for running both
+   checks together, covering what happens when they disagree or one is late, and who pays for proving.
+2. **Proving operations.** Produce a proof for every batch, on time, and re-verify the guest at every
+   Tempo upgrade (T12 activates on Moderato 2026-10-08; T13 brings the attestation verifier). That is
+   ongoing, Tempo-specific work, and it grows with every Zone.
+
+Who pays first, Tempo or Zone operators, is open. Revenue today: zero.
+
+## Who
+
+One founder, Hiro ([@psyto](https://github.com/psyto)), working in the stack Tempo is built on:
+Reth, Revm, Alloy and Foundry. Writes [rethlab](https://rethlab.fabrknt.com), source-reading courses on
+Reth, and [rdk](https://github.com/psyto/rdk), a DeFi kit on Reth. The previous project,
+[Reckn](https://github.com/psyto/reckn), took 3rd place for Uniswap Foundation at ETHGlobal Tokyo 2026.
+Getting Tempo's code into a zkVM meant patching it (`patches/`, `spikes/zone-spf/patches/`).
+
+## What the Zone verifier is, and is not
 
 **Is:**
 - Tempo Zones' own batch verifier, executed inside SP1.
@@ -72,6 +89,12 @@ from receipts in [`deployments/moderato.json`](deployments/moderato.json).
    `ZoneBatchVerified`.
 
 ## How bonded answers work
+
+**An honest note on the demo.** The demo's question ("if I send this transfer, what is the receiver credited?") is one a client can
+check for itself: `eth_simulateV1` with `validation: true` and a fee token reproduces the answer,
+including the fee charge and a receive-policy block (measured 2026-10-04). That is why it makes a good
+demo: anyone can check that the server lied, without trusting us. It is not the product. The product is
+the engine behind the slash: proving Tempo's execution so that a contract on Tempo can act on it.
 
 1. **Ask.** The client asks a `Question` (block N and its hash, sender, TIP-20 token, `transfer` /
    `transferWithMemo` calldata, fee token, gas limit) and pays for it with an ordinary MPP charge.

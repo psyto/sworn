@@ -1,4 +1,4 @@
-# CWF submission form — Sworn (draft, 2026-10-03)
+# CWF submission form: Sworn (draft v2, 2026-10-04, follows video/PITCH.md v2 and _submission/CRITERIA-MAP.md)
 
 **Every field below is written to be pasted.** Limits are the form's own (field list and limits taken
 from the copy of this form kept for the previous entry); `scripts/cwf-form.sh` counts them.
@@ -18,47 +18,49 @@ Sworn
 ## Brief description · Public · ≤500
 
 ```
-Paid answers about Tempo state that can be proven false. Before an agent pays, it buys an MPP answer: "if this TIP-20 transfer ran on the state after block N, how much would the receiver actually get?" The server reserves part of its bond behind that exact answer on-chain. If the answer is wrong, anyone can prove it by re-running Tempo's own EVM (tempo-revm) inside an SP1 zero-knowledge proof, and the reserved bond pays the client. No judge, no owner.
+Zero-knowledge proofs of Tempo's own execution. Tempo's docs say ZK proving for Tempo Zones "is not implemented": today a Zone batch is checked by a hardware attestation, or by a reference contract that returns true. Sworn runs Tempo's own Zone batch verifier inside SP1, binds the proof to the exact inputs of Tempo's IVerifier, and a contract on Moderato verified it. The same engine re-runs Tempo's EVM and has slashed a lying server three times on Moderato.
 ```
 
 ## Project website · Public
 
 ```
-https://github.com/psyto/sworn
+[FILL AFTER PUBLISH — the live page URL once the founder approves publishing; until then https://github.com/psyto/sworn]
 ```
 
 ## What are you building, and who is it for? · ≤1000
 
 ```
-On MPP, the client pays and the server answers. If the answer is wrong, the protocol has no recourse: MPP's own docs say refunds are out-of-protocol and "up to your service".
+Sworn proves Tempo's execution in zero knowledge, so a contract on Tempo can act on it without trusting whoever ran it.
 
-Sworn adds recourse for one answer that matters on Tempo: will this payment actually reach the receiver? It is not obvious. A transfer to an address whose receive policy blocks the sender still succeeds, and the money lands in ReceivePolicyGuard instead. TIP-403 policies and fee tokens change it too.
+The first use is Tempo Zones: private blockchains anchored to Tempo. A Zone's withdrawals are only as trustworthy as the check on each batch. Today that check is an AWS Nitro attestation, which means trusting one vendor's hardware, and Tempo's reference verifier returns true without checking. Tempo's docs: ZK proof generation "is not implemented".
 
-The server answers about a named block, then calls reserve() on a contract with no owner, locking part of its bond behind that answer. The client's SDK captures the state proofs for that block itself. If the answer is wrong, a zero-knowledge proof of Tempo's own execution engine running on that state slashes the reservation to the client.
+What is built: Tempo's own Zone batch verifier (zone_spf::prove_zone_batch) runs inside SP1. The proof is bound to every input Tempo's IVerifier receives, plus the chain and the genesis. SwornZoneVerifier, with IVerifier's exact signature, verified a real batch on Moderato (tx 0x9aa938e8…dfbd).
 
-It is for agents and treasuries sending payments where a wrong preflight costs more than the answer, and for MPP sellers who want to stand behind their answers.
+It is for Tempo first, since Tempo chooses each Zone's verifier: ZK as a second, independent check beside the attestation. Then it is for the Zones that need a proof for every batch, on time, through every Tempo upgrade.
 ```
 
 ## Why did you decide to build this, and why build it now? · ≤1000
 
 ```
-[FOUNDER — draft to edit] I work in Rust on the Reth/Revm/Alloy/Foundry stack: I wrote rethlab (rethlab.fabrknt.com), a set of source-reading courses on Reth, and rdk, a DeFi kit on Reth (github.com/psyto/rdk). Before this, my escrow Reckn placed 3rd for Uniswap Foundation at ETHGlobal Tokyo 2026, adjudicating payments by deterministic re-execution.
+I work in Rust on the stack Tempo is built on: Reth, Revm, Alloy, Foundry. I wrote rethlab (rethlab.fabrknt.com), source-reading courses on Reth, and rdk, a DeFi kit on Reth. My previous project, Reckn, took 3rd place for Uniswap Foundation at ETHGlobal Tokyo 2026, adjudicating payments by deterministic re-execution.
 
-Tempo is built on that stack, and agentic payments over MPP are one of the build paths in its own docs. Reading MPP, I found it defines charges, sessions and subscriptions, but no way for a client to hold a server to its answer. Tempo's own zones code re-executes Tempo over a witness, but says it is "presently a normal Rust verifier rather than a no_std proving guest".
+Reading Tempo's Zones docs, I found the gap: the check on a Zone batch is an attestation or a stub, and ZK proving "is not implemented". Tempo's own batch verifier exists as ordinary Rust. Nobody had put it, or Tempo's EVM, inside a zkVM.
 
-So the question was whether tempo-revm could run inside a zkVM against real Moderato state. On 2026-10-03 it did: a TIP-20 transfer re-executed in SP1 matched the chain, and a Groth16 proof took about six minutes on a laptop. That made recourse cheap enough to build now.
+On 2026-10-03, tempo-revm ran in SP1 and matched 40 of 40 real Moderato transactions. On 10-04, Tempo's Zone batch verifier ran in SP1, and a contract on Moderato verified the proof.
+
+Why now: Zones are on testnet and Tempo's attestation verifier arrives with the T13 upgrade. A second, independent check is cheapest to add before Zones hold real money.
 ```
 
 ## How does your product use these chains? · ≤500
 
 ```
-Tempo (Moderato): the answer is about Tempo state; the bond, reservation and slashing live in a Tempo contract paid in PathUSD; the SP1 Groth16 proof is verified on Tempo; the block hash binding uses Tempo's own BLOCKHASH. Inside the proof runs Tempo's execution engine (tempo-revm) with TIP-20, fee-token and receive-policy precompiles, over state MPT-verified against Tempo's header. The answer is sold over MPP. Sworn: 0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6 on Moderato.
+Tempo (Moderato). SwornZoneVerifier, with Tempo's IVerifier signature, verifies a Groth16 proof of a Tempo Zone batch on Tempo (0x64bA9F64…42De). Sworn.sol holds bonds and pays slashes in PathUSD (0xc54b7e52…02c6). Both use the SP1 Groth16 verifier deployed on Tempo. Inside the proofs run Tempo's own code: Zones' prove_zone_batch, and tempo-revm with the TIP-20, TIP-403 and fee-token precompiles, bound to Tempo's block hash.
 ```
 
 ## What technologies are you using or integrating with? · ≤500
 
 ```
-Tempo: tempo-revm (patched to build for the zkVM), TIP-20, receive policies / ReceivePolicyGuard, TIP-403, fee tokens, MPP (mppx). Paradigm stack: Reth, Revm, Alloy (sol! types, EIP-712), Foundry (forge tests, anvil). Succinct SP1 (zkVM guest + Groth16, verified on-chain with SP1VerifierGroth16 v6.1.0). TypeScript SDK and server (viem, mppx), React demo.
+Tempo: Tempo Zones (zone-spf, the IVerifier interface, the Nitro attestation fields), tempo-revm (patched to build for the zkVM), TIP-20, TIP-403 receive policies, fee tokens, MPP (mppx). The Paradigm stack: Reth, Revm, Alloy (sol!, EIP-712), Foundry (forge, anvil). Succinct SP1 6.3 (zkVM guests, Groth16, verified on-chain by SP1VerifierGroth16 v6.1.0). TypeScript, viem and React for the SDK, server, demo and live page.
 ```
 
 ## Which chains · select
@@ -70,7 +72,7 @@ Tempo
 ## Category · Public
 
 ```
-[FOUNDER — choose from the form's list; the options were never pasted. Candidates in order: Payments / Infrastructure / DeFi. Recommendation: Payments — the product is a guarantee on a payment preflight sold over MPP.]
+[FOUNDER — choose from the form's list. Recommendation: Infrastructure, since the product is a proof engine for Tempo's execution; Payments is the fallback.]
 ```
 
 ## Is your project a mobile-focused dApp?
@@ -88,13 +90,13 @@ Japan
 ## Notes for judges — anyone not listed who did meaningful work · ≤600
 
 ```
-Sworn is one person's work. Code review was done by OpenAI's Codex against prompts committed alongside the results in docs/reviews/, and implementation was assisted by Anthropic's Claude; every finding either produced was checked against the real files before being acted on, and several were rejected as wrong. No collaborator, contractor or teammate contributed. [FOUNDER: confirm; add "the narration is the founder's own voice" once recorded]
+Sworn is one person's work. Code review was done by OpenAI's Codex, with the prompts committed alongside the results in docs/reviews/. Implementation was assisted by Anthropic's Claude. Every finding either produced was checked against the real files before being acted on, and several were rejected as wrong. No collaborator, contractor or teammate contributed. [FOUNDER: confirm; add "the narration is the founder's own voice" once recorded]
 ```
 
 ## Anything else judges should know · ≤500
 
 ```
-Everything in github.com/psyto/sworn was written inside the window, from 2026-10-03. Pre-existing work, disclosed: the design discipline (no owner, permissionless settlement) comes from my earlier psyto/reckn; no Reckn code is used. tempoxyz/tempo is used at 61c979a with three patches so it builds for SP1 (patches/tempo.patch). Prior art cited: Succinct's rsp (reth in SP1, no Tempo) and Tempo's zone-spf (not a proving guest). Moderato testnet only; unaudited. Traction is zero.
+Everything in github.com/psyto/sworn was written inside the window, from 2026-10-03. Prior work, disclosed: the no-owner design discipline comes from my earlier psyto/reckn (no code reused). Tempo and Tempo Zones are fetched at pinned commits and patched, not vendored. The Zone batch proved comes from Tempo's own zones integration tests (dev chain), not from Moderato. Testnet only, unaudited, no revenue.
 ```
 
 ---
@@ -104,7 +106,7 @@ Everything in github.com/psyto/sworn was written inside the window, from 2026-10
 ## Project logo or graphic · Public · required
 
 ```
-[TO MAKE — not yet created]
+_submission/brand/mark-512.png (square mark); _submission/brand/card-1200x630.png (wide card)
 ```
 
 ## GitHub link · Public · required
@@ -116,7 +118,7 @@ https://github.com/psyto/sworn
 ## Important context about the repo · ≤500
 
 ```
-The repository starts on 2026-10-03, inside the window; every commit is CWF work. docs/specs/ holds three spec rounds and docs/reviews/ the independent reviews of each, with the exact prompts sent. tempoxyz/tempo is not vendored: scripts/fetch-tempo.sh checks out 61c979a and applies patches/tempo.patch. Measured results are in out/: AC-2 replays 40 real Moderato transactions against receipts; a real Groth16 proof slashes a wrong answer in contracts/test/RealGroth16.t.sol.
+The repo starts 2026-10-03, inside the window. Start at README.md. docs/specs/ has the specs (003 = Zone verifier); docs/reviews/ has independent reviews with the exact prompts. spikes/zone-spf/ holds the Zone guest and logs, and fetch.sh rebuilds Tempo and Zones from pinned commits. deployments/moderato.json records every Moderato transaction from receipts. contracts/: 64 forge tests, including real Groth16 proofs.
 ```
 
 ## Demo video · ≤3 min · required
@@ -128,13 +130,13 @@ The repository starts on 2026-10-03, inside the window; every commit is CWF work
 ## Live product link
 
 ```
-[FILL AFTER MODERATO — demo page URL]
+[FILL AFTER PUBLISH — live page URL]
 ```
 
 ## Access instructions · ≤300
 
 ```
-[FILL AFTER MODERATO] The demo page reads Moderato in your browser. To re-check the slash yourself: git clone https://github.com/psyto/sworn && cd sworn/contracts && forge test --match-contract RealGroth16
+The page reads Moderato in your browser. Nothing to sign or install. "Verify again" re-checks the Zone proof on Moderato live. To re-run locally: git clone https://github.com/psyto/sworn && cd sworn/contracts && forge test
 ```
 
 ## Pitch video · Public · ≤2 min · required
@@ -156,38 +158,38 @@ The repository starts on 2026-10-03, inside the window; every commit is CWF work
 ## How do you know people actually need, or will need this product? · ≤1000
 
 ```
-I do not know yet, and I will not claim a user I do not have. What is measured is the gap: MPP specifies charges, sessions and subscriptions, and its refunds page says refunds are out-of-protocol and the server's decision. The nearest entries building on Tempo resolve disputes with a human or a resolver. Tempo's receive policies make "the transfer succeeded" and "the receiver was paid" different facts, which a paying agent cannot see without executing the transfer.
+I do not have a user yet, and I will not claim one. What I can show is the gap, in Tempo's own words and code. The Zones reference verifier returns true without checking execution. The native verifier is a Nitro attestation, whose approved measurements were unset at the reviewed commit. Tempo's docs say ZK proof generation "is not implemented". Zones are on Tempo testnet now, and every Zone that holds money needs withdrawals the parent chain can trust.
 
-The demand hypothesis is two-sided and testable: agents and treasuries pay for a preflight when a wrong one costs more than the answer (a reservation costs ~0.0003 PathUSD in fees on Moderato; the real cost is the bond locked while it can be challenged), and MPP data sellers bond their answers because "slashable if wrong" is a stronger claim than "trusted". The first test after the window is to offer a bonded endpoint to MPP service operators and count how many bond.
+The need is clearest for Tempo itself, which chooses each Zone's verifier, and for institutions that will run Zones and must show their withdrawals are backed by correct execution, not one vendor's chip.
+
+The next test is direct: put a TEE plus ZK design in front of Tempo and the first Zone operators, and ask whether they would run it.
 ```
 
 ## How far along are you? Do you have users? · ≤1000
 
 ```
-No users. Built and measured inside the window:
-- tempo-revm runs in an SP1 guest over Moderato state MPT-verified against the header; three small patches to Tempo.
-- Fidelity: 40 of 40 real Moderato transactions (type-2, account-abstraction and legacy) replayed with Tempo's own engine match their receipts — status, gas, fee, logs, balances.
-- A receive-policy-blocked transfer: 5.97M cycles, Groth16 proof in 391 s on a laptop.
-- Sworn.sol: bond, reserve, challenge, release; no owner; 59 tests including a real proof that slashes a wrong answer and cannot slash the right one.
-- On Moderato: a dishonest answer, a real payment diverted to ReceivePolicyGuard, and a real Groth16 proof slashed the bond to the client (tx 0xa7b90b8c…ab9b); the honest answer cannot be slashed.
-- Full flow 30/30 on Tempo's own localnet: MPP charge, reserve, SDK checks, proof, slash.
-- Server, SDK and demo: [state at submission]
+No users, no revenue. Built and measured inside the window, all on Moderato testnet:
+- Tempo Zones: Tempo's own batch verifier runs in SP1 on 4 real batches from Tempo's zones integration tests, matching native output (19-26M cycles; tampering rejected). A proof bound to IVerifier's inputs was verified on Moderato (tx 0x9aa938e8…dfbd).
+- tempo-revm in SP1: 40 of 40 real Moderato transactions re-executed match their receipts.
+- Three real slashes on Moderato: a lying answer server's bond paid the client, each by a Groth16 proof.
+- 64 forge tests, including real proofs; contracts with no owner.
+- A public page that re-checks every claim from chain. Pitch and demo videos.
 ```
 
 ## Who else is building in this space, and what are they getting wrong? · ≤1000
 
 ```
-Tempo itself: zones' zone-spf re-executes Tempo over a witness, but for rollup batches, and not yet as a proving guest. Succinct's rsp proves reth blocks in SP1, not Tempo and not single answers. Light clients like Helios let a client verify an RPC read, but detection is not recourse: a wrong answer still costs the client.
+Tempo itself: Zones use an AWS Nitro attestation. That is fast, but it is trust in one vendor's hardware, and Tempo's docs say ZK proving is not implemented. Tempo could build ZK in-house; Sworn is the working version today, offered as a second check, not a replacement.
 
-On Tempo, buyer-protection escrows resolve disputes with a human or resolver; that brings back a party who decides. MPP sessions refund only what the server did not claim.
+General-purpose provers (Succinct SP1, RISC Zero, Boundless) prove programs. Someone still has to port Tempo's code (Sworn needed patches to tempo-revm, zone-spf and two crates) and re-verify it at every Tempo upgrade. Succinct's rsp proves reth blocks, not Tempo.
 
-Nobody is getting the engine wrong; the missing piece is binding a paid answer to money that a proof, not a person, can move.
+Nobody is getting the engine wrong. What is missing is the Tempo-specific work: a guest that tracks Tempo's hardforks, a proof bound to exactly what the ZonePortal checks, and someone accountable for running it on time.
 ```
 
 ## How do you make money, or how do you plan to? · ≤500
 
 ```
-A fee per bonded answer, priced above the reservation's own cost, and later a share of the premium servers charge for bonded endpoints. Running a challenger is open to anyone; the protocol takes nothing from slashes. The honest number today: zero revenue, and the price a buyer will pay for a guarantee is an untested hypothesis.
+Step 1: Tempo adds ZK as a second check. Revenue is a contract or grant to build and maintain the verifier. Step 2: proving operations, a fee per batch proved on an SLA plus maintenance at every Tempo upgrade, paid by Tempo or by Zone operators. That is still open. Today: zero revenue, and no payer has agreed.
 ```
 
 ## How long have you each been working on this? Full time? · ≤500

@@ -1,0 +1,11 @@
+import puppeteer from '/Users/hiroyusai/src/sworn/video/node_modules/puppeteer/lib/esm/puppeteer/puppeteer.js';
+import { fileURLToPath } from 'url'; import path from 'path';
+const dir = path.dirname(fileURLToPath(import.meta.url));
+const b = await puppeteer.launch({ headless: 'new' });
+const p = await b.newPage();
+await p.setViewport({ width: 512, height: 512 });
+await p.goto('file://' + dir + '/mark.svg'); await p.screenshot({ path: dir + '/mark-512.png', omitBackground: true });
+await p.setViewport({ width: 1200, height: 630 });
+await p.goto('file://' + dir + '/card.html', { waitUntil: 'networkidle0' });
+await p.screenshot({ path: dir + '/card-1200x630.png', clip: { x: 0, y: 0, width: 1200, height: 630 } });
+await b.close();
