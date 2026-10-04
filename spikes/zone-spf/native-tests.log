@@ -1,0 +1,21 @@
+warning: linker stderr: ld: __eh_frame section too large (max 16MB) to encode dwarf unwind offsets in compact unwind table, performance of exception handling might be affected
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: `zone-node` (test "it") generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.39s
+warning: the following packages contain code that will be rejected by a future version of Rust: proc-macro-error2 v2.0.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+     Running tests/it/main.rs (target/debug/deps/it-764ce1dea7e78600)
+
+running 5 tests
+test hardfork_settlement_e2e::test_t13_migrates_and_settles_existing_portal ... ok
+test l1_e2e::test_deposit_and_withdrawal ... ok
+test spf::spf_batch_execute ... ok
+test spf::spf_builder_equivalence ... ok
+test spf::spf_replays_migrated_policy_transaction_with_parent_forks ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 166 filtered out; finished in 71.04s
+
+cargo test -p zone-node --test it -- spf:: hardfork_settlement_e2e   1  6.41s user 2.12s system 11% cpu 1:12.70 total
+EXIT 0

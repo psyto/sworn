@@ -1,0 +1,17 @@
+   Compiling reth-node-ethereum v2.5.1 (https://github.com/paradigmxyz/reth?rev=5f02aa3#5f02aa39)
+   Compiling zone-sequencer v0.3.1 (/Users/hiroyusai/src/sworn/spikes/zone-spf/zones/crates/sequencer)
+   Compiling reth-ethereum v2.5.1 (https://github.com/paradigmxyz/reth?rev=5f02aa3#5f02aa39)
+   Compiling tempo-node v1.13.2 (https://github.com/tempoxyz/tempo?rev=346c22eb4293ac1f5edd27d4afd1f99323bc527c#346c22eb)
+   Compiling zone-payload v0.3.1 (/Users/hiroyusai/src/sworn/spikes/zone-spf/zones/crates/payload)
+   Compiling zone-node v0.3.1 (/Users/hiroyusai/src/sworn/spikes/zone-spf/zones/crates/node)
+warning: linker stderr: ld: __eh_frame section too large (max 16MB) to encode dwarf unwind offsets in compact unwind table, performance of exception handling might be affected
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: `zone-node` (test "it") generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1m 08s
+warning: the following packages contain code that will be rejected by a future version of Rust: proc-macro-error2 v2.0.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+  Executable tests/it/main.rs (target/debug/deps/it-4bcb7bc26aec0a9f)
+cargo test -p zone-node --test it --no-run  124.58s user 7.96s system 192% cpu 1:08.93 total
+EXIT 0

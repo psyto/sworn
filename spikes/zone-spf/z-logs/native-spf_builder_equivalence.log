@@ -1,0 +1,31 @@
+native execute wall: 1.489583ms
+{
+  "args": {
+    "anchorBlockHash": "0x7cd5e726f1c8433f92a4d4bf63c8646bc3e9481ab6e6e8a26ab452a040eb8bb1",
+    "anchorBlockNumber": 1,
+    "expectedWithdrawalBatchIndex": 1,
+    "nextBlockHash": "0x9930f19a9fda96a6a6e2790737652c52f1dee7a51446ffd675055fedf9211a17",
+    "nextDepositNumber": 0,
+    "nextProcessedHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "nextProcessedTokenCount": 0,
+    "nextZoneHeight": 1,
+    "prevBlockHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "prevDepositNumber": 0,
+    "prevProcessedHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "prevProcessedTokenCount": 0,
+    "tempoBlockNumber": 1,
+    "withdrawalQueueHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "zoneId": 1
+  },
+  "destinationChainId": 42431,
+  "digest": "0x0c1a5fba56284b0128f2424ef36bd6eaf8a636a1b3d11cb224d3a1629885a829",
+  "genesisArtifactHash": "0x8189b140049d06cc5a903405de563ec204f902ffd8281f14f612578d78787bc4",
+  "parentChainId": 1337,
+  "publicValues": "0x6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f310c1a5fba56284b0128f2424ef36bd6eaf8a636a1b3d11cb224d3a1629885a829",
+  "typehash": "0x92642ea5ff5c47ad5a0c977fa87d5a0634b45661ad091c055f6905e7a51d8221",
+  "verifier": "0x000000000000000000000000000000005a0e5a0e",
+  "verifierConfig": "0x02",
+  "verifierConfigHash": "0xf2ee15ea639b73fa3db9b34a245bdfa015c260c598b211bf05a1ecc4b3e3b4f2",
+  "zoneGuestVersion": "0x6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f31"
+}
+spf_builder_equivalence exit 0

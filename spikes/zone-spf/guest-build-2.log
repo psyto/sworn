@@ -1,0 +1,186 @@
+cargo:warning=rustc +succinct --version: "rustc 1.93.0-dev\n"
+[sp1]  warning: patch `tempo-alloy v1.11.0 (/Users/hiroyusai/src/sworn/spikes/zone-spf/tempo/crates/alloy)` was not used in the crate graph
+[sp1]  warning: patch `tempo-consensus v1.13.2 (/Users/hiroyusai/src/sworn/spikes/zone-spf/tempo/crates/consensus)` was not used in the crate graph
+[sp1]  warning: patch `tempo-node v1.13.2 (/Users/hiroyusai/src/sworn/spikes/zone-spf/tempo/crates/node)` was not used in the crate graph
+[sp1]  warning: patch `tempo-payload-types v1.13.2 (/Users/hiroyusai/src/sworn/spikes/zone-spf/tempo/crates/payload/types)` was not used in the crate graph
+[sp1]  warning: patch `tempo-transaction-pool v1.13.2 (/Users/hiroyusai/src/sworn/spikes/zone-spf/tempo/crates/transaction-pool)` was not used in the crate graph
+[sp1]  help: Check that the patched package version and available features are compatible
+[sp1]        with the dependency requirements. If the patch has a different version from
+[sp1]        what is locked in the Cargo.lock file, run `cargo update` to use the new
+[sp1]        version. This may also occur with an optional dependency that is not enabled.
+[sp1]     Compiling serde_core v1.0.228
+[sp1]     Compiling portable-atomic v1.13.1
+[sp1]     Compiling zeroize v1.9.0
+[sp1]     Compiling num-traits v0.2.19
+[sp1]     Compiling zerocopy v0.8.54
+[sp1]     Compiling secp256k1-sys v0.11.0
+[sp1]     Compiling auto_impl v1.3.0
+[sp1]     Compiling rustversion v1.0.23
+[sp1]     Compiling darling_macro v0.23.0
+[sp1]     Compiling getrandom v0.3.4
+[sp1]     Compiling crc-catalog v2.5.0
+[sp1]     Compiling ahash v0.8.12
+[sp1]     Compiling crc v3.4.0
+[sp1]     Compiling generic-array v0.14.7
+[sp1]     Compiling hybrid-array v0.4.13
+[sp1]     Compiling der v0.7.10
+[sp1]     Compiling darling v0.23.0
+[sp1]     Compiling crypto-common v0.1.7
+[sp1]     Compiling block-buffer v0.10.4
+[sp1]     Compiling crypto-common v0.2.2
+[sp1]     Compiling block-buffer v0.12.1
+[sp1]     Compiling digest v0.10.7
+[sp1]     Compiling crypto-bigint v0.5.5
+[sp1]     Compiling hmac v0.12.1
+[sp1]     Compiling spki v0.7.3
+[sp1]     Compiling pkcs8 v0.10.2
+[sp1]     Compiling digest v0.11.3
+[sp1]     Compiling hkdf v0.12.4
+[sp1]     Compiling sha2 v0.10.9
+[sp1]     Compiling rfc6979 v0.4.0
+[sp1]     Compiling signature v2.2.0
+[sp1]     Compiling sha3 v0.11.0
+[sp1]     Compiling num-integer v0.1.46
+[sp1]     Compiling indexmap v2.14.0
+[sp1]     Compiling secp256k1-sys v0.10.1
+[sp1]     Compiling num-bigint v0.4.8
+[sp1]     Compiling enum-ordinalize-derive v4.4.1
+[sp1]     Compiling typenum v1.20.1
+[sp1]     Compiling blst v0.3.16
+[sp1]     Compiling serde v1.0.228
+[sp1]     Compiling hashbrown v0.17.1
+[sp1]     Compiling const-hex v1.19.1
+[sp1]     Compiling bitflags v2.13.0
+[sp1]     Compiling serde_json v1.0.150
+[sp1]     Compiling bytes v1.12.1
+[sp1]     Compiling bitvec v1.1.1
+[sp1]     Compiling arrayvec v0.7.8
+[sp1]     Compiling either v1.16.0
+[sp1]     Compiling serdect v0.2.0
+[sp1]     Compiling sec1 v0.7.3
+[sp1]     Compiling alloy-rlp v0.3.16
+[sp1]     Compiling ruint v1.20.0
+[sp1]     Compiling smallvec v1.15.2
+[sp1]     Compiling itertools v0.14.0
+[sp1]     Compiling nonmax v0.5.5
+[sp1]     Compiling num-rational v0.4.2
+[sp1]     Compiling once_cell v1.21.4
+[sp1]     Compiling ppv-lite86 v0.2.21
+[sp1]     Compiling tracing-core v0.1.36
+[sp1]     Compiling serde_with_macros v3.21.0
+[sp1]     Compiling rand_chacha v0.3.1
+[sp1]     Compiling tracing v0.1.44
+[sp1]     Compiling rand v0.8.7
+[sp1]     Compiling ff v0.13.1
+[sp1]     Compiling enum-ordinalize v4.4.1
+[sp1]     Compiling ark-serialize-derive v0.6.0
+[sp1]     Compiling arrayref v0.3.9
+[sp1]     Compiling ark-std v0.6.0
+[sp1]     Compiling serde_with v3.21.0
+[sp1]     Compiling crossbeam-utils v0.8.22
+[sp1]     Compiling ark-serialize v0.6.0
+[sp1]     Compiling num_cpus v1.17.0
+[sp1]     Compiling ark-ff-asm v0.6.0
+[sp1]     Compiling cfg-if v1.0.4
+[sp1]     Compiling hex v0.4.3
+[sp1]     Compiling threadpool v1.8.1
+[sp1]     Compiling nybbles v0.4.8
+[sp1]     Compiling ark-ff-macros v0.6.0
+[sp1]     Compiling alloy-tx-macros v2.4.1
+[sp1]     Compiling cpufeatures v0.3.0
+[sp1]     Compiling keccak v0.2.0
+[sp1]     Compiling group v0.13.0
+[sp1]     Compiling elliptic-curve v0.13.8
+[sp1]     Compiling sha2 v0.11.0
+[sp1]     Compiling crossbeam-epoch v0.9.20
+[sp1]     Compiling itoa v1.0.18
+[sp1]     Compiling educe v0.6.0
+[sp1]     Compiling ecdsa v0.16.9
+[sp1]     Compiling zstd-sys v2.0.16+zstd.1.5.7
+[sp1]     Compiling k256 v0.13.4
+[sp1]     Compiling num-iter v0.1.46
+[sp1]     Compiling num-complex v0.4.6
+[sp1]     Compiling derive_more v2.1.1
+[sp1]     Compiling c-kzg v2.1.8
+[sp1]     Compiling crossbeam-deque v0.8.7
+[sp1]     Compiling num v0.4.3
+[sp1]     Compiling alloy-primitives v1.7.2
+[sp1]     Compiling primeorder v0.13.6
+[sp1]     Compiling ark-ff v0.6.0
+[sp1]     Compiling rayon-core v1.13.0
+[sp1]     Compiling p256 v0.13.2
+[sp1]     Compiling aurora-engine-modexp v1.2.0
+[sp1]     Compiling ripemd v0.2.0
+[sp1]     Compiling zmij v1.0.23
+[sp1]     Compiling derive-where v1.6.1
+[sp1]     Compiling zstd-safe v7.2.4
+[sp1]     Compiling konst_macro_rules v0.2.19
+[sp1]     Compiling memchr v2.8.3
+[sp1]     Compiling konst v0.2.20
+[sp1]     Compiling parity-scale-codec v3.7.5
+[sp1]     Compiling alloy-sol-type-parser v1.7.2
+[sp1]     Compiling const_format_proc_macros v0.2.34
+[sp1]     Compiling synstructure v0.13.2
+[sp1]     Compiling syn-solidity v1.7.2
+[sp1]     Compiling const_format v0.2.36
+[sp1]     Compiling rayon v1.12.0
+[sp1]     Compiling modular-bitfield-impl v0.13.1
+[sp1]     Compiling impl-trait-for-tuples v0.2.3
+[sp1]     Compiling alloy-json-abi v1.7.2
+[sp1]     Compiling secp256k1 v0.31.1
+[sp1]     Compiling secp256k1 v0.30.0
+[sp1]     Compiling macro-string v0.2.0
+[sp1]     Compiling proc-macro-error-attr3 v3.0.1
+[sp1]     Compiling byte-slice-cast v1.2.3
+[sp1]     Compiling static_assertions v1.1.0
+[sp1]     Compiling siphasher v1.0.3
+[sp1]     Compiling modular-bitfield v0.13.1
+[sp1]     Compiling alloy-sol-macro-input v1.7.2
+[sp1]     Compiling proc-macro-error3 v3.0.1
+[sp1]     Compiling phf_shared v0.14.0
+[sp1]     Compiling zerofrom-derive v0.1.7
+[sp1]     Compiling reth-codecs-derive v0.6.0
+[sp1]     Compiling num_enum_derive v0.7.6
+[sp1]     Compiling winnow v1.0.4
+[sp1]     Compiling phf v0.14.0
+[sp1]     Compiling yoke-derive v0.8.2
+[sp1]     Compiling alloy-eip7928 v0.4.8
+[sp1]     Compiling alloy-eip7702 v0.6.3
+[sp1]     Compiling alloy-eip2930 v0.2.3
+[sp1]     Compiling revm-primitives v42.0.0
+[sp1]     Compiling revm-bytecode v42.0.0
+[sp1]     Compiling alloy-eip2124 v0.2.0
+[sp1]     Compiling alloy-serde v2.4.1
+[sp1]     Compiling alloy-trie v0.9.5
+[sp1]     Compiling revm-state v42.0.0
+[sp1]  error[E0432]: unresolved import `libc::FILE`
+[sp1]   --> /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/c-kzg-2.1.8/bindings/rust/src/bindings/./generated.rs:3:5
+[sp1]    |
+[sp1]  3 | use libc::FILE;
+[sp1]    |     ^^^^^^^^^^ no `FILE` in the root
+[sp1]  
+[sp1]  error[E0425]: cannot find value `file_path_bytes` in this scope
+[sp1]     --> /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/c-kzg-2.1.8/bindings/rust/src/bindings/mod.rs:184:38
+[sp1]      |
+[sp1]  184 |         let file_path = CString::new(file_path_bytes)
+[sp1]      |                                      ^^^^^^^^^^^^^^^ not found in this scope
+[sp1]  
+[sp1]  error[E0425]: cannot find function `fopen` in crate `libc`
+[sp1]     --> /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/c-kzg-2.1.8/bindings/rust/src/bindings/mod.rs:277:39
+[sp1]      |
+[sp1]  277 |         let file_ptr = unsafe { libc::fopen(file_path.as_ptr(), MODE.as_ptr()) };
+[sp1]      |                                       ^^^^^ not found in `libc`
+[sp1]  
+[sp1]  error[E0425]: cannot find function `fclose` in crate `libc`
+[sp1]     --> /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/c-kzg-2.1.8/bindings/rust/src/bindings/mod.rs:294:49
+[sp1]      |
+[sp1]  294 |             let _unchecked_close_result = libc::fclose(file_ptr);
+[sp1]      |                                                 ^^^^^^ not found in `libc`
+[sp1]  
+[sp1]  Some errors have detailed explanations: E0425, E0432.
+[sp1]  For more information about an error, try `rustc --explain E0425`.
+[sp1]  warning: c-kzg@2.1.8: warning: /opt/anaconda3/bin/arm64-apple-darwin20.0.0-ranlib: warning for library: /Users/hiroyusai/src/sworn/spikes/zone-spf/guest/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/build/c-kzg-4f4b67e62f0c3855/out/libckzg.a the table of contents is empty (no object file members in the library define global symbols)
+[sp1]  error: could not compile `c-kzg` (lib) due to 4 previous errors
+[sp1]  warning: build failed, waiting for other jobs to finish...
+~/.sp1/bin/cargo-prove prove build --ignore-rust-version  103.14s user 8.72s system 552% cpu 20.240 total
+EXIT 101

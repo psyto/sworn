@@ -1,0 +1,24 @@
+warning: unused imports: `ConfigureEngineEvm`, `ExecutableTxIterator`, and `ExecutionCtxFor`
+  --> /Users/hiroyusai/src/sworn/spikes/zone-spf/zones/crates/evm/src/lib.rs:35:5
+   |
+35 |     ConfigureEngineEvm, ConfigureEvm, EvmEnvFor, ExecutableTxIterator, ExecutionCtxFor,
+   |     ^^^^^^^^^^^^^^^^^^                           ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `num::NonZeroU32`
+  --> /Users/hiroyusai/src/sworn/spikes/zone-spf/zones/crates/evm/src/lib.rs:43:5
+   |
+43 |     num::NonZeroU32,
+   |     ^^^^^^^^^^^^^^^
+
+native host public values: 6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f31506fffee16ea140e58348f0aab6b050ac27d2ea2325a8655173ca61ccea7df6a
+fixture written: contracts/test/vectors/zone-hardfork-placeholder.json
+cycles(total_instruction_count): 25531739
+PROVE groth16 wall: 877.010636417s
+proof pv match: true
+verify ok (199.578792ms)
+         21741436928  maximum resident set size
+      18087451769131  cycles elapsed
+scripts/zone-prove.sh 0x000000000000000000000000000000005a0e5a0e  42431  5289.66s user 587.49s system 655% cpu 14:56.82 total
+EXIT 0

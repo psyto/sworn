@@ -72,5 +72,24 @@
     "clientPathUSDDelta": "500000000",
     "provingRealTime": "9 min 00 s",
     "verifiedIndependently": "receipt status 1 and Slashed from Sworn; guard +500 / R' +0 at payment block-1/block; client +500 at challenge block-1/block"
+  },
+  "SwornZoneVerifier": {
+    "spec": "docs/specs/003-zone-verifier.md",
+    "address": "0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De",
+    "codehash": "0xefc8799a0b3352ca20b70d227e9a74858eadcc41e92b651118dcb44ee13b14ab",
+    "deployTx": "0x1a0c3bda046cffabcd888588f832f84f9eccbbe2ac73d6e1a070adfe502b189b",
+    "block": 38070241,
+    "gasUsed": 3460805,
+    "deployer": "roles.deployer",
+    "constructor": {
+      "sp1Verifier": "0x2c77329747b7C8B293514A6129404D4cefDd9B18",
+      "zoneVkey": "0x006c15314d326e27d72c1c1f83fd2bc0eaf5fb2053e2fe5b3e9415a2d037293d",
+      "parentChainId": 1337,
+      "pinnedZoneId": 1,
+      "pinnedGenesisArtifactHash": "0xd39aa765427c64ea95821bd5f93d44c89854b0f00fec0e21137421d04fb7c11e",
+      "pinnedGenesisArtifact": "spikes/zone-spf/genesis/hardfork_t13_recovery.genesis.json"
+    },
+    "noOwnerOnDeployedCode": "OK (2837 bytes sans metadata, STATICCALL x1, forbidden opcodes 0)",
+    "deviations": "D1 parentChainId=1337 dev chain; D2 no portal caller check; D3 one pinned zone+genesis artifact; D4 write-nothing demonstration. Batch = hardfork_t13_recovery from Tempo zones integration tests (zones ac49071f), not a Moderato zone."
   }
 }

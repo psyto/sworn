@@ -1,0 +1,10 @@
+no-owner: OK (src/Sworn.sol)
+no-owner: compiled runtime bytecode 2837 bytes (sans metadata), STATICCALL x1, forbidden opcodes 0
+no-owner: OK (src/SwornZoneVerifier.sol)
+PASS (as required): src/Sworn.sol
+FAIL (as required): planted-owner -> owner/admin/role
+FAIL (as required): planted-delegatecall -> delegatecall/callcode
+FAIL (as required): planted-fallback -> fallback/receive
+PASS (as required): --zone-verifier src/SwornZoneVerifier.sol
+FAIL (as required): --zone-verifier --code <runtime with SSTORE/CALL>
+required 49 / passed 49; total tests run 64

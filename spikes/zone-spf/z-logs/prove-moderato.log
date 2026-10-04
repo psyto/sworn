@@ -1,0 +1,15 @@
+warning: unused imports: `ConfigureEngineEvm`, `ExecutableTxIterator`, and `ExecutionCtxFor`
+  --> /Users/hiroyusai/src/sworn/spikes/zone-spf/zones/crates/evm/src/lib.rs:35:5
+   |
+35 |     ConfigureEngineEvm, ConfigureEvm, EvmEnvFor, ExecutableTxIterator, ExecutionCtxFor,
+   |     ^^^^^^^^^^^^^^^^^^                           ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `num::NonZeroU32`
+  --> /Users/hiroyusai/src/sworn/spikes/zone-spf/zones/crates/evm/src/lib.rs:43:5
+   |
+43 |     num::NonZeroU32,
+   |     ^^^^^^^^^^^^^^^
+
+native host public values: 6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f311337e71b07cb19399d06f78b6d7c15f3f52264ea0738588344a8c15e89c951bd

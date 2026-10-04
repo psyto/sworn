@@ -1,0 +1,29 @@
+[package]
+name = "zone-spf-guest"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+sp1-zkvm = "=6.3.1"
+sworn-zone-attest = { path = "../attest" }
+
+[workspace]
+
+[patch."https://github.com/tempoxyz/tempo"]
+tempo-alloy = { path = "../tempo/crates/alloy" }
+tempo-chainspec = { path = "../tempo/crates/chainspec" }
+tempo-consensus = { path = "../tempo/crates/consensus" }
+tempo-contracts = { path = "../tempo/crates/contracts" }
+tempo-evm = { path = "../tempo/crates/evm" }
+tempo-hardfork = { path = "../tempo/crates/hardfork" }
+tempo-node = { path = "../tempo/crates/node" }
+tempo-payload-types = { path = "../tempo/crates/payload/types" }
+tempo-precompiles = { path = "../tempo/crates/precompiles" }
+tempo-precompiles-macros = { path = "../tempo/crates/precompiles-macros" }
+tempo-primitives = { path = "../tempo/crates/primitives" }
+tempo-revm = { path = "../tempo/crates/revm" }
+tempo-transaction-pool = { path = "../tempo/crates/transaction-pool" }
+
+[patch.crates-io]
+c-kzg = { path = "../vendor/c-kzg" } # SPIKE-ZKVM-5
+reth-primitives-traits = { path = "../vendor/reth-primitives-traits" } # SPIKE-ZKVM-6

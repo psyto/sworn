@@ -1,0 +1,47 @@
+cargo:warning=rustc +succinct --version: "rustc 1.93.0-dev\n"
+[sp1]  warning: patch `tempo-alloy v1.11.0 (/Users/hiroyusai/src/sworn/spikes/zone-spf/tempo/crates/alloy)` was not used in the crate graph
+[sp1]  warning: patch `tempo-consensus v1.13.2 (/Users/hiroyusai/src/sworn/spikes/zone-spf/tempo/crates/consensus)` was not used in the crate graph
+[sp1]  warning: patch `tempo-node v1.13.2 (/Users/hiroyusai/src/sworn/spikes/zone-spf/tempo/crates/node)` was not used in the crate graph
+[sp1]  warning: patch `tempo-payload-types v1.13.2 (/Users/hiroyusai/src/sworn/spikes/zone-spf/tempo/crates/payload/types)` was not used in the crate graph
+[sp1]  warning: patch `tempo-transaction-pool v1.13.2 (/Users/hiroyusai/src/sworn/spikes/zone-spf/tempo/crates/transaction-pool)` was not used in the crate graph
+[sp1]  help: Check that the patched package version and available features are compatible
+[sp1]        with the dependency requirements. If the patch has a different version from
+[sp1]        what is locked in the Cargo.lock file, run `cargo update` to use the new
+[sp1]        version. This may also occur with an optional dependency that is not enabled.
+[sp1]     Compiling alloy-eips v2.4.1
+[sp1]     Compiling revm-database-interface v42.0.0
+[sp1]     Compiling ark-poly v0.6.0
+[sp1]     Compiling c-kzg v2.1.8 (/Users/hiroyusai/src/sworn/spikes/zone-spf/vendor/c-kzg)
+[sp1]     Compiling zstd-sys v2.0.16+zstd.1.5.7
+[sp1]     Compiling zstd-safe v7.2.4
+[sp1]     Compiling num_enum v0.7.6
+[sp1]     Compiling alloy-sol-macro-expander v1.7.2
+[sp1]     Compiling zerofrom v0.1.8
+[sp1]     Compiling stable_deref_trait v1.2.1
+[sp1]     Compiling alloy-json-abi v1.7.2
+[sp1]     Compiling quanta v0.12.6
+[sp1]     Compiling dyn-clone v1.0.20
+[sp1]  error[E0422]: cannot find struct, variant or union type `timespec` in crate `libc`
+[sp1]   --> /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quanta-0.12.6/src/clocks/monotonic/unix.rs:9:28
+[sp1]    |
+[sp1]  9 |         let mut ts = libc::timespec {
+[sp1]    |                            ^^^^^^^^ not found in `libc`
+[sp1]  
+[sp1]  error[E0425]: cannot find function `clock_gettime` in crate `libc`
+[sp1]    --> /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quanta-0.12.6/src/clocks/monotonic/unix.rs:14:19
+[sp1]     |
+[sp1]  14 |             libc::clock_gettime(libc::CLOCK_MONOTONIC, &mut ts);
+[sp1]     |                   ^^^^^^^^^^^^^ not found in `libc`
+[sp1]  
+[sp1]  error[E0425]: cannot find value `CLOCK_MONOTONIC` in crate `libc`
+[sp1]    --> /Users/hiroyusai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quanta-0.12.6/src/clocks/monotonic/unix.rs:14:39
+[sp1]     |
+[sp1]  14 |             libc::clock_gettime(libc::CLOCK_MONOTONIC, &mut ts);
+[sp1]     |                                       ^^^^^^^^^^^^^^^ not found in `libc`
+[sp1]  
+[sp1]  Some errors have detailed explanations: E0422, E0425.
+[sp1]  For more information about an error, try `rustc --explain E0422`.
+[sp1]  error: could not compile `quanta` (lib) due to 3 previous errors
+[sp1]  warning: build failed, waiting for other jobs to finish...
+~/.sp1/bin/cargo-prove prove build --ignore-rust-version  6.86s user 0.67s system 356% cpu 2.113 total
+EXIT 101

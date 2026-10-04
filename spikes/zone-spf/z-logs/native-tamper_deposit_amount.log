@@ -1,0 +1,3 @@
+native execute wall: 1.407083ms
+NATIVE REJECTED: prove_zone_batch: failed to execute advanceTempo in zone block 1
+tamper exit 3

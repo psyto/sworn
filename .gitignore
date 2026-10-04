@@ -28,3 +28,5 @@ video/takes/*/*.raw.mp4
 video/*.raw.mp4
 video/demo.slides.mp4
 .DS_Store
+# site/: static live page build cache
+*.tsbuildinfo

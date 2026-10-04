@@ -1,0 +1,56 @@
+client init wall: 12.201629125s
+stderr: WARNING: Using insecure random number generator.
+execute wall: 503.591542ms
+cycles(total_instruction_count): 20589332
+report: gas: 19794658
+opcode counts (20589332 total instructions):
+    3962871 xor
+    2129127 addi
+    2124296 or
+    2038772 sll
+    1651218 ld
+    1463991 sd
+    1400408 lbu
+    1350757 srl
+    1327184 and
+     917137 add
+     429452 bne
+     373676 beq
+     289883 sb
+     145962 bltu
+     135787 jalr
+     126570 mul
+     111680 sltu
+     106790 auipc
+     106479 mulhu
+      78724 lui
+      68839 sub
+      58248 bgeu
+      45546 jal
+      26923 subw
+      21169 srlw
+      17560 blt
+      15969 addw
+      14922 sra
+       8595 lw
+       7580 slt
+       7564 sw
+       5707 lhu
+       4965 lb
+       4341 sh
+       3588 bge
+       1574 lwu
+       1504 lh
+       1436 sllw
+       1216 mulh
+       1166 mulw
+        118 sraw
+         22 ecall
+         16 divu
+syscall counts (0 total syscall instructions):
+
+publicValues match native host: PASS
+setup wall: 3.429728292s
+vkey(bytes32): 0x00456ca524140a2ee646ed085cb5e79bf8743265843cf1eb3be08e636a464859
+/Users/hiroyusai/src/sworn/runner/target/release/spike-runner $ELF  execute  115.26s user 4.52s system 736% cpu 16.267 total
+EXIT 0

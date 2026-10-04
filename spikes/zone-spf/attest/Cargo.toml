@@ -1,0 +1,16 @@
+[package]
+name = "sworn-zone-attest"
+version = "0.1.0"
+edition = "2024"
+description = "Spec 003 §3–§4: the guest input, the SwornZoneBatchAttestation digest and the public values. Shared by the SP1 guest and the native host (one copy of the code)."
+
+[dependencies]
+zone-spf = { path = "../zones/crates/spf" }
+zone-chainspec = { path = "../zones/crates/chainspec" }
+alloy-genesis = { version = "2.4.1", default-features = false }
+alloy-primitives = { version = "1.7.2", default-features = false }
+alloy-sol-types = { version = "1.7.2", default-features = false }
+serde_json = "1.0.142"
+
+# Own workspace root: keeps cargo from attaching this crate to the Sworn root workspace.
+[workspace]

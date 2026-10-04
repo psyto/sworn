@@ -1,0 +1,32 @@
+[package]
+name = "sworn-zone-host"
+version = "0.1.0"
+edition = "2024"
+description = "Spec 003 native host: builds guest inputs, runs the SAME sworn-zone-attest code natively, AC-Z1 mutation tests, AC-Z2 golden vector."
+
+[dependencies]
+sworn-zone-attest = { path = "../attest" }
+alloy-primitives = { version = "1.7.2", default-features = false, features = ["std"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1.0.142", features = ["raw_value"] }
+
+[workspace]
+
+[patch."https://github.com/tempoxyz/tempo"]
+tempo-alloy = { path = "../tempo/crates/alloy" }
+tempo-chainspec = { path = "../tempo/crates/chainspec" }
+tempo-consensus = { path = "../tempo/crates/consensus" }
+tempo-contracts = { path = "../tempo/crates/contracts" }
+tempo-evm = { path = "../tempo/crates/evm" }
+tempo-hardfork = { path = "../tempo/crates/hardfork" }
+tempo-node = { path = "../tempo/crates/node" }
+tempo-payload-types = { path = "../tempo/crates/payload/types" }
+tempo-precompiles = { path = "../tempo/crates/precompiles" }
+tempo-precompiles-macros = { path = "../tempo/crates/precompiles-macros" }
+tempo-primitives = { path = "../tempo/crates/primitives" }
+tempo-revm = { path = "../tempo/crates/revm" }
+tempo-transaction-pool = { path = "../tempo/crates/transaction-pool" }
+
+[patch.crates-io]
+c-kzg = { path = "../vendor/c-kzg" } # SPIKE-ZKVM-5
+reth-primitives-traits = { path = "../vendor/reth-primitives-traits" } # SPIKE-ZKVM-6

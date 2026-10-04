@@ -40,4 +40,10 @@ for v in planted-owner planted-delegatecall planted-fallback; do
   if [ $rc -eq 1 ]; then echo "FAIL (as required): $v -> $(printf '%s\n' "$out" | grep FORBIDDEN | head -3 | sed 's/.*FORBIDDEN //; s/ in .*//' | paste -sd, -)"
   else echo "NOT CAUGHT: $v (rc=$rc)"; status=1; fi
 done
+# Spec 003 zone mode: SwornZoneVerifier passes; a runtime with storage writes and CALL (Sworn's own
+# bytecode, passed as if it were the zone verifier's deployed code) is caught by the opcode scan.
+if scripts/no-owner.sh --zone-verifier >/dev/null; then echo "PASS (as required): --zone-verifier src/SwornZoneVerifier.sol"; else echo "UNEXPECTED FAIL: --zone-verifier"; status=1; fi
+out=$(scripts/no-owner.sh --zone-verifier --code "$(forge inspect Sworn deployedBytecode)" 2>&1); rc=$?
+if [ $rc -eq 1 ] && printf '%s' "$out" | grep -q "FORBIDDEN opcode SSTORE"; then echo "FAIL (as required): --zone-verifier --code <runtime with SSTORE/CALL>"
+else echo "NOT CAUGHT: zone bytecode scan (rc=$rc)"; status=1; fi
 exit $status

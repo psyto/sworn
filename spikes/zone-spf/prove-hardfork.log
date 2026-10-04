@@ -1,0 +1,88 @@
+client init wall: 12.687797542s
+stderr: WARNING: Using insecure random number generator.
+execute wall: 558.440625ms
+cycles(total_instruction_count): 22659079
+report: gas: 21746928
+opcode counts (22659079 total instructions):
+    4062174 xor
+    2220840 addi
+    2197841 or
+    2135884 sll
+    1908985 ld
+    1684744 sd
+    1498161 srl
+    1497395 and
+    1355343 add
+    1314728 lbu
+     429709 bne
+     349465 beq
+     329018 mul
+     285295 sb
+     278003 mulhu
+     271249 sltu
+     163596 bltu
+     161977 jalr
+     121883 auipc
+      88579 sub
+      79058 lui
+      65522 bgeu
+      44989 jal
+      27879 subw
+      25569 srlw
+       8439 addw
+       7558 slt
+       7470 blt
+       6748 lw
+       6597 lhu
+       6573 sw
+       6070 lb
+       4635 sh
+       2228 sra
+       1640 lwu
+       1599 lh
+       1550 bge
+         60 sllw
+         22 ecall
+          4 divu
+syscall counts (0 total syscall instructions):
+
+publicValues match native host: PASS
+setup wall: 3.447949792s
+vkey(bytes32): 0x00456ca524140a2ee646ed085cb5e79bf8743265843cf1eb3be08e636a464859
+stderr: WARNING: Using insecure random number generator.
+Setting environment variables took 820.583µs
+Reading R1CS took 13.511254333s
+Reading proving key took 3.164817625s
+Reading witness file took 2.268375ms
+Deserializing JSON data took 20.0255ms
+Generating witness took 409.428041ms
+[90m09:02:15[0m DBG constraint system solver done [36mnbConstraints=[0m15972262 [36mtook=[0m4312.078791
+[90m09:02:44[0m DBG prover done [36macceleration=[0mnone [36mbackend=[0mgroth16 [36mcurve=[0mbn254 [36mnbConstraints=[0m15972262 [36mtook=[0m29650.670416
+Generating proof took 33.966558459s
+[90m09:02:44[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m09:02:44[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m09:02:44[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m09:02:44[0m DBG verifier done [36mbackend=[0mgroth16 [36mcurve=[0mbn254 [36mtook=[0m0.97975
+PROVE groth16 wall: 706.574125666s
+proof pv match: true
+verify ok (196.194125ms)
+fixture written: out-groth16-hardfork.json
+      724.73 real      4985.98 user       537.90 sys
+         18310250496  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            53567028  page reclaims
+                 431  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+               11686  signals received
+             1755101  voluntary context switches
+            25238120  involuntary context switches
+      50570934343270  instructions retired
+      17023663407814  cycles elapsed
+         72800130760  peak memory footprint
+EXIT 0

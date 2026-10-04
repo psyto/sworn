@@ -1,0 +1,35 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 18f54d8..66543e1 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -181,7 +181,7 @@ optional = true
+ version = "0.1"
+ optional = true
+ 
+-[dependencies.quanta]
++[target.'cfg(not(target_os = "zkvm"))'.dependencies.quanta] # SPIKE-ZKVM-6 (= Sworn SPIKE-PATCH-1 cause)
+ version = "0.12"
+ optional = true
+ 
+diff --git a/src/lib.rs b/src/lib.rs
+index 4991887..c4196f0 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -112,7 +112,7 @@
+ extern crate alloc;
+ 
+ /// Re-export of [`quanta::Instant`] for high-resolution timing with minimal overhead.
+-#[cfg(feature = "quanta")]
++#[cfg(all(feature = "quanta", not(target_os = "zkvm")))] // SPIKE-ZKVM-6
+ pub use quanta::Instant as FastInstant;
+ 
+ /// Fallback to [`std::time::Instant`] when the `quanta` feature is disabled.
+@@ -120,7 +120,7 @@ pub use quanta::Instant as FastInstant;
+ /// This keeps `FastInstant` available for `std` consumers that opt out of
+ /// `quanta` or build for targets where `quanta`'s platform timing backend is
+ /// unavailable.
+-#[cfg(all(feature = "std", not(feature = "quanta")))]
++#[cfg(all(feature = "std", any(not(feature = "quanta"), target_os = "zkvm")))] // SPIKE-ZKVM-6
+ pub use std::time::Instant as FastInstant;
+ 
+ /// Common constants.

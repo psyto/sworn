@@ -1,0 +1,31 @@
+{
+  "args": {
+    "anchorBlockHash": "0xa1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+    "anchorBlockNumber": 102,
+    "expectedWithdrawalBatchIndex": 103,
+    "nextBlockHash": "0xb2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+    "nextDepositNumber": 106,
+    "nextProcessedHash": "0xc2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2",
+    "nextProcessedTokenCount": 108,
+    "nextZoneHeight": 104,
+    "prevBlockHash": "0xb1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1",
+    "prevDepositNumber": 105,
+    "prevProcessedHash": "0xc1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1",
+    "prevProcessedTokenCount": 107,
+    "tempoBlockNumber": 101,
+    "withdrawalQueueHash": "0xd1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1",
+    "zoneId": 7
+  },
+  "destinationChainId": 42431,
+  "digest": "0xf9bd6871ee9a3957c94697f3b85cd939f7c6000ee56700f4e8cc34d3c46aec7d",
+  "genesisArtifactHash": "0xe1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1",
+  "note": "spec 003 AC-Z2 golden vector; produced by `sworn-zone-host golden`, asserted by attest/src/lib.rs and contracts/test/SwornZoneVerifier.t.sol",
+  "parentChainId": 1337,
+  "publicValues": "0x6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f31f9bd6871ee9a3957c94697f3b85cd939f7c6000ee56700f4e8cc34d3c46aec7d",
+  "typeString": "SwornZoneBatchAttestation(uint256 parentChainId,address verifier,uint32 zoneId,uint64 tempoBlockNumber,uint64 anchorBlockNumber,bytes32 anchorBlockHash,uint64 expectedWithdrawalBatchIndex,uint256 nextZoneHeight,bytes32 prevBlockHash,bytes32 nextBlockHash,bytes32 prevProcessedHash,bytes32 nextProcessedHash,uint64 prevDepositNumber,uint64 nextDepositNumber,uint64 prevProcessedTokenCount,uint64 nextProcessedTokenCount,bytes32 withdrawalQueueHash,bytes32 verifierConfigHash,bytes32 genesisArtifactHash,uint256 destinationChainId)",
+  "typehash": "0x92642ea5ff5c47ad5a0c977fa87d5a0634b45661ad091c055f6905e7a51d8221",
+  "verifier": "0x000000000000000000000000000000005a0e5a0e",
+  "verifierConfig": "0x02",
+  "verifierConfigHash": "0xf2ee15ea639b73fa3db9b34a245bdfa015c260c598b211bf05a1ecc4b3e3b4f2",
+  "zoneGuestVersion": "0x6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f31"
+}

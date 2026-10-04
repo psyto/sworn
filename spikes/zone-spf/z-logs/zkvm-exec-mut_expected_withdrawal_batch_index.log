@@ -1,0 +1,61 @@
+client init wall: 12.732203917s
+stderr: WARNING: Using insecure random number generator.
+stderr: 
+stderr: thread '<unnamed>' (2) panicked at src/main.rs:12:72:
+stderr: prove_zone_batch: withdrawal batch index mismatch: expected 4, got 3
+stderr: stack backtrace:
+stderr: note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+stderr: prove_zone_batch: withdrawal batch index mismatch: expected 4, got 3
+execute wall: 598.774084ms
+cycles(total_instruction_count): 25419657
+report: gas: 24504280
+opcode counts (25419657 total instructions):
+    5009671 xor
+    2516560 or
+    2457153 sll
+    2370491 addi
+    2143830 ld
+    1893181 sd
+    1777826 srl
+    1730018 and
+    1365105 lbu
+    1353732 add
+     445743 bne
+     355455 beq
+     329063 mul
+     284197 sb
+     277997 mulhu
+     271259 sltu
+     164915 bltu
+     163411 jalr
+     122669 auipc
+      88568 sub
+      80578 lui
+      65744 bgeu
+      45082 jal
+      27813 subw
+      18174 srlw
+       8827 addw
+       7558 slt
+       7490 blt
+       6744 lw
+       6602 lhu
+       6568 sw
+       5890 lb
+       4628 sh
+       2228 sra
+       1646 lwu
+       1599 lh
+       1555 bge
+         59 sllw
+         24 ecall
+          4 divu
+syscall counts (0 total syscall instructions):
+
+publicValues match native host: FAIL
+
+thread 'main' (51354256) panicked at src/main.rs:29:5:
+assertion failed: ok
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+$R $ELF zin/$c.bin execute  86.53s user 1.70s system 654% cpu 13.484 total
+EXIT 101

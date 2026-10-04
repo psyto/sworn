@@ -1,0 +1,150 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 5e763b67..129d3cea 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -14227,6 +14227,7 @@ dependencies = [
+  "parking_lot",
+  "proptest",
+  "reth-chain-state",
++ "reth-chainspec",
+  "reth-metrics",
+  "reth-primitives-traits",
+  "reth-provider",
+diff --git a/crates/node/tests/it/hardfork_settlement_e2e.rs b/crates/node/tests/it/hardfork_settlement_e2e.rs
+index 464c86da..af2408ba 100644
+--- a/crates/node/tests/it/hardfork_settlement_e2e.rs
++++ b/crates/node/tests/it/hardfork_settlement_e2e.rs
+@@ -239,7 +239,9 @@ async fn test_t13_migrates_and_settles_existing_portal() -> eyre::Result<()> {
+ 
+     let witness = recovery_witness(&l1, &zone, portal_address, 9, end).await?;
+     let config = SpfConfig::new(spec);
++    let dump = crate::spf::spike_dump_case("hardfork_t13_recovery", &config, &witness); // SPIKE-DUMP
+     let output = prove_zone_batch(&config, witness.clone())?;
++    crate::spf::spike_dump_output(dump, &output); // SPIKE-DUMP
+     let head = provider.get_block_by_number(end.into()).await?.unwrap();
+     assert_eq!(output.block_transition.prevBlockHash, parent.header.hash);
+     assert_eq!(
+diff --git a/crates/node/tests/it/spf.rs b/crates/node/tests/it/spf.rs
+index 26640fa4..d4eb3224 100644
+--- a/crates/node/tests/it/spf.rs
++++ b/crates/node/tests/it/spf.rs
+@@ -164,7 +164,9 @@ async fn spf_batch_execute() -> eyre::Result<()> {
+         tempo_ancestry_headers: vec![],
+     };
+ 
++    let dump = spike_dump_case("spf_batch_execute", &config, &witness); // SPIKE-DUMP
+     let output = prove_zone_batch(&config, witness)?;
++    spike_dump_output(dump, &output); // SPIKE-DUMP
+ 
+     assert_eq!(output.block_transition.prevBlockHash, B256::ZERO);
+     assert_eq!(output.block_transition.nextBlockHash, expected_hash);
+@@ -195,7 +197,9 @@ async fn spf_builder_equivalence() -> eyre::Result<()> {
+     let config = spf_config(&genesis);
+     let witness = built.batch_witness(&config, zone_state_witness, vec![]);
+ 
++    let dump = spike_dump_case("spf_builder_equivalence", &config, &witness); // SPIKE-DUMP
+     let output = prove_zone_batch(&config, witness)?;
++    spike_dump_output(dump, &output); // SPIKE-DUMP
+ 
+     assert_eq!(output.next_zone_height, 1);
+     assert_eq!(
+@@ -251,7 +255,9 @@ async fn spf_replays_migrated_policy_transaction_with_parent_forks() -> eyre::Re
+     let config = spf_config(&genesis);
+     let witness = built.batch_witness(&config, zone_state_witness, tempo_state_nodes);
+ 
++    let dump = spike_dump_case("spf_replays_migrated_policy", &config, &witness); // SPIKE-DUMP
+     let output = prove_zone_batch(&config, witness)?;
++    spike_dump_output(dump, &output); // SPIKE-DUMP
+ 
+     assert_eq!(output.next_zone_height, 1);
+     assert_eq!(
+@@ -533,3 +539,31 @@ fn trie(mut leaves: Vec<(B256, Vec<u8>)>) -> (B256, Vec<Bytes>) {
+         .collect();
+     (root, nodes)
+ }
++
++/// SPIKE-DUMP: write `{genesis, witness}` (the SP1 guest input) when ZONE_SPF_DUMP_DIR is set.
++pub(crate) fn spike_dump_case(
++    name: &str,
++    config: &SpfConfig,
++    witness: &BatchWitness,
++) -> Option<String> {
++    let dir = std::env::var("ZONE_SPF_DUMP_DIR").ok()?;
++    let genesis = config.chain_spec().inner.genesis().clone();
++    // The guest rebuilds the spec from this genesis; make sure that is lossless.
++    assert_eq!(
++        &ZoneChainSpec::from_genesis(genesis.clone()).expect("rebuild spec"),
++        config.chain_spec().as_ref(),
++        "dumped genesis must rebuild the identical ZoneChainSpec"
++    );
++    let path = format!("{dir}/{name}");
++    let case = serde_json::json!({ "genesis": genesis, "witness": witness });
++    std::fs::write(format!("{path}.case.json"), serde_json::to_vec(&case).unwrap()).unwrap();
++    Some(path)
++}
++
++/// SPIKE-DUMP: write the natively computed BatchOutput next to the case.
++pub(crate) fn spike_dump_output(path: Option<String>, output: &zone_spf::BatchOutput) {
++    if let Some(path) = path {
++        std::fs::write(format!("{path}.native-output.json"), serde_json::to_vec(output).unwrap())
++            .unwrap();
++    }
++}
+diff --git a/crates/sequencer/Cargo.toml b/crates/sequencer/Cargo.toml
+index b9995d03..9170b3f8 100644
+--- a/crates/sequencer/Cargo.toml
++++ b/crates/sequencer/Cargo.toml
+@@ -54,6 +54,7 @@ metrics.workspace = true
+ parking_lot.workspace = true
+ serde.workspace = true
+ serde_json.workspace = true
++reth-chainspec.workspace = true # SPIKE-DUMP
+ schnellru.workspace = true
+ thiserror.workspace = true
+ tempfile.workspace = true
+@@ -66,4 +67,5 @@ jsonrpsee.workspace = true
+ proptest.workspace = true
+ reth-provider = { workspace = true, features = ["test-utils"] }
+ serde_json.workspace = true
++reth-chainspec.workspace = true # SPIKE-DUMP
+ tokio-tungstenite.workspace = true
+diff --git a/crates/sequencer/src/prover.rs b/crates/sequencer/src/prover.rs
+index c2d0dc09..24c690fd 100644
+--- a/crates/sequencer/src/prover.rs
++++ b/crates/sequencer/src/prover.rs
+@@ -561,6 +561,24 @@ async fn validate_candidate<P: ZoneSequencerProvider>(
+         tempo_state_nodes: witness.tempo_state_witness.node_pool.len(),
+     };
+ 
++    // SPIKE-DUMP: record the production-generated witness + zone genesis for the SP1 spike.
++    let spike_dump_path = std::env::var("ZONE_SPF_DUMP_DIR").ok().map(|dir| {
++        use reth_chainspec::EthChainSpec as _;
++        let first = witness.zone_blocks.first().map(|b| b.number).unwrap_or_default();
++        let last = witness.zone_blocks.last().map(|b| b.number).unwrap_or_default();
++        let path = format!(
++            "{dir}/zone{}-chain{}-blocks{first}-{last}",
++            context.config.zone_id,
++            context.config.chain_spec.chain().id()
++        );
++        let case = serde_json::json!({
++            "genesis": context.config.chain_spec.inner.genesis(),
++            "witness": &witness,
++        });
++        std::fs::write(format!("{path}.case.json"), serde_json::to_vec(&case).unwrap()).unwrap();
++        path
++    });
++
+     let started = Instant::now();
+     let (output, proof_bundle) = if let Some(address) = &context.config.prover_address {
+         let (output, proof_bundle) =
+@@ -580,6 +598,10 @@ async fn validate_candidate<P: ZoneSequencerProvider>(
+         .record(started.elapsed().as_secs_f64());
+ 
+     let started = Instant::now();
++    if let Some(path) = &spike_dump_path {
++        std::fs::write(format!("{path}.native-output.json"), serde_json::to_vec(&output).unwrap())
++            .unwrap();
++    }
+     compare_output(&output, batch, batch.prev_block_hash).context(ValidationFailure)?;
+     metrics
+         .output_validation_duration_seconds

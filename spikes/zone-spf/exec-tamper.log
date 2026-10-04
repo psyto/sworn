@@ -1,0 +1,59 @@
+client init wall: 12.330702s
+stderr: WARNING: Using insecure random number generator.
+stderr: 
+stderr: thread '<unnamed>' (2) panicked at src/main.rs:20:29:
+stderr: prove_zone_batch: failed to execute advanceTempo in zone block 1
+stderr: stack backtrace:
+stderr: note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+stderr: prove_zone_batch: failed to execute advanceTempo in zone block 1
+execute wall: 535.592167ms
+cycles(total_instruction_count): 20816860
+report: gas: 20019339
+opcode counts (20816860 total instructions):
+    3618227 xor
+    2048825 addi
+    2023401 or
+    1954425 sll
+    1728111 ld
+    1520760 sd
+    1358206 and
+    1354100 srl
+    1321553 add
+    1257973 lbu
+     402437 bne
+     331154 beq
+     326784 mul
+     277281 mulhu
+     270646 sltu
+     266155 sb
+     148033 jalr
+     145511 bltu
+     112005 auipc
+      82143 sub
+      71739 lui
+      58785 bgeu
+      40729 jal
+      25605 subw
+      17167 srlw
+       8053 addw
+       7544 slt
+       6988 blt
+       6273 lhu
+       5628 lb
+       5591 sw
+       4657 lw
+       4451 sh
+       2009 sra
+       1573 lh
+       1331 bge
+        920 lwu
+         59 sllw
+         24 ecall
+          4 divu
+syscall counts (0 total syscall instructions):
+
+publicValues match native host: FAIL
+
+thread 'main' (51213778) panicked at src/main.rs:29:5:
+assertion failed: ok
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

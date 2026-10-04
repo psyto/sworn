@@ -1,0 +1,213 @@
+diff --git a/crates/chainspec/Cargo.toml b/crates/chainspec/Cargo.toml
+index 10efb9b3c7..8b8534b9cf 100644
+--- a/crates/chainspec/Cargo.toml
++++ b/crates/chainspec/Cargo.toml
+@@ -23,7 +23,6 @@ tempo-primitives.workspace = true
+ reth-cli = { workspace = true, optional = true }
+ reth-chainspec = { workspace = true, optional = true }
+ reth-network-peers = { workspace = true, optional = true }
+-tempo-dkg-onchain-artifacts = { workspace = true, optional = true }
+ 
+ alloy-evm = { workspace = true, optional = true }
+ alloy-genesis.workspace = true
+@@ -34,6 +33,11 @@ eyre = { workspace = true, optional = true }
+ serde.workspace = true
+ serde_json.workspace = true
+ paste.workspace = true
++
++# SPIKE-ZKVM-2: the DKG outcome parser (commonware-consensus -> commonware-runtime -> tokio/reqwest,
++# blst) is only needed for the consensus network identity, never for EVM execution. Not on zkvm.
++[target.'cfg(not(target_os = "zkvm"))'.dependencies]
++tempo-dkg-onchain-artifacts = { workspace = true, optional = true }
+ commonware-codec = { workspace = true, optional = true }
+ commonware-cryptography = { workspace = true, optional = true }
+ 
+diff --git a/crates/chainspec/src/network_identity.rs b/crates/chainspec/src/network_identity.rs
+index 76bd70dde3..4a3145954c 100644
+--- a/crates/chainspec/src/network_identity.rs
++++ b/crates/chainspec/src/network_identity.rs
+@@ -1,3 +1,31 @@
++// SPIKE-ZKVM-2: on zkvm, a stub with no BLS key; parsing always fails so the identity is `None`.
++#[cfg(target_os = "zkvm")]
++#[derive(Debug, Clone, PartialEq, Eq)]
++pub struct NetworkIdentity {
++    /// First epoch for which `identity` is expected to verify finalizations.
++    pub from_epoch: u64,
++}
++
++#[cfg(target_os = "zkvm")]
++impl NetworkIdentity {
++    pub(crate) fn mainnet() -> Self {
++        Self { from_epoch: 0 }
++    }
++
++    pub(crate) fn testnet() -> Self {
++        Self { from_epoch: 51 }
++    }
++
++    pub(crate) fn from_extra_data(_extra_data: &[u8]) -> eyre::Result<Self> {
++        eyre::bail!("network identity parsing is not compiled for zkvm")
++    }
++}
++
++#[cfg(not(target_os = "zkvm"))]
++pub use real::NetworkIdentity;
++
++#[cfg(not(target_os = "zkvm"))]
++mod real {
+ //! Compiled network identities.
+ 
+ use alloy_primitives::hex;
+@@ -87,3 +115,5 @@ mod tests {
+         );
+     }
+ }
++
++}
+diff --git a/crates/dkg-onchain-artifacts/Cargo.toml b/crates/dkg-onchain-artifacts/Cargo.toml
+index cd8d226e36..151dbb5ba8 100644
+--- a/crates/dkg-onchain-artifacts/Cargo.toml
++++ b/crates/dkg-onchain-artifacts/Cargo.toml
+@@ -14,11 +14,15 @@ publish.workspace = true
+ [dependencies]
+ bytes.workspace = true
+ commonware-codec.workspace = true
+-commonware-consensus.workspace = true
+ commonware-cryptography.workspace = true
+ commonware-utils.workspace = true
+ modular-bitfield = { version = "0.13.1", optional = true }
+ 
++# SPIKE-ZKVM-3: commonware-consensus (-> commonware-runtime -> tokio/reqwest/zstd/aws-lc) is only
++# used for its `Epoch` newtype; on zkvm a codec-identical local copy is used instead.
++[target.'cfg(not(target_os = "zkvm"))'.dependencies]
++commonware-consensus.workspace = true
++
+ [dev-dependencies]
+ commonware-math.workspace = true
+ rand.workspace = true
+diff --git a/crates/dkg-onchain-artifacts/src/lib.rs b/crates/dkg-onchain-artifacts/src/lib.rs
+index 081d1c2ba2..df3dc26374 100644
+--- a/crates/dkg-onchain-artifacts/src/lib.rs
++++ b/crates/dkg-onchain-artifacts/src/lib.rs
+@@ -4,7 +4,49 @@ use std::num::NonZeroU32;
+ 
+ use bytes::{Buf, BufMut};
+ use commonware_codec::{EncodeSize, RangeCfg, Read, ReadExt, Write};
++#[cfg(not(target_os = "zkvm"))]
+ use commonware_consensus::types::Epoch;
++#[cfg(target_os = "zkvm")]
++pub use zkvm_epoch::Epoch;
++
++/// SPIKE-ZKVM-3: codec-identical copy of `commonware_consensus::types::Epoch` (varint u64).
++#[cfg(target_os = "zkvm")]
++mod zkvm_epoch {
++    use bytes::{Buf, BufMut};
++    use commonware_codec::{EncodeSize, Error, Read, ReadExt, Write, varint::UInt};
++
++    #[derive(Copy, Clone, Debug, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
++    pub struct Epoch(u64);
++
++    impl Epoch {
++        pub const fn new(value: u64) -> Self {
++            Self(value)
++        }
++        pub const fn get(self) -> u64 {
++            self.0
++        }
++    }
++
++    impl Read for Epoch {
++        type Cfg = ();
++        fn read_cfg(buf: &mut impl Buf, _cfg: &Self::Cfg) -> Result<Self, Error> {
++            let value: u64 = UInt::read(buf)?.into();
++            Ok(Self(value))
++        }
++    }
++
++    impl Write for Epoch {
++        fn write(&self, buf: &mut impl BufMut) {
++            UInt(self.0).write(buf);
++        }
++    }
++
++    impl EncodeSize for Epoch {
++        fn encode_size(&self) -> usize {
++            UInt(self.0).encode_size()
++        }
++    }
++}
+ use commonware_cryptography::{
+     bls12381::{
+         dkg::feldman_desmedt::Output,
+diff --git a/crates/precompiles/src/stablecoin_dex/mod.rs b/crates/precompiles/src/stablecoin_dex/mod.rs
+index a62d90d3dc..07f135a184 100644
+--- a/crates/precompiles/src/stablecoin_dex/mod.rs
++++ b/crates/precompiles/src/stablecoin_dex/mod.rs
+@@ -1718,7 +1718,7 @@ impl StablecoinDEX {
+     fn validate_and_build_route(&self, path: &[Address]) -> Result<Vec<(B256, bool)>> {
+         let mut route = Vec::new();
+ 
+-        for [token_in, token_out] in path.array_windows::<2>().copied() {
++        for [token_in, token_out] in path.windows(2).map(|w| [w[0], w[1]]) { // SPIKE-ZKVM-7 (= Sworn SPIKE-PATCH-3): array_windows needs rustc>=1.94; SP1 toolchain is 1.93
+             let (base, quote) = {
+                 let token_in_tip20 = TIP20Token::from_address(token_in)?;
+ 
+diff --git a/crates/primitives/Cargo.toml b/crates/primitives/Cargo.toml
+index f12c655073..57f37f4367 100644
+--- a/crates/primitives/Cargo.toml
++++ b/crates/primitives/Cargo.toml
+@@ -48,12 +48,15 @@ serde_json.workspace = true
+ once_cell = { version = "1.21", default-features = false }
+ 
+ # Cryptography
+-aws-lc-rs = { version = "1.16.2", optional = true, default-features = false, features = ["alloc", "non-fips", "ring-sig-verify"] }
+ base64.workspace = true
+ commonware-cryptography.workspace = true
+ p256 = { workspace = true, features = ["ecdsa"] }
+ sha2.workspace = true
+ 
++# SPIKE-ZKVM-4 (= Sworn SPIKE-PATCH-2): aws-lc-rs (C/cmake) only on non-zkvm targets; zkvm uses p256.
++[target.'cfg(not(target_os = "zkvm"))'.dependencies]
++aws-lc-rs = { version = "1.16.2", optional = true, default-features = false, features = ["alloc", "non-fips", "ring-sig-verify"] }
++
+ [dev-dependencies]
+ arbitrary.workspace = true
+ reth-codecs.workspace = true
+diff --git a/crates/primitives/src/transaction/tt_signature.rs b/crates/primitives/src/transaction/tt_signature.rs
+index e5323d6a5b..a7167195f7 100644
+--- a/crates/primitives/src/transaction/tt_signature.rs
++++ b/crates/primitives/src/transaction/tt_signature.rs
+@@ -808,7 +808,7 @@ fn concat<const N: usize>(slices: &[&[u8]]) -> [u8; N] {
+     out
+ }
+ 
+-#[cfg(feature = "std")]
++#[cfg(all(feature = "std", not(target_os = "zkvm")))] // SPIKE-ZKVM-4
+ fn verify_p256_signature_with_aws_lc(
+     r: &[u8],
+     s: &[u8],
+@@ -837,7 +837,7 @@ fn verify_p256_signature_with_aws_lc(
+         .map_err(|_| "P256 signature verification failed")
+ }
+ 
+-#[cfg(any(test, not(feature = "std")))]
++#[cfg(any(test, not(feature = "std"), target_os = "zkvm"))] // SPIKE-ZKVM-4
+ fn verify_p256_signature_with_p256(
+     r: &[u8],
+     s: &[u8],
+@@ -891,13 +891,13 @@ fn verify_p256_signature_internal(
+         return Err("P256 signature has high s value");
+     }
+ 
+-    #[cfg(all(feature = "std", not(test)))]
++    #[cfg(all(feature = "std", not(test), not(target_os = "zkvm")))] // SPIKE-ZKVM-4
+     {
+         // production `std` builds use the `aws-lc-rs` crate
+         verify_p256_signature_with_aws_lc(r, s, pub_key_x, pub_key_y, message_hash)
+     }
+ 
+-    #[cfg(not(feature = "std"))]
++    #[cfg(any(not(feature = "std"), target_os = "zkvm"))] // SPIKE-ZKVM-4
+     {
+         // production `no-std` builds use the `p256` crate
+         verify_p256_signature_with_p256(r, s, pub_key_x, pub_key_y, message_hash)

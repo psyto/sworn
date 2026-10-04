@@ -1,0 +1,241 @@
+# 003 — A ZK verifier for Tempo Zone batches, shaped like `IVerifier`
+
+Status: r2 (2026-10-04), after Codex r1 CHANGES (`docs/reviews/003-spec-r1.md`). Builds on the zone-spf spike (`spikes/zone-spf/`), which ran Tempo Zones'
+own `prove_zone_batch` (zones `ac49071f`) inside SP1 on four real batches from the zones integration
+tests, matched native output, and produced a Groth16 proof of `hardfork_t13_recovery` (22,659,079 cycles,
+706.6 s locally).
+
+## 1. What the spike does not yet do (the gap this spec closes)
+
+1. The guest commits `keccak256(json(BatchOutput)) || json(BatchOutput)`. That binds the execution result
+   but not the **public inputs** the portal passes to `IVerifier.verify` (zone id, Tempo block, anchor,
+   expected withdrawal index), nor the verifier or its config. A Nitro attestation commits all of these
+   (`zones/crates/prover/src/protocol.rs:122`, `nitro_batch_attestation_hash`).
+2. The guest builds the Zone chain spec from a **genesis the prover supplies**. Nothing pins which spec
+   was used, so a prover could replay the batch under a different spec.
+3. No on-chain contract checks the proof against the `IVerifier` arguments.
+
+## 2. Goals
+
+- **G1 (guest):** commit one digest over everything a Nitro attestation commits, plus the chain spec.
+- **G2 (contract):** `SwornZoneVerifier.sol` implements `IVerifier`
+  (`zones/crates/contracts/src/runtime/interfaces/IZone.sol:306-345`). It recomputes the digest from
+  calldata and checks the SP1 Groth16 proof via the SP1 verifier already on Moderato
+  (`0x2c77329747b7C8B293514A6129404D4cefDd9B18`, v6.1.0, the one `Sworn.sol` uses).
+- **G3 (evidence):** deploy on Moderato and send one `attest` transaction carrying the real proof of
+  `hardfork_t13_recovery`, which emits an event anyone can find and re-check.
+
+Non-goals: wiring into a ZonePortal (only Tempo's factory can choose a zone's verifier:
+`tempo zone_factory/mod.rs:110,172`); withdrawals; a Moderato-native Zone batch; replacing Nitro.
+
+## 3. The digest
+
+EIP-712 `hashStruct` (no domain separator, matching the Nitro digest; domain separation comes from
+`destinationChainId` + `verifier` + `parentChainId` + `zoneId` inside the struct) of:
+
+```
+SwornZoneBatchAttestation(
+  uint256 parentChainId, address verifier, uint32 zoneId,
+  uint64 tempoBlockNumber, uint64 anchorBlockNumber, bytes32 anchorBlockHash,
+  uint64 expectedWithdrawalBatchIndex, uint256 nextZoneHeight,
+  bytes32 prevBlockHash, bytes32 nextBlockHash,
+  bytes32 prevProcessedHash, bytes32 nextProcessedHash,
+  uint64 prevDepositNumber, uint64 nextDepositNumber,
+  uint64 prevProcessedTokenCount, uint64 nextProcessedTokenCount,
+  bytes32 withdrawalQueueHash, bytes32 verifierConfigHash,
+  bytes32 genesisArtifactHash, uint256 destinationChainId)
+```
+
+- The first 18 fields have the same meaning and source as `NitroBatchAttestation`; field values come
+  from `witness.public_inputs` and from the `BatchOutput` returned by `prove_zone_batch`.
+- The struct has a **different name** from `NitroBatchAttestation`, so a digest can never be mistaken for a
+  Nitro `user_data`.
+- `verifier` is the deployed `SwornZoneVerifier` address (a guest input, so the verifier is deployed
+  before proving). `verifierConfigHash = keccak256(verifierConfig)` with
+  `verifierConfig = ZK_VERIFIER_CONFIG_V1 = 0x02` (Nitro's is `0x01`).
+- `genesisArtifactHash = keccak256(genesis_bytes)`: the exact bytes of the genesis JSON the guest parsed
+  (hardfork config included). This pins one **artifact**; it does not prove that artifact is the authentic
+  spec. Choosing it is a trusted deployment step (the artifact is committed to the repo and its hash recorded).
+- `destinationChainId`: the chain the verifier is deployed on (42431 for Moderato), a guest input. The
+  contract uses `block.chainid`, so the same proof cannot verify on another chain even at the same address.
+- The canonical type string is exactly (one line, no spaces after commas):
+  `SwornZoneBatchAttestation(uint256 parentChainId,address verifier,uint32 zoneId,uint64 tempoBlockNumber,uint64 anchorBlockNumber,bytes32 anchorBlockHash,uint64 expectedWithdrawalBatchIndex,uint256 nextZoneHeight,bytes32 prevBlockHash,bytes32 nextBlockHash,bytes32 prevProcessedHash,bytes32 nextProcessedHash,uint64 prevDepositNumber,uint64 nextDepositNumber,uint64 prevProcessedTokenCount,uint64 nextProcessedTokenCount,bytes32 withdrawalQueueHash,bytes32 verifierConfigHash,bytes32 genesisArtifactHash,uint256 destinationChainId)`
+
+**Public values** = `abi.encode(bytes32 ZONE_GUEST_VERSION, bytes32 digest)`, with
+`ZONE_GUEST_VERSION = keccak256("sworn-zone-guest-v1")`.
+
+## 4. Guest changes (`spikes/zone-spf/guest`)
+
+The input becomes `{ genesis_bytes: bytes, witness: BatchWitness, verifier: address, verifier_config: bytes, destination_chain_id: u64 }`.
+
+The guest:
+1. hashes `genesis_bytes`, then parses them;
+2. runs `prove_zone_batch` exactly as today;
+3. computes the digest;
+4. commits the public values.
+
+It aborts if `verifier_config != 0x02`.
+
+A native host computes the same public values with the same Rust code (shared module, not copied).
+
+## 5. Contract (`contracts/src/SwornZoneVerifier.sol`)
+
+- **Immutables** (constructor): `SP1_VERIFIER`, `ZONE_VKEY`, `PARENT_CHAIN_ID`, `PINNED_ZONE_ID`,
+  `PINNED_GENESIS_ARTIFACT_HASH`. No owner, no setters, no upgrade path; `scripts/no-owner.sh` must pass on it.
+- **`verify(...)`**: the exact `IVerifier` signature, `view`. It reverts with a custom error when:
+  - `verifierConfig != 0x02`;
+  - `zoneId != PINNED_ZONE_ID`;
+  - the SP1 proof fails.
+
+  Otherwise it returns `true`. The digest uses `PARENT_CHAIN_ID`, `address(this)`,
+  `keccak256(verifierConfig)`, `PINNED_GENESIS_ARTIFACT_HASH` and `block.chainid`, with every other field taken
+  from the arguments.
+- **`attest(...)`**: same arguments, non-view. Runs the same check, then emits
+  `ZoneBatchVerified(uint32 zoneId, uint256 nextZoneHeight, bytes32 prevBlockHash, bytes32 nextBlockHash, bytes32 digest)`.
+  It writes nothing to storage.
+- **Deliberate deviations from a production verifier**, each stated in NatSpec and in every public text:
+  - **D1 `PARENT_CHAIN_ID`:** a constructor argument (1337, the dev chain the batch came from). In
+    production it would be `block.chainid`.
+  - **D2 no caller check:** Nitro's verifier requires the caller to be the zone's canonical portal. There
+    is no portal for this zone on Moderato.
+  - **D3 one pinned zone and genesis artifact:** a production verifier would need a registry chosen by
+    Tempo. Which artifact is pinned is a trusted deployment choice.
+  - **D4 write-nothing demonstration:** the missing caller check (D2) is safe only because `attest` moves
+    nothing and stores nothing. It must not be generalized to settlement.
+
+## 6. Acceptance criteria
+
+- **AC-Z1 (execute):**
+  - All four real batches PASS, with guest public values equal to the native host's.
+  - `tamper_deposit_amount` aborts.
+  - **Public-input binding (native, every member):** for `hardfork_t13_recovery`, mutate each of the six
+    `PublicInputs` members individually (parent_chain_id, zone_id, tempo_block_number, anchor_block_number,
+    anchor_block_hash, expected_withdrawal_batch_index) with the witness otherwise unchanged; each must make
+    `prove_zone_batch` return an error. Run natively (same code path the guest runs); one of them (e.g.
+    expected_withdrawal_batch_index) is also run in the zkVM executor and must abort.
+  - Changing one byte of `genesis_bytes` (e.g. in the alloc of an untouched account) changes
+    `genesisArtifactHash`, and therefore the digest.
+- **AC-Z2 (golden vector):** a fixed non-trivial vector gives the same digest in Rust and Solidity, and both
+  sides assert that their typehash equals `keccak256` of the literal type string in §3, and equals the same
+  hard-coded 32-byte constant `0x92642ea5ff5c47ad5a0c977fa87d5a0634b45661ad091c055f6905e7a51d8221`.
+- **AC-Z3 (prove):** a Groth16 proof of `hardfork_t13_recovery` whose public values equal the native host's;
+  the fixture is written to `contracts/test/vectors/zone-hardfork.json`.
+- **AC-Z4 (Foundry):**
+  - The real fixture passes `verify` and `attest` against the real SP1 Groth16 verifier bytecode.
+  - **Calldata fields:** each of the 15 digest fields that come from `verify` arguments, mutated
+    individually, makes it revert. So do a wrong `verifierConfig` and a wrong `zoneId`.
+  - **Immutable/derived fields, via clone deployments with the same vkey:** a clone with a different
+    `PARENT_CHAIN_ID`, one with a different `PINNED_GENESIS_ARTIFACT_HASH`, one at a different address,
+    and the original under `vm.chainId(1)` (different `block.chainid`) each reject the real proof.
+  - A flipped proof byte and a wrong vkey also reject.
+- **AC-Z5 (Moderato):**
+  - Deploy; record the address, codehash and constructor args in `deployments/moderato.json` under
+    `zoneVerifier`.
+  - Send `attest` with the real proof, and record the tx hash and block.
+  - `eth_call verify` returns true; one mutated field reverts.
+  - `scripts/no-owner.sh` passes on the deployed bytecode.
+- **AC-Z6:** `scripts/gate.sh` still passes, and Sworn's existing 59 tests are unchanged.
+
+## 7. What may be claimed afterwards (and what may not)
+
+- **May:** "Tempo's own Zone batch verifier runs inside a zero-knowledge VM, and a contract on Tempo's
+  Moderato testnet verified that proof against the `IVerifier` inputs (tx …)."
+- **May not:**
+  - that a Tempo Zone settles with it;
+  - that it secures withdrawals;
+  - that the batch came from Moderato (it came from Tempo's zones integration tests on a dev chain);
+  - that it is production-ready or audited;
+  - that the pinned genesis is Tempo's authentic Zone spec (it is the artifact from Tempo's integration test);
+  - anything about cross-chain or settlement security (D2/D4).
+
+  D1–D4 are disclosed wherever the claim appears.
+
+## Results (phase A)
+
+Measured 2026-10-04 on the founder's Mac (12 cores, 32 GB), SP1 6.3.1. Nothing was sent to any chain.
+Logs are in `spikes/zone-spf/z-logs/`.
+
+**Build / code**
+- Shared module `spikes/zone-spf/attest` (`sworn-zone-attest`): `sol!` struct, `TYPE_STRING`, `TYPEHASH`,
+  input framing and `execute()`. The guest (`guest/src/main.rs`) and the native host (`host/`) both call `execute()`.
+  The guest is built with `spikes/zone-spf/build-guest.sh` (`cargo prove build --ignore-rust-version`, plus the RISC-V C compiler for c-kzg/blst/secp256k1/zstd).
+  Log: `guest-build.log`. The ELF sha256 is `62b72e9c…d8e2` (`guest-elf.sha256`).
+- vkey: `0x006c15314d326e27d72c1c1f83fd2bc0eaf5fb2053e2fe5b3e9415a2d037293d`. It does not depend on the verifier address.
+- Pinned genesis artifact: `spikes/zone-spf/genesis/hardfork_t13_recovery.genesis.json`. It is 54,615 bytes, the exact `genesis` substring of the case dump, and its
+  `keccak256` is `0xd39aa765427c64ea95821bd5f93d44c89854b0f00fec0e21137421d04fb7c11e`.
+- Placeholder verifier for local proofs: `0x000000000000000000000000000000005a0e5a0e`, with destination chain 42431.
+
+**AC-Z1**
+- zkVM execute: guest public values equal the native host's for all four batches. The previous spike's guest (which committed JSON, not this digest) is shown for comparison:
+
+  | batch | cycles | spike guest cycles | log |
+  |---|---:|---:|---|
+  | hardfork_t13_recovery | 25,531,739 | 22,659,079 | `zkvm-exec-hardfork_t13_recovery.log` |
+  | spf_batch_execute | 23,463,438 | | `zkvm-exec-spf_batch_execute.log` |
+  | spf_builder_equivalence | 21,477,274 | | `zkvm-exec-spf_builder_equivalence.log` |
+  | spf_replays_migrated_policy | 19,081,481 | | `zkvm-exec-spf_replays_migrated_policy.log` |
+
+  The batch outputs also equal the `native-output.json` the zones integration tests wrote (`native-*.log`).
+- `tamper_deposit_amount`: rejected natively (`prove_zone_batch: failed to execute advanceTempo in zone block 1`). The guest panics in the zkVM and commits no public values.
+  Logs: `native-tamper_deposit_amount.log`, `zkvm-exec-tamper_deposit_amount.log`.
+- PublicInputs binding (native, `native-mutations.log`): all six single-member mutations are rejected by `prove_zone_batch`:
+  - parent_chain_id and zone_id: chain-id mismatch;
+  - tempo_block_number: final Tempo block mismatch;
+  - anchor_block_number: ancestry length mismatch;
+  - anchor_block_hash: anchor hash mismatch;
+  - expected_withdrawal_batch_index: index mismatch.
+
+  The expected_withdrawal_batch_index mutation also panics in the zkVM (`zkvm-exec-mut_expected_withdrawal_batch_index.log`).
+- One genesis byte (byte 83: the nonce of alloc account `0x0…0` changed from `0x1` to `0x2`): the batch still verifies with an identical `BatchOutput`, but
+  `genesisArtifactHash` changes `0xd39a…c11e` → `0x4c5d…e9ba` and the digest changes `0x506f…df6a` → `0xc51b…ac39`.
+- `verifier_config = 0x01` is rejected.
+
+**AC-Z2**
+- Golden vector `contracts/test/vectors/zone-digest-golden.json`: every field is distinct, and the digest is
+  `0xf9bd6871ee9a3957c94697f3b85cd939f7c6000ee56700f4e8cc34d3c46aec7d`.
+- Rust (`attest-unit-tests.log`, 2/2) and Solidity (`test_ACZ2_*`) both assert the same value. Both also assert the typehash `0x92642ea5…8221`, which equals `keccak256` of the literal.
+
+**AC-Z3 (placeholder address only)**
+- A Groth16 proof of `hardfork_t13_recovery` for `0x…5a0e5a0e` on chain 42431:
+  - proving wall time 877.0 s (14 min 57 s end to end incl. build), peak RSS 21.7 GB;
+  - public values equal the native host's;
+  - SDK verify passed.
+- Log: `prove-hardfork_t13_recovery-0x000000000000000000000000000000005a0e5a0e-42431.log`. Fixture: `contracts/test/vectors/zone-hardfork-placeholder.json`.
+- The real `zone-hardfork.json` needs the Moderato address. Produce it with `scripts/zone-prove.sh <address>`.
+
+**AC-Z4**
+- `contracts/test/SwornZoneVerifier.t.sol` (`forge-zone-tests.log`), 5/5 pass. Both the mock-verifier run and the real run (`deployCodeTo` at the placeholder address, the real v6.1.0 Groth16 bytecode etched at the Moderato SP1 address, `vm.chainId(42431)`) check the same cases:
+  - pass verify and attest, with the event emitted and zero storage writes;
+  - each of the 15 calldata fields mutated → revert. zoneId fails with WrongZone, plus a clone pinned to the mutated zone fails with InvalidProof;
+  - three wrong `verifierConfig` values;
+  - clones with a different PARENT_CHAIN_ID, a different PINNED_GENESIS_ARTIFACT_HASH, or a different address, and `vm.chainId(1)`;
+  - a flipped proof byte and a wrong vkey.
+- Breaking the contract (hashing a constant instead of `withdrawalQueueHash`, `block.chainid`, `PARENT_CHAIN_ID` or `address(this)`) makes the tests fail.
+
+**AC-Z5 prep (nothing sent)**
+- `scripts/deploy-zone-verifier.sh` prints only. Its dry run, which only reads Moderato, gives:
+  - init code: 3,386 bytes;
+  - eth_estimateGas: 3,741,423;
+  - log: `deploy-zone-verifier-dryrun.log`.
+- `scripts/zone-attest.sh` was rehearsed on a local anvil (chain 42431) using `anvil_setCode` only, with no transactions:
+  - the immutables match;
+  - `attestationDigest` matches;
+  - `verify` returns true;
+  - with nextZoneHeight+1 it reverts with `InvalidProof()`;
+  - `attest` eth_estimateGas: 267,753;
+  - log: `zone-attest-anvil-rehearsal.log`.
+- `scripts/no-owner.sh --zone-verifier --code <runtime>` passes on the constructed runtime. That is 2,837 bytes with one STATICCALL and no SSTORE/SLOAD/CALL/DELEGATECALL/CREATE/SELFDESTRUCT (`no-owner-placeholder-runtime.log`).
+
+**AC-Z6**
+- `contracts/scripts/gate.sh` passes: 49/49 required, 64 tests run (59 existing + 5 new). Log: `gate.log`.
+- Sworn's compiled runtime keccak is still `0x9082880d…5563`, the deployed codehash.
+
+## Results (AC-Z5, in progress)
+
+- **Deployed on Moderato, 2026-10-04.**
+  - `SwornZoneVerifier` at `0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De`, tx `0x1a0c3bda046cffabcd888588f832f84f9eccbbe2ac73d6e1a070adfe502b189b`.
+  - Block 38070241, status 1, gasUsed 3,460,805.
+  - The runtime codehash is `0xefc8799a…14ab`.
+  - `no-owner.sh --zone-verifier` passes on the deployed code (2,837 bytes, one STATICCALL, no forbidden opcodes).
+  - Recorded in `deployments/moderato.json` under `SwornZoneVerifier`.
+- **Pending:** the real proof for this address (`scripts/zone-prove.sh`), the `eth_call verify` and mutated-field checks, and the `attest` transaction.

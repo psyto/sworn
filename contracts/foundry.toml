@@ -8,5 +8,10 @@ script = "script"
 solc_version = "0.8.20"
 optimizer = true
 optimizer_runs = 200
+# Spec 003: SwornZoneVerifier implements Tempo's 12-argument IVerifier.verify, whose ABI decoder alone is
+# "stack too deep" under the legacy code generator. Only that file (and whatever imports it) is compiled
+# with via-IR; Sworn.sol keeps the default profile, so its bytecode is unchanged.
+additional_compiler_profiles = [{ name = "via-ir", via_ir = true }]
+compilation_restrictions = [{ paths = "src/SwornZoneVerifier.sol", via_ir = true }]
 # Read-only: the real-proof test reads a fixture produced by the Rust half.
 fs_permissions = [{ access = "read", path = "../out" }, { access = "read", path = "./test/vectors" }]

@@ -1,0 +1,11 @@
+ok    ZONE_VKEY = 0x006c15314d326e27d72c1c1f83fd2bc0eaf5fb2053e2fe5b3e9415a2d037293d
+ok    PARENT_CHAIN_ID = 1337
+ok    PINNED_ZONE_ID = 1
+ok    PINNED_GENESIS_ARTIFACT_HASH = 0xd39aa765427c64ea95821bd5f93d44c89854b0f00fec0e21137421d04fb7c11e
+ok    attestationDigest = 0x506fffee16ea140e58348f0aab6b050ac27d2ea2325a8655173ca61ccea7df6a
+ok    eth_call verify(real proof) = true
+ok    eth_call verify(nextZoneHeight+1) reverts InvalidProof() (0x09bde339)
+=== attest transaction (to 0x000000000000000000000000000000005a0e5a0e, chain 42431, value 0) ===
+calldata (1028 bytes): 0x7ca3670f0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000001
+chain eth_estimateGas: 267753
+PRINT ONLY: nothing sent. To send: scripts/with-keys.sh scripts/zone-attest.sh 0x000000000000000000000000000000005a0e5a0e test/vectors/zone-hardfork-placeholder
