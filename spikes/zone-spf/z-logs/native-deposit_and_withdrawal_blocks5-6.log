@@ -1,0 +1,43 @@
+native execute wall: 3.642417ms
+{
+  "args": {
+    "anchorBlockHash": "0x32b7d416821ff53af8097e30cc6d5ac8a94951dd978c04ab5372ea9dde32f7be",
+    "anchorBlockNumber": 9,
+    "expectedWithdrawalBatchIndex": 2,
+    "nextBlockHash": "0x381b0c6ddcd745639afd802563edf2e2a88e85974aab86dee51422ed53325095",
+    "nextDepositNumber": 1,
+    "nextProcessedHash": "0x9b7772db7df138a4a431c5a2b3b0a9a11512128246b4374781a56b7d46c7d9de",
+    "nextProcessedTokenCount": 1,
+    "nextZoneHeight": 6,
+    "prevBlockHash": "0x486a38058e6bdb882c143765341ba77074d73c1603c8a6fbb1a3f289474a03c3",
+    "prevDepositNumber": 1,
+    "prevProcessedHash": "0x9b7772db7df138a4a431c5a2b3b0a9a11512128246b4374781a56b7d46c7d9de",
+    "prevProcessedTokenCount": 1,
+    "tempoBlockNumber": 9,
+    "withdrawalQueueHash": "0xcf747192522a50fdbfcc788939f22b3d02d69f54ea49843d884873cb839502e7",
+    "zoneId": 1
+  },
+  "destinationChainId": 42431,
+  "digest": "0xbb031a6ddf28faf6d19a2cda814229ba46a918b69cf52fb2136461bd79ec11aa",
+  "genesisArtifactHash": "0x2736e5fba4db8533f8611e21035914ebd9bab157b2d1a751d939136b52133236",
+  "parentChainId": 1337,
+  "publicValues": "0x6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f31bb031a6ddf28faf6d19a2cda814229ba46a918b69cf52fb2136461bd79ec11aa",
+  "typehash": "0x92642ea5ff5c47ad5a0c977fa87d5a0634b45661ad091c055f6905e7a51d8221",
+  "verifier": "0x000000000000000000000000000000005a0e5a0e",
+  "verifierConfig": "0x73776f726e2d7370312d67726f746831362d7631",
+  "verifierConfigHash": "0xc405c6c7397b2e658a365c7a4e97b646114812fa0357d8f047caabd14012dd23",
+  "zoneGuestVersion": "0x6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f31"
+}
+
+nextZoneHeight: host=6 dump=6 OK
+prevBlockHash: host=0x486a38058e6bdb882c143765341ba77074d73c1603c8a6fbb1a3f289474a03c3 dump=0x486a38058e6bdb882c143765341ba77074d73c1603c8a6fbb1a3f289474a03c3 OK
+nextBlockHash: host=0x381b0c6ddcd745639afd802563edf2e2a88e85974aab86dee51422ed53325095 dump=0x381b0c6ddcd745639afd802563edf2e2a88e85974aab86dee51422ed53325095 OK
+prevProcessedHash: host=0x9b7772db7df138a4a431c5a2b3b0a9a11512128246b4374781a56b7d46c7d9de dump=0x9b7772db7df138a4a431c5a2b3b0a9a11512128246b4374781a56b7d46c7d9de OK
+nextProcessedHash: host=0x9b7772db7df138a4a431c5a2b3b0a9a11512128246b4374781a56b7d46c7d9de dump=0x9b7772db7df138a4a431c5a2b3b0a9a11512128246b4374781a56b7d46c7d9de OK
+prevDepositNumber: host=1 dump=1 OK
+nextDepositNumber: host=1 dump=1 OK
+prevProcessedTokenCount: host=1 dump=1 OK
+nextProcessedTokenCount: host=1 dump=1 OK
+withdrawalQueueHash: host=0xcf747192522a50fdbfcc788939f22b3d02d69f54ea49843d884873cb839502e7 dump=0xcf747192522a50fdbfcc788939f22b3d02d69f54ea49843d884873cb839502e7 OK
+expectedWithdrawalBatchIndex: host=2 dump=2 OK
+BatchOutput (host) == sequencer native-output.json: PASS

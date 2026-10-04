@@ -169,7 +169,7 @@ The next test is direct: put a TEE plus ZK design in front of Tempo and the firs
 
 ```
 No users, no revenue. Built and measured inside the window, all on Moderato testnet:
-- Tempo Zones: Tempo's own batch verifier runs in SP1 on 4 real batches from Tempo's zones integration tests, matching native output (19-26M cycles; tampering rejected). A proof bound to IVerifier's inputs was verified on Moderato (tx 0xb14b7127…3b80).
+- Tempo Zones: Tempo's own batch verifier runs in SP1 on 5 real batches from Tempo's zones integration tests, matching native output (19-26M cycles; tampering rejected). Proofs bound to IVerifier's inputs were verified on Moderato, including a batch with a withdrawal (txs 0xb14b7127…3b80, 0xa63009fd…f770).
 - tempo-revm in SP1: 40 of 40 real Moderato transactions re-executed match their receipts.
 - Three real slashes on Moderato: a lying answer server's bond paid the client, each by a Groth16 proof.
 - 64 forge tests, including real proofs; contracts with no owner.

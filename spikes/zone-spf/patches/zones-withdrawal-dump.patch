@@ -1,0 +1,206 @@
+SPIKE-WITHDRAWAL (spec 003, withdrawal batch feasibility). Applies after zones-zkvm.patch and zones-witness-dump.patch.
+Test-only: with ZONE_SPF_OBSERVE_PROVER set, the l1_e2e harness passes an in-process settlement prover to the sequencer,
+so validate_candidate (and the SPIKE-DUMP) runs on every real settlement batch; settlement then proceeds without a proof.
+
+--- a/crates/node/tests/it/utils.rs
++++ b/crates/node/tests/it/utils.rs
+@@ -592,6 +592,7 @@
+         &self,
+         config: zone_sequencer::ZoneSequencerConfig,
+         signer: alloy_signer_local::PrivateKeySigner,
++        prover_config: Option<zone_sequencer::SettlementProverConfig>, // SPIKE-WITHDRAWAL
+     ) -> Pin<Box<dyn Future<Output = zone_sequencer::ZoneSequencerHandle> + Send + '_>>;
+ }
+ 
+@@ -621,6 +622,7 @@
+         &self,
+         config: zone_sequencer::ZoneSequencerConfig,
+         signer: alloy_signer_local::PrivateKeySigner,
++        prover_config: Option<zone_sequencer::SettlementProverConfig>, // SPIKE-WITHDRAWAL
+     ) -> Pin<Box<dyn Future<Output = zone_sequencer::ZoneSequencerHandle> + Send + '_>> {
+         let provider = self.node.provider().clone();
+         Box::pin(async move {
+@@ -628,8 +630,8 @@
+                 config,
+                 signer,
+                 provider,
+-                None,
+                 None,
++                prover_config,
+                 None,
+                 tokio_util::sync::CancellationToken::new(),
+             )
+@@ -673,6 +675,9 @@
+     engine_stop: Option<CancellationToken>,
+     /// The shared leadership schedule
+     leadership: Option<LeadershipSchedule>,
++    /// SPIKE-WITHDRAWAL: in-process settlement prover for `spawn_sequencer`, set only when
++    /// `ZONE_SPF_OBSERVE_PROVER` is set and the zone has a real portal.
++    spike_prover_config: Option<zone_sequencer::SettlementProverConfig>,
+     _tasks: Runtime,
+ }
+ 
+@@ -698,7 +703,9 @@
+         config: zone_sequencer::ZoneSequencerConfig,
+         signer: alloy_signer_local::PrivateKeySigner,
+     ) -> zone_sequencer::ZoneSequencerHandle {
+-        self.node_handle.spawn_sequencer(config, signer).await
++        self.node_handle
++            .spawn_sequencer(config, signer, self.spike_prover_config.clone())
++            .await
+     }
+ 
+     /// Stops the `ZoneEngine` at a block boundary and waits until block production has
+@@ -1400,7 +1407,9 @@
+         // Don't use .dev() — it spawns a LocalMiner that conflicts with ZoneEngine.
+         // The ZoneEngine is the sole block producer; it advances the chain when L1
+         // blocks arrive in the deposit queue.
+-        let node_config = NodeConfig::new(Arc::new(chain_spec))
++        let chain_spec = Arc::new(chain_spec);
++        let spike_chain_spec = chain_spec.clone(); // SPIKE-WITHDRAWAL
++        let node_config = NodeConfig::new(chain_spec)
+             .with_unused_ports()
+             .with_rpc(
+                 RpcServerArgs::default()
+@@ -1490,6 +1499,23 @@
+             .unwrap()
+             .parse()
+             .unwrap();
++
++        // SPIKE-WITHDRAWAL: the production settlement prover, run in-process and observationally.
++        let spike_prover_config = if std::env::var_os("ZONE_SPF_OBSERVE_PROVER").is_some()
++            && !portal_address.is_zero()
++        {
++            Some(zone_sequencer::SettlementProverConfig {
++                parent_chain_id: l1_provider.get_chain_id().await?,
++                zone_id,
++                chain_spec: spike_chain_spec,
++                debug_api: Arc::new(SpikeRpcDebugApi(
++                    ProviderBuilder::new().connect_http(http_url.clone()).erased(),
++                )),
++                prover_address: None,
++            })
++        } else {
++            None
++        };
+ 
+         // Build the real redacted RPC API while the handle is still concrete,
+         // before type-erasing it into Box<dyn TestNodeHandle>.
+@@ -1523,6 +1549,7 @@
+             node_handle: Box::new(node_handle),
+             engine_stop,
+             leadership,
++            spike_prover_config,
+             _tasks: tasks,
+         })
+     }
+@@ -5534,5 +5561,22 @@
+             nonce,
+             tag,
+         }
++    }
++}
++
++/// SPIKE-WITHDRAWAL: `debug_zoneExecutionWitness` over the zone node's own HTTP RPC (the in-process
++/// `NodeZoneDebugApi` behind it is crate-private to zone-node).
++struct SpikeRpcDebugApi(DynProvider);
++
++#[jsonrpsee::core::async_trait]
++impl zone_rpc::debug::ZoneDebugApi for SpikeRpcDebugApi {
++    async fn zone_execution_witness(
++        &self,
++        block: BlockId,
++    ) -> jsonrpsee::core::RpcResult<zone_rpc::types::ZoneExecutionWitness> {
++        self.0
++            .raw_request("debug_zoneExecutionWitness".into(), (block,))
++            .await
++            .map_err(|e| jsonrpsee::types::ErrorObjectOwned::owned(-32000, e.to_string(), None::<()>))
+     }
+ }
+--- a/crates/sequencer/src/lib.rs
++++ b/crates/sequencer/src/lib.rs
+@@ -169,7 +169,12 @@
+     let settlement_prover = prover_config.map(|prover_config| {
+         prover::spawn_settlement_prover(
+             prover_config,
+-            proof_collector.expect("settlement prover requires a proof collector"),
++            // SPIKE-WITHDRAWAL: an observational prover (ZONE_SPF_OBSERVE_PROVER) needs no collector.
++            if prover::spike_observe_prover() {
++                proof_collector
++            } else {
++                Some(proof_collector.expect("settlement prover requires a proof collector"))
++            },
+             zone_provider.clone(),
+             l1_provider.clone(),
+         )
+--- a/crates/sequencer/src/monitor.rs
++++ b/crates/sequencer/src/monitor.rs
+@@ -559,6 +559,15 @@
+     ) -> std::result::Result<(), BatchSubmitError> {
+         let proof = async {
+             match &self.settlement_prover {
++                // SPIKE-WITHDRAWAL: observational prover — validation must pass, then submit
++                // without a proof bundle, exactly as when no prover is configured.
++                Some(prover) if crate::prover::spike_observe_prover() => {
++                    match prover.prove(from, last_zone_block, prepared.clone()).await {
++                        Ok(bundle) => Ok(Some(bundle)),
++                        Err(e) if e.to_string() == crate::prover::SPIKE_NO_ATTESTATION => Ok(None),
++                        Err(e) => Err(BatchSubmitError::from(e)),
++                    }
++                }
+                 Some(prover) => prover
+                     .prove(from, last_zone_block, prepared.clone())
+                     .await
+--- a/crates/sequencer/src/prover.rs
++++ b/crates/sequencer/src/prover.rs
+@@ -191,10 +191,22 @@
+         Pin::new(&mut self.get_mut().inner).poll_shutdown(cx)
+     }
+ }
++
++/// SPIKE-WITHDRAWAL: test-only observational settlement prover. When `ZONE_SPF_OBSERVE_PROVER` is
++/// set, the settlement path runs the in-process SPF on every candidate (so `validate_candidate`, and
++/// the SPIKE-DUMP, run on real settlement batches) but does not require durable witness persistence
++/// or a Nitro attestation; the batch is then submitted exactly as with no prover configured.
++pub(crate) fn spike_observe_prover() -> bool {
++    std::env::var_os("ZONE_SPF_OBSERVE_PROVER").is_some()
++}
++
++/// SPIKE-WITHDRAWAL: the error the worker returns when validation succeeded but no attestation exists.
++pub(crate) const SPIKE_NO_ATTESTATION: &str =
++    "attested settlement requires a remote prover with Nitro NSM support";
+ 
+ pub(crate) fn spawn_settlement_prover<P: ZoneSequencerProvider>(
+     config: SettlementProverConfig,
+-    proofs: ProofCollectorHandle,
++    proofs: Option<ProofCollectorHandle>,
+     zone_provider: P,
+     l1_provider: DynProvider<TempoNetwork>,
+ ) -> SettlementProver {
+@@ -204,7 +216,7 @@
+             zone_provider,
+             l1_provider,
+             SETTLEMENT_PROVER_QUEUE_CAPACITY,
+-            Some(proofs),
++            proofs,
+         ),
+     }
+ }
+@@ -465,7 +477,7 @@
+         proofs,
+         &zone_inputs,
+         expected_next_hash,
+-        job.response.is_some(),
++        job.response.is_some() && !spike_observe_prover(), // SPIKE-WITHDRAWAL
+     )
+     .await?;
+     metrics
+@@ -607,7 +619,7 @@
+         .output_validation_duration_seconds
+         .record(started.elapsed().as_secs_f64());
+ 
+-    if job.response.is_some() && proof_bundle.is_none() {
++    if job.response.is_some() && proof_bundle.is_none() && !spike_observe_prover() {
+         bail!("attested settlement requires a remote prover with Nitro NSM support");
+     }
+     Ok((stats, proof_bundle))

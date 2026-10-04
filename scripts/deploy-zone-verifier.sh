@@ -18,9 +18,14 @@
 #                                                      ZONE_VKEY_FORCE=1. Prove later with the SAME ELF.
 #   PARENT_CHAIN_ID               [ZONE_PARENT_CHAIN_ID] 1337 (D1)
 #   PINNED_ZONE_ID                [ZONE_ID]            1
-#   PINNED_GENESIS_ARTIFACT_HASH  keccak256 of spikes/zone-spf/genesis/hardfork_t13_recovery.genesis.json (D3)
+#   PINNED_GENESIS_ARTIFACT_HASH  [ZONE_GENESIS_FILE]  keccak256 of that file (D3); default
+#                                                      spikes/zone-spf/genesis/hardfork_t13_recovery.genesis.json.
+#                                                      The hash must equal the one recorded in spec 003 for that
+#                                                      artifact (table below), or ZONE_GENESIS_EXPECT for any other file.
+#   ZONE_CASE=<name> is shorthand for ZONE_GENESIS_FILE=spikes/zone-spf/genesis/<name>.genesis.json, e.g.
+#   ZONE_CASE=deposit_and_withdrawal_blocks5-6 (the withdrawal batch; zone id 1, parent chain 1337 like the default).
 #
-# After --send: run scripts/zone-prove.sh <address>, then scripts/zone-attest.sh <address> <fixture>.
+# After --send: run ZONE_CASE=<name> scripts/zone-prove.sh <address>, then scripts/zone-attest.sh <address> <fixture>.
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$root/contracts"
@@ -28,12 +33,14 @@ SEND=
 case "${1:-}" in
   --send) SEND=1 ;;
   "") ;;
-  -h|--help) sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+  -h|--help) sed -n '2,28p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
   *) echo "unknown argument $1 (try --help)"; exit 2 ;;
 esac
 RPC="${RPC:-https://rpc.moderato.tempo.xyz}"
 CAP=30000000   # TEMPO_T1_TX_GAS_LIMIT_CAP
-genesis_file="$root/spikes/zone-spf/genesis/hardfork_t13_recovery.genesis.json"
+case_="${ZONE_CASE:-hardfork_t13_recovery}"
+genesis_file="${ZONE_GENESIS_FILE:-$root/spikes/zone-spf/genesis/$case_.genesis.json}"
+[ -f "$genesis_file" ] || { echo "no genesis artifact at $genesis_file"; exit 1; }
 
 export ZONE_SP1_VERIFIER="${ZONE_SP1_VERIFIER:-0x2c77329747b7C8B293514A6129404D4cefDd9B18}"
 "$root/spikes/zone-spf/build-guest.sh" >/dev/null 2>&1 || { echo "guest build failed (run spikes/zone-spf/build-guest.sh)"; exit 1; }
@@ -48,8 +55,14 @@ export ZONE_PARENT_CHAIN_ID="${ZONE_PARENT_CHAIN_ID:-1337}"
 export ZONE_ID="${ZONE_ID:-1}"
 export ZONE_GENESIS_ARTIFACT_HASH
 ZONE_GENESIS_ARTIFACT_HASH=$(cast keccak "0x$(xxd -p "$genesis_file" | tr -d '\n')")
-[ "$ZONE_GENESIS_ARTIFACT_HASH" = "0xd39aa765427c64ea95821bd5f93d44c89854b0f00fec0e21137421d04fb7c11e" ] || \
-  { echo "genesis artifact hash $ZONE_GENESIS_ARTIFACT_HASH != the pinned 0xd39aa765…c11e (spec 003 Results)"; exit 1; }
+# keccak256 of each committed artifact, as recorded in spec 003 (Results / Withdrawal batch).
+case "$(basename "$genesis_file")" in
+  hardfork_t13_recovery.genesis.json)              expect=0xd39aa765427c64ea95821bd5f93d44c89854b0f00fec0e21137421d04fb7c11e ;;
+  deposit_and_withdrawal_blocks5-6.genesis.json)   expect=0x2736e5fba4db8533f8611e21035914ebd9bab157b2d1a751d939136b52133236 ;;
+  *) expect="${ZONE_GENESIS_EXPECT:?$genesis_file is not a recorded artifact; set ZONE_GENESIS_EXPECT to its expected keccak256}" ;;
+esac
+[ "$ZONE_GENESIS_ARTIFACT_HASH" = "$(tr 'A-F' 'a-f' <<<"$expect")" ] || \
+  { echo "genesis artifact hash $ZONE_GENESIS_ARTIFACT_HASH != the recorded $expect for $(basename "$genesis_file")"; exit 1; }
 
 [ "$(cast chain-id --rpc-url "$RPC")" = "42431" ] || { echo "RPC is not Moderato (42431)"; exit 1; }
 vh=$(cast call --rpc-url "$RPC" "$ZONE_SP1_VERIFIER" "VERIFIER_HASH()(bytes32)")
@@ -76,13 +89,15 @@ constructor(
   parentChainId             $ZONE_PARENT_CHAIN_ID
   pinnedZoneId              $ZONE_ID
   pinnedGenesisArtifactHash $ZONE_GENESIS_ARTIFACT_HASH
+                            (keccak256 of ${genesis_file#$root/}, $(wc -c <"$genesis_file" | tr -d ' ') bytes)
 )
 verifierConfig accepted    "sworn-sp1-groth16-v1" = $(cast from-utf8 sworn-sp1-groth16-v1)
 constructor args (abi)      $ctor
 init code                   $(( (${#init} - 2) / 2 )) bytes, keccak256 $(cast keccak "$init")
 gas                         chain eth_estimateGas=$chain_est  forge-local=$local_est  -> -g $mult (~$offered offered, cap $CAP)
 EOF
-if [ -z "$SEND" ]; then echo "PRINT ONLY: nothing sent. To deploy: scripts/with-keys.sh scripts/deploy-zone-verifier.sh --send"; exit 0; fi
+envp=""; [ "$case_" != hardfork_t13_recovery ] && envp="ZONE_CASE=$case_ "
+if [ -z "$SEND" ]; then echo "PRINT ONLY: nothing sent. To deploy: ${envp}scripts/with-keys.sh scripts/deploy-zone-verifier.sh --send"; exit 0; fi
 
 : "${SWORN_DEPLOYER_KEY:?--send needs SWORN_DEPLOYER_KEY in the environment (run under scripts/with-keys.sh)}"
 [ $(( chain_est * 110 / 100 )) -le "$CAP" ] || { echo "chain estimate within 10% of the cap; refusing"; exit 1; }
@@ -90,4 +105,4 @@ if [ -z "$SEND" ]; then echo "PRINT ONLY: nothing sent. To deploy: scripts/with-
 forge script script/ZoneVerifier.s.sol:DeployZoneVerifier --rpc-url "$RPC" -g "$mult" --slow --broadcast
 echo "Next: read the receipt; scripts/no-owner.sh --zone-verifier --code \$(cast code <address> --rpc-url $RPC);"
 echo "      record address/codehash/constructor args in deployments/moderato.json under zoneVerifier;"
-echo "      scripts/zone-prove.sh <address>; scripts/zone-attest.sh <address> contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json"
+echo "      ${envp}scripts/zone-prove.sh <address>; scripts/zone-attest.sh <address> <the fixture zone-prove.sh printed>"

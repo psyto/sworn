@@ -1,0 +1,64 @@
+client init wall: 12.519162541s
+stderr: WARNING: Using insecure random number generator.
+stderr: 
+stderr: thread '<unnamed>' (2) panicked at src/main.rs:12:72:
+stderr: prove_zone_batch: withdrawal batch index mismatch: expected 3, got 2
+stderr: stack backtrace:
+stderr: note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+stderr: prove_zone_batch: withdrawal batch index mismatch: expected 3, got 2
+execute wall: 595.4045ms
+cycles(total_instruction_count): 24342703
+report: gas: 23381264
+opcode counts (24342703 total instructions):
+    5063818 xor
+    2482725 or
+    2432139 sll
+    2405536 addi
+    2046541 ld
+    1832468 sd
+    1707786 srl
+    1640551 and
+    1451348 lbu
+     896803 add
+     475433 bne
+     364843 beq
+     308923 sb
+     162924 jalr
+     158340 bltu
+     134629 mul
+     123801 auipc
+     115745 sltu
+     109794 mulhu
+      91953 lui
+      80226 sub
+      68563 bgeu
+      53838 jal
+      30770 subw
+      17355 addw
+      14458 srlw
+      10645 lw
+       9866 sw
+       8578 blt
+       7644 slt
+       7626 lhu
+       5839 lb
+       4985 sh
+       4387 sra
+       4129 bge
+       1884 lwu
+       1739 lh
+       1439 sllw
+       1266 mulw
+       1217 mulh
+        121 sraw
+         24 ecall
+          4 divu
+syscall counts (0 total syscall instructions):
+
+publicValues match native host: FAIL
+
+thread 'main' (51670058) panicked at src/main.rs:29:5:
+assertion failed: ok
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+../../runner/target/release/spike-runner $ELF $W/mut_ewbi.bin execute  86.10s user 1.55s system 663% cpu 13.207 total
+EXIT 101

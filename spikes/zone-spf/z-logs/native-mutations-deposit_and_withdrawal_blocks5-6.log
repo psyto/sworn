@@ -1,0 +1,15 @@
+baseline: OK digest 0xbb031a6ddf28faf6d19a2cda814229ba46a918b69cf52fb2136461bd79ec11aa genesisArtifactHash 0x2736e5fba4db8533f8611e21035914ebd9bab157b2d1a751d939136b52133236
+mutate parent_chain_id: REJECTED (PASS) by prove_zone_batch: Zone chain ID mismatch: expected 5742371274753, got 5746666242049
+mutate zone_id: REJECTED (PASS) by prove_zone_batch: Zone chain ID mismatch: expected 5742371274753, got 5742371274754
+mutate tempo_block_number: REJECTED (PASS) by prove_zone_batch: final Tempo block number mismatch: expected 10, got 9
+mutate anchor_block_number: REJECTED (PASS) by prove_zone_batch: Tempo ancestry length mismatch: expected 1, got 0
+mutate anchor_block_hash: REJECTED (PASS) by prove_zone_batch: Tempo anchor hash mismatch: expected 0x32b7d416821ff53af8097e30cc6d5ac8a94951dd978c04ab5372ea9dde32f7bf, got 0x32b7d416821ff53af8097e30cc6d5ac8a94951dd978c04ab5372ea9dde32f7be
+mutate expected_withdrawal_batch_index: REJECTED (PASS) by prove_zone_batch: withdrawal batch index mismatch: expected 3, got 2
+  zkVM input for this mutation: zin/wd/mut_ewbi.bin (scratch)
+genesis byte 83 ('1'->'2' in …lloc":{"0x0000000000000000000000000000000000000000":{"balance":"0x0","nonce":"0x1"): batch still verifies, BatchOutput unchanged=true, genesisArtifactHash 0x2736e5fba4db8533f8611e21035914ebd9bab157b2d1a751d939136b52133236 -> 0x595aecab672b06e6ceacf90a77e6da7489069d8285e2efdd351622ff16b914ac, digest 0xbb031a6ddf28faf6d19a2cda814229ba46a918b69cf52fb2136461bd79ec11aa -> 0x4e5da439d2e12491c8c8db6b0c9fc6673c34d4d400321341e2b4fd8aa63d6ca3: PASS
+verifier_config 0x01: REJECTED (PASS)
+verifier_config 0x02: REJECTED (PASS)
+verifier_config empty: REJECTED (PASS)
+verifier_config tag||0x00: REJECTED (PASS)
+mutations: ALL PASS
+EXIT 0

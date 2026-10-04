@@ -61,8 +61,11 @@ Getting Tempo's code into a zkVM meant patching it (`patches/`, `spikes/zone-spf
 - Verified on chain by a contract with `IVerifier`'s exact signature. [Spec 003](docs/specs/003-zone-verifier.md).
 
 **Is not, yet** (spec 003 §5 D1–D4, §7):
-- **The batch is not from Moderato.** It is `hardfork_t13_recovery`, from Tempo's zones integration tests
-  on a dev chain (1337), and has no withdrawals or user transactions.
+- **The batches are not from Moderato.** Both come from Tempo's zones integration tests on a dev chain
+  (1337). `hardfork_t13_recovery` has no withdrawals or user transactions. `deposit_and_withdrawal_blocks5-6`,
+  taken from the Zone sequencer's own batch-validation path, has **one withdrawal and two user
+  transactions** ([tx](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770)). That shows a withdrawal inside a proven batch, not that withdrawals are
+  secured.
 - **No Zone settles with it.** Each Zone's verifier is fixed by Tempo's factory when the Zone is created,
   so only Tempo can adopt it.
 - **No portal caller check.** That is safe only because the contract moves and stores nothing.
@@ -78,6 +81,7 @@ Getting Tempo's code into a zkVM meant patching it (`patches/`, `spikes/zone-spf
 | SP1VerifierGroth16 v6.1.0 | [`0x2c77329747b7C8B293514A6129404D4cefDd9B18`](https://explore.testnet.tempo.xyz/address/0x2c77329747b7C8B293514A6129404D4cefDd9B18) | codehash equals the local build of the vendored, unmodified `sp1-contracts` v6.1.0 |
 
 | **SwornZoneVerifier** | [`0x00F6ed344B9C7F5eBA8788A115f8d6B4c00564e5`](https://explore.testnet.tempo.xyz/address/0x00F6ed344B9C7F5eBA8788A115f8d6B4c00564e5) | `IVerifier`-shaped Zone batch verifier; immutables only, no storage writes; deployed 2026-10-04 (block 38078600) |
+| **SwornZoneVerifier (withdrawal batch)** | [`0xF2e1E74c14B10bE4dda591dbE50F91b88bDcBA11`](https://explore.testnet.tempo.xyz/address/0xF2e1E74c14B10bE4dda591dbE50F91b88bDcBA11) | same code and vkey, pinned to the genesis of the batch with a withdrawal |
 | SwornZoneVerifier, superseded | [`0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De`](https://explore.testnet.tempo.xyz/address/0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De) | first deployment; its `verifierConfig` was `0x02`, which upstream zones (`344ff785`, 10-01) defines as NoProof, so it was redeployed with the self-describing tag `"sworn-sp1-groth16-v1"` |
 
 Sworn guest vkey `0x00727936…7fa9`, `GUEST_VERSION = keccak256("sworn-guest-v1")`. Zone guest vkey
@@ -133,6 +137,7 @@ no access key), and a transaction Tempo would reject before execution is itself 
 | rejection | a tampered deposit, and each of the six public inputs changed one at a time, are rejected by Tempo's own code |
 | proving | `hardfork_t13_recovery`: 25.5M cycles, local Groth16 **701 s**, peak 18.5 GB |
 | on Moderato | `verify` returns true for the real proof and reverts when one field changes; `attest` emitted `ZoneBatchVerified` for zone 1, height 10 ([`0xb14b…3b80`](https://explore.testnet.tempo.xyz/tx/0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80), block 38080441, 260,419 gas) |
+| a batch with a withdrawal | `deposit_and_withdrawal_blocks5-6` (1 withdrawal, 2 user transactions), 24.4M cycles, Groth16 891 s; verified on Moderato by a second instance ([`0xa630…f770`](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770), block 38097996) |
 | contract | every digest field, the immutables (via clone deployments), the chain id, the proof and the vkey are each shown to matter, against the **real** SP1 Groth16 verifier |
 
 **Bonded answers** (2026-10-03; logs in `out/`):

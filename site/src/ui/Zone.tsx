@@ -124,7 +124,9 @@ export function ZoneSection({ attest, check, onRetry, onVerify }: Props) {
           <ul>
             <li>
               <b>The batch is not from Moderato.</b> It is <code>hardfork_t13_recovery</code> from Tempo's zones integration
-              tests, on a dev chain (1337), with no withdrawals or user transactions.
+              tests, on a dev chain (1337), with no withdrawals. A second batch from the same tests, with one withdrawal and two
+              user transactions, was verified the same way (<a href="https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770">tx</a>); that shows a withdrawal inside a
+              proven batch, not that withdrawals are secured.
             </li>
             <li>
               <b>No Zone settles with it.</b> Tempo's factory fixes each Zone's verifier when the Zone is created, so only Tempo

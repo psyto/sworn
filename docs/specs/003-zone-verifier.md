@@ -314,3 +314,111 @@ Logs are in `spikes/zone-spf/z-logs/`.
 - **`attest` sent:** tx `0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80`, block 38080441, status 1, gasUsed 260,419.
   It emitted `ZoneBatchVerified(1, 10, 0x578542fc…b569, 0xc517a760…8065, 0xf73f48c7…71ba)`.
 - **The first deployment** (`0x64bA9F64…42De`, config `0x02`) is kept in `deployments/moderato.json` as `SwornZoneVerifierSuperseded`.
+
+## Withdrawal batch (feasibility), 2026-10-04
+
+**Verdict: feasible, with no guest change.** A zone batch that contains a withdrawal, produced by the zones sequencer's own
+settlement prover path (`validate_candidate`), runs in the unchanged guest. Its public values equal the native host's, and its
+`BatchOutput` equals the sequencer's own SPF output. Nothing was sent to any chain, and no Groth16 proof was made: a proof is bound
+to a verifier address, and that verifier is not deployed yet.
+
+The batch is still **from Tempo's zones integration tests on a local dev chain** (parent chain 1337), not from Moderato.
+What changes is that it carries a real withdrawal. §7 still applies: this does not show that a Zone's withdrawals are secured
+(there is no portal wiring, D2/D4).
+
+**Where the batch comes from**
+- The withdrawal tests in `crates/node/tests/it/e2e.rs` (`test_withdrawal_batch_finalization`, …) run against a dummy L1 with no
+  sequencer, so no batch is ever validated there. The test used instead is `l1_e2e::test_deposit_and_withdrawal`. It runs a real
+  local Tempo L1 dev node, deploys a portal, deposits 1 pathUSD, spawns the sequencer, withdraws 0.5 pathUSD, and waits until the
+  withdrawal is paid on L1.
+- New zones patch `spikes/zone-spf/patches/zones-withdrawal-dump.patch` (listed in `fetch.sh`; applies after the other two zones
+  patches). It is test-only and gated on `ZONE_SPF_OBSERVE_PROVER`:
+  - the l1_e2e harness passes an in-process `SettlementProverConfig` (`prover_address: None`) to `spawn_zone_sequencer`. Its debug
+    API calls `debug_zoneExecutionWitness` over the zone node's own RPC, because the in-process `NodeZoneDebugApi` is private to
+    `zone-node`;
+  - the sequencer's settlement prover then runs `validate_candidate` → `prove_zone_batch` → `compare_output` on every settlement
+    batch. It skips only the durable-persistence requirement and the Nitro attestation, and the batch is then submitted without a
+    proof, as in every other test. A real validation failure still fails the submission.
+- Command (from `spikes/zone-spf/zones`):
+  `ZONE_SPF_DUMP_DIR=<dir> ZONE_SPF_OBSERVE_PROVER=1 RUST_LOG=info cargo test -p zone-node --test it -- --exact l1_e2e::test_deposit_and_withdrawal --nocapture`.
+  The test passes (1/1, 6.9 s). The sequencer validated two batches (`z-logs/withdrawal-zones-test-prover-lines.log`, full log
+  `z-logs/withdrawal-zones-test-deposit_and_withdrawal_blocks5-6.log`):
+
+  | batch | blocks | deposits | withdrawals | user txs | withdrawalQueueHash |
+  |---|---|---:|---:|---:|---|
+  | zone blocks 1–4 | 4 | 1 | 0 | 0 | zero |
+  | **zone blocks 5–6** | 2 | 0 | **1** | **2** | **`0xcf747192…02e7`** |
+
+  Block 5 holds the recipient's `approve(ZoneOutbox, max)` on pathUSD. Block 6 holds its `ZoneOutbox.requestWithdrawal` and
+  `finalizeWithdrawalBatch` with a count of 1.
+- Each rerun produces a different batch and a **different genesis artifact**. The L1 dev node's genesis hash, written into
+  TempoState slot 0 of the zone genesis, and the block timestamps change per run (checked: a second run gave genesis
+  `0x067aff7b…ee4a`). The committed artifact is therefore the record, and rerunning the test does not regenerate it.
+
+**The case** `deposit_and_withdrawal_blocks5-6`
+- `spikes/zone-spf/witness/deposit_and_withdrawal_blocks5-6.case.json` (the sequencer's dump, byte-identical) and `.native-output.json`.
+  Also `.bin` / `.bin.expected`, the guest input for the placeholder verifier `0x…5a0e5a0e` on 42431.
+- Genesis artifact `spikes/zone-spf/genesis/deposit_and_withdrawal_blocks5-6.genesis.json`: 54,606 bytes, the exact `genesis`
+  substring of the case dump (byte offset 11), cut with `sworn-zone-host extract-genesis` like the four existing ones.
+  **`keccak256 = 0x2736e5fba4db8533f8611e21035914ebd9bab157b2d1a751d939136b52133236`** (the new `PINNED_GENESIS_ARTIFACT_HASH`,
+  also checked with `cast keccak`).
+- Public inputs: **zone id 1, parent chain id 1337**, the same as the deployed verifier. Tempo block 9, anchor block 9
+  (`0x32b7d416…f7be`), expected withdrawal batch index 2. Zone chain id 5742371274753. `nextZoneHeight` 6.
+
+**Execution** (logs in `spikes/zone-spf/z-logs/`)
+- Native host (`native-deposit_and_withdrawal_blocks5-6.log`):
+  - accepted;
+  - all 11 `BatchOutput` fields equal the sequencer's `native-output.json`: PASS;
+  - digest for the placeholder `0xbb031a6d…11aa`.
+- zkVM execute (`zkvm-exec-deposit_and_withdrawal_blocks5-6.log`):
+  - **24,443,996 cycles**, compared with 19.1–25.5 M for the four earlier batches;
+  - `publicValues match native host: PASS`;
+  - vkey `0x007ef731…5b39`.
+- Rejections:
+  - all six PublicInputs mutations are rejected natively;
+  - the genesis byte change moves the digest `0xbb031a6d…11aa` → `0x4e5da439…6ca3`;
+  - the four wrong `verifier_config` values are rejected (`native-mutations-deposit_and_withdrawal_blocks5-6.log`);
+  - the `expected_withdrawal_batch_index` mutation panics in the zkVM (`expected 3, got 2`; `zkvm-exec-mut_expected_withdrawal_batch_index-deposit_and_withdrawal_blocks5-6.log`).
+- Withdrawal-specific tamper: setting block 6's `finalizeWithdrawalBatchCount` to 0 is rejected natively
+  (`finalization sender count mismatch: expected 0, got 1`) and panics in the zkVM. Setting it to null is rejected natively
+  (`native-tamper-withdrawal-count-…`, `zkvm-exec-tamper-withdrawal-count-…`).
+- Guest unchanged: `elf-vkey.sh` gives ELF sha256 `fd7a6a10…0c51` and vkey `0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39`
+  (`elf-vkey-withdrawal-check.log`). A `build-guest.sh` rebuild gives the same ELF; the guest does not depend on `zone-sequencer`
+  or `zone-node`, which are the only crates the new patch touches.
+
+**Deployment prep (nothing sent)**
+- `scripts/deploy-zone-verifier.sh` takes `ZONE_CASE=<name>` (or `ZONE_GENESIS_FILE`), `ZONE_ID` and `ZONE_PARENT_CHAIN_ID`.
+  The defaults are today's values (hardfork genesis, zone 1, parent 1337). The genesis hash must equal the one recorded here
+  for that artifact, or `ZONE_GENESIS_EXPECT` for any other file. Without `--send` it prints only. The Moderato dry run
+  (`deploy-zone-verifier-dryrun-deposit_and_withdrawal_blocks5-6.log`, reads only) gives the constructor
+  `(0x2c7732…9B18, 0x007ef731…5b39, 1337, 1, 0x2736e5fb…3236)`, 3,542 bytes of init code and eth_estimateGas 3,901,195.
+- `scripts/zone-prove.sh` takes `ZONE_CASE=<name>` (default `hardfork_t13_recovery`). It writes
+  `contracts/test/vectors/zone-<name>-sworn-sp1-groth16-v1.json`. Its read-only pre-check now also requires the on-chain
+  `PINNED_GENESIS_ARTIFACT_HASH` to equal the case's genesis.
+- `scripts/zone-attest.sh` already reads everything from the fixture and needs no change. **Its anvil rehearsal is pending**,
+  because no proof exists yet.
+- Founder commands, in order:
+  1. `ZONE_CASE=deposit_and_withdrawal_blocks5-6 scripts/deploy-zone-verifier.sh` (print only; check that the constructor shows `0x2736e5fb…3236`)
+  2. `ZONE_CASE=deposit_and_withdrawal_blocks5-6 scripts/with-keys.sh scripts/deploy-zone-verifier.sh --send` → address `A`.
+     Then run `scripts/no-owner.sh --zone-verifier --code $(cast code A --rpc-url https://rpc.moderato.tempo.xyz)` and record `A` in `deployments/moderato.json`.
+  3. `ZONE_CASE=deposit_and_withdrawal_blocks5-6 scripts/zone-prove.sh A` (about 12–15 min, about 20 GB; the pre-check refuses `A` if its genesis/vkey/tag differ)
+  4. `scripts/zone-attest.sh A contracts/test/vectors/zone-deposit_and_withdrawal_blocks5-6-sworn-sp1-groth16-v1.json` (read-only checks + calldata), then the same command under `scripts/with-keys.sh … --send`.
+     The expected event is `ZoneBatchVerified(1, 6, 0x486a3805…03c3, 0x381b0c6d…5095, <digest for A>)`.
+
+## Results (withdrawal batch on Moderato)
+
+- **Second instance:** `SwornZoneVerifier` at `0xF2e1E74c14B10bE4dda591dbE50F91b88bDcBA11`.
+  - Deploy tx `0xf7300650a0f75f2135ef0af6889ffeba26af4d01bf2a8d02b4cb2e612b52a653`, block 38095887.
+  - Same code and vkey as the first. Pinned genesis `0x2736e5fb…3236` (`deposit_and_withdrawal_blocks5-6.genesis.json`).
+  - `no-owner` passes on the deployed code.
+- **Real proof:** 24,443,996 cycles, Groth16 891.1 s, peak RSS 19.8 GB; public values equal the native host's.
+- **Read-only checks:**
+  - every immutable matches;
+  - `attestationDigest` = `0x8d338158…eabd`;
+  - `verify` returns true;
+  - `nextZoneHeight+1` reverts with `InvalidProof()`.
+- **`attest`:** tx `0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770`, block 38097996, status 1, gasUsed 260,863.
+  It emitted `ZoneBatchVerified(1, 6, 0x486a3805…03c3, 0x381b0c6d…5095, 0x8d338158…eabd)`.
+- **What this shows:** a batch with a withdrawal (`withdrawalQueueHash` `0xcf747192…02e7`) and user transactions is
+  proven and verified on chain. It is still a dev-chain batch from Tempo's integration tests, and it says nothing
+  about withdrawals being secured (no portal, D1–D4).

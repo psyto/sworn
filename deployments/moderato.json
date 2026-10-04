@@ -149,5 +149,43 @@
       },
       "readOnlyChecks": "immutables and verifierConfig match fixture; attestationDigest matches; eth_call verify(real proof)=true; nextZoneHeight+1 reverts InvalidProof(); forge test_ACZ4_REAL_groth16_moderato_all_cases passes"
     }
+  },
+  "SwornZoneVerifierWithdrawal": {
+    "spec": "docs/specs/003-zone-verifier.md (Withdrawal batch)",
+    "address": "0xF2e1E74c14B10bE4dda591dbE50F91b88bDcBA11",
+    "codehash": "0x2b4450ca74f2b9bfff8451463b829762b6cbbb920fd9cdaf4b8b11f605784e00",
+    "deployTx": "0xf7300650a0f75f2135ef0af6889ffeba26af4d01bf2a8d02b4cb2e612b52a653",
+    "block": 38095887,
+    "gasUsed": 3619319,
+    "deployer": "roles.deployer",
+    "verifierConfig": "sworn-sp1-groth16-v1",
+    "constructor": {
+      "sp1Verifier": "0x2c77329747b7C8B293514A6129404D4cefDd9B18",
+      "zoneVkey": "0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39",
+      "guestElfSha256": "fd7a6a105e915fef3f75402fb65fabca0eca8cbe8c69df4cc73aa07c9a620c51",
+      "parentChainId": 1337,
+      "pinnedZoneId": 1,
+      "pinnedGenesisArtifactHash": "0x2736e5fba4db8533f8611e21035914ebd9bab157b2d1a751d939136b52133236",
+      "pinnedGenesisArtifact": "spikes/zone-spf/genesis/deposit_and_withdrawal_blocks5-6.genesis.json"
+    },
+    "batch": "deposit_and_withdrawal_blocks5-6: Tempo zones integration test l1_e2e::test_deposit_and_withdrawal (dev chain 1337); zone blocks 5-6, 1 withdrawal, 2 user transactions, withdrawalQueueHash 0xcf747192\u202602e7",
+    "noOwnerOnDeployedCode": "OK",
+    "deviations": "D1-D4 as SwornZoneVerifier; batch from Tempo's integration tests, not a Moderato zone; shows a withdrawal is inside the proven batch, not that withdrawals are secured.",
+    "attest": {
+      "tx": "0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770",
+      "block": 38097996,
+      "status": 1,
+      "gasUsed": 260863,
+      "from": "roles.deployer",
+      "event": "ZoneBatchVerified(zoneId 1, nextZoneHeight 6, prevBlockHash 0x486a3805\u202603c3, nextBlockHash 0x381b0c6d\u20265095, digest 0x8d338158\u2026eabd)",
+      "fixture": "contracts/test/vectors/zone-deposit_and_withdrawal_blocks5-6-sworn-sp1-groth16-v1.json",
+      "proving": {
+        "cycles": 24443996,
+        "groth16WallSecs": 891.1,
+        "peakRssGB": 19.8,
+        "log": "spikes/zone-spf/z-logs/prove-moderato-deposit_and_withdrawal_blocks5-6.log"
+      },
+      "readOnlyChecks": "immutables, verifierConfig and genesis match fixture; attestationDigest matches; eth_call verify(real proof)=true; nextZoneHeight+1 reverts InvalidProof()"
+    }
   }
 }

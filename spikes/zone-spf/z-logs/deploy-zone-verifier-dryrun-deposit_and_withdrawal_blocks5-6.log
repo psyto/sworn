@@ -1,0 +1,17 @@
+no-owner: compiled runtime bytecode 2993 bytes (sans metadata), STATICCALL x1, forbidden opcodes 0
+no-owner: OK (src/SwornZoneVerifier.sol)
+=== SwornZoneVerifier deployment (chain 42431, https://rpc.moderato.tempo.xyz) ===
+constructor(
+  sp1Verifier               0x2c77329747b7C8B293514A6129404D4cefDd9B18   (VERIFIER_HASH 0x4388a21c687fdd5f218d7e3d13190cac4c5355818d3605fd5fb811df468ee696)
+  zoneVkey                  0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39
+                            (guest ELF sha256 fd7a6a105e915fef3f75402fb65fabca0eca8cbe8c69df4cc73aa07c9a620c51, ELF vkey 0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39)
+  parentChainId             1337
+  pinnedZoneId              1
+  pinnedGenesisArtifactHash 0x2736e5fba4db8533f8611e21035914ebd9bab157b2d1a751d939136b52133236
+                            (keccak256 of spikes/zone-spf/genesis/deposit_and_withdrawal_blocks5-6.genesis.json, 54606 bytes)
+)
+verifierConfig accepted    "sworn-sp1-groth16-v1" = 0x73776f726e2d7370312d67726f746831362d7631
+constructor args (abi)      0x0000000000000000000000002c77329747b7c8b293514a6129404d4cefdd9b18007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39000000000000000000000000000000000000000000000000000000000000053900000000000000000000000000000000000000000000000000000000000000012736e5fba4db8533f8611e21035914ebd9bab157b2d1a751d939136b52133236
+init code                   3542 bytes, keccak256 0x0d5c7b97d603e112b065a1c536a661b5e2a8c31bc7a94108983fa2e940eb0a8a
+gas                         chain eth_estimateGas=3901195  forge-local=715542  -> -g 818 (~5853133 offered, cap 30000000)
+PRINT ONLY: nothing sent. To deploy: ZONE_CASE=deposit_and_withdrawal_blocks5-6 scripts/with-keys.sh scripts/deploy-zone-verifier.sh --send

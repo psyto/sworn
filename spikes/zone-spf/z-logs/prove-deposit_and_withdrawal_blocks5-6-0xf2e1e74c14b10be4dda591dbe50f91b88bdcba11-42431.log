@@ -1,0 +1,94 @@
+elf sha256: fd7a6a105e915fef3f75402fb65fabca0eca8cbe8c69df4cc73aa07c9a620c51
+case: deposit_and_withdrawal_blocks5-6  genesis keccak256: 0x2736e5fba4db8533f8611e21035914ebd9bab157b2d1a751d939136b52133236
+verifier: 0xF2e1E74c14B10bE4dda591dbE50F91b88bDcBA11  destinationChainId: 42431
+client init wall: 11.960108916s
+stderr: WARNING: Using insecure random number generator.
+execute wall: 574.554416ms
+cycles(total_instruction_count): 24443996
+report: gas: 23486397
+opcode counts (24443996 total instructions):
+    5101012 xor
+    2494660 or
+    2443750 sll
+    2410429 addi
+    2055488 ld
+    1840081 sd
+    1716796 srl
+    1649147 and
+    1453680 lbu
+     895865 add
+     476041 bne
+     364717 beq
+     309344 sb
+     163018 jalr
+     158475 bltu
+     134426 mul
+     123657 auipc
+     115728 sltu
+     109801 mulhu
+      91404 lui
+      79861 sub
+      68623 bgeu
+      53646 jal
+      30447 subw
+      17381 addw
+      15158 srlw
+      10653 lw
+       9879 sw
+       8542 blt
+       7644 slt
+       7621 lhu
+       5843 lb
+       4984 sh
+       4387 sra
+       4124 bge
+       1877 lwu
+       1739 lh
+       1439 sllw
+       1266 mulw
+       1217 mulh
+        121 sraw
+         21 ecall
+          4 divu
+syscall counts (0 total syscall instructions):
+
+publicValues match native host: PASS
+setup wall: 3.376157416s
+vkey(bytes32): 0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39
+stderr: WARNING: Using insecure random number generator.
+Setting environment variables took 477.291µs
+Reading R1CS took 12.737367584s
+Reading proving key took 3.445759083s
+Reading witness file took 1.922167ms
+Deserializing JSON data took 20.136792ms
+Generating witness took 419.641458ms
+[90m15:18:34[0m DBG constraint system solver done [36mnbConstraints=[0m15972262 [36mtook=[0m3984.038125
+[90m15:19:08[0m DBG prover done [36macceleration=[0mnone [36mbackend=[0mgroth16 [36mcurve=[0mbn254 [36mnbConstraints=[0m15972262 [36mtook=[0m34100.478667
+Generating proof took 38.090648583s
+[90m15:19:08[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m15:19:08[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m15:19:08[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m15:19:08[0m DBG verifier done [36mbackend=[0mgroth16 [36mcurve=[0mbn254 [36mtook=[0m1.495041
+PROVE groth16 wall: 891.062177583s
+proof pv match: true
+verify ok (204.887916ms)
+fixture written: /Users/hiroyusai/src/sworn/spikes/zone-spf/zin/prove-0xf2e1e74c14b10be4dda591dbe50f91b88bdcba11-42431/groth16.json
+      908.67 real      5058.01 user       613.70 sys
+         19814154240  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            59306189  page reclaims
+                 501  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+               12612  signals received
+             4524280  voluntary context switches
+            27075484  involuntary context switches
+      52010038146875  instructions retired
+      17500919940474  cycles elapsed
+         89700550680  peak memory footprint
+EXIT 0

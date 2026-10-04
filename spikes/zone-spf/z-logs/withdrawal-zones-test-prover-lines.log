@@ -1,0 +1,5 @@
+# ZONE_SPF_DUMP_DIR=<dir> ZONE_SPF_OBSERVE_PROVER=1 RUST_LOG=info cargo test -p zone-node --test it -- --exact l1_e2e::test_deposit_and_withdrawal --nocapture
+2026-10-04T05:52:58.445443Z  INFO zone::sequencer::prover: Prover enabled zone_id=1 prover_address=None queue_capacity=2
+2026-10-04T05:52:58.487794Z  INFO zone::sequencer::prover: Prover validated batch zone_from=1 zone_to=4 prev_block_hash=0x0000000000000000000000000000000000000000000000000000000000000000 next_block_hash=0x486a38058e6bdb882c143765341ba77074d73c1603c8a6fbb1a3f289474a03c3 elapsed_ms=36 witness_bytes=12363 blocks=4 deposits=1 withdrawals=0 transactions=0 zone_state_nodes=45 tempo_state_nodes=24
+2026-10-04T05:52:59.503070Z  INFO zone::sequencer::prover: Prover validated batch zone_from=5 zone_to=6 prev_block_hash=0x486a38058e6bdb882c143765341ba77074d73c1603c8a6fbb1a3f289474a03c3 next_block_hash=0x381b0c6ddcd745639afd802563edf2e2a88e85974aab86dee51422ed53325095 elapsed_ms=47 witness_bytes=9874 blocks=2 deposits=0 withdrawals=1 transactions=2 zone_state_nodes=46 tempo_state_nodes=18
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 170 filtered out; finished in 6.86s

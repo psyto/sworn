@@ -1,0 +1,23 @@
+pre-check ok: 0xF2e1E74c14B10bE4dda591dbE50F91b88bDcBA11 on chain 42431 has ZONE_VKEY = ELF vkey 0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39, the sworn-sp1-groth16-v1 tag and genesis 0x2736e5fba4db8533f8611e21035914ebd9bab157b2d1a751d939136b52133236 (deposit_and_withdrawal_blocks5-6)
+warning: unused imports: `ConfigureEngineEvm`, `ExecutableTxIterator`, and `ExecutionCtxFor`
+  --> /Users/hiroyusai/src/sworn/spikes/zone-spf/zones/crates/evm/src/lib.rs:35:5
+   |
+35 |     ConfigureEngineEvm, ConfigureEvm, EvmEnvFor, ExecutableTxIterator, ExecutionCtxFor,
+   |     ^^^^^^^^^^^^^^^^^^                           ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `num::NonZeroU32`
+  --> /Users/hiroyusai/src/sworn/spikes/zone-spf/zones/crates/evm/src/lib.rs:43:5
+   |
+43 |     num::NonZeroU32,
+   |     ^^^^^^^^^^^^^^^
+
+native host public values: 6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f318d3381583eb2fe9ef6226d2b71ce5a799821c60c71294f961f6b30e06435eabd
+fixture written: /Users/hiroyusai/src/sworn/contracts/test/vectors/zone-deposit_and_withdrawal_blocks5-6-sworn-sp1-groth16-v1.json
+cycles(total_instruction_count): 24443996
+PROVE groth16 wall: 891.062177583s
+proof pv match: true
+verify ok (204.887916ms)
+         19814154240  maximum resident set size
+      17500919940474  cycles elapsed

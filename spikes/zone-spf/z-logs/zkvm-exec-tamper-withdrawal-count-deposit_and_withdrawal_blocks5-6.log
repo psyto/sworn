@@ -1,0 +1,63 @@
+client init wall: 12.453634s
+stderr: WARNING: Using insecure random number generator.
+stderr: 
+stderr: thread '<unnamed>' (2) panicked at src/main.rs:12:72:
+stderr: prove_zone_batch: zone block 1 finalization sender count mismatch: expected 0, got 1
+stderr: stack backtrace:
+stderr: note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+stderr: prove_zone_batch: zone block 1 finalization sender count mismatch: expected 0, got 1
+execute wall: 487.249625ms
+cycles(total_instruction_count): 19872758
+report: gas: 19219577
+opcode counts (19872758 total instructions):
+    4265191 xor
+    2117494 or
+    2024518 sll
+    1958902 addi
+    1604126 ld
+    1431484 sd
+    1401096 srl
+    1350238 and
+    1236816 lbu
+     672352 add
+     386246 bne
+     320428 beq
+     250272 sb
+     123152 jalr
+     119294 bltu
+      96067 auipc
+      72354 mul
+      70019 lui
+      61620 sltu
+      61218 sub
+      54970 mulhu
+      53463 bgeu
+      40331 jal
+      25568 subw
+      13104 addw
+      12244 srlw
+       7512 slt
+       6635 blt
+       6319 lhu
+       5502 lw
+       5074 sw
+       4941 lb
+       4301 sh
+       2396 bge
+       2279 sra
+       1520 lh
+       1374 sllw
+        986 lwu
+        658 mulw
+        608 mulh
+         60 sraw
+         24 ecall
+          2 divu
+syscall counts (0 total syscall instructions):
+
+publicValues match native host: FAIL
+
+thread 'main' (51671076) panicked at src/main.rs:29:5:
+assertion failed: ok
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+EXIT 101

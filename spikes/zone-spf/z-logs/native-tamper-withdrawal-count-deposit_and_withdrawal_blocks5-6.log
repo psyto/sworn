@@ -1,0 +1,8 @@
+== tamper_wcount
+native execute wall: 1.301875ms
+NATIVE REJECTED: prove_zone_batch: zone block 1 finalization sender count mismatch: expected 0, got 1
+EXIT 0
+== tamper_wnone
+native execute wall: 1.359917ms
+NATIVE REJECTED: prove_zone_batch: zone block 1 has finalization senders without a count
+EXIT 0

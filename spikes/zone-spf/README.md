@@ -9,7 +9,7 @@ The batches come from Tempo's zones integration tests, on a dev chain (1337), no
 
 | path | |
 |---|---|
-| `patches/` | five patches: zones (zkVM build, witness dump), tempo `346c22eb` (zkVM build), c-kzg 2.1.8, reth-primitives-traits 0.6.0 |
+| `patches/` | six patches: zones (zkVM build, witness dump, withdrawal dump = test-only observational settlement prover), tempo `346c22eb` (zkVM build), c-kzg 2.1.8, reth-primitives-traits 0.6.0 |
 | `fetch.sh` | clones zones/tempo at the pinned commits, downloads the two crates, applies the patches (none of these trees is committed) |
 | `build-guest.sh` | builds the guest; needs a RISC-V C compiler for the C deps (`./riscv`, not fetched) |
 | `attest/` | shared digest code (`sol!` struct, type string, input framing), used by both the guest and the host |

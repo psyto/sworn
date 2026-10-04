@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Reproduce the large, uncommitted trees of the zone-spf spike from pinned commits + ./patches.
 #   zones  = tempoxyz/zones @ ac49071f  + patches/zones-zkvm.patch + patches/zones-witness-dump.patch
+#            + patches/zones-withdrawal-dump.patch (test-only observational settlement prover; withdrawal batch)
 #   tempo  = tempoxyz/tempo @ 346c22eb  + patches/tempo-zkvm.patch
 #   vendor = crates.io c-kzg 2.1.8, reth-primitives-traits 0.6.0 + their *-zkvm.patch
 # Not fetched: the RISC-V C toolchain (./riscv, riscv64-unknown-elf-gcc 15.2.0) used by build-guest.sh
@@ -12,7 +13,7 @@ clone() { # dir url commit
   git -C "$1" checkout -q "$3"
 }
 clone zones https://github.com/tempoxyz/zones.git ac49071f
-git -C zones apply ../patches/zones-zkvm.patch ../patches/zones-witness-dump.patch
+git -C zones apply ../patches/zones-zkvm.patch ../patches/zones-witness-dump.patch ../patches/zones-withdrawal-dump.patch
 clone tempo https://github.com/tempoxyz/tempo 346c22eb4293ac1f5edd27d4afd1f99323bc527c
 git -C tempo apply ../patches/tempo-zkvm.patch
 mkdir -p vendor
