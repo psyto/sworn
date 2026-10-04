@@ -67,3 +67,7 @@ the deployed contract on the explorer]**
 | deployed on Moderato | `deployments/moderato.json` |
 | 40 / 40 | `out/ac2_run.log` last line |
 | ran out of gas at the limit; ~11× | `out/e2e/localnet-oog-300k-20261003.log` `gasUsed 300000`; cold SSTORE 254,347 vs 22,147 (founder's reckn spec 011 §2.2c) |
+
+---
+
+**Submitted 2026-10-04** (founder): https://youtu.be/vI-Zx7ue0dA. This is version A, as recorded on 10-03, with no Zone-proof update, keeping the focus on the pivot. Subtitles: `Sworn_CWF_CheckIn3_20261003.en.srt`.
