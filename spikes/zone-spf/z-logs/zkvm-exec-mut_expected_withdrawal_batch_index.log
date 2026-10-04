@@ -1,4 +1,4 @@
-client init wall: 12.732203917s
+client init wall: 12.408579917s
 stderr: WARNING: Using insecure random number generator.
 stderr: 
 stderr: thread '<unnamed>' (2) panicked at src/main.rs:12:72:
@@ -6,41 +6,41 @@ stderr: prove_zone_batch: withdrawal batch index mismatch: expected 4, got 3
 stderr: stack backtrace:
 stderr: note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
 stderr: prove_zone_batch: withdrawal batch index mismatch: expected 4, got 3
-execute wall: 598.774084ms
-cycles(total_instruction_count): 25419657
-report: gas: 24504280
-opcode counts (25419657 total instructions):
-    5009671 xor
-    2516560 or
-    2457153 sll
-    2370491 addi
-    2143830 ld
-    1893181 sd
-    1777826 srl
-    1730018 and
-    1365105 lbu
-    1353732 add
-     445743 bne
-     355455 beq
-     329063 mul
-     284197 sb
+execute wall: 587.646458ms
+cycles(total_instruction_count): 25420362
+report: gas: 24499580
+opcode counts (25420362 total instructions):
+    5009721 xor
+    2516513 or
+    2457129 sll
+    2370803 addi
+    2143986 ld
+    1893280 sd
+    1777713 srl
+    1730117 and
+    1365224 lbu
+    1353668 add
+     445865 bne
+     355480 beq
+     329048 mul
+     284236 sb
      277997 mulhu
-     271259 sltu
-     164915 bltu
-     163411 jalr
-     122669 auipc
-      88568 sub
-      80578 lui
-      65744 bgeu
-      45082 jal
-      27813 subw
-      18174 srlw
-       8827 addw
+     271261 sltu
+     164963 bltu
+     163417 jalr
+     122671 auipc
+      88516 sub
+      80535 lui
+      65759 bgeu
+      45091 jal
+      27789 subw
+      18176 srlw
+       8819 addw
        7558 slt
        7490 blt
-       6744 lw
+       6739 lw
        6602 lhu
-       6568 sw
+       6563 sw
        5890 lb
        4628 sh
        2228 sra
@@ -54,8 +54,8 @@ syscall counts (0 total syscall instructions):
 
 publicValues match native host: FAIL
 
-thread 'main' (51354256) panicked at src/main.rs:29:5:
+thread 'main' (51545914) panicked at src/main.rs:29:5:
 assertion failed: ok
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
-$R $ELF zin/$c.bin execute  86.53s user 1.70s system 654% cpu 13.484 total
+$R $ELF zin/$c.bin execute  86.01s user 1.61s system 670% cpu 13.064 total
 EXIT 101

@@ -34,7 +34,7 @@ Sworn proves Tempo's execution in zero knowledge, so a contract on Tempo can act
 
 The first use is Tempo Zones: private blockchains anchored to Tempo. A Zone's withdrawals are only as trustworthy as the check on each batch. Today that check is an AWS Nitro attestation, which means trusting one vendor's hardware, and Tempo's reference verifier returns true without checking. Tempo's docs: ZK proof generation "is not implemented".
 
-What is built: Tempo's own Zone batch verifier (zone_spf::prove_zone_batch) runs inside SP1. The proof is bound to every input Tempo's IVerifier receives, plus the chain and the genesis. SwornZoneVerifier, with IVerifier's exact signature, verified a real batch on Moderato (tx 0x9aa938e8…dfbd).
+What is built: Tempo's own Zone batch verifier (zone_spf::prove_zone_batch) runs inside SP1. The proof is bound to every input Tempo's IVerifier receives, plus the chain and the genesis. SwornZoneVerifier, with IVerifier's exact signature, verified a real batch on Moderato (tx 0xb14b7127…3b80).
 
 It is for Tempo first, since Tempo chooses each Zone's verifier: ZK as a second, independent check beside the attestation. Then it is for the Zones that need a proof for every batch, on time, through every Tempo upgrade.
 ```
@@ -54,7 +54,7 @@ Why now: Zones are on testnet and Tempo's attestation verifier arrives with the 
 ## How does your product use these chains? · ≤500
 
 ```
-Tempo (Moderato). SwornZoneVerifier, with Tempo's IVerifier signature, verifies a Groth16 proof of a Tempo Zone batch on Tempo (0x64bA9F64…42De). Sworn.sol holds bonds and pays slashes in PathUSD (0xc54b7e52…02c6). Both use the SP1 Groth16 verifier deployed on Tempo. Inside the proofs run Tempo's own code: Zones' prove_zone_batch, and tempo-revm with the TIP-20, TIP-403 and fee-token precompiles, bound to Tempo's block hash.
+Tempo (Moderato). SwornZoneVerifier, with Tempo's IVerifier signature, verifies a Groth16 proof of a Tempo Zone batch on Tempo (0x00F6ed34…64e5). Sworn.sol holds bonds and pays slashes in PathUSD (0xc54b7e52…02c6). Both use the SP1 Groth16 verifier deployed on Tempo. Inside the proofs run Tempo's own code: Zones' prove_zone_batch, and tempo-revm with the TIP-20, TIP-403 and fee-token precompiles, bound to Tempo's block hash.
 ```
 
 ## What technologies are you using or integrating with? · ≤500
@@ -169,7 +169,7 @@ The next test is direct: put a TEE plus ZK design in front of Tempo and the firs
 
 ```
 No users, no revenue. Built and measured inside the window, all on Moderato testnet:
-- Tempo Zones: Tempo's own batch verifier runs in SP1 on 4 real batches from Tempo's zones integration tests, matching native output (19-26M cycles; tampering rejected). A proof bound to IVerifier's inputs was verified on Moderato (tx 0x9aa938e8…dfbd).
+- Tempo Zones: Tempo's own batch verifier runs in SP1 on 4 real batches from Tempo's zones integration tests, matching native output (19-26M cycles; tampering rejected). A proof bound to IVerifier's inputs was verified on Moderato (tx 0xb14b7127…3b80).
 - tempo-revm in SP1: 40 of 40 real Moderato transactions re-executed match their receipts.
 - Three real slashes on Moderato: a lying answer server's bond paid the client, each by a Groth16 proof.
 - 64 forge tests, including real proofs; contracts with no owner.

@@ -1,6 +1,6 @@
 // The Zone batch proof on Moderato, read from chain. The attest tx hash and the contract's expected codehash
 // come from deployments/moderato.json; the proof re-checked by "Verify again" is the fixture the attest tx
-// sent (contracts/test/vectors/zone-hardfork.json), and the page checks that it is byte-for-byte the same
+// sent (contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json), and the page checks that it is byte-for-byte the same
 // calldata as the transaction's.
 //
 // Reads run one after another (the public RPC rate-limits bursts).
@@ -19,7 +19,7 @@ import {
 import { getBlock, getCode, getTransactionReceipt, readContract } from "viem/actions";
 import deployments from "../../../deployments/moderato.json";
 // Named imports: the bundle keeps only these fields of the fixture (args, the proof, the config, the digest).
-import { args as fxArgs, digest as fxDigest, proof as fxProof, verifierConfig as fxConfig } from "../../../contracts/test/vectors/zone-hardfork.json";
+import { args as fxArgs, digest as fxDigest, proof as fxProof, verifierConfig as fxConfig } from "../../../contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json";
 import { verifierAbi } from "./abis.ts";
 import type { ChainConfig } from "./config.ts";
 import { DataError, asDataError } from "./errors.ts";

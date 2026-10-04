@@ -51,8 +51,10 @@ pub const TYPEHASH: B256 =
 pub const ZONE_GUEST_VERSION: B256 =
     alloy_primitives::b256!("6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f31");
 
-/// `verifierConfig` for this ZK verifier (Nitro's is `0x01`).
-pub const ZK_VERIFIER_CONFIG_V1: &[u8] = &[0x02];
+/// `verifierConfig` for this ZK verifier: the ASCII bytes of "sworn-sp1-groth16-v1" (20 bytes).
+/// Self-describing, and cannot collide with Tempo's one-byte tags: upstream zones commit 344ff785
+/// (2026-10-01) defines 0x01 = Nitro and 0x02 = NoProof (spec 003 §3). Earlier drafts used 0x02.
+pub const ZK_VERIFIER_CONFIG_V1: &[u8] = b"sworn-sp1-groth16-v1";
 
 /// The guest input (spec §4).
 #[derive(Debug, Clone)]
@@ -71,7 +73,7 @@ pub struct GuestInput {
 pub enum Error {
     /// The framed input is malformed.
     Input(&'static str),
-    /// `verifier_config != 0x02`.
+    /// `verifier_config != ZK_VERIFIER_CONFIG_V1` ("sworn-sp1-groth16-v1").
     WrongVerifierConfig,
     Genesis(String),
     ChainSpec(String),
@@ -84,7 +86,7 @@ impl core::fmt::Display for Error {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
             Error::Input(m) => write!(f, "malformed input: {m}"),
-            Error::WrongVerifierConfig => write!(f, "verifier_config must be 0x02"),
+            Error::WrongVerifierConfig => write!(f, "verifier_config must be \"sworn-sp1-groth16-v1\""),
             Error::Genesis(m) => write!(f, "genesis: {m}"),
             Error::ChainSpec(m) => write!(f, "chainspec: {m}"),
             Error::Witness(m) => write!(f, "witness: {m}"),
@@ -267,6 +269,15 @@ mod tests {
         };
         assert_eq!(a.eip712_type_hash(), TYPEHASH);
         assert_eq!(keccak256(b"sworn-zone-guest-v1"), ZONE_GUEST_VERSION);
+        assert_eq!(ZK_VERIFIER_CONFIG_V1, &hex_literal_tag()[..]);
+        assert_eq!(
+            keccak256(ZK_VERIFIER_CONFIG_V1),
+            alloy_primitives::b256!("c405c6c7397b2e658a365c7a4e97b646114812fa0357d8f047caabd14012dd23")
+        );
+    }
+
+    fn hex_literal_tag() -> Vec<u8> {
+        alloy_primitives::hex::decode("73776f726e2d7370312d67726f746831362d7631").unwrap()
     }
 
     /// AC-Z2: the golden vector shared with Solidity (`contracts/test/vectors/zone-digest-golden.json`).

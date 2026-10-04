@@ -44,6 +44,6 @@ cargo:warning=rustc +succinct --version: "rustc 1.93.0-dev\n"
 [sp1]     |     ^^^^^^^^^^^^^^^
 [sp1]  
 [sp1]  warning: `zone-evm` (lib) generated 2 warnings (run `cargo fix --lib -p zone-evm` to apply 2 suggestions)
-[sp1]      Finished `release` profile [optimized] target(s) in 0.44s
+[sp1]      Finished `release` profile [optimized] target(s) in 0.47s
 cargo:rustc-env=SP1_ELF_zone-spf-guest=/Users/hiroyusai/src/sworn/spikes/zone-spf/guest/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/zone-spf-guest
 ELF: /Users/hiroyusai/src/sworn/spikes/zone-spf/guest/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/zone-spf-guest

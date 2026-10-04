@@ -14,9 +14,14 @@ window.__fill = (d) => {
   return true;
 };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// A .fade with data-at="S" appears S seconds after the scene starts (timed to the narration); the rest
+// fade in one after another, 450 ms apart, from the scene start.
 window.__show = async (id) => {
   for (const s of document.querySelectorAll(".scene")) s.classList.toggle("on", s.id === id);
-  for (const p of document.querySelectorAll(`#${id} .fade`)) { p.classList.add("in"); await sleep(450); }
+  const t0 = performance.now();
+  for (const p of document.querySelectorAll(`#${id} .fade[data-at]`))
+    setTimeout(() => p.classList.add("in"), Math.max(0, +p.dataset.at * 1000 - (performance.now() - t0)));
+  for (const p of document.querySelectorAll(`#${id} .fade:not([data-at])`)) { p.classList.add("in"); await sleep(450); }
 };
 window.__overflow = (id) => {
   for (const s of document.querySelectorAll(".scene")) s.classList.toggle("on", s.id === id);

@@ -1,0 +1,23 @@
+pre-check ok: 0x00F6ed344B9C7F5eBA8788A115f8d6B4c00564e5 on chain 42431 has ZONE_VKEY = ELF vkey 0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39 and the sworn-sp1-groth16-v1 tag
+warning: unused imports: `ConfigureEngineEvm`, `ExecutableTxIterator`, and `ExecutionCtxFor`
+  --> /Users/hiroyusai/src/sworn/spikes/zone-spf/zones/crates/evm/src/lib.rs:35:5
+   |
+35 |     ConfigureEngineEvm, ConfigureEvm, EvmEnvFor, ExecutableTxIterator, ExecutionCtxFor,
+   |     ^^^^^^^^^^^^^^^^^^                           ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `num::NonZeroU32`
+  --> /Users/hiroyusai/src/sworn/spikes/zone-spf/zones/crates/evm/src/lib.rs:43:5
+   |
+43 |     num::NonZeroU32,
+   |     ^^^^^^^^^^^^^^^
+
+native host public values: 6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f31f73f48c78a414d33146608ac25053073d9fdb214895e9a58a3e043ae316171ba
+fixture written: /Users/hiroyusai/src/sworn/contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json
+cycles(total_instruction_count): 25536122
+PROVE groth16 wall: 701.08766075s
+proof pv match: true
+verify ok (197.286792ms)
+         18497470464  maximum resident set size
+      17225989137688  cycles elapsed

@@ -52,7 +52,13 @@ SwornZoneBatchAttestation(
   Nitro `user_data`.
 - `verifier` is the deployed `SwornZoneVerifier` address (a guest input, so the verifier is deployed
   before proving). `verifierConfigHash = keccak256(verifierConfig)` with
-  `verifierConfig = ZK_VERIFIER_CONFIG_V1 = 0x02` (Nitro's is `0x01`).
+  `verifierConfig = ZK_VERIFIER_CONFIG_V1 = bytes("sworn-sp1-groth16-v1")`, the 20 ASCII bytes
+  `0x73776f726e2d7370312d67726f746831362d7631`, so `verifierConfigHash = 0xc405c6c7397b2e658a365c7a4e97b646114812fa0357d8f047caabd14012dd23`.
+  **Why not a one-byte tag (changed 2026-10-04):** an earlier version of this spec used `0x02`. Upstream zones commit
+  `344ff785` (2026-10-01, `bin/prover/enclave/README.md`, "Verifier configurations") defines `0x01` = Nitro and
+  **`0x02` = NoProof**, and Moderato's zone 3 has sent `0x02` with empty proofs since block 37,572,491
+  (`docs/research/moderato-zone-feasibility-20261004.md`). A self-describing tag cannot collide with Tempo's one-byte tags.
+  The deployment that used `0x02` (`0x64bA9F64…42De`) is marked superseded in `deployments/moderato.json`.
 - `genesisArtifactHash = keccak256(genesis_bytes)`: the exact bytes of the genesis JSON the guest parsed
   (hardfork config included). This pins one **artifact**; it does not prove that artifact is the authentic
   spec. Choosing it is a trusted deployment step (the artifact is committed to the repo and its hash recorded).
@@ -74,7 +80,7 @@ The guest:
 3. computes the digest;
 4. commits the public values.
 
-It aborts if `verifier_config != 0x02`.
+It aborts if `verifier_config != bytes("sworn-sp1-groth16-v1")`.
 
 A native host computes the same public values with the same Rust code (shared module, not copied).
 
@@ -83,7 +89,7 @@ A native host computes the same public values with the same Rust code (shared mo
 - **Immutables** (constructor): `SP1_VERIFIER`, `ZONE_VKEY`, `PARENT_CHAIN_ID`, `PINNED_ZONE_ID`,
   `PINNED_GENESIS_ARTIFACT_HASH`. No owner, no setters, no upgrade path; `scripts/no-owner.sh` must pass on it.
 - **`verify(...)`**: the exact `IVerifier` signature, `view`. It reverts with a custom error when:
-  - `verifierConfig != 0x02`;
+  - `verifierConfig != bytes("sworn-sp1-groth16-v1")` (so Tempo's `0x01` Nitro, `0x02` NoProof and the empty config all revert);
   - `zoneId != PINNED_ZONE_ID`;
   - the SP1 proof fails.
 
@@ -119,7 +125,8 @@ A native host computes the same public values with the same Rust code (shared mo
   sides assert that their typehash equals `keccak256` of the literal type string in §3, and equals the same
   hard-coded 32-byte constant `0x92642ea5ff5c47ad5a0c977fa87d5a0634b45661ad091c055f6905e7a51d8221`.
 - **AC-Z3 (prove):** a Groth16 proof of `hardfork_t13_recovery` whose public values equal the native host's;
-  the fixture is written to `contracts/test/vectors/zone-hardfork.json`.
+  the fixture is written to `contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json` (the `0x02`-era fixture
+  `zone-hardfork.json` stays as the record of the superseded deployment).
 - **AC-Z4 (Foundry):**
   - The real fixture passes `verify` and `attest` against the real SP1 Groth16 verifier bytecode.
   - **Calldata fields:** each of the 15 digest fields that come from `verify` arguments, mutated
@@ -151,6 +158,9 @@ A native host computes the same public values with the same Rust code (shared mo
   D1–D4 are disclosed wherever the claim appears.
 
 ## Results (phase A)
+
+> Measured with `verifierConfig = 0x02`. Superseded by the tag change; see **Results (sworn-sp1-groth16-v1)** below.
+> The genesis, typehash, AC-Z1 rejections and contract logic are unchanged. The vkey, digests, golden vector and proofs below are the `0x02` ones.
 
 Measured 2026-10-04 on the founder's Mac (12 cores, 32 GB), SP1 6.3.1. Nothing was sent to any chain.
 Logs are in `spikes/zone-spf/z-logs/`.
@@ -232,6 +242,9 @@ Logs are in `spikes/zone-spf/z-logs/`.
 
 ## Results (AC-Z5)
 
+> **Superseded:** this deployment accepts `verifierConfig = 0x02`, which upstream now defines as NoProof (zones `344ff785`).
+> It stays on chain and in `deployments/moderato.json` (marked `superseded`). The replacement is not yet deployed.
+
 - **Deployed on Moderato, 2026-10-04.**
   - `SwornZoneVerifier` at `0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De`, tx `0x1a0c3bda046cffabcd888588f832f84f9eccbbe2ac73d6e1a070adfe502b189b`.
   - Block 38070241, status 1, gasUsed 3,460,805.
@@ -248,3 +261,56 @@ Logs are in `spikes/zone-spf/z-logs/`.
 - **`attest` sent, 2026-10-04:** tx `0x9aa938e8c311c0a9b62c50a312129dde4cc1223c45f3b72ff41ff89503d5dfbd`, block 38071845,
   status 1, gasUsed 260,152. One `ZoneBatchVerified(1, 10, 0x578542fc…b569, 0xc517a760…8065, 0x1337e71b…51bd)` from the
   verifier, matching the batch's native output.
+
+## Results (sworn-sp1-groth16-v1), 2026-10-04
+
+`ZK_VERIFIER_CONFIG_V1` changed from `0x02` to `bytes("sworn-sp1-groth16-v1")`. Nothing was sent to any chain. Logs are in `spikes/zone-spf/z-logs/` and were re-run.
+
+- **Guest:** ELF sha256 `fd7a6a105e915fef3f75402fb65fabca0eca8cbe8c69df4cc73aa07c9a620c51` (`guest-elf.sha256`).
+  The **vkey** is `0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39`, from `spikes/zone-spf/elf-vkey.sh` (zkVM execute plus setup, no proof).
+- **AC-Z1, zkVM execute:** guest public values equal the native host's for all four batches:
+  - hardfork_t13_recovery: 25,536,122 cycles;
+  - spf_batch_execute: 23,464,458;
+  - spf_builder_equivalence: 21,477,357;
+  - spf_replays_migrated_policy: 19,081,958.
+- **AC-Z1, rejections:**
+  - `tamper_deposit_amount` and the expected_withdrawal_batch_index mutation panic in the zkVM;
+  - all six PublicInputs mutations are rejected natively;
+  - the genesis byte change moves the digest `0xf4977d85…1cfa` → `0x0924dbeb…3811`;
+  - `verifier_config` values `0x01`, `0x02`, empty, and the tag followed by `0x00` are rejected (`native-mutations.log`).
+- **AC-Z2:** the golden vector was regenerated, because `verifierConfigHash` is a field. Its digest is now
+  `0x18e909651eee33b89350fbd7df0a19381842a1535a6e19e2c147e3445b0919b8`. Rust passes 2/2, and Solidity matches. The typehash is unchanged.
+- **AC-Z3:** not yet re-proved. The placeholder `0x02` proof moved to `contracts/test/vectors/superseded/`. The real fixture will be
+  produced for the redeployed address by `scripts/zone-prove.sh <address>` and written to
+  `contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json`.
+- **AC-Z4:**
+  - The mock-verifier test covers every case. Its wrong-config cases are now `0x01`, `0x02`, empty, and the tag followed by `0x00`.
+  - `test_ACZ4_REAL_groth16_moderato_all_cases` uses `deployCodeTo` at the fixture's (deployed) address. It is **PENDING**: it skips while the fixture is absent, and fails on a fixture with another config (checked with the old one).
+  - `contracts/scripts/check-tests.sh` lists it as PENDING, not required.
+- **AC-Z5 prep:**
+  - `scripts/deploy-zone-verifier.sh` (print only) now builds the guest and takes the vkey from the ELF, or from an explicit `ZONE_VKEY`, which must match unless `ZONE_VKEY_FORCE=1`. It prints the ELF sha256. Moderato dry run: init code 3,542 bytes, eth_estimateGas 3,901,195.
+  - `scripts/zone-attest.sh` also checks `ZK_VERIFIER_CONFIG_V1`. It was rehearsed on anvil (chain 42431, `anvil_setCode` / `anvil_setStorageAt` only) with a **mock** SP1 verifier, because no real proof for the new tag exists yet (`zone-attest-anvil-rehearsal-mock.log`).
+  - Before proving, `scripts/zone-prove.sh` refuses an address whose on-chain `ZONE_VKEY` or tag differs from the ELF's. Checked read-only against the superseded `0x64bA9F64…`, which it refused.
+  - `no-owner.sh --zone-verifier` passes: 2,993 bytes, one STATICCALL, no forbidden opcodes.
+- **AC-Z6:** `contracts/scripts/gate.sh` passes with 49/49 required. 64 tests run: 63 pass, and the zone real-proof test is skipped as PENDING.
+
+## Results (AC-Z5, sworn-sp1-groth16-v1 deployment)
+
+- **Deployed 2026-10-04:** `SwornZoneVerifier` at `0x00F6ed344B9C7F5eBA8788A115f8d6B4c00564e5`.
+  - Tx `0x4bb81674725455cccd5857c7683ee4d6e15760223b073f2bf1a34c091d081271`, block 38078600, status 1, gasUsed 3,619,319.
+  - Codehash `0x115088cb…72c1`.
+  - `no-owner.sh --zone-verifier` passes on the deployed code.
+  - On-chain `ZK_VERIFIER_CONFIG_V1` = `"sworn-sp1-groth16-v1"`.
+- **Real proof:**
+  - 25,536,122 cycles, Groth16 701.1 s, peak RSS 18.5 GB; public values equal the native host's.
+  - Log: `spikes/zone-spf/z-logs/prove-moderato-sworn-sp1-groth16-v1.log`.
+  - Fixture: `contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json`.
+  - `test_ACZ4_REAL_groth16_moderato_all_cases` passes against it, so the gate no longer has a pending test.
+- **Read-only checks on Moderato:**
+  - the immutables and the tag match;
+  - `attestationDigest` = `0xf73f48c7…71ba`;
+  - `verify` returns true;
+  - `nextZoneHeight+1` reverts with `InvalidProof()`.
+- **`attest` sent:** tx `0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80`, block 38080441, status 1, gasUsed 260,419.
+  It emitted `ZoneBatchVerified(1, 10, 0x578542fc…b569, 0xc517a760…8065, 0xf73f48c7…71ba)`.
+- **The first deployment** (`0x64bA9F64…42De`, config `0x02`) is kept in `deployments/moderato.json` as `SwornZoneVerifierSuperseded`.

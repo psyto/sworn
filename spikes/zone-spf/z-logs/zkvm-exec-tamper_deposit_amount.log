@@ -1,4 +1,4 @@
-client init wall: 13.264849208s
+client init wall: 12.467176167s
 stderr: WARNING: Using insecure random number generator.
 stderr: 
 stderr: thread '<unnamed>' (2) panicked at src/main.rs:12:72:
@@ -6,42 +6,42 @@ stderr: prove_zone_batch: failed to execute advanceTempo in zone block 1
 stderr: stack backtrace:
 stderr: note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
 stderr: prove_zone_batch: failed to execute advanceTempo in zone block 1
-execute wall: 574.776625ms
-cycles(total_instruction_count): 23729013
-report: gas: 22921109
-opcode counts (23729013 total instructions):
-    4600607 xor
-    2359336 or
-    2293086 sll
-    2209351 addi
-    1974623 ld
-    1737713 sd
-    1643354 srl
-    1601420 and
-    1330096 add
-    1312491 lbu
-     419647 bne
-     339515 beq
-     326984 mul
+execute wall: 571.054875ms
+cycles(total_instruction_count): 23737756
+report: gas: 22930159
+opcode counts (23737756 total instructions):
+    4600863 xor
+    2360007 or
+    2294183 sll
+    2210243 addi
+    1975107 ld
+    1738034 sd
+    1644261 srl
+    1602159 and
+    1331341 add
+    1312744 lbu
+     419818 bne
+     339790 beq
+     327119 mul
      277285 mulhu
      270679 sltu
-     266203 sb
-     150337 jalr
-     146745 bltu
-     113353 auipc
-      82512 sub
-      74215 lui
-      59457 bgeu
-      41062 jal
-      25968 subw
+     266294 sb
+     150331 jalr
+     146842 bltu
+     113463 auipc
+      82760 sub
+      74719 lui
+      59456 bgeu
+      41166 jal
+      26122 subw
       17167 srlw
        8448 addw
        7544 slt
        7105 blt
        6329 lhu
        5744 lb
-       5599 sw
-       4664 lw
+       5597 sw
+       4662 lw
        4453 sh
        2009 sra
        1573 lh
@@ -54,8 +54,8 @@ syscall counts (0 total syscall instructions):
 
 publicValues match native host: FAIL
 
-thread 'main' (51353461) panicked at src/main.rs:29:5:
+thread 'main' (51545522) panicked at src/main.rs:29:5:
 assertion failed: ok
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
-$R $ELF zin/$c.bin execute  85.93s user 1.70s system 629% cpu 13.923 total
+$R $ELF zin/$c.bin execute  85.07s user 1.73s system 662% cpu 13.108 total
 EXIT 101

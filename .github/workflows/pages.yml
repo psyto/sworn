@@ -4,7 +4,7 @@ name: pages
 on:
   push:
     branches: [main]
-    paths: ["site/**", "deployments/moderato.json", "contracts/test/vectors/zone-hardfork.json", ".github/workflows/pages.yml"]
+    paths: ["site/**", "deployments/moderato.json", "contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json", ".github/workflows/pages.yml"]
   workflow_dispatch:
 permissions:
   contents: read

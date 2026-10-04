@@ -1,99 +1,99 @@
 1
-00:00:00,000 --> 00:00:04,495
-On Tempo, MPP lets agents and apps pay per request
+00:00:00,000 --> 00:00:03,657
+Tempo Zones are private blockchains anchored to Tempo.
 
 2
-00:00:04,545 --> 00:00:08,586
-— including paying for an answer before they send money.
+00:00:03,707 --> 00:00:10,145
+Today, the check that a Zone batch was executed correctly is a hardware attestation,
 
 3
-00:00:08,636 --> 00:00:11,768
-"Will this payment actually reach the receiver?"
+00:00:10,195 --> 00:00:13,852
+or, in the reference contract, nothing at all.
 
 4
-00:00:11,818 --> 00:00:13,586
-is worth paying for.
+00:00:13,902 --> 00:00:18,950
+Tempo's own docs say zero-knowledge proving for Zones is not implemented.
 
 5
-00:00:13,636 --> 00:00:19,950
-But today, if that answer is wrong, MPP leaves the refund to the server.
+00:00:19,000 --> 00:00:20,768
+So I built it.
 
 6
-00:00:20,000 --> 00:00:25,037
-On Tempo, a transfer can succeed while the receiver gets nothing:
+00:00:20,818 --> 00:00:25,768
+Sworn runs Tempo's own Zone batch verifier inside a zero-knowledge VM,
 
 7
-00:00:25,088 --> 00:00:28,737
-receive policies send it to a guard instead.
+00:00:25,818 --> 00:00:33,950
+binds the proof to the exact inputs Tempo's verifier takes, and a contract on Tempo's testnet verified it.
 
 8
-00:00:28,787 --> 00:00:32,900
-Policies, fee tokens and balances all change the outcome
+00:00:34,000 --> 00:00:35,768
+Here is the transaction.
 
 9
-00:00:32,950 --> 00:00:38,450
-— so a good answer is valuable, and a wrong one is costly.
+00:00:35,818 --> 00:00:38,495
+The same engine re-runs Tempo's EVM,
 
 10
-00:00:38,500 --> 00:00:42,593
-Sworn lets the seller back its answer with money.
+00:00:38,545 --> 00:00:43,950
+and it has already slashed a lying server three times on Moderato.
 
 11
-00:00:42,643 --> 00:00:46,736
-The agent buys an answer about the current block;
+00:00:44,000 --> 00:00:48,521
+Zones hold money, and money has to come back out.
 
 12
-00:00:46,786 --> 00:00:51,799
-the seller locks part of its bond behind exactly that answer.
+00:00:48,571 --> 00:00:53,550
+Withdrawals are only as trustworthy as the check on the batch.
 
 13
-00:00:51,849 --> 00:00:57,783
-If it's false, anyone can prove it, and the bond pays the agent.
+00:00:53,600 --> 00:00:59,950
+A hardware attestation means trusting one vendor's chip; a zero-knowledge proof, anyone can check.
 
 14
-00:00:57,833 --> 00:01:01,926
-The agent gets an answer it can rely on;
+00:01:00,000 --> 00:01:05,470
+Tempo decides which verifier its Zones use, so step one is Tempo:
 
 15
-00:01:01,976 --> 00:01:05,609
-the seller gets proof it can be trusted.
+00:01:05,520 --> 00:01:10,070
+ZK as a second, independent check next to the attestation.
 
 16
-00:01:05,659 --> 00:01:07,450
-No judge, no owner.
+00:01:10,120 --> 00:01:13,750
+Step two is the business: running the provers,
 
 17
-00:01:07,500 --> 00:01:10,228
-It's built from Tempo's own parts.
+00:01:13,800 --> 00:01:19,730
+with a proof for every batch, on time, re-verified at every Tempo upgrade.
 
 18
-00:01:10,278 --> 00:01:15,320
-Tempo's Zones work already re-runs Tempo's EVM against a proven state
+00:01:19,780 --> 00:01:22,950
+Specialist work that grows with every Zone.
 
 19
-00:01:15,370 --> 00:01:17,635
-— Tempo needs this primitive too.
+00:01:23,000 --> 00:01:30,365
+Tempo is built on Reth and Revm, the stack I work in and teach in rethlab,
 
 20
-00:01:17,685 --> 00:01:24,117
-I took it into a zero-knowledge proof: tempo-revm, proven against Tempo's own block hash.
+00:01:30,415 --> 00:01:35,926
+and my last project won a Uniswap Foundation prize at ETHGlobal Tokyo.
 
 21
-00:01:24,167 --> 00:01:27,820
-It matched forty of forty real Moderato transfers,
+00:01:35,976 --> 00:01:41,950
+Getting Tempo's code into a zkVM meant patching it, which takes reading it.
 
 22
-00:01:27,870 --> 00:01:32,450
-and on Moderato it has already slashed a lying server.
+00:01:42,000 --> 00:01:47,536
+It's testnet and unaudited, the batch comes from Tempo's own integration tests,
 
 23
-00:01:32,500 --> 00:01:37,583
-I build on Reth and Revm; I teach them in rethlab.
+00:01:47,586 --> 00:01:50,329
+and there is no revenue yet.
 
 24
-00:01:37,633 --> 00:01:43,183
-Next: a bonded-answer method any MPP seller on Tempo can switch on.
+00:01:50,379 --> 00:01:53,588
+Next: running both checks together, with Tempo.
 
 25
-00:01:43,233 --> 00:01:46,450
-Sworn — answers you can hold to account.
+00:01:53,638 --> 00:01:55,450
+Sworn: Tempo's execution, proven.

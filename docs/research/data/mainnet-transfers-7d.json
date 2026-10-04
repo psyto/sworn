@@ -1,0 +1,335 @@
+{
+ "net": "mainnet",
+ "fromBlock": 41407000,
+ "toBlock": 42487199,
+ "elapsedSec": 234,
+ "rpcCalls": 111,
+ "rpcRetries": 9,
+ "tip20TransferLogs": 1116027,
+ "nonTip20TransferLogs": 15423,
+ "byCategory": {
+  "payment": 534893,
+  "fee_in": 561700,
+  "mint": 5507,
+  "burn": 6506,
+  "dex": 7408,
+  "fee_out": 13
+ },
+ "byToken": {
+  "0x20c000000000000000000000b9537d11c60e8b50": {
+   "payment": 440864,
+   "fee_in": 405598,
+   "dex": 2396,
+   "burn": 485,
+   "mint": 306,
+   "fee_out": 8
+  },
+  "0x20c0000000000000000000000000000000000000": {
+   "fee_in": 141686,
+   "payment": 46980,
+   "burn": 784,
+   "dex": 2328,
+   "mint": 1321,
+   "fee_out": 3
+  },
+  "0x20c00000000000000000000014f22ca97301eb73": {
+   "payment": 17815,
+   "fee_in": 7978,
+   "dex": 2385,
+   "mint": 71,
+   "burn": 13,
+   "fee_out": 1
+  },
+  "0x20c0000000000000000000006fd9a167923ba194": {
+   "mint": 834,
+   "payment": 12410,
+   "burn": 2279
+  },
+  "0x20c00000000000000000000089caf7c622ae4b0f": {
+   "payment": 9128,
+   "burn": 1040,
+   "mint": 138
+  },
+  "0x20c0000000000000000000006a37da5c996874be": {
+   "fee_in": 6367,
+   "payment": 1779,
+   "mint": 192,
+   "burn": 43,
+   "fee_out": 1,
+   "dex": 138
+  },
+  "0x20c0000000000000000000003158081efd85bfc2": {
+   "payment": 3545,
+   "burn": 558,
+   "mint": 58
+  },
+  "0x20c000000000000000000000f37de3740adec032": {
+   "payment": 1135,
+   "burn": 1135,
+   "mint": 409
+  },
+  "0x20c000000000000000000000baac91f6ca72f768": {
+   "mint": 1904,
+   "payment": 610,
+   "burn": 37
+  },
+  "0x20c000000000000000000000ab375577424a678d": {
+   "mint": 192,
+   "payment": 43,
+   "burn": 43
+  },
+  "0x20c0000000000000000000000520792dcccccccc": {
+   "dex": 161,
+   "fee_in": 71,
+   "payment": 32
+  },
+  "0x20c00000000000000000000058d0b8b2cfdb358c": {
+   "payment": 156,
+   "burn": 38,
+   "mint": 1
+  },
+  "0x20c000000000000000000000d479b9f6ec0ceff9": {
+   "payment": 97,
+   "mint": 2
+  },
+  "0x20c0000000000000000000001621e21f71cf12fb": {
+   "payment": 65,
+   "mint": 1,
+   "burn": 3
+  },
+  "0x20c0000000000000000000008ee4fcff88888888": {
+   "payment": 61,
+   "burn": 1
+  },
+  "0x20c00000000000000000000041066fdab17401b8": {
+   "mint": 19,
+   "payment": 21,
+   "burn": 1
+  },
+  "0x20c000000000000000000000b97f3aa2bfaaa64b": {
+   "mint": 15,
+   "payment": 14,
+   "burn": 10
+  },
+  "0x20c0000000000000000000002febde2ab35284dc": {
+   "payment": 24,
+   "burn": 8,
+   "mint": 7
+  },
+  "0x20c000000000000000000000c412ec89d0c08be5": {
+   "mint": 3,
+   "payment": 30
+  },
+  "0x20c000000000000000000000109394a271f6aae6": {
+   "payment": 31
+  },
+  "0x20c00000000000000000000065439bf965b62982": {
+   "mint": 8,
+   "payment": 9,
+   "burn": 9
+  },
+  "0x20c000000000000000000000ab73a7e610ba18fe": {
+   "payment": 8,
+   "burn": 8,
+   "mint": 7
+  },
+  "0x20c0000000000000000000003599bbeb6aec06e5": {
+   "mint": 5,
+   "payment": 5,
+   "burn": 5
+  },
+  "0x20c000000000000000000000301ecc78ead01357": {
+   "payment": 3,
+   "mint": 6
+  },
+  "0x20c000000000000000000000c3268d803b51d448": {
+   "mint": 1,
+   "payment": 4,
+   "burn": 1
+  },
+  "0x20c0000000000000000000005fcf40533ab69481": {
+   "mint": 1,
+   "payment": 4,
+   "burn": 1
+  },
+  "0x20c000000000000000000000987bef2978df41f9": {
+   "payment": 5
+  },
+  "0x20c000000000000000000000b35009b1b466295b": {
+   "mint": 1,
+   "payment": 3,
+   "burn": 1
+  },
+  "0x20c000000000000000000000ae247a1130450f09": {
+   "payment": 2,
+   "burn": 2
+  },
+  "0x20c0000000000000000000008bcaa57703106472": {
+   "payment": 3
+  },
+  "0x20c0000000000000000000005a892dc39b2415cd": {
+   "mint": 1,
+   "payment": 1,
+   "burn": 1
+  },
+  "0x20c000000000000000000000d5d5815ae71124d1": {
+   "payment": 3
+  },
+  "0x20c000000000000000000000435f6827071ecaa2": {
+   "payment": 2
+  },
+  "0x20c000000000000000000000da3df40f1697c3cd": {
+   "mint": 1
+  },
+  "0x20c000000000000000000000fb3dfe3a6b7877aa": {
+   "payment": 1
+  },
+  "0x20c000000000000000000000f4371867ae9754ce": {
+   "mint": 1
+  },
+  "0x20c000000000000000000000c6ac18274a980b26": {
+   "mint": 1
+  },
+  "0x20c0000000000000000000003337951a5a9d94b2": {
+   "mint": 1
+  }
+ },
+ "payment": {
+  "events": 534893,
+  "txs": 482217,
+  "distinctSenders": 17465,
+  "distinctReceivers": 17692,
+  "top25Senders": [
+   {
+    "addr": "0x385193793fe875cd9f2341409563932023fb4fab",
+    "events": 127102,
+    "share": 0.2376
+   },
+   {
+    "addr": "0x07fbca218b0a0a35244e0025a036fa85a6dc97dc",
+    "events": 31273,
+    "share": 0.0585
+   },
+   {
+    "addr": "0x55da623ac848d6d53f2fc87debd8829994d3019b",
+    "events": 15287,
+    "share": 0.0286
+   },
+   {
+    "addr": "0x8ed7ec422e5e6e4964e989f81c2e6ae7ac2a3f31",
+    "events": 12090,
+    "share": 0.0226
+   },
+   {
+    "addr": "0x5e023c31e1d3dcd08a1b3e8c96f6ef8aa8fcacd1",
+    "events": 11186,
+    "share": 0.0209
+   },
+   {
+    "addr": "0x4c2c0f0bb2631b02ac9299c59690914ee7a200b8",
+    "events": 6226,
+    "share": 0.0116
+   },
+   {
+    "addr": "0x73b5d86deae56497f852fd79dd6fe68c7270fb6b",
+    "events": 6060,
+    "share": 0.0113
+   },
+   {
+    "addr": "0xa7b1ed80a011d14a2db4a295570a72fe9cce647e",
+    "events": 6060,
+    "share": 0.0113
+   },
+   {
+    "addr": "0x9a044ae05e5e6290dcf56afd69548565e957a626",
+    "events": 6009,
+    "share": 0.0112
+   },
+   {
+    "addr": "0x72c573fd7de6a3dec3035d48db938ebf733d159b",
+    "events": 5796,
+    "share": 0.0108
+   },
+   {
+    "addr": "0x799cd096e5ebc436daecef85392b2ecf196dfbe6",
+    "events": 5236,
+    "share": 0.0098
+   },
+   {
+    "addr": "0xb69fbe3c4c879444f8c4feda5e98c57bfc95e2b0",
+    "events": 5204,
+    "share": 0.0097
+   },
+   {
+    "addr": "0xd730394f3bb85a4828e35fc5e361dcc9f894fa4f",
+    "events": 3770,
+    "share": 0.007
+   },
+   {
+    "addr": "0x466745d86aafcda323c1d051296d45eee84f4338",
+    "events": 3770,
+    "share": 0.007
+   },
+   {
+    "addr": "0x2423c04240c1bb8f4caaae274ace63b4e1a40a5e",
+    "events": 3732,
+    "share": 0.007
+   },
+   {
+    "addr": "0x4512be0304b38b0279ccca1a310ceee3cad79476",
+    "events": 3502,
+    "share": 0.0065
+   },
+   {
+    "addr": "0xf7089aba2c7d2bd57c50cb8b971688f98b033d91",
+    "events": 3414,
+    "share": 0.0064
+   },
+   {
+    "addr": "0x68d38b19e875cdd3c4e8f8cec3d454eab2186219",
+    "events": 3134,
+    "share": 0.0059
+   },
+   {
+    "addr": "0xa65c6ed737b52543123817977d8d2c0e554bfc2d",
+    "events": 2426,
+    "share": 0.0045
+   },
+   {
+    "addr": "0xec4b97d943c90563ffc2bdb96c152a368a6a3771",
+    "events": 2279,
+    "share": 0.0043
+   },
+   {
+    "addr": "0x21fa111a254549ee317d2ad623c8d86aa21814e7",
+    "events": 2027,
+    "share": 0.0038
+   },
+   {
+    "addr": "0x83a1491f3e7f8daab8f787a631334b9ca7a87023",
+    "events": 2027,
+    "share": 0.0038
+   },
+   {
+    "addr": "0x897720c5b19f93f3194990d0121d3a64783bbab8",
+    "events": 1879,
+    "share": 0.0035
+   },
+   {
+    "addr": "0x72630f9eaf30a521789d325c3731933198625e0c",
+    "events": 1866,
+    "share": 0.0035
+   },
+   {
+    "addr": "0x50551bfc05e8e34f3240d7c03f0d5c5d5426ec49",
+    "events": 1800,
+    "share": 0.0034
+   }
+  ],
+  "top1Share": 0.2376,
+  "top10Share": 0.4246,
+  "sendersWith1Event": 3284,
+  "sendersWithOver1000Events": 38
+ },
+ "toGuardTransfers": []
+}

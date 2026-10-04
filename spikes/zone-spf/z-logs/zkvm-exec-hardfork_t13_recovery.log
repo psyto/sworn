@@ -1,40 +1,40 @@
-client init wall: 12.791797916s
+client init wall: 12.962722166s
 stderr: WARNING: Using insecure random number generator.
-execute wall: 610.619292ms
-cycles(total_instruction_count): 25531739
-report: gas: 24614233
-opcode counts (25531739 total instructions):
-    5047005 xor
-    2529549 or
-    2469982 sll
-    2376616 addi
-    2153244 ld
-    1901611 sd
-    1788250 srl
-    1739524 and
-    1367440 lbu
-    1354379 add
-     446505 bne
-     355657 beq
-     329007 mul
-     284558 sb
+execute wall: 624.292958ms
+cycles(total_instruction_count): 25536122
+report: gas: 24614695
+opcode counts (25536122 total instructions):
+    5047171 xor
+    2529804 or
+    2470637 sll
+    2377078 addi
+    2153408 ld
+    1901544 sd
+    1788617 srl
+    1739869 and
+    1367676 lbu
+    1355088 add
+     446619 bne
+     355808 beq
+     329092 mul
+     284627 sb
      278004 mulhu
-     271239 sltu
-     165139 bltu
-     163483 jalr
-     122565 auipc
-      88527 sub
-      80621 lui
-      65791 bgeu
-      45033 jal
-      27744 subw
-      18874 srlw
-       8836 addw
+     271233 sltu
+     165185 bltu
+     163459 jalr
+     122662 auipc
+      88665 sub
+      80931 lui
+      65771 bgeu
+      45090 jal
+      27818 subw
+      18870 srlw
+       8838 addw
        7558 slt
        7457 blt
-       6746 lw
+       6747 lw
        6597 lhu
-       6575 sw
+       6576 sw
        5897 lb
        4627 sh
        2228 sra
@@ -47,7 +47,7 @@ opcode counts (25531739 total instructions):
 syscall counts (0 total syscall instructions):
 
 publicValues match native host: PASS
-setup wall: 3.420500458s
-vkey(bytes32): 0x006c15314d326e27d72c1c1f83fd2bc0eaf5fb2053e2fe5b3e9415a2d037293d
-$R $ELF zin/$c.bin execute  114.82s user 4.88s system 704% cpu 16.978 total
+setup wall: 3.50854725s
+vkey(bytes32): 0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39
+$R $ELF zin/$c.bin execute  112.97s user 4.87s system 678% cpu 17.356 total
 EXIT 0

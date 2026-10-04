@@ -46,7 +46,7 @@ export function ZoneSection({ attest, check, onRetry, onVerify }: Props) {
           label="Tempo's Zone batch verifier (zone_spf::prove_zone_batch) runs inside the SP1 zkVM, the run is wrapped as a Groth16 proof, and SwornZoneVerifier, with IVerifier's signature, verifies it on Moderato."
         />
         <figcaption>
-          <code>zone_spf::prove_zone_batch</code> from Tempo's zones repository, with five small patches so it builds for the
+          <code>zone_spf::prove_zone_batch</code> from Tempo's zones repository, with small build patches so it builds for the
           zkVM. The proof of this batch took 25.5M cycles and 816 s to make locally. The heavy edge is on Tempo.
         </figcaption>
       </figure>

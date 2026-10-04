@@ -1,0 +1,15 @@
+{
+ "net": "mainnet",
+ "fromBlock": 41407000,
+ "toBlock": 42487199,
+ "counts": {
+  "UserTokenSet": 47,
+  "RebalanceSwap": 11,
+  "Mint": 2,
+  "FeesDistributed": 2
+ },
+ "distinctUserTokenSetUsers": 30,
+ "distinctRebalanceSwappers": 1,
+ "elapsedSec": 8,
+ "rpcCalls": 18
+}

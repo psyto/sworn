@@ -60,7 +60,13 @@ FIXTURE="
 RealGroth16Test.test_REAL_groth16_fixture_verifies
 RealGroth16Test.test_REAL_groth16_fixture_challenge_pays
 "
-REQUIRED="$REQUIRED" FIXTURE="$FIXTURE" python3 -c '
+# Spec 003: the zone real-proof test needs the Moderato fixture of the redeployed (sworn-sp1-groth16-v1)
+# verifier. Until scripts/zone-prove.sh <address> writes test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json it is SKIPPED and
+# reported as PENDING here; it is not one of the required ids and is never counted as passed.
+PENDING="
+SwornZoneVerifierTest.test_ACZ4_REAL_groth16_moderato_all_cases
+"
+REQUIRED="$REQUIRED" FIXTURE="$FIXTURE" PENDING="$PENDING" python3 -c '
 import json, os, sys
 d = json.loads(sys.stdin.read())
 got = {}
@@ -75,6 +81,11 @@ for n in os.environ["FIXTURE"].split():
     s = got.get(n, "MISSING")
     if s == "Skipped": print("SKIPPED (no fixture / placeholders):", n)
     elif s != "Success": print("FAIL", n, s); bad += 1
+for n in os.environ["PENDING"].split():
+    s = got.get(n, "MISSING")
+    if s == "Skipped": print("PENDING (skipped, not counted):", n)
+    elif s == "Success": print("ran (fixture present):", n)
+    else: print("FAIL", n, s); bad += 1
 others = [k for k, s in got.items() if s not in ("Success", "Skipped")]
 for k in others: print("FAIL", k, got[k]); bad += 1
 names = os.environ["REQUIRED"].split()

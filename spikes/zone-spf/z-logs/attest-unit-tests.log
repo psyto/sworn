@@ -23,7 +23,7 @@ warning: unused import: `num::NonZeroU32`
 
 warning: `zone-evm` (lib) generated 2 warnings (run `cargo fix --lib -p zone-evm` to apply 2 suggestions)
    Compiling sworn-zone-attest v0.1.0 (/Users/hiroyusai/src/sworn/spikes/zone-spf/attest)
-    Finished `release` profile [optimized] target(s) in 0.89s
+    Finished `release` profile [optimized] target(s) in 0.91s
      Running unittests src/lib.rs (target/release/deps/sworn_zone_attest-699ed54400d6982a)
 
 running 2 tests

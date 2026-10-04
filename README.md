@@ -11,7 +11,7 @@ that engine:
    `SwornZoneVerifier` is deployed on Moderato. Tempo's docs say ZK proving for Zones *"is not
    implemented"*: today the reference verifier returns `true` without checking execution, and the
    native verifier is a Nitro TEE attestation. **On 2026-10-04 a contract on Moderato verified a real
-   Zone batch proof** ([tx](https://explore.testnet.tempo.xyz/tx/0x9aa938e8c311c0a9b62c50a312129dde4cc1223c45f3b72ff41ff89503d5dfbd)).
+   Zone batch proof** ([tx](https://explore.testnet.tempo.xyz/tx/0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80)).
 2. **Bonded answers (the demo).** A server sells an answer about a TIP-20 transfer over
    [MPP](https://mpp.dev) and reserves bond behind it. A wrong answer is proven false by re-running
    **Tempo's own EVM (`tempo-revm`)** inside SP1 against Tempo's own block hash, and the bond pays the
@@ -77,10 +77,11 @@ Getting Tempo's code into a zkVM meant patching it (`patches/`, `spikes/zone-spf
 | **Sworn** | [`0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6`](https://explore.testnet.tempo.xyz/address/0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6) | no owner, admin, pause or upgrade; every constant read back from chain |
 | SP1VerifierGroth16 v6.1.0 | [`0x2c77329747b7C8B293514A6129404D4cefDd9B18`](https://explore.testnet.tempo.xyz/address/0x2c77329747b7C8B293514A6129404D4cefDd9B18) | codehash equals the local build of the vendored, unmodified `sp1-contracts` v6.1.0 |
 
-| **SwornZoneVerifier** | [`0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De`](https://explore.testnet.tempo.xyz/address/0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De) | `IVerifier`-shaped Zone batch verifier; immutables only, no storage writes; deployed 2026-10-04 (block 38070241) |
+| **SwornZoneVerifier** | [`0x00F6ed344B9C7F5eBA8788A115f8d6B4c00564e5`](https://explore.testnet.tempo.xyz/address/0x00F6ed344B9C7F5eBA8788A115f8d6B4c00564e5) | `IVerifier`-shaped Zone batch verifier; immutables only, no storage writes; deployed 2026-10-04 (block 38078600) |
+| SwornZoneVerifier, superseded | [`0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De`](https://explore.testnet.tempo.xyz/address/0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De) | first deployment; its `verifierConfig` was `0x02`, which upstream zones (`344ff785`, 10-01) defines as NoProof, so it was redeployed with the self-describing tag `"sworn-sp1-groth16-v1"` |
 
 Sworn guest vkey `0x00727936…7fa9`, `GUEST_VERSION = keccak256("sworn-guest-v1")`. Zone guest vkey
-`0x006c1531…293d`, pinned genesis artifact `0xd39aa765…c11e`. Everything is recorded
+`0x007ef731…5b39`, pinned genesis artifact `0xd39aa765…c11e`. Everything is recorded
 from receipts in [`deployments/moderato.json`](deployments/moderato.json).
 
 ## How the Zone verifier works
@@ -130,8 +131,8 @@ no access key), and a transaction Tempo would reject before execution is itself 
 |---|---|
 | four real batches from Tempo's zones integration tests | guest public values equal the native host's; batch outputs equal the integration tests' own; 19.1M–25.5M cycles |
 | rejection | a tampered deposit, and each of the six public inputs changed one at a time, are rejected by Tempo's own code |
-| proving | `hardfork_t13_recovery`: 25.5M cycles, local Groth16 **816 s**, peak 19.9 GB |
-| on Moderato | `verify` returns true for the real proof and reverts when one field changes; `attest` emitted `ZoneBatchVerified` for zone 1, height 10 ([`0x9aa9…dfbd`](https://explore.testnet.tempo.xyz/tx/0x9aa938e8c311c0a9b62c50a312129dde4cc1223c45f3b72ff41ff89503d5dfbd), block 38071845, 260,152 gas) |
+| proving | `hardfork_t13_recovery`: 25.5M cycles, local Groth16 **701 s**, peak 18.5 GB |
+| on Moderato | `verify` returns true for the real proof and reverts when one field changes; `attest` emitted `ZoneBatchVerified` for zone 1, height 10 ([`0xb14b…3b80`](https://explore.testnet.tempo.xyz/tx/0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80), block 38080441, 260,419 gas) |
 | contract | every digest field, the immutables (via clone deployments), the chain id, the proof and the vkey are each shown to matter, against the **real** SP1 Groth16 verifier |
 
 **Bonded answers** (2026-10-03; logs in `out/`):

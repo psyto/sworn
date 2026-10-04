@@ -73,7 +73,8 @@
     "provingRealTime": "9 min 00 s",
     "verifiedIndependently": "receipt status 1 and Slashed from Sworn; guard +500 / R' +0 at payment block-1/block; client +500 at challenge block-1/block"
   },
-  "SwornZoneVerifier": {
+  "SwornZoneVerifierSuperseded": {
+    "superseded": "verifierConfig 0x02 collides with upstream NoProof (zones 344ff785); redeployed with bytes(\"sworn-sp1-groth16-v1\")",
     "spec": "docs/specs/003-zone-verifier.md",
     "address": "0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De",
     "codehash": "0xefc8799a0b3352ca20b70d227e9a74858eadcc41e92b651118dcb44ee13b14ab",
@@ -99,7 +100,7 @@
       "from": "roles.deployer",
       "event": "ZoneBatchVerified(zoneId 1, nextZoneHeight 10, prevBlockHash 0x578542fc\u2026b569, nextBlockHash 0xc517a760\u20268065, digest 0x1337e71b\u202651bd)",
       "batch": "hardfork_t13_recovery (Tempo zones integration tests, dev chain 1337)",
-      "fixture": "contracts/test/vectors/zone-hardfork.json",
+      "fixture": "contracts/test/vectors/superseded/zone-hardfork-config02-moderato.json",
       "proving": {
         "cycles": 25531739,
         "groth16WallSecs": 816.0,
@@ -107,6 +108,46 @@
         "log": "spikes/zone-spf/z-logs/prove-moderato.log"
       },
       "readOnlyChecks": "immutables match fixture; attestationDigest matches; eth_call verify(real proof)=true; nextZoneHeight+1 reverts InvalidProof()"
+    },
+    "verifierConfig": "0x02"
+  },
+  "SwornZoneVerifier": {
+    "spec": "docs/specs/003-zone-verifier.md",
+    "replaces": "SwornZoneVerifierSuperseded (verifierConfig 0x02, which upstream zones 344ff785 defines as NoProof)",
+    "address": "0x00F6ed344B9C7F5eBA8788A115f8d6B4c00564e5",
+    "codehash": "0x115088cb9070e58785c0583569a847738cc95e863f56fbe94195d138146b72c1",
+    "deployTx": "0x4bb81674725455cccd5857c7683ee4d6e15760223b073f2bf1a34c091d081271",
+    "block": 38078600,
+    "gasUsed": 3619319,
+    "deployer": "roles.deployer",
+    "verifierConfig": "sworn-sp1-groth16-v1 (0x73776f726e2d7370312d67726f746831362d7631)",
+    "constructor": {
+      "sp1Verifier": "0x2c77329747b7C8B293514A6129404D4cefDd9B18",
+      "zoneVkey": "0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39",
+      "guestElfSha256": "fd7a6a105e915fef3f75402fb65fabca0eca8cbe8c69df4cc73aa07c9a620c51",
+      "parentChainId": 1337,
+      "pinnedZoneId": 1,
+      "pinnedGenesisArtifactHash": "0xd39aa765427c64ea95821bd5f93d44c89854b0f00fec0e21137421d04fb7c11e",
+      "pinnedGenesisArtifact": "spikes/zone-spf/genesis/hardfork_t13_recovery.genesis.json"
+    },
+    "noOwnerOnDeployedCode": "OK",
+    "deviations": "D1 parentChainId=1337 dev chain; D2 no portal caller check; D3 one pinned zone+genesis artifact; D4 write-nothing demonstration. Batch = hardfork_t13_recovery from Tempo zones integration tests (zones ac49071f), not a Moderato zone.",
+    "attest": {
+      "tx": "0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80",
+      "block": 38080441,
+      "status": 1,
+      "gasUsed": 260419,
+      "from": "roles.deployer",
+      "event": "ZoneBatchVerified(zoneId 1, nextZoneHeight 10, prevBlockHash 0x578542fc\u2026b569, nextBlockHash 0xc517a760\u20268065, digest 0xf73f48c7\u202671ba)",
+      "batch": "hardfork_t13_recovery (Tempo zones integration tests, dev chain 1337)",
+      "fixture": "contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json",
+      "proving": {
+        "cycles": 25536122,
+        "groth16WallSecs": 701.1,
+        "peakRssGB": 18.5,
+        "log": "spikes/zone-spf/z-logs/prove-moderato-sworn-sp1-groth16-v1.log"
+      },
+      "readOnlyChecks": "immutables and verifierConfig match fixture; attestationDigest matches; eth_call verify(real proof)=true; nextZoneHeight+1 reverts InvalidProof(); forge test_ACZ4_REAL_groth16_moderato_all_cases passes"
     }
   }
 }

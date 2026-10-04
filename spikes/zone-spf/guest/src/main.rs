@@ -8,7 +8,7 @@ sp1_zkvm::entrypoint!(main);
 pub fn main() {
     let input = sp1_zkvm::io::read_vec();
     let input = sworn_zone_attest::decode_input(&input).unwrap_or_else(|e| panic!("{e}"));
-    // Aborts if verifier_config != 0x02, if the genesis does not parse, or if prove_zone_batch rejects.
+    // Aborts if verifier_config != "sworn-sp1-groth16-v1", if the genesis does not parse, or if prove_zone_batch rejects.
     let outcome = sworn_zone_attest::execute(input).unwrap_or_else(|e| panic!("{e}"));
     sp1_zkvm::io::commit_slice(&outcome.public_values);
 }

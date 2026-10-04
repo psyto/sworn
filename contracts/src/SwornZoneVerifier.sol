@@ -68,8 +68,12 @@ contract SwornZoneVerifier is IVerifier {
     bytes32 public constant ATTESTATION_TYPEHASH = 0x92642ea5ff5c47ad5a0c977fa87d5a0634b45661ad091c055f6905e7a51d8221;
     /// @notice keccak256("sworn-zone-guest-v1"): the first word of the guest's public values.
     bytes32 public constant ZONE_GUEST_VERSION = keccak256("sworn-zone-guest-v1");
-    /// @notice keccak256(hex"02"), the hash of ZK_VERIFIER_CONFIG_V1 (Nitro's config is 0x01).
-    bytes32 public constant ZK_VERIFIER_CONFIG_V1_HASH = keccak256(hex"02");
+    /// @notice The `verifierConfig` this verifier accepts: the ASCII bytes "sworn-sp1-groth16-v1".
+    ///         Self-describing, and cannot collide with Tempo's one-byte tags (upstream zones 344ff785,
+    ///         2026-10-01: 0x01 = Nitro, 0x02 = NoProof). An earlier deployment used 0x02 and is superseded.
+    bytes public constant ZK_VERIFIER_CONFIG_V1 = "sworn-sp1-groth16-v1";
+    /// @notice keccak256(ZK_VERIFIER_CONFIG_V1) = 0xc405c6c7…dd23, the struct's verifierConfigHash.
+    bytes32 public constant ZK_VERIFIER_CONFIG_V1_HASH = keccak256("sworn-sp1-groth16-v1");
 
     ISP1Verifier public immutable SP1_VERIFIER;
     bytes32 public immutable ZONE_VKEY;

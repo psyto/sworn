@@ -1,0 +1,178 @@
+[moderato] 37091109   3.4% logs=302043 calls=30 retries=0 31s
+[moderato] 37131185   7.4% logs=679963 calls=71 retries=0 62s
+[moderato] 37169352  11.2% logs=1039408 calls=102 retries=0 92s
+[moderato] 37212773  15.6% logs=1320810 calls=128 retries=0 123s
+[moderato] 37247842  19.1% logs=1702528 calls=169 retries=0 154s
+[moderato] 37269869  21.3% logs=2008564 calls=199 retries=0 185s
+[moderato] 37287779  23.0% logs=2289029 calls=225 retries=2 216s
+[moderato] 37316557  25.9% logs=2609476 calls=256 retries=2 248s
+[moderato] 37356410  29.9% logs=2901837 calls=282 retries=3 278s
+[moderato] 37379799  32.2% logs=3158028 calls=312 retries=6 312s
+[moderato] 37403321  34.6% logs=3392992 calls=334 retries=7 343s
+[moderato] 37431174  37.3% logs=3657052 calls=357 retries=8 373s
+[moderato] 37454129  39.6% logs=3895350 calls=380 retries=10 404s
+[moderato] 37480770  42.3% logs=4164034 calls=407 retries=11 435s
+[moderato] 37508896  45.1% logs=4450540 calls=438 retries=13 468s
+[moderato] 37535414  47.7% logs=4736710 calls=468 retries=13 500s
+[moderato] 37550911  49.3% logs=5001911 calls=496 retries=15 530s
+[moderato] 37568400  51.0% logs=5326978 calls=526 retries=15 562s
+[moderato] 37588767  53.1% logs=5614897 calls=552 retries=16 592s
+[moderato] 37618105  56.0% logs=5879450 calls=577 retries=16 622s
+[moderato] 37654884  59.6% logs=6198883 calls=609 retries=17 656s
+[moderato] 37668390  61.0% logs=6419890 calls=634 retries=17 686s
+[moderato] 37688644  63.0% logs=6622289 calls=654 retries=18 718s
+[moderato] 37711539  65.3% logs=6881976 calls=680 retries=19 749s
+[moderato] 37727386  66.9% logs=7158282 calls=707 retries=20 779s
+[moderato] 37747540  68.9% logs=7440428 calls=733 retries=22 812s
+[moderato] 37777567  71.9% logs=7648851 calls=755 retries=24 843s
+[moderato] 37805021  74.6% logs=7912823 calls=781 retries=26 875s
+[moderato] 37827487  76.9% logs=8138755 calls=804 retries=29 906s
+[moderato] 37850723  79.2% logs=8354931 calls=827 retries=31 936s
+[moderato] 37863633  80.5% logs=8579964 calls=853 retries=33 967s
+[moderato] 37888569  83.0% logs=8796788 calls=873 retries=35 998s
+[moderato] 37912333  85.3% logs=8961601 calls=892 retries=39 1029s
+[moderato] 37946016  88.7% logs=9208467 calls=918 retries=41 1059s
+[moderato] 37977470  91.8% logs=9430898 calls=941 retries=43 1090s
+[moderato] 37989402  93.0% logs=9694830 calls=970 retries=46 1122s
+[moderato] 38014750  95.5% logs=9926313 calls=989 retries=46 1152s
+[moderato] 38046990  98.8% logs=10134349 calls=1010 retries=46 1183s
+{
+ "net": "moderato",
+ "fromBlock": 37056728,
+ "toBlock": 38059506,
+ "elapsedSec": 1190,
+ "rpcCalls": 1019,
+ "rpcRetries": 46,
+ "tip20TransferLogs": 10106085,
+ "nonTip20TransferLogs": 99290,
+ "byCategory": {
+  "fee_in": 6648359,
+  "payment": 1397272,
+  "mint": 1787817,
+  "dex": 241999,
+  "fee_out": 6086,
+  "burn": 24008,
+  "to_guard": 284,
+  "from_guard": 198,
+  "ours": 62
+ },
+ "payment": {
+  "events": 1397272,
+  "txs": 1208842,
+  "distinctSenders": 114571,
+  "distinctReceivers": 146093,
+  "top25Senders": [
+   {
+    "addr": "0x06678fa9281de0130b6b3922a937d54c6402f59f",
+    "events": 62704,
+    "share": 0.0449
+   },
+   {
+    "addr": "0xc21df1bb620ebe7f5ae0144df50de28ce0d47ae7",
+    "events": 54867,
+    "share": 0.0393
+   },
+   {
+    "addr": "0x160a25fffa76652ba236ce97395b4d6c51bc3fc0",
+    "events": 44959,
+    "share": 0.0322
+   },
+   {
+    "addr": "0xbcd4042de499d14e55001ccbb24a551f3b954096",
+    "events": 31107,
+    "share": 0.0223
+   },
+   {
+    "addr": "0x7c0f652b9ee144a1c579e7c55ca23919b7605255",
+    "events": 28175,
+    "share": 0.0202
+   },
+   {
+    "addr": "0x5ad0000000000000000000000000000000000003",
+    "events": 27448,
+    "share": 0.0196
+   },
+   {
+    "addr": "0x5a4d000000000000000000000000000000000000",
+    "events": 15676,
+    "share": 0.0112
+   },
+   {
+    "addr": "0xd4a4f5aa3620cae2571b08c41b5f95cd9216e4c7",
+    "events": 7865,
+    "share": 0.0056
+   },
+   {
+    "addr": "0x9cb1ea32dc5b09a8b76ca0e5b07012c78844651e",
+    "events": 7865,
+    "share": 0.0056
+   },
+   {
+    "addr": "0x6bb6dcf984dd80bcbea3ac758dfbf58741c3b0a1",
+    "events": 7865,
+    "share": 0.0056
+   },
+   {
+    "addr": "0xdba07fd07f461c4ea05bcb17ab25e999ef3af40b",
+    "events": 7811,
+    "share": 0.0056
+   },
+   {
+    "addr": "0x251fb427b6d3780bbb248e9a5206d7545b0f9d02",
+    "events": 7811,
+    "share": 0.0056
+   },
+   {
+    "addr": "0x5b13ba4ed0395b346369b59121dc72676853fe37",
+    "events": 3892,
+    "share": 0.0028
+   },
+   {
+    "addr": "0x93dbe5e44c6bbb27c9582838f81b4d9498f7bebf",
+    "events": 3857,
+    "share": 0.0028
+   },
+   {
+    "addr": "0x44be5bc7e3c6201e01b2872e7b113693ce5c8ab7",
+    "events": 3851,
+    "share": 0.0028
+   },
+   {
+    "addr": "0x4d50500000000000000000000000000000000000",
+    "events": 2329,
+    "share": 0.0017
+   },
+   {
+    "addr": "0x2221129ce58f20d528a07b6487f1a29ff6df7e14",
+    "events": 1356,
+    "share": 0.001
+   },
+   {
+    "addr": "0x113ca86be942671e5290ed57d86297f0ecd61b6a",
+    "events": 1189,
+    "share": 0.0009
+   },
+   {
+    "addr": "0xaa521170126c63ceb4f39b62d09a21e363fa8215",
+    "events": 1120,
+    "share": 0.0008
+   },
+   {
+    "addr": "0x3cdf6783be3be497c83ddfe171aaed963053400e",
+    "events": 1049,
+    "share": 0.0008
+   },
+   {
+    "addr": "0xef4a124e61d5eeb39f8a828de937b23d358ee319",
+    "events": 1045,
+    "share": 0.0007
+   },
+   {
+    "addr": "0x56f16647f224c4bdd96073c90ca85adbde83795b",
+    "events": 964,
+    "share": 0.0007
+   },
+   {
+    "addr": "0x6602cda80eca1c56b018dfe7039be6cca181893d",
+    "events": 959,
+  

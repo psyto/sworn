@@ -35,7 +35,7 @@ export function parseScenes(mdRel) {
   const md = read(mdRel, "script");
   const body = md.split(/^## Claims and sources/m)[0];
   const scenes = body.split(/^## /m).slice(1).filter((s) => /^Scene \d/.test(s)).map((chunk) => {
-    const head = chunk.match(/^Scene (\d+) — (.+?) ·/) ?? fail(`${mdRel}: unreadable scene heading "${chunk.slice(0, 60)}…"`);
+    const head = chunk.match(/^Scene (\d+)(?: —|:) (.+?) ·/) ?? fail(`${mdRel}: unreadable scene heading "${chunk.slice(0, 60)}…"`);
     const text = chunk.split("\n").filter((l) => l.startsWith("> ")).map((l) => l.slice(2).trim()).join(" ");
     const words = countWords(text);
     if (!words) fail(`${mdRel}, scene ${head[1]}: no narration`);
@@ -85,10 +85,10 @@ export async function fetchText(url, what) {
   if (!res.ok) fail(`${what}: ${url} → HTTP ${res.status}`);
   return res.text();
 }
-export function ghFile(repoName, file, what) {
+export function ghFile(repoName, file, what, ref) {
   let b64;
   try {
-    b64 = execFileSync("gh", ["api", `repos/${repoName}/contents/${file}`, "--jq", ".content"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+    b64 = execFileSync("gh", ["api", `repos/${repoName}/contents/${file}${ref ? `?ref=${ref}` : ""}`, "--jq", ".content"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
   } catch (e) { fail(`${what}: gh api repos/${repoName}/contents/${file} failed: ${e.stderr ?? e.message}`); }
   return Buffer.from(b64.replace(/\s+/g, ""), "base64").toString("utf8");
 }

@@ -1,0 +1,116 @@
+[mainnet] 5/8000 blocks txs=2 transferTxs=2 rev=0 calls=1 0s
+[mainnet] 305/8000 blocks txs=153 transferTxs=129 rev=0 calls=62 23s
+[mainnet] 605/8000 blocks txs=278 transferTxs=224 rev=0 calls=122 45s
+[mainnet] 905/8000 blocks txs=400 transferTxs=324 rev=0 calls=183 67s
+[mainnet] 1205/8000 blocks txs=541 transferTxs=430 rev=0 calls=243 90s
+[mainnet] 1505/8000 blocks txs=710 transferTxs=559 rev=0 calls=304 114s
+[mainnet] 1805/8000 blocks txs=849 transferTxs=668 rev=0 calls=365 136s
+[mainnet] 2105/8000 blocks txs=1004 transferTxs=795 rev=0 calls=428 159s
+[mainnet] 2405/8000 blocks txs=1169 transferTxs=934 rev=0 calls=489 182s
+[mainnet] 2705/8000 blocks txs=1346 transferTxs=1066 rev=0 calls=549 205s
+[mainnet] 3005/8000 blocks txs=1527 transferTxs=1222 rev=0 calls=612 231s
+[mainnet] 3305/8000 blocks txs=1737 transferTxs=1389 rev=0 calls=672 255s
+[mainnet] 3605/8000 blocks txs=1969 transferTxs=1576 rev=0 calls=732 279s
+[mainnet] 3905/8000 blocks txs=2206 transferTxs=1767 rev=0 calls=792 304s
+[mainnet] 4205/8000 blocks txs=2395 transferTxs=1923 rev=0 calls=854 328s
+[mainnet] 4505/8000 blocks txs=2565 transferTxs=2056 rev=0 calls=915 352s
+[mainnet] 4805/8000 blocks txs=2745 transferTxs=2202 rev=0 calls=975 375s
+[mainnet] 5105/8000 blocks txs=2988 transferTxs=2421 rev=0 calls=1035 401s
+[mainnet] 5405/8000 blocks txs=3208 transferTxs=2599 rev=0 calls=1095 427s
+[mainnet] 5705/8000 blocks txs=3385 transferTxs=2751 rev=0 calls=1155 453s
+[mainnet] 6005/8000 blocks txs=3568 transferTxs=2913 rev=0 calls=1216 478s
+[mainnet] 6305/8000 blocks txs=3656 transferTxs=2979 rev=0 calls=1277 1062s
+[mainnet] 6605/8000 blocks txs=3736 transferTxs=3026 rev=0 calls=1337 1085s
+[mainnet] 6905/8000 blocks txs=3812 transferTxs=3074 rev=0 calls=1397 1105s
+[mainnet] 7205/8000 blocks txs=3869 transferTxs=3114 rev=0 calls=1457 1125s
+[mainnet] 7505/8000 blocks txs=3909 transferTxs=3133 rev=0 calls=1517 1143s
+[mainnet] 7805/8000 blocks txs=3968 transferTxs=3165 rev=0 calls=1577 1163s
+{
+ "net": "mainnet",
+ "fromBlock": 41407000,
+ "toBlock": 42487199,
+ "sampledBlocks": 8000,
+ "seed": 20261004,
+ "stats": {
+  "blocks": 8000,
+  "txs": 4027,
+  "txsReverted": 18,
+  "transferTxs": 3200,
+  "transferTxsReverted": 2,
+  "transferTxType_0x76": 3142,
+  "transferTxsWith_transferWithMemo": 1946,
+  "transferTxsWith_transfer": 1254,
+  "transferTxType_0x2": 32,
+  "transferFromTxs": 29,
+  "transferFromTxsReverted": 0,
+  "transferTxType_0x0": 26
+ },
+ "byFirstCallTarget": {
+  "tip20": {
+   "txs": 3284,
+   "reverted": 2
+  },
+  "other": {
+   "txs": 723,
+   "reverted": 16
+  },
+  "create": {
+   "txs": 9,
+   "reverted": 0
+  },
+  "dex": {
+   "txs": 9,
+   "reverted": 0
+  },
+  "tip403": {
+   "txs": 2,
+   "reverted": 0
+  }
+ },
+ "transferRevertRatio": 0.000625,
+ "transferRevertReasons": [
+  [
+   "out of gas",
+   1
+  ],
+  [
+   "tip20:InsufficientBalance(uint256,uint256,address)",
+   1
+  ]
+ ],
+ "transferRevertSenders": [
+  [
+   "0x55da623ac848d6d53f2fc87debd8829994d3019b",
+   1
+  ],
+  [
+   "0xcab241c2612d295c70ac4cd1317f625fc0d8c5b4",
+   1
+  ]
+ ],
+ "distinctTransferRevertSenders": 2,
+ "otherRevertReasons": [
+  [
+   "other::0x22611167",
+   7
+  ],
+  [
+   "other::tip20:InsufficientBalance(uint256,uint256,address)",
+   4
+  ],
+  [
+   "other::0xe450d38c",
+   3
+  ],
+  [
+   "other::0x76f4b878",
+   1
+  ],
+  [
+   "other::execution reverted",
+   1
+  ]
+ ],
+ "rpcCalls": 1618,
+ "elapsedSec": 1177
+}

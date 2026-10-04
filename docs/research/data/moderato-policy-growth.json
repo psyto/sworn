@@ -1,0 +1,106 @@
+{
+ "net": "moderato",
+ "genesisUTC": "2026-01-08T17:47:52+00:00",
+ "rows": [
+  {
+   "dateUTC": "2026-01-15",
+   "block": 1036475,
+   "policyIdCounter": 12645
+  },
+  {
+   "dateUTC": "2026-02-01",
+   "block": 3138941,
+   "policyIdCounter": 329683
+  },
+  {
+   "dateUTC": "2026-02-15",
+   "block": 4993793,
+   "policyIdCounter": 437713
+  },
+  {
+   "dateUTC": "2026-03-01",
+   "block": 6709991,
+   "policyIdCounter": 958036
+  },
+  {
+   "dateUTC": "2026-03-15",
+   "block": 8448558,
+   "policyIdCounter": 1120491
+  },
+  {
+   "dateUTC": "2026-04-01",
+   "block": 10882732,
+   "policyIdCounter": 1208403
+  },
+  {
+   "dateUTC": "2026-04-15",
+   "block": 12945942,
+   "policyIdCounter": 1218260
+  },
+  {
+   "dateUTC": "2026-05-01",
+   "block": 15407865,
+   "policyIdCounter": 1228268
+  },
+  {
+   "dateUTC": "2026-05-15",
+   "block": 17570226,
+   "policyIdCounter": 1233433
+  },
+  {
+   "dateUTC": "2026-06-01",
+   "block": 20205492,
+   "policyIdCounter": 1238500
+  },
+  {
+   "dateUTC": "2026-06-15",
+   "block": 22263392,
+   "policyIdCounter": 1241338
+  },
+  {
+   "dateUTC": "2026-07-01",
+   "block": 24559702,
+   "policyIdCounter": 1245154
+  },
+  {
+   "dateUTC": "2026-07-15",
+   "block": 26580067,
+   "policyIdCounter": 1247626
+  },
+  {
+   "dateUTC": "2026-08-01",
+   "block": 28919789,
+   "policyIdCounter": 1249271
+  },
+  {
+   "dateUTC": "2026-08-15",
+   "block": 30908858,
+   "policyIdCounter": 1250076
+  },
+  {
+   "dateUTC": "2026-09-01",
+   "block": 33336004,
+   "policyIdCounter": 1250938
+  },
+  {
+   "dateUTC": "2026-09-15",
+   "block": 35331415,
+   "policyIdCounter": 1251671
+  },
+  {
+   "dateUTC": "2026-09-27",
+   "block": 37056727,
+   "policyIdCounter": 1252286
+  },
+  {
+   "dateUTC": "2026-10-01",
+   "block": 37627659,
+   "policyIdCounter": 1252418
+  },
+  {
+   "dateUTC": "2026-10-04",
+   "block": 38059506,
+   "policyIdCounter": 1252613
+  }
+ ]
+}

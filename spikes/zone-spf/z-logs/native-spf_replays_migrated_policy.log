@@ -1,4 +1,4 @@
-native execute wall: 1.433792ms
+native execute wall: 1.124209ms
 {
   "args": {
     "anchorBlockHash": "0xede1657289f1c5db3968ddbc8b1c0c128930caac00c657cb4fbaf13342c65580",
@@ -18,14 +18,13 @@ native execute wall: 1.433792ms
     "zoneId": 1
   },
   "destinationChainId": 42431,
-  "digest": "0x216c73be8f90490a1b6e1ea3b455583925d652ec90a43806ae51ff919987c92c",
+  "digest": "0xbc104719ebf16a6bbeea3e4aba6812a4cc0d3b4cdf62ecd6db5093fc3d00ad00",
   "genesisArtifactHash": "0xc530313e1cd71f75af94663e44474ae9a482499f08bdb8426a969418b0696402",
   "parentChainId": 1337,
-  "publicValues": "0x6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f31216c73be8f90490a1b6e1ea3b455583925d652ec90a43806ae51ff919987c92c",
+  "publicValues": "0x6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f31bc104719ebf16a6bbeea3e4aba6812a4cc0d3b4cdf62ecd6db5093fc3d00ad00",
   "typehash": "0x92642ea5ff5c47ad5a0c977fa87d5a0634b45661ad091c055f6905e7a51d8221",
   "verifier": "0x000000000000000000000000000000005a0e5a0e",
-  "verifierConfig": "0x02",
-  "verifierConfigHash": "0xf2ee15ea639b73fa3db9b34a245bdfa015c260c598b211bf05a1ecc4b3e3b4f2",
+  "verifierConfig": "0x73776f726e2d7370312d67726f746831362d7631",
+  "verifierConfigHash": "0xc405c6c7397b2e658a365c7a4e97b646114812fa0357d8f047caabd14012dd23",
   "zoneGuestVersion": "0x6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c471680f31"
 }
-spf_replays_migrated_policy exit 0

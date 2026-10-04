@@ -3,7 +3,7 @@
 # the Foundry fixture. Local only: sends nothing, needs no keys. ~12 min, ~18 GB RAM — never run two.
 #
 #   scripts/zone-prove.sh <verifier-address> [fixture-out] [destination-chain-id]
-#     fixture-out           default contracts/test/vectors/zone-hardfork.json
+#     fixture-out           default contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json
 #     destination-chain-id  default 42431 (Moderato)
 #
 # The verifier address is a guest input (spec §3), so the verifier must be deployed (or its address
@@ -12,7 +12,7 @@ set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 spf="$root/spikes/zone-spf"
 addr="${1:?usage: zone-prove.sh <verifier-address> [fixture-out] [destination-chain-id]}"
-out="${2:-$root/contracts/test/vectors/zone-hardfork.json}"
+out="${2:-$root/contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json}"
 chain="${3:-42431}"
 [[ "$addr" =~ ^0x[0-9a-fA-F]{40}$ ]] || { echo "zone-prove: bad address $addr" >&2; exit 2; }
 case_="hardfork_t13_recovery"
@@ -24,6 +24,19 @@ log="$spf/z-logs/prove-$case_-$tag.log"
 pgrep -f "spike-runner .* groth16" >/dev/null && { echo "zone-prove: a groth16 run is already in progress; refusing to start a second" >&2; exit 1; }
 
 "$spf/build-guest.sh" >"$spf/z-logs/guest-build-prove-$tag.log" 2>&1
+# Read-only pre-check (saves a wasted 15-min proof): if the verifier is already deployed on $RPC, its
+# ZONE_VKEY and ZK_VERIFIER_CONFIG_V1 must match this ELF and the host's tag.
+RPC="${RPC:-https://rpc.moderato.tempo.xyz}"
+if [ "$(cast chain-id --rpc-url "$RPC" 2>/dev/null || true)" = "$chain" ] && [ -n "$(cast code --rpc-url "$RPC" "$addr" 2>/dev/null | sed 's/^0x//')" ]; then
+  ev=$("$spf/elf-vkey.sh"); elf_vkey=$(awk '/^vkey /{print $2}' <<<"$ev")
+  onchain=$(cast call --rpc-url "$RPC" "$addr" 'ZONE_VKEY()(bytes32)')
+  [ "$onchain" = "$elf_vkey" ] || { echo "zone-prove: on-chain ZONE_VKEY $onchain != ELF vkey $elf_vkey ($ev)" >&2; exit 1; }
+  cfg=$(cast call --rpc-url "$RPC" "$addr" 'ZK_VERIFIER_CONFIG_V1()(bytes)')
+  [ "$cfg" = "$(cast from-utf8 sworn-sp1-groth16-v1)" ] || { echo "zone-prove: verifier at $addr accepts config $cfg, not sworn-sp1-groth16-v1" >&2; exit 1; }
+  echo "pre-check ok: $addr on chain $chain has ZONE_VKEY = ELF vkey $elf_vkey and the sworn-sp1-groth16-v1 tag"
+else
+  echo "pre-check skipped: no code at $addr on $RPC (chain $chain)"
+fi
 elf="$spf/guest/target/elf-compilation/riscv64im-succinct-zkvm-elf/release/zone-spf-guest"
 (cd "$spf/host" && cargo build --release --quiet)
 host="$spf/host/target/release/sworn-zone-host"

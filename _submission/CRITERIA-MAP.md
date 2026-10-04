@@ -16,7 +16,7 @@ surface follows the pitch's order and wording.
 
 **Sworn proves Tempo's own execution in zero knowledge.** Tempo's docs say ZK proving for Zones "is not
 implemented". Sworn runs Tempo's Zone batch verifier inside SP1, and a contract on Moderato verified the
-proof (tx `0x9aa9…dfbd`). The same engine has slashed a lying server three times on Moderato.
+proof (tx `0xb14b…3b80`). The same engine has slashed a lying server three times on Moderato.
 
 ## Matrix
 

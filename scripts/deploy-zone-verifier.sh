@@ -11,9 +11,11 @@
 #
 # Constructor arguments (env overrides in brackets):
 #   SP1_VERIFIER                  [ZONE_SP1_VERIFIER]  0x2c77329747b7C8B293514A6129404D4cefDd9B18 (v6.1.0, Moderato)
-#   ZONE_VKEY                     [ZONE_VKEY]          .vkey of contracts/test/vectors/zone-hardfork-placeholder.json
-#                                                      (the program vkey does not depend on the verifier address;
-#                                                      it MUST equal the vkey zone-prove.sh prints for the same ELF)
+#   ZONE_VKEY                     [ZONE_VKEY]          the vkey of the guest ELF as built now: build-guest.sh, then
+#                                                      spikes/zone-spf/elf-vkey.sh (zkVM execute + setup, no proof).
+#                                                      An explicit ZONE_VKEY is used as given, but the ELF's sha256
+#                                                      and vkey are still printed, and a mismatch is refused unless
+#                                                      ZONE_VKEY_FORCE=1. Prove later with the SAME ELF.
 #   PARENT_CHAIN_ID               [ZONE_PARENT_CHAIN_ID] 1337 (D1)
 #   PINNED_ZONE_ID                [ZONE_ID]            1
 #   PINNED_GENESIS_ARTIFACT_HASH  keccak256 of spikes/zone-spf/genesis/hardfork_t13_recovery.genesis.json (D3)
@@ -32,16 +34,22 @@ esac
 RPC="${RPC:-https://rpc.moderato.tempo.xyz}"
 CAP=30000000   # TEMPO_T1_TX_GAS_LIMIT_CAP
 genesis_file="$root/spikes/zone-spf/genesis/hardfork_t13_recovery.genesis.json"
-placeholder="$root/contracts/test/vectors/zone-hardfork-placeholder.json"
 
 export ZONE_SP1_VERIFIER="${ZONE_SP1_VERIFIER:-0x2c77329747b7C8B293514A6129404D4cefDd9B18}"
-export ZONE_VKEY="${ZONE_VKEY:-$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["vkey"])' "$placeholder")}"
+"$root/spikes/zone-spf/build-guest.sh" >/dev/null 2>&1 || { echo "guest build failed (run spikes/zone-spf/build-guest.sh)"; exit 1; }
+ev=$("$root/spikes/zone-spf/elf-vkey.sh")
+elf_sha=$(awk '/^elf_sha256 /{print $2}' <<<"$ev"); elf_vkey=$(awk '/^vkey /{print $2}' <<<"$ev")
+[[ "$elf_vkey" =~ ^0x[0-9a-f]{64}$ ]] || { echo "could not compute the ELF vkey"; exit 1; }
+if [ -n "${ZONE_VKEY:-}" ] && [ "$(tr 'A-F' 'a-f' <<<"$ZONE_VKEY")" != "$elf_vkey" ] && [ "${ZONE_VKEY_FORCE:-}" != 1 ]; then
+  echo "ZONE_VKEY $ZONE_VKEY != vkey of the built ELF $elf_vkey (sha256 $elf_sha); set ZONE_VKEY_FORCE=1 to deploy it anyway"; exit 1
+fi
+export ZONE_VKEY="${ZONE_VKEY:-$elf_vkey}"
 export ZONE_PARENT_CHAIN_ID="${ZONE_PARENT_CHAIN_ID:-1337}"
 export ZONE_ID="${ZONE_ID:-1}"
 export ZONE_GENESIS_ARTIFACT_HASH
 ZONE_GENESIS_ARTIFACT_HASH=$(cast keccak "0x$(xxd -p "$genesis_file" | tr -d '\n')")
-fx_genesis=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["genesisArtifactHash"])' "$placeholder")
-[ "$ZONE_GENESIS_ARTIFACT_HASH" = "$fx_genesis" ] || { echo "genesis artifact hash $ZONE_GENESIS_ARTIFACT_HASH != fixture's $fx_genesis"; exit 1; }
+[ "$ZONE_GENESIS_ARTIFACT_HASH" = "0xd39aa765427c64ea95821bd5f93d44c89854b0f00fec0e21137421d04fb7c11e" ] || \
+  { echo "genesis artifact hash $ZONE_GENESIS_ARTIFACT_HASH != the pinned 0xd39aa765…c11e (spec 003 Results)"; exit 1; }
 
 [ "$(cast chain-id --rpc-url "$RPC")" = "42431" ] || { echo "RPC is not Moderato (42431)"; exit 1; }
 vh=$(cast call --rpc-url "$RPC" "$ZONE_SP1_VERIFIER" "VERIFIER_HASH()(bytes32)")
@@ -64,10 +72,12 @@ cat <<EOF
 constructor(
   sp1Verifier               $ZONE_SP1_VERIFIER   (VERIFIER_HASH $vh)
   zoneVkey                  $ZONE_VKEY
+                            (guest ELF sha256 $elf_sha, ELF vkey $elf_vkey)
   parentChainId             $ZONE_PARENT_CHAIN_ID
   pinnedZoneId              $ZONE_ID
   pinnedGenesisArtifactHash $ZONE_GENESIS_ARTIFACT_HASH
 )
+verifierConfig accepted    "sworn-sp1-groth16-v1" = $(cast from-utf8 sworn-sp1-groth16-v1)
 constructor args (abi)      $ctor
 init code                   $(( (${#init} - 2) / 2 )) bytes, keccak256 $(cast keccak "$init")
 gas                         chain eth_estimateGas=$chain_est  forge-local=$local_est  -> -g $mult (~$offered offered, cap $CAP)
@@ -80,4 +90,4 @@ if [ -z "$SEND" ]; then echo "PRINT ONLY: nothing sent. To deploy: scripts/with-
 forge script script/ZoneVerifier.s.sol:DeployZoneVerifier --rpc-url "$RPC" -g "$mult" --slow --broadcast
 echo "Next: read the receipt; scripts/no-owner.sh --zone-verifier --code \$(cast code <address> --rpc-url $RPC);"
 echo "      record address/codehash/constructor args in deployments/moderato.json under zoneVerifier;"
-echo "      scripts/zone-prove.sh <address>; scripts/zone-attest.sh <address> contracts/test/vectors/zone-hardfork.json"
+echo "      scripts/zone-prove.sh <address>; scripts/zone-attest.sh <address> contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json"

@@ -1,0 +1,12 @@
+ok    ZONE_VKEY = 0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39
+ok    PARENT_CHAIN_ID = 1337
+ok    PINNED_ZONE_ID = 1
+ok    ZK_VERIFIER_CONFIG_V1 = 0x73776f726e2d7370312d67726f746831362d7631
+ok    PINNED_GENESIS_ARTIFACT_HASH = 0xd39aa765427c64ea95821bd5f93d44c89854b0f00fec0e21137421d04fb7c11e
+ok    attestationDigest = 0xf4977d85cccb6040a138d5fb089eff5194e66987ef2c9bb3a87b8ba45ae51cfa
+ok    eth_call verify(real proof) = true
+ok    eth_call verify(nextZoneHeight+1) reverts InvalidProof() (0x09bde339)
+=== attest transaction (to 0x000000000000000000000000000000005a0e5a0e, chain 42431, value 0) ===
+calldata (740 bytes): 0x7ca3670f0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000
+chain eth_estimateGas: 40209
+PRINT ONLY: nothing sent. To send: scripts/with-keys.sh scripts/zone-attest.sh 0x000000000000000000000000000000005a0e5a0e ../spikes/zone-spf/zin/rehea

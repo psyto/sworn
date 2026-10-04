@@ -1,0 +1,97 @@
+[
+{
+"beforeUTC": "2026-06-01",
+"accountsEverSet": 0,
+"restrictiveNow": 0
+},
+{
+"beforeUTC": "2026-06-08",
+"accountsEverSet": 0,
+"restrictiveNow": 0
+},
+{
+"beforeUTC": "2026-06-15",
+"accountsEverSet": 0,
+"restrictiveNow": 0
+},
+{
+"beforeUTC": "2026-06-22",
+"accountsEverSet": 0,
+"restrictiveNow": 0
+},
+{
+"beforeUTC": "2026-06-29",
+"accountsEverSet": 0,
+"restrictiveNow": 0
+},
+{
+"beforeUTC": "2026-07-06",
+"accountsEverSet": 0,
+"restrictiveNow": 0
+},
+{
+"beforeUTC": "2026-07-13",
+"accountsEverSet": 0,
+"restrictiveNow": 0
+},
+{
+"beforeUTC": "2026-07-20",
+"accountsEverSet": 1,
+"restrictiveNow": 1
+},
+{
+"beforeUTC": "2026-07-27",
+"accountsEverSet": 1,
+"restrictiveNow": 1
+},
+{
+"beforeUTC": "2026-08-03",
+"accountsEverSet": 1,
+"restrictiveNow": 1
+},
+{
+"beforeUTC": "2026-08-10",
+"accountsEverSet": 1,
+"restrictiveNow": 1
+},
+{
+"beforeUTC": "2026-08-17",
+"accountsEverSet": 1,
+"restrictiveNow": 1
+},
+{
+"beforeUTC": "2026-08-24",
+"accountsEverSet": 1,
+"restrictiveNow": 1
+},
+{
+"beforeUTC": "2026-08-31",
+"accountsEverSet": 1,
+"restrictiveNow": 1
+},
+{
+"beforeUTC": "2026-09-07",
+"accountsEverSet": 1,
+"restrictiveNow": 1
+},
+{
+"beforeUTC": "2026-09-14",
+"accountsEverSet": 10,
+"restrictiveNow": 2
+},
+{
+"beforeUTC": "2026-09-21",
+"accountsEverSet": 10,
+"restrictiveNow": 2
+},
+{
+"beforeUTC": "2026-09-28",
+"accountsEverSet": 11,
+"restrictiveNow": 3
+},
+{
+"beforeUTC": "2026-10-04",
+"accountsEverSet": 11,
+"restrictiveNow": 3
+}
+]

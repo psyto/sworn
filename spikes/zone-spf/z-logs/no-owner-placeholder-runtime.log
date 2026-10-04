@@ -1,2 +1,2 @@
-no-owner: given runtime bytecode 2837 bytes (sans metadata), STATICCALL x1, forbidden opcodes 0
+no-owner: given runtime bytecode 2993 bytes (sans metadata), STATICCALL x1, forbidden opcodes 0
 no-owner: OK (src/SwornZoneVerifier.sol)

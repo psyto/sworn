@@ -1,0 +1,115 @@
+{
+ "net": "mainnet",
+ "fromBlock": 41407000,
+ "toBlock": 42487199,
+ "sampledBlocks": 8000,
+ "seed": 20261004,
+ "stats": {
+  "blocks": 8000,
+  "txs": 4027,
+  "txsReverted": 18,
+  "transferTxs": 3200,
+  "transferTxsReverted": 2,
+  "transferTxType_0x76": 3142,
+  "transferTxsWith_transferWithMemo": 1946,
+  "transferTxsWith_transfer": 1254,
+  "transferTxType_0x2": 32,
+  "transferFromTxs": 29,
+  "transferFromTxsReverted": 0,
+  "transferTxType_0x0": 26
+ },
+ "byFirstCallTarget": {
+  "tip20": {
+   "txs": 3284,
+   "reverted": 2
+  },
+  "other": {
+   "txs": 723,
+   "reverted": 16
+  },
+  "create": {
+   "txs": 9,
+   "reverted": 0
+  },
+  "dex": {
+   "txs": 9,
+   "reverted": 0
+  },
+  "tip403": {
+   "txs": 2,
+   "reverted": 0
+  }
+ },
+ "transferRevertRatio": 0.000625,
+ "transferRevertReasons": [
+  [
+   "out of gas",
+   1
+  ],
+  [
+   "tip20:InsufficientBalance(uint256,uint256,address)",
+   1
+  ]
+ ],
+ "transferRevertSenders": [
+  [
+   "0x55da623ac848d6d53f2fc87debd8829994d3019b",
+   1
+  ],
+  [
+   "0xcab241c2612d295c70ac4cd1317f625fc0d8c5b4",
+   1
+  ]
+ ],
+ "distinctTransferRevertSenders": 2,
+ "otherRevertReasons": [
+  [
+   "other::0x22611167",
+   7
+  ],
+  [
+   "other::tip20:InsufficientBalance(uint256,uint256,address)",
+   4
+  ],
+  [
+   "other::0xe450d38c",
+   3
+  ],
+  [
+   "other::0x76f4b878",
+   1
+  ],
+  [
+   "other::execution reverted",
+   1
+  ]
+ ],
+ "transferReverts": [
+  {
+   "block": 42468672,
+   "tx": "0x28889820ba9f8b712dca8acc0512fee7835d1abceb77fff037efd85c89ba4ad4",
+   "from": "0x55da623ac848d6d53f2fc87debd8829994d3019b",
+   "type": "0x76",
+   "token": "0x20c000000000000000000000b9537d11c60e8b50",
+   "reason": "out of gas",
+   "error": "out of gas",
+   "gas": 80648,
+   "gasUsed": 80648,
+   "nCalls": 1
+  },
+  {
+   "block": 42472858,
+   "tx": "0x489a4b7822e261c84a8f13834eaae52e0f23ed5d56d8c6ff0f1450cfe3a034c5",
+   "from": "0xcab241c2612d295c70ac4cd1317f625fc0d8c5b4",
+   "type": "0x2",
+   "token": "0x20c000000000000000000000b9537d11c60e8b50",
+   "reason": "tip20:InsufficientBalance(uint256,uint256,address)",
+   "error": "execution reverted",
+   "gas": 296321,
+   "gasUsed": 274274,
+   "nCalls": 1
+  }
+ ],
+ "rpcCalls": 1618,
+ "elapsedSec": 1177
+}

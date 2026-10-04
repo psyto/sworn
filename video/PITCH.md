@@ -23,7 +23,7 @@ checking execution."]**
 ## Scene 2: it works · ≈ 25 s
 
 **[Screen 2: Tempo's Zone batch verifier → SP1 zkVM → Groth16 → `SwornZoneVerifier` on Moderato, then the
-explorer: `attest` tx `0x9aa9…dfbd`, event `ZoneBatchVerified`. Then a strip: "3 slashes on Moderato".]**
+explorer: `attest` tx `0xb14b…3b80`, event `ZoneBatchVerified`. Then a strip: "3 slashes on Moderato".]**
 
 > So I built it. Sworn runs Tempo's own Zone batch verifier inside a zero-knowledge VM, binds the proof to
 > the exact inputs Tempo's verifier takes, and a contract on Tempo's testnet verified it. Here
@@ -74,9 +74,9 @@ for every batch, on time, re-verified at every Tempo upgrade".]**
 | Zones are private blockchains anchored to Tempo | `tempoxyz/zones` README @ `ac49071f`: *"Zones are private blockchains anchored to Tempo"* |
 | today the check is a hardware attestation, or nothing in the reference contract | Tempo docs "Tempo Zone proving and settlement": *"The Zones Solidity reference verifier still returns `true` without checking execution. Tempo also implements a native Nitro attestation verifier activated by T13."*; `zones/crates/contracts/src/runtime/tempo/Verifier.sol` (`return true`) |
 | ZK proving for Zones is not implemented | Tempo docs, same page: *"ZK proof generation is not implemented"* (checked on the live page 2026-10-04) |
-| runs Tempo's own Zone batch verifier inside a zkVM | `spikes/zone-spf/` (zones `ac49071f`, `prove_zone_batch`, five zkVM patches); spec 003 AC-Z1 |
+| runs Tempo's own Zone batch verifier inside a zkVM | `spikes/zone-spf/` (zones `ac49071f`, `prove_zone_batch`, zkVM build patches to zones, tempo and two dependency crates); spec 003 AC-Z1 |
 | bound to the exact inputs Tempo's verifier interface takes | `SwornZoneVerifier.sol` has `IVerifier.verify`'s exact signature (`IZone.sol:306-345`); the digest covers every `NitroBatchAttestation` field plus the destination chain and genesis artifact (spec 003 §3) |
-| a contract on Tempo's testnet verified it; "here is the transaction" | Moderato tx `0x9aa938e8…dfbd`, block 38071845, `ZoneBatchVerified` (`deployments/moderato.json`) |
+| a contract on Tempo's testnet verified it; "here is the transaction" | Moderato tx `0xb14b7127…3b80`, block 38080441, `ZoneBatchVerified` (`deployments/moderato.json`) |
 | re-runs Tempo's EVM; slashed a lying server three times on Moderato | `firstSlash` `0xa7b9…ab9b`, `demoLiveTakeFirst` `0xbf8e…f046`, `demoLiveTake` `0x69ab…5188` (`deployments/moderato.json`) |
 | withdrawals are only as trustworthy as the check on the batch | `IVerifier` NatSpec: the proof validates the state transition, deposits and withdrawal queue (`IZone.sol:308-318`); ZonePortal calls `verify` on `submitBatch` |
 | attestation = trusting one vendor's chip | the native verifier is AWS Nitro (Tempo docs, same page) |

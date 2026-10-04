@@ -1,7 +1,7 @@
 // The Zone batch proof on Moderato, read-only against the public RPC.
 import { describe, expect, it } from "vitest";
 import deployments from "../../deployments/moderato.json";
-import fixture from "../../contracts/test/vectors/zone-hardfork.json";
+import fixture from "../../contracts/test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json";
 import { makePublicClient } from "../src/chain/client.ts";
 import { MODERATO } from "../src/chain/config.ts";
 import { readZoneAttest, verifyZoneNow } from "../src/chain/zone.ts";

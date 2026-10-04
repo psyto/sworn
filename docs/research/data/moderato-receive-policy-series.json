@@ -1,0 +1,97 @@
+[
+{
+"beforeUTC": "2026-06-01",
+"accountsEverSet": 0,
+"restrictiveNow": 0
+},
+{
+"beforeUTC": "2026-06-08",
+"accountsEverSet": 0,
+"restrictiveNow": 0
+},
+{
+"beforeUTC": "2026-06-15",
+"accountsEverSet": 0,
+"restrictiveNow": 0
+},
+{
+"beforeUTC": "2026-06-22",
+"accountsEverSet": 1,
+"restrictiveNow": 1
+},
+{
+"beforeUTC": "2026-06-29",
+"accountsEverSet": 1,
+"restrictiveNow": 1
+},
+{
+"beforeUTC": "2026-07-06",
+"accountsEverSet": 1,
+"restrictiveNow": 1
+},
+{
+"beforeUTC": "2026-07-13",
+"accountsEverSet": 28,
+"restrictiveNow": 28
+},
+{
+"beforeUTC": "2026-07-20",
+"accountsEverSet": 481,
+"restrictiveNow": 480
+},
+{
+"beforeUTC": "2026-07-27",
+"accountsEverSet": 2501,
+"restrictiveNow": 482
+},
+{
+"beforeUTC": "2026-08-03",
+"accountsEverSet": 6887,
+"restrictiveNow": 523
+},
+{
+"beforeUTC": "2026-08-10",
+"accountsEverSet": 9082,
+"restrictiveNow": 527
+},
+{
+"beforeUTC": "2026-08-17",
+"accountsEverSet": 9386,
+"restrictiveNow": 530
+},
+{
+"beforeUTC": "2026-08-24",
+"accountsEverSet": 11664,
+"restrictiveNow": 532
+},
+{
+"beforeUTC": "2026-08-31",
+"accountsEverSet": 13778,
+"restrictiveNow": 532
+},
+{
+"beforeUTC": "2026-09-07",
+"accountsEverSet": 15959,
+"restrictiveNow": 532
+},
+{
+"beforeUTC": "2026-09-14",
+"accountsEverSet": 17713,
+"restrictiveNow": 553
+},
+{
+"beforeUTC": "2026-09-21",
+"accountsEverSet": 22685,
+"restrictiveNow": 556
+},
+{
+"beforeUTC": "2026-09-28",
+"accountsEverSet": 27379,
+"restrictiveNow": 574
+},
+{
+"beforeUTC": "2026-10-04",
+"accountsEverSet": 29280,
+"restrictiveNow": 625
+}
+]

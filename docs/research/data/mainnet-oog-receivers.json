@@ -1,0 +1,54 @@
+{
+ "net": "mainnet",
+ "n": 2,
+ "byReasonAndReceiverWasEmpty": [
+  [
+   [
+    "out of gas",
+    false
+   ],
+   1
+  ],
+  [
+   [
+    "tip20:InsufficientBalance(uint256,uint256,address)",
+    false
+   ],
+   1
+  ]
+ ],
+ "gasLimitRange": [
+  80648,
+  296321
+ ],
+ "rows": [
+  {
+   "block": 42468672,
+   "tx": "0x28889820ba9f8b712dca8acc0512fee7835d1abceb77fff037efd85c89ba4ad4",
+   "from": "0x55da623ac848d6d53f2fc87debd8829994d3019b",
+   "type": "0x76",
+   "token": "0x20c000000000000000000000b9537d11c60e8b50",
+   "reason": "out of gas",
+   "error": "out of gas",
+   "gas": 80648,
+   "gasUsed": 80648,
+   "nCalls": 1,
+   "receiver": "0x306cf24f98fa425b41c3aec2ee369e51cd177018",
+   "receiverBalanceBefore": 1197310000
+  },
+  {
+   "block": 42472858,
+   "tx": "0x489a4b7822e261c84a8f13834eaae52e0f23ed5d56d8c6ff0f1450cfe3a034c5",
+   "from": "0xcab241c2612d295c70ac4cd1317f625fc0d8c5b4",
+   "type": "0x2",
+   "token": "0x20c000000000000000000000b9537d11c60e8b50",
+   "reason": "tip20:InsufficientBalance(uint256,uint256,address)",
+   "error": "execution reverted",
+   "gas": 296321,
+   "gasUsed": 274274,
+   "nCalls": 1,
+   "receiver": "0xe4c07803c741813adc21fd03524bf4fff0802e1e",
+   "receiverBalanceBefore": 631584
+  }
+ ]
+}

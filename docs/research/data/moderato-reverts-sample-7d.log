@@ -1,0 +1,193 @@
+[moderato] 5/3000 blocks txs=7 transferTxs=0 rev=0 calls=1 1s
+[moderato] 305/3000 blocks txs=1770 transferTxs=283 rev=0 calls=344 189s
+[moderato] 605/3000 blocks txs=3570 transferTxs=592 rev=3 calls=628 351s
+[moderato] 905/3000 blocks txs=5630 transferTxs=889 rev=10 calls=985 543s
+[moderato] 1205/3000 blocks txs=7635 transferTxs=1183 rev=16 calls=1316 735s
+[moderato] 1505/3000 blocks txs=9962 transferTxs=1568 rev=37 calls=1677 933s
+[moderato] 1805/3000 blocks txs=11902 transferTxs=1838 rev=39 calls=1945 1088s
+[moderato] 2105/3000 blocks txs=14287 transferTxs=2327 rev=54 calls=2297 1242s
+[moderato] 2405/3000 blocks txs=16196 transferTxs=2601 rev=56 calls=2528 1381s
+[moderato] 2705/3000 blocks txs=17750 transferTxs=2848 rev=56 calls=2803 2096s
+{
+ "net": "moderato",
+ "fromBlock": 37056728,
+ "toBlock": 38059506,
+ "sampledBlocks": 3000,
+ "seed": 20261004,
+ "stats": {
+  "blocks": 3000,
+  "txs": 19658,
+  "txsReverted": 2020,
+  "transferTxs": 3035,
+  "transferTxsReverted": 65,
+  "transferTxType_0x2": 1536,
+  "transferTxsWith_transfer": 2899,
+  "transferTxType_0x76": 202,
+  "transferTxsWith_transferWithMemo": 136,
+  "transferTxType_0x0": 1297
+ },
+ "byFirstCallTarget": {
+  "other": {
+   "txs": 7496,
+   "reverted": 578
+  },
+  "dex": {
+   "txs": 1165,
+   "reverted": 770
+  },
+  "tip20": {
+   "txs": 9640,
+   "reverted": 663
+  },
+  "feeManager": {
+   "txs": 176,
+   "reverted": 0
+  },
+  "create": {
+   "txs": 1014,
+   "reverted": 3
+  },
+  "tip20Factory": {
+   "txs": 157,
+   "reverted": 6
+  },
+  "tip403": {
+   "txs": 10,
+   "reverted": 0
+  }
+ },
+ "transferRevertRatio": 0.0214168039538715,
+ "transferRevertReasons": [
+  [
+   "out of gas",
+   64
+  ],
+  [
+   "account_keychain:SpendingLimitExceeded()",
+   1
+  ]
+ ],
+ "transferRevertSenders": [
+  [
+   "0x8d3e4ab993c372acc2be1733f1f2fd473dfdc358",
+   1
+  ],
+  [
+   "0xc5e99d436fcf5bdb89f6bf73e5d99980680fcdb6",
+   1
+  ],
+  [
+   "0x79b82790b50715a7de615288b705ed997a8339b4",
+   1
+  ],
+  [
+   "0x7d1f56d414c914078647f6f99e6bdc2420658bab",
+   1
+  ],
+  [
+   "0xdd91d9e54e28e82d99847e120f2a2caeda03a8ed",
+   1
+  ],
+  [
+   "0xadb1ebefe2df2d3c5dc21ef1abb4c1b06820e5b7",
+   1
+  ],
+  [
+   "0x7b8a095c229e06853bbbe3e6f2db29b59d096df8",
+   1
+  ],
+  [
+   "0x128962fb14edd3f3412a7f2ac8af3a0db3bd9812",
+   1
+  ],
+  [
+   "0xe81687ef198c1dcd0d318ee6f69b875d078a08dd",
+   1
+  ],
+  [
+   "0x737ef69fac33815201d5115672a3d39435a708c7",
+   1
+  ]
+ ],
+ "distinctTransferRevertSenders": 65,
+ "otherRevertReasons": [
+  [
+   "dex::common_errors:UnknownFunctionSelector(bytes4)",
+   766
+  ],
+  [
+   "tip20:0x095ea7b3:out of gas",
+   578
+  ],
+  [
+   "other::out of gas",
+   538
+  ],
+  [
+   "other::tip20:InsufficientAllowance()",
+   23
+  ],
+  [
+   "tip20:0x095ea7b3:tip20:InvalidToken()",
+   13
+  ],
+  [
+   "other::0xbaf3f0f7",
+   9
+  ],
+  [
+   "tip20:0x2f2ff15d:tip20:Uninitialized()",
+   5
+  ],
+  [
+   "dex::out of gas",
+   4
+  ],
+  [
+   "tip20Factory::common_errors:UnknownFunctionSelector(bytes4)",
+   3
+  ],
+  [
+   "tip20Factory::out of gas",
+   3
+  ],
+  [
+   "other::account_keychain:UnauthorizedCaller()",
+   2
+  ],
+  [
+   "other::0x7a4ab730",
+   2
+  ],
+  [
+   "create::invalid opcode",
+   2
+  ],
+  [
+   "tip20:0x1e458bee:tip20:Uninitialized()",
+   2
+  ],
+  [
+   "other::0xae9b4ce9",
+   1
+  ],
+  [
+   "other::0xd1145827",
+   1
+  ],
+  [
+   "create::out of gas",
+   1
+  ],
+  [
+   "other::0x22611167",
+   1
+  ],
+  [
+   "other::0x7b857a6b",
+   1
+  ]
+ ],
+ "rpcCalls": 3100,
+ "elapsedSec": 2249
+}

@@ -1,0 +1,101 @@
+{
+ "net": "mainnet",
+ "genesisUTC": "2026-01-16T20:51:19+00:00",
+ "rows": [
+  {
+   "dateUTC": "2026-02-01",
+   "block": 2546912,
+   "policyIdCounter": 3
+  },
+  {
+   "dateUTC": "2026-02-15",
+   "block": 4869597,
+   "policyIdCounter": 3
+  },
+  {
+   "dateUTC": "2026-03-01",
+   "block": 7114356,
+   "policyIdCounter": 5
+  },
+  {
+   "dateUTC": "2026-03-15",
+   "block": 9378994,
+   "policyIdCounter": 6
+  },
+  {
+   "dateUTC": "2026-04-01",
+   "block": 12363544,
+   "policyIdCounter": 14
+  },
+  {
+   "dateUTC": "2026-04-15",
+   "block": 14797431,
+   "policyIdCounter": 136
+  },
+  {
+   "dateUTC": "2026-05-01",
+   "block": 17580344,
+   "policyIdCounter": 521
+  },
+  {
+   "dateUTC": "2026-05-15",
+   "block": 20013953,
+   "policyIdCounter": 551
+  },
+  {
+   "dateUTC": "2026-06-01",
+   "block": 22963359,
+   "policyIdCounter": 554
+  },
+  {
+   "dateUTC": "2026-06-15",
+   "block": 25267981,
+   "policyIdCounter": 554
+  },
+  {
+   "dateUTC": "2026-07-01",
+   "block": 27802873,
+   "policyIdCounter": 555
+  },
+  {
+   "dateUTC": "2026-07-15",
+   "block": 30009241,
+   "policyIdCounter": 556
+  },
+  {
+   "dateUTC": "2026-08-01",
+   "block": 32652924,
+   "policyIdCounter": 561
+  },
+  {
+   "dateUTC": "2026-08-15",
+   "block": 34808895,
+   "policyIdCounter": 578
+  },
+  {
+   "dateUTC": "2026-09-01",
+   "block": 37417564,
+   "policyIdCounter": 589
+  },
+  {
+   "dateUTC": "2026-09-15",
+   "block": 39550753,
+   "policyIdCounter": 598
+  },
+  {
+   "dateUTC": "2026-09-27",
+   "block": 41406999,
+   "policyIdCounter": 604
+  },
+  {
+   "dateUTC": "2026-10-01",
+   "block": 42021929,
+   "policyIdCounter": 604
+  },
+  {
+   "dateUTC": "2026-10-04",
+   "block": 42487199,
+   "policyIdCounter": 605
+  }
+ ]
+}

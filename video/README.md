@@ -54,7 +54,7 @@ record with a fallback font; never Tempo's logo, wordmark or Pilat).
 
 ```sh
 node video/record-pitch.mjs              # → video/pitch.mp4 + pitch.srt + pitch.marks.json   (reads only)
-node video/split-scenes.mjs pitch        # → video/scenes/pitch/scene-{1..5}.mp4|.txt + NARRATION.md
+node video/split-scenes.mjs pitch        # → video/scenes/pitch/scene-{1..6}.mp4|.txt + NARRATION.md
 
 node video/record-demo.mjs --no-live     # scenes 2–5 for real, scene 1 a labelled PLACEHOLDER (reads only)
 DEMO_LIVE_OK=1 node video/record-demo.mjs --live           # scene 1 = live take — SENDS MODERATO TXs
@@ -62,7 +62,9 @@ node video/record-demo.mjs --from-take video/takes/demo-…  # re-edit a saved t
 node video/split-scenes.mjs demo         # → video/scenes/demo/
 ```
 
-Pitch sources: `deployments/moderato.json` ↔ Moderato (codehash, GUEST_VKEY, SP1 verifier VERSION, MAX_AGE,
+Pitch **v2** (six scenes, Zone proof first) sources: Tempo's docs page `zones/proving.md` (both quoted sentences), `tempoxyz/zones` @ `ac49071f` via `gh api` (README, reference `Verifier.sol` `return true`), the pinned checkout `spikes/zone-spf/zones` (`IVerifier.verify` selector = `SwornZoneVerifier`'s), Moderato (SwornZoneVerifier codehash, the attest receipt and decoded `ZoneBatchVerified`, the three `Slashed` receipts), the explorer page of the attest tx (screenshot cropped to its transaction card, never the header with Tempo's wordmark; its Events tab must show the event's topic0), the proving log, vendored `zone_factory`, README (T12, "is / is not"), the patch files, GitHub, ethglobal.com. `PREVIEW=<dir> node video/record-pitch.mjs` writes one PNG per scene instead of recording. `DEMO.md` is now the **v2 edit plan** (not yet recorded; `demo.mp4` is still v1).
+
+v1 pitch sources: `deployments/moderato.json` ↔ Moderato (codehash, GUEST_VKEY, SP1 verifier VERSION, MAX_AGE,
 CHALLENGE_PERIOD); the three first-slash receipts (reserve `0x08f6…0350`, payment `0x65bc…312a` with guard /
 R′ balances at block−1 and block, challenge `0xa7b9…ab9b` with the client's balance at block−1 and block);
 `out/ac2_run.log`; vendored `tempo/…/tip20/mod.rs`; `tempoxyz/zones` `crates/spf/src/lib.rs` via `gh api`;

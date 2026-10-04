@@ -1,14 +1,16 @@
-no-owner: compiled runtime bytecode 2837 bytes (sans metadata), STATICCALL x1, forbidden opcodes 0
+no-owner: compiled runtime bytecode 2993 bytes (sans metadata), STATICCALL x1, forbidden opcodes 0
 no-owner: OK (src/SwornZoneVerifier.sol)
 === SwornZoneVerifier deployment (chain 42431, https://rpc.moderato.tempo.xyz) ===
 constructor(
   sp1Verifier               0x2c77329747b7C8B293514A6129404D4cefDd9B18   (VERIFIER_HASH 0x4388a21c687fdd5f218d7e3d13190cac4c5355818d3605fd5fb811df468ee696)
-  zoneVkey                  0x006c15314d326e27d72c1c1f83fd2bc0eaf5fb2053e2fe5b3e9415a2d037293d
+  zoneVkey                  0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39
+                            (guest ELF sha256 fd7a6a105e915fef3f75402fb65fabca0eca8cbe8c69df4cc73aa07c9a620c51, ELF vkey 0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39)
   parentChainId             1337
   pinnedZoneId              1
   pinnedGenesisArtifactHash 0xd39aa765427c64ea95821bd5f93d44c89854b0f00fec0e21137421d04fb7c11e
 )
-constructor args (abi)      0x0000000000000000000000002c77329747b7c8b293514a6129404d4cefdd9b18006c15314d326e27d72c1c1f83fd2bc0eaf5fb2053e2fe5b3e9415a2d037293d00000000000000000000000000000000000000000000000000000000000005390000000000000000000000000000000000000000000000000000000000000001d39aa765427c64ea95821bd5f93d44c89854b0f00fec0e21137421d04fb7c11e
-init code                   3386 bytes, keccak256 0x3b58942f9333633c54a8a09f5cb03f5f4f0399f21a2ab15003e8571cbd4cb9d5
-gas                         chain eth_estimateGas=3741423  forge-local=681787  -> -g 824 (~5617924 offered, cap 30000000)
+verifierConfig accepted    "sworn-sp1-groth16-v1" = 0x73776f726e2d7370312d67726f746831362d7631
+constructor args (abi)      0x0000000000000000000000002c77329747b7c8b293514a6129404d4cefdd9b18007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b3900000000000000000000000000000000000000000000000000000000000005390000000000000000000000000000000000000000000000000000000000000001d39aa765427c64ea95821bd5f93d44c89854b0f00fec0e21137421d04fb7c11e
+init code                   3542 bytes, keccak256 0xde190ac679ac92e1ed97e28576d0ea8ca7db70523a174a6be1a310477a1a9888
+gas                         chain eth_estimateGas=3901195  forge-local=715542  -> -g 818 (~5853133 offered, cap 30000000)
 PRINT ONLY: nothing sent. To deploy: scripts/with-keys.sh scripts/deploy-zone-verifier.sh --send

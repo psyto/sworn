@@ -8,7 +8,8 @@
 #   - the on-chain immutables equal the fixture's (ZONE_VKEY, PARENT_CHAIN_ID, PINNED_ZONE_ID,
 #     PINNED_GENESIS_ARTIFACT_HASH) and the fixture was proved for this address and chain;
 #   - attestationDigest(args) == fixture digest;
-#   - verify(args, 0x02, proof) returns true;
+#   - the on-chain ZK_VERIFIER_CONFIG_V1 equals the fixture's verifierConfig ("sworn-sp1-groth16-v1");
+#   - verify(args, verifierConfig, proof) returns true;
 #   - verify with ONE field mutated (nextZoneHeight + 1) reverts with InvalidProof();
 #   - prints the exact attest calldata.
 # With --send: broadcasts that calldata via forge script (key from SWORN_DEPLOYER_KEY in the env, never a
@@ -38,6 +39,7 @@ chk() { # label, on-chain value, fixture value
 chk ZONE_VKEY "$(cast call --rpc-url "$RPC" "$addr" 'ZONE_VKEY()(bytes32)')" "$(j vkey)"
 chk PARENT_CHAIN_ID "$(cast call --rpc-url "$RPC" "$addr" 'PARENT_CHAIN_ID()(uint256)')" "$(j parentChainId)"
 chk PINNED_ZONE_ID "$(cast call --rpc-url "$RPC" "$addr" 'PINNED_ZONE_ID()(uint32)')" "$(j args.zoneId)"
+chk ZK_VERIFIER_CONFIG_V1 "$(cast call --rpc-url "$RPC" "$addr" 'ZK_VERIFIER_CONFIG_V1()(bytes)')" "$(j verifierConfig)"
 chk PINNED_GENESIS_ARTIFACT_HASH "$(cast call --rpc-url "$RPC" "$addr" 'PINNED_GENESIS_ARTIFACT_HASH()(bytes32)')" "$(j genesisArtifactHash)"
 
 BT="(bytes32,bytes32)"; DQ="(bytes32,bytes32,uint64,uint64)"; TE="(uint64,uint64)"

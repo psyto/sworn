@@ -15,8 +15,16 @@ import {MockSP1Verifier} from "./mocks/MockSP1Verifier.sol";
 /// @notice Spec 003 (docs/specs/003-zone-verifier.md) AC-Z2 and AC-Z4.
 ///         Vectors (all produced by the Rust side, spikes/zone-spf/host):
 ///           test/vectors/zone-digest-golden.json          AC-Z2 golden vector (synthetic, every field distinct)
-///           test/vectors/zone-hardfork-placeholder.json   REAL SP1 v6.1.0 Groth16 proof of hardfork_t13_recovery
-///                                                         for verifier 0x…5a0e5a0e on chain 42431
+///           test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json               REAL SP1 v6.1.0 Groth16 proof of hardfork_t13_recovery for
+///                                                         the Moderato SwornZoneVerifier at its deployed address
+///                                                         (scripts/zone-prove.sh <address>). PENDING until the
+///                                                         verifier carrying the "sworn-sp1-groth16-v1" tag is
+///                                                         deployed: the real-proof test skips, with that reason,
+///                                                         while the file is absent, and FAILS on a stale one.
+///           test/vectors/superseded/zone-hardfork-config02-moderato.json  SUPERSEDED record (verifierConfig 0x02 = upstream NoProof
+///                                                         since zones 344ff785) of the attest at 0x64bA9F64…42De; the
+///                                                         live page reads it. Not used by tests.
+///           test/vectors/superseded/                      the 0x02 placeholder-address proof; not used by tests.
 abstract contract ZoneBase is Test {
     string constant TYPE_STRING =
         "SwornZoneBatchAttestation(uint256 parentChainId,address verifier,uint32 zoneId,uint64 tempoBlockNumber,uint64 anchorBlockNumber,bytes32 anchorBlockHash,uint64 expectedWithdrawalBatchIndex,uint256 nextZoneHeight,bytes32 prevBlockHash,bytes32 nextBlockHash,bytes32 prevProcessedHash,bytes32 nextProcessedHash,uint64 prevDepositNumber,uint64 nextDepositNumber,uint64 prevProcessedTokenCount,uint64 nextProcessedTokenCount,bytes32 withdrawalQueueHash,bytes32 verifierConfigHash,bytes32 genesisArtifactHash,uint256 destinationChainId)";
@@ -217,9 +225,9 @@ abstract contract ZoneBase is Test {
             _expectBoth(zz, m, proof, SwornZoneVerifier.InvalidProof.selector);
             _deploy(v.verifier, sp1, vkey, v.parentChainId, v.a.zoneId, v.genesisArtifactHash); // restore
         }
-        // Wrong verifierConfig: Nitro's 0x01, empty, and 0x02 with a trailing byte.
-        bytes[3] memory badCfg = [bytes(hex"01"), bytes(""), bytes(hex"0200")];
-        for (uint256 k = 0; k < 3; k++) {
+        // Wrong verifierConfig: Tempo's 0x01 (Nitro) and 0x02 (NoProof), empty, and the tag plus one byte.
+        bytes[4] memory badCfg = [bytes(hex"01"), bytes(hex"02"), bytes(""), bytes("sworn-sp1-groth16-v1\x00")];
+        for (uint256 k = 0; k < 4; k++) {
             Args memory m = _mutated(v.a, 14);
             m.withdrawalQueueHash = v.a.withdrawalQueueHash;
             m.verifierConfig = badCfg[k];
@@ -249,7 +257,8 @@ abstract contract ZoneBase is Test {
 
 contract SwornZoneVerifierTest is ZoneBase {
     string constant GOLDEN = "test/vectors/zone-digest-golden.json";
-    string constant REAL = "test/vectors/zone-hardfork-placeholder.json";
+    string constant REAL = "test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json";
+    bytes constant TAG = "sworn-sp1-groth16-v1";
 
     // ---------------------------------------------------------------- AC-Z2
 
@@ -262,6 +271,10 @@ contract SwornZoneVerifierTest is ZoneBase {
         assertEq(vm.parseJsonBytes32(j, ".typehash"), TYPEHASH, "Rust typehash");
         assertEq(z.ZONE_GUEST_VERSION(), keccak256("sworn-zone-guest-v1"));
         assertEq(z.ZONE_GUEST_VERSION(), vm.parseJsonBytes32(j, ".zoneGuestVersion"));
+        assertEq(z.ZK_VERIFIER_CONFIG_V1(), TAG);
+        assertEq(z.ZK_VERIFIER_CONFIG_V1_HASH(), keccak256(TAG));
+        assertEq(z.ZK_VERIFIER_CONFIG_V1_HASH(), 0xc405c6c7397b2e658a365c7a4e97b646114812fa0357d8f047caabd14012dd23);
+        assertEq(vm.parseJsonBytes(j, ".verifierConfig"), TAG, "Rust tag");
         assertEq(z.ZK_VERIFIER_CONFIG_V1_HASH(), vm.parseJsonBytes32(j, ".verifierConfigHash"));
     }
 
@@ -288,12 +301,18 @@ contract SwornZoneVerifierTest is ZoneBase {
 
     // ---------------------------------------------------------------- AC-Z4, REAL proof + REAL verifier
 
-    function test_ACZ4_REAL_groth16_placeholder_all_cases() public {
+    /// PENDING (skipped with this reason) until test/vectors/zone-hardfork-sworn-sp1-groth16-v1.json exists for the redeployed
+    /// verifier. A fixture that exists but carries another verifierConfig fails — a stale proof is never
+    /// silently accepted as current. The contract is placed at the fixture's (deployed) address.
+    function test_ACZ4_REAL_groth16_moderato_all_cases() public {
+        if (!vm.exists(REAL)) {
+            vm.skip(true, "PENDING: no Moderato fixture for the sworn-sp1-groth16-v1 verifier yet (scripts/zone-prove.sh <address>)");
+        }
         string memory j = vm.readFile(REAL);
         Vec memory v = _vec(REAL);
+        assertEq(v.a.verifierConfig, TAG, "stale fixture: verifierConfig is not sworn-sp1-groth16-v1");
         bytes32 vk = vm.parseJsonBytes32(j, ".vkey");
         bytes memory proof = vm.parseJsonBytes(j, ".proof");
-        assertEq(v.verifier, 0x000000000000000000000000000000005a0E5A0E, "fixture is for the placeholder address");
         assertEq(v.chainId, 42431);
         assertEq(v.parentChainId, 1337);
         assertEq(v.a.zoneId, 1);

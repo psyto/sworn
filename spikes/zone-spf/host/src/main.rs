@@ -239,12 +239,17 @@ fn mutations(a: &[String]) {
         }
     }
 
-    // verifier_config != 0x02 must abort.
-    match run_framed(&frame(&genesis, &witness_raw, verifier, &[0x01], chain)) {
-        Err(za::Error::WrongVerifierConfig) => println!("verifier_config 0x01: REJECTED (PASS)"),
-        other => {
-            println!("verifier_config 0x01: not rejected as expected (FAIL): {:?}", other.map(|o| o.digest));
-            fails += 1;
+    // verifier_config other than "sworn-sp1-groth16-v1" must abort: Tempo's 0x01 (Nitro) and 0x02 (NoProof),
+    // the empty config, and the tag with one trailing byte.
+    let mut tag_plus = za::ZK_VERIFIER_CONFIG_V1.to_vec();
+    tag_plus.push(0);
+    for (label, cfg) in [("0x01", vec![0x01u8]), ("0x02", vec![0x02]), ("empty", vec![]), ("tag||0x00", tag_plus)] {
+        match run_framed(&frame(&genesis, &witness_raw, verifier, &cfg, chain)) {
+            Err(za::Error::WrongVerifierConfig) => println!("verifier_config {label}: REJECTED (PASS)"),
+            other => {
+                println!("verifier_config {label}: not rejected as expected (FAIL): {:?}", other.map(|o| o.digest));
+                fails += 1;
+            }
         }
     }
 

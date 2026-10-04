@@ -1,0 +1,90 @@
+elf sha256: fd7a6a105e915fef3f75402fb65fabca0eca8cbe8c69df4cc73aa07c9a620c51
+verifier: 0x00F6ed344B9C7F5eBA8788A115f8d6B4c00564e5  destinationChainId: 42431
+client init wall: 12.041571292s
+stderr: WARNING: Using insecure random number generator.
+execute wall: 596.554458ms
+cycles(total_instruction_count): 25536122
+report: gas: 24614695
+opcode counts (25536122 total instructions):
+    5047171 xor
+    2529804 or
+    2470637 sll
+    2377078 addi
+    2153408 ld
+    1901544 sd
+    1788617 srl
+    1739869 and
+    1367676 lbu
+    1355088 add
+     446619 bne
+     355808 beq
+     329092 mul
+     284627 sb
+     278004 mulhu
+     271233 sltu
+     165185 bltu
+     163459 jalr
+     122662 auipc
+      88665 sub
+      80931 lui
+      65771 bgeu
+      45090 jal
+      27818 subw
+      18870 srlw
+       8838 addw
+       7558 slt
+       7457 blt
+       6747 lw
+       6597 lhu
+       6576 sw
+       5897 lb
+       4627 sh
+       2228 sra
+       1638 lwu
+       1599 lh
+       1550 bge
+         59 sllw
+         21 ecall
+          4 divu
+syscall counts (0 total syscall instructions):
+
+publicValues match native host: PASS
+setup wall: 3.315207208s
+vkey(bytes32): 0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39
+stderr: WARNING: Using insecure random number generator.
+Setting environment variables took 466.542µs
+Reading R1CS took 12.559426292s
+Reading proving key took 2.406835833s
+Reading witness file took 2.781792ms
+Deserializing JSON data took 19.401834ms
+Generating witness took 400.273ms
+[90m12:22:27[0m DBG constraint system solver done [36mnbConstraints=[0m15972262 [36mtook=[0m3742.711708
+[90m12:22:56[0m DBG prover done [36macceleration=[0mnone [36mbackend=[0mgroth16 [36mcurve=[0mbn254 [36mnbConstraints=[0m15972262 [36mtook=[0m28396.821917
+Generating proof took 32.144492s
+[90m12:22:56[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m12:22:56[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m12:22:56[0m [33mWRN[0m [1mignoring uninitialized slice[0m [36mslice name=[0mVars [36mslice type=[0m[]frontend.Variable
+[90m12:22:56[0m DBG verifier done [36mbackend=[0mgroth16 [36mcurve=[0mbn254 [36mtook=[0m1.116666
+PROVE groth16 wall: 701.08766075s
+proof pv match: true
+verify ok (197.286792ms)
+fixture written: /Users/hiroyusai/src/sworn/spikes/zone-spf/zin/prove-0x00f6ed344b9c7f5eba8788a115f8d6b4c00564e5-42431/groth16.json
+      718.08 real      5121.57 user       489.67 sys
+         18497470464  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            53688162  page reclaims
+                 464  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+               10993  signals received
+             2108574  voluntary context switches
+            22071188  involuntary context switches
+      51662596681954  instructions retired
+      17225989137688  cycles elapsed
+         79351556632  peak memory footprint
+EXIT 0
