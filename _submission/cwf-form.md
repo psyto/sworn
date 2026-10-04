@@ -24,7 +24,7 @@ Zero-knowledge proofs of Tempo's own execution. Tempo's docs say ZK proving for 
 ## Project website · Public
 
 ```
-[FILL AFTER PUBLISH — the live page URL once the founder approves publishing; until then https://github.com/psyto/sworn]
+https://psyto.github.io/sworn/
 ```
 
 ## What are you building, and who is it for? · ≤1000
@@ -130,13 +130,13 @@ The repo starts 2026-10-03, inside the window. Start at README.md. docs/specs/ h
 ## Live product link
 
 ```
-[FILL AFTER PUBLISH — live page URL]
+https://psyto.github.io/sworn/
 ```
 
 ## Access instructions · ≤300
 
 ```
-The page reads Moderato in your browser. Nothing to sign or install. "Verify again" re-checks the Zone proof on Moderato live. To re-run locally: git clone https://github.com/psyto/sworn && cd sworn/contracts && forge test
+https://psyto.github.io/sworn/ reads Moderato in your browser. Nothing to sign or install. "Verify again" re-checks the Zone proof on Moderato live. To re-run locally: git clone https://github.com/psyto/sworn && cd sworn/contracts && forge test
 ```
 
 ## Pitch video · Public · ≤2 min · required

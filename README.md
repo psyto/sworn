@@ -17,6 +17,8 @@ that engine:
    **Tempo's own EVM (`tempo-revm`)** inside SP1 against Tempo's own block hash, and the bond pays the
    client. No judge, no owner. This has slashed a lying server **three times on Moderato**.
 
+> **Live page: [psyto.github.io/sworn](https://psyto.github.io/sworn/)**, which re-checks everything below from chain in your browser.
+>
 > **Status (2026-10-04): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
 > testnet** only. Unaudited. Traction: none.
 
@@ -189,6 +191,7 @@ found no public example of `tempo-revm` or `zone-spf` proven in a zkVM.
 | `contracts/` | `Sworn.sol`, `SwornZoneVerifier.sol`, vendored SP1 verifier, tests, `scripts/gate.sh`, `scripts/no-owner.sh`, deploy scripts |
 | `spikes/zone-spf/` | Zone guest, shared digest code (`attest/`), native host, patches, pinned genesis, witnesses, logs; `fetch.sh` rebuilds the large trees |
 | `answerer/`, `server/`, `sdk/`, `challenger/` | answer engine (Rust), MPP server (TS), client SDK (TS), `sworn-witness` / `sworn-challenge` (Rust) |
+| `site/` | the live page ([psyto.github.io/sworn](https://psyto.github.io/sworn/)): read-only, published by `.github/workflows/pages.yml` |
 | `demo/` | agent wallet and owner's phone (Vite + React + viem); every number read from chain |
 | `deployments/` | Moderato addresses, from receipts |
 | `patches/tempo.patch`, `scripts/fetch-tempo.sh` | Tempo at `61c979a` + three patches so it builds for the zkVM |
