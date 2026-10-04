@@ -90,7 +90,7 @@ Japan
 ## Notes for judges — anyone not listed who did meaningful work · ≤600
 
 ```
-Sworn is one person's work. Code review was done by OpenAI's Codex, with the prompts committed alongside the results in docs/reviews/. Implementation was assisted by Anthropic's Claude. Every finding either produced was checked against the real files before being acted on, and several were rejected as wrong. No collaborator, contractor or teammate contributed. [FOUNDER: confirm; add "the narration is the founder's own voice" once recorded]
+Solo founder; no collaborators, contractors or teammates. AI tools used for code review and implementation assistance are documented in the repo (README, docs/reviews/). [FOUNDER: confirm]
 ```
 
 ## Anything else judges should know · ≤500
@@ -173,7 +173,7 @@ No users, no revenue. Built and measured inside the window, all on Moderato test
 - tempo-revm in SP1: 40 of 40 real Moderato transactions re-executed match their receipts.
 - Three real slashes on Moderato: a lying answer server's bond paid the client, each by a Groth16 proof.
 - 64 forge tests, including real proofs; contracts with no owner.
-- A public page that re-checks every claim from chain. Pitch and demo videos.
+- A public page that reads the on-chain evidence and re-runs the Zone proof check in your browser. Pitch and demo videos.
 ```
 
 ## Who else is building in this space, and what are they getting wrong? · ≤1000

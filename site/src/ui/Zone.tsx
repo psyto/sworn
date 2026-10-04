@@ -38,7 +38,7 @@ export function ZoneSection({ attest, check, onRetry, onVerify }: Props) {
         <p className="lede">
           Tempo's own Zone batch verifier ran inside SP1 on a real batch. A contract on Moderato with the exact signature of
           Tempo's <code>IVerifier</code> checked the Groth16 proof and emitted <code>ZoneBatchVerified</code>. Your browser reads
-          all of it below from rpc.moderato.tempo.xyz, and can check the proof again.
+          the transaction, event and contract below from rpc.moderato.tempo.xyz, and can check the proof again.
         </p>
       </div>
 

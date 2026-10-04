@@ -21,7 +21,7 @@ export function TimelineSection({ take, state, onPick, onVerify }: Props) {
         <p className="lede">
           A server sold a paid answer about a TIP-20 transfer and reserved part of its bond behind it. The answer was wrong, and
           a Groth16 proof of tempo-revm, Tempo's own EVM, sent that bond to the paying agent. It has happened three times on Moderato;
-          every number below is read by your browser.
+          the on-chain values below are read by your browser.
         </p>
       </div>
       <p className="note">

@@ -17,7 +17,10 @@ that engine:
    **Tempo's own EVM (`tempo-revm`)** inside SP1 against Tempo's own block hash, and the bond pays the
    client. No judge, no owner. This has slashed a lying server **three times on Moderato**.
 
-> **Live page: [psyto.github.io/sworn](https://psyto.github.io/sworn/)**, which re-checks everything below from chain in your browser.
+> **For judges, the fast path:** the [live page](https://psyto.github.io/sworn/) ·
+> [the Moderato proof tx](https://explore.testnet.tempo.xyz/tx/0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80) ·
+> "Verify it again" on the page (two live `eth_call`s: the real proof → true; one field changed → `InvalidProof`) ·
+> pitch (2 min) and demo (2:35) videos: *links added once published*.
 >
 > **Status (2026-10-04): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
 > testnet** only. Unaudited. Traction: none.
@@ -172,8 +175,9 @@ Two more slashes were recorded live for the demo video, on the same day:
 
 ## What is not done
 
-- **No TEE + ZK design yet.** How a ZK proof would sit alongside Tempo's Nitro attestation (one verifier
-  checking both, what happens when they disagree or one is late, who pays for proving) is unwritten.
+- **TEE + ZK is a design proposal, not built.** [Spec 004](docs/specs/004-tee-plus-zk.md) proposes that Nitro settles
+  and a ZK proof of the exact batch commitment releases payouts. The proof statement it needs, the portal
+  changes and an invalidity proof are not built, and all of it would land in Tempo's code, not ours.
 
 - **Moderato's next hardfork, T12, activates at 2026-10-08 14:00 UTC (23:00 JST)** (`1791468000`). The answerer refuses on a schedule
   it does not know, so it stops answering at T12 until the guest is checked against it.

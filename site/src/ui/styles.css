@@ -241,3 +241,8 @@ p { margin: 0; }
   .chips li, .chip { width: 100%; }
   .zone-card.again > .btn { justify-self: stretch; }
 }
+
+/* judges' fast path under the hero */
+.fast-path { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-top: 20px; }
+.fast-path .eyebrow { margin: 0; }
+.fast-path a { font-weight: 500; }

@@ -50,6 +50,8 @@ export function Topbar() {
 }
 
 const ZONE_TX = deployments.SwornZoneVerifier.attest.tx;
+/** YouTube links for the two submission videos; null until published (then the links appear). */
+const VIDEOS: { pitch: string | null; demo: string | null } = { pitch: null, demo: null };
 const DOCS = "https://tempo.xyz/developers/docs/protocol/zones/proving";
 
 export function Hero() {
@@ -83,6 +85,23 @@ export function Hero() {
           </a>
         </li>
       </ul>
+      <nav className="fast-path" aria-label="For judges: the fast path">
+        <span className="eyebrow">Fast path</span>
+        {VIDEOS.pitch && (
+          <a href={VIDEOS.pitch} target="_blank" rel="noreferrer">
+            Pitch · 2 min ↗
+          </a>
+        )}
+        {VIDEOS.demo && (
+          <a href={VIDEOS.demo} target="_blank" rel="noreferrer">
+            Demo · 2:35 ↗
+          </a>
+        )}
+        <a href={txUrl(MODERATO, ZONE_TX)} target="_blank" rel="noreferrer">
+          The Moderato proof tx ↗
+        </a>
+        <a href="#zone">Verify it again in your browser ↓</a>
+      </nav>
     </section>
   );
 }
@@ -141,12 +160,20 @@ export function Footer() {
             Spec 003: Zone verifier
           </a>
         </li>
-        <li>
-          <span className="placeholder">Pitch video (link to be added)</span>
-        </li>
-        <li>
-          <span className="placeholder">Demo video (link to be added)</span>
-        </li>
+        {VIDEOS.pitch && (
+          <li>
+            <a href={VIDEOS.pitch} target="_blank" rel="noreferrer">
+              Pitch video
+            </a>
+          </li>
+        )}
+        {VIDEOS.demo && (
+          <li>
+            <a href={VIDEOS.demo} target="_blank" rel="noreferrer">
+              Demo video
+            </a>
+          </li>
+        )}
       </ul>
       <p className="fine">
         This page has no backend and holds no keys. It reads Tempo's public Moderato RPC from your browser and sends no
