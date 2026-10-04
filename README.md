@@ -41,10 +41,15 @@ Who pays first, Tempo or Zone operators, is open. Revenue today: zero.
 
 ## Who
 
-One founder, Hiro ([@psyto](https://github.com/psyto)), working in the stack Tempo is built on:
-Reth, Revm, Alloy and Foundry. Writes [rethlab](https://rethlab.fabrknt.com), source-reading courses on
-Reth, and [rdk](https://github.com/psyto/rdk), a DeFi kit on Reth. The previous project,
-[Reckn](https://github.com/psyto/reckn), took 3rd place for Uniswap Foundation at ETHGlobal Tokyo 2026.
+**Hiroyuki Saito** ([@psyto](https://github.com/psyto)), solo founder, Japan.
+- **Rust engineer on Tempo's stack:** Reth, Revm, Alloy and Foundry. Author of
+  [RethLab](https://rethlab.fabrknt.com) (21 source-reading courses on that stack) and
+  [rdk](https://github.com/psyto/rdk), a DeFi kit on Reth.
+- **Previous project:** [Reckn](https://github.com/psyto/reckn) won a Uniswap Foundation prize at
+  ETHGlobal Tokyo 2026.
+- **Before that:** 15 years building banking systems in Japan, familiar with banking regulation;
+  earlier, software development in Hong Kong and India.
+
 Getting Tempo's code into a zkVM meant patching it (`patches/`, `spikes/zone-spf/patches/`).
 
 ## What the Zone verifier is, and is not
@@ -80,7 +85,7 @@ from receipts in [`deployments/moderato.json`](deployments/moderato.json).
 
 ## How the Zone verifier works
 
-1. **Execute.** The SP1 guest runs `zone_spf::prove_zone_batch` (zones `ac49071f`, five zkVM patches in
+1. **Execute.** The SP1 guest runs `zone_spf::prove_zone_batch` (zones `ac49071f`, built for the zkVM with patches in
    `spikes/zone-spf/patches/`) on a batch witness.
 2. **Commit.** The guest commits one EIP-712 digest. It covers the zone, Tempo block, anchor, expected
    withdrawal index, the batch's state transitions and withdrawal queue hash (the same fields as Tempo's
@@ -175,7 +180,7 @@ Two more slashes were recorded live for the demo video, on the same day:
 
 Tempo's own [`tempoxyz/zones`](https://github.com/tempoxyz/zones) `zone-spf` re-executes Zone batches
 over a witness, and is *"presently a normal Rust verifier rather than a `no_std` proving guest"*. Sworn
-runs that same code inside SP1 with five zkVM patches; the verification logic is Tempo's, unchanged.
+runs that same code inside SP1, with build patches to zones, tempo and two dependency crates; the verification logic is Tempo's, unchanged.
 [`succinctlabs/rsp`](https://github.com/succinctlabs/rsp) proves reth blocks in SP1, but not Tempo. We
 found no public example of `tempo-revm` or `zone-spf` proven in a zkVM.
 
