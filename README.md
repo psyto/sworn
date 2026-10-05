@@ -50,7 +50,7 @@ connected.
 ### 1. System overview: who runs what
 
 ```mermaid
-flowchart LR
+flowchart TB
   subgraph OP["Zone operator (private)"]
     ZN["Zone node and private ledger"]
     W[("Batch witness + Zone genesis")]
