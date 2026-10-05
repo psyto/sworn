@@ -199,5 +199,5 @@ One founder, based in Japan.
 ## Legal entity / investment / fundraising / live token
 
 ```
-[FOUNDER]
+Legal entity: No. Investment raised: No. Currently fundraising: No. Live token: No.
 ```
