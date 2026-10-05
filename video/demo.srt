@@ -3,20 +3,20 @@
 A Zone operator selects the batch before an audit.
 
 2
-00:00:04,408 --> 00:00:08,766
-Batch 006 has one withdrawal and two user transactions.
+00:00:04,408 --> 00:00:10,236
+This batch, Zone blocks 5–6, has one withdrawal and two user transactions.
 
 3
-00:00:08,816 --> 00:00:11,705
+00:00:10,286 --> 00:00:13,174
 They start Sworn's local proof job.
 
 4
-00:00:11,755 --> 00:00:17,583
+00:00:13,224 --> 00:00:19,052
 It runs Tempo's code in SP1, then performs read-only verification on Moderato.
 
 5
-00:00:17,633 --> 00:00:23,950
-The finished proof record can be sent to an auditor or settlement counterparty.
+00:00:19,102 --> 00:00:23,950
+The finished proof record can be sent to an auditor.
 
 6
 00:00:24,000 --> 00:00:31,450

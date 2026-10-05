@@ -24,14 +24,14 @@ Holding withdrawals until ZK finality is a proposal for Tempo, not a deployed Sw
 
 ## Scene 1 — start a proof job · ≈ 24 s
 
-**[A deliberately labelled desktop **Zone Operations Console**. The operator sees Batch 006, its one withdrawal
+**[A deliberately labelled desktop **Zone Operations Console**. The operator sees Zone blocks 5–6, its one withdrawal
 and two user transactions, and starts a local proof job. The status progresses from queued to the real SP1 Groth16
-pipeline, then to read-only on-chain verification. The sidebar visibly says `Fixture / dev chain 1337`; the card says
+pipeline, then to read-only on-chain verification. The console is labelled on screen "Illustration of the operator workflow"; the operator is a generic "Example Zone"; the sidebar says `Test fixture · zone 1 · dev chain 1337`; the card says
 `No transaction sent`. This is a fixture-only local workflow, not a hosted service or settlement integration.]**
 
-> A Zone operator selects the batch before an audit. Batch 006 has one withdrawal and two user transactions.
+> A Zone operator selects the batch before an audit. This batch, Zone blocks 5–6, has one withdrawal and two user transactions.
 > They start Sworn's local proof job. It runs Tempo's code in SP1, then performs read-only verification on
-> Moderato. The finished proof record can be sent to an auditor or settlement counterparty.
+> Moderato. The finished proof record can be sent to an auditor.
 
 ## Scene 2 — why the batch check matters · ≈ 17 s
 

@@ -220,7 +220,7 @@ function checkZoneText(t, when) {
     "Sworn · one field changed", "✗ reverts InvalidProof()", "The proof from the on-chain attest transaction verifies.",
     "Moderato's current prototype verifier (pre-T13 reference stub), an equivalent malformed batch",
     "Moderato, pre-T13 · called", "zone 99 · empty hashes · config dead · proof beef", "returns true", STUB_LINE, "Sworn demonstrates the missing ZK check.", COMPARE,
-    "Generate evidence for Batch 006", "Start local proof job", "≈15 min · ≈20 GB RAM · no transaction sent",
+    "Generate evidence for Zone blocks 5–6", "Start local proof job", "≈15 min · ≈20 GB RAM · no transaction sent",
     "Fixture only: one integration-test batch on dev chain 1337.",
     "The batches are not from Moderato.", "Not connected to a ZonePortal; it does not protect withdrawals today.", "is a proposal (spec 004",
   ];

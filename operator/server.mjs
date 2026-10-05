@@ -89,19 +89,31 @@ function setCors(req, res) {
     res.setHeader("Vary", "Origin");
   }
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Sworn-Operator");
 }
 function send(res, status, body) {
   res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
   res.end(JSON.stringify(body));
 }
 
+// Requests must come from this machine's own pages. CORS only stops other sites from reading a response;
+// it does not stop them from sending a simple POST, so the Host and Origin are checked here, and a custom
+// header (which forces a CORS preflight) is required to start a job.
+const LOOPBACK = /^(localhost|127\.0\.0\.1)(:\d+)?$/;
+function trusted(req) {
+  if (!LOOPBACK.test(req.headers.host ?? "")) return false; // DNS rebinding
+  const origin = req.headers.origin;
+  return !origin || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+}
+
 const server = createServer((req, res) => {
   setCors(req, res);
+  if (!trusted(req)) return send(res, 403, { error: "Forbidden: local pages only." });
   if (req.method === "OPTIONS") return res.writeHead(204).end();
   if (req.method === "GET" && req.url === "/health") return send(res, 200, { status: "ready", localOnly: true, fixture: withdrawalFixture, current: publicJob(current) });
   if (req.method === "GET" && req.url === "/proof-jobs/current") return send(res, 200, { job: publicJob(current) });
   if (req.method === "POST" && req.url === "/proof-jobs") {
+    if (req.headers["x-sworn-operator"] !== "1") return send(res, 403, { error: "Missing X-Sworn-Operator header." });
     if (current && ["queued", "proving", "verifying"].includes(current.status)) return send(res, 409, { error: "A proof job is already running.", job: publicJob(current) });
     current = newJob();
     void launch(current);

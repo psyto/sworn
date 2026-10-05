@@ -95,7 +95,7 @@ function useLocalProofJob() {
   const start = async () => {
     setStartError(null);
     try {
-      const response = await fetch(`${OPERATOR}/proof-jobs`, { method: "POST" });
+      const response = await fetch(`${OPERATOR}/proof-jobs`, { method: "POST", headers: { "X-Sworn-Operator": "1" } });
       const value = await response.json() as { job?: ProofJob; error?: string };
       if (!response.ok || !value.job) throw new Error(value.error ?? `operator returned ${response.status}`);
       setJob(value.job);
@@ -147,17 +147,15 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
   return (
     <section className="section ops-shell" id="zone" aria-labelledby="zone-h">
       <aside className="ops-side" aria-label="Zone operations navigation">
-        <p className="ops-zone"><span>Tempo Zone</span>Northstar Pay</p>
+        <p className="ops-zone"><span>Example operator · illustration</span>Example Zone</p>
         <nav className="ops-nav" aria-label="Console sections">
           <span>Batches</span>
           <span className="selected">Proof evidence</span>
-          <span>Audit exports</span>
-          <span>Settings</span>
         </nav>
-        <p className="ops-scope">Zone #1<br />Moderato testnet<br />Fixture / dev chain 1337</p>
+        <p className="ops-scope">Test fixture<br />zone 1 · dev chain 1337</p>
       </aside>
       <div className="ops-main">
-        <div className="ops-crumb"><span>Proof evidence</span><span>Batch 006</span><b>Read live from chain</b></div>
+        <div className="ops-crumb"><span>Proof evidence</span><span>Zone blocks 5–6</span><b>Read live from chain</b></div>
       <div className="section-head">
         <p className="eyebrow">Read live from chain</p>
         <h2 id="zone-h">A Tempo Zone batch with a withdrawal, verified on Moderato</h2>
@@ -340,7 +338,7 @@ function ProofJobPanel({ worker, job, start, startError }: ReturnType<typeof use
     <section className="proof-job" aria-live="polite" aria-label="Local proof job">
       <div>
         <p className="eyebrow">Local prover · operator action</p>
-        <h3>Generate evidence for Batch 006</h3>
+        <h3>Generate evidence for Zone blocks 5–6</h3>
         <p className="sub">Runs the real SP1 Groth16 pipeline for the withdrawal fixture, then runs read-only verification on Moderato.</p>
       </div>
       {worker === "offline" ? (
