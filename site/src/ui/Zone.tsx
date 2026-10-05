@@ -94,15 +94,19 @@ function useLocalProofJob() {
 
   const start = async () => {
     setStartError(null);
+    let response: Response;
     try {
-      const response = await fetch(`${OPERATOR}/proof-jobs`, { method: "POST", headers: { "X-Sworn-Operator": "1" } });
-      const value = await response.json() as { job?: ProofJob; error?: string };
-      if (!response.ok || !value.job) throw new Error(value.error ?? `operator returned ${response.status}`);
-      setJob(value.job);
+      response = await fetch(`${OPERATOR}/proof-jobs`, { method: "POST", headers: { "X-Sworn-Operator": "1" } });
     } catch (error) {
+      // Only a network failure means the worker is not reachable.
       setStartError(error instanceof Error ? error.message : String(error));
       setWorker("offline");
+      return;
     }
+    const value = await response.json().catch(() => ({})) as { job?: ProofJob; error?: string };
+    if (value.job) setJob(value.job);
+    // A server answer (e.g. 409, a job is already running) is a start error, not "worker offline".
+    if (!response.ok || !value.job) setStartError(value.error ?? `operator returned ${response.status}`);
   };
   return { worker, job, start, startError };
 }
@@ -140,7 +144,7 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
     const url = URL.createObjectURL(file);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "sworn-batch-006-evidence.json";
+    link.download = "sworn-zone-blocks-5-6-evidence.json";
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -148,10 +152,10 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
     <section className="section ops-shell" id="zone" aria-labelledby="zone-h">
       <aside className="ops-side" aria-label="Zone operations navigation">
         <p className="ops-zone"><span>Example operator · illustration</span>Example Zone</p>
-        <nav className="ops-nav" aria-label="Console sections">
+        <div className="ops-nav" aria-hidden="true" title="Static labels, not navigation">
           <span>Batches</span>
           <span className="selected">Proof evidence</span>
-        </nav>
+        </div>
         <p className="ops-scope">Test fixture<br />zone 1 · dev chain 1337</p>
       </aside>
       <div className="ops-main">

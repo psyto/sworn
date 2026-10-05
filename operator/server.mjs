@@ -98,7 +98,8 @@ function send(res, status, body) {
 
 // Requests must come from this machine's own pages. CORS only stops other sites from reading a response;
 // it does not stop them from sending a simple POST, so the Host and Origin are checked here, and a custom
-// header (which forces a CORS preflight) is required to start a job.
+// header (which forces a CORS preflight) is required to start a job. This is a cross-site boundary only: it is
+// not authorization against another local process, which could run scripts/zone-prove.sh directly anyway.
 const LOOPBACK = /^(localhost|127\.0\.0\.1)(:\d+)?$/;
 function trusted(req) {
   if (!LOOPBACK.test(req.headers.host ?? "")) return false; // DNS rebinding

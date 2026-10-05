@@ -37,6 +37,12 @@ The job usually takes about 15 minutes and requires roughly 20 GB RAM. Output is
 
 ## Boundary
 
+The worker rejects requests from other websites (non-loopback `Host`, cross-site `Origin`) and requires an
+`X-Sworn-Operator` header to start a job. That is a **cross-site boundary, not authorization**: any process
+already running on the same machine as the same user could start a job (or run `scripts/zone-prove.sh`
+directly). It still accepts no input and never sends a transaction.
+
+
 A real Zone operator must provide its own private witness, genesis artifact, and version-compatible guest.
 This local controller deliberately does not accept arbitrary files or select arbitrary Zones: that would
 need authenticated operator access, input isolation, resource quotas, a job queue, and a Zone-specific
