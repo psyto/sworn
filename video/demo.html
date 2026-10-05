@@ -1,8 +1,8 @@
 <!doctype html>
 <!--
-  Sworn demo v2.1 (video/DEMO.md) — the authored slides record-demo.mjs drives: scene 1 (d1, a withdrawal
-  needs a trusted check), scene 3's explorer insert (e1), scene 4 (dz, said plainly) and scene 6 (d6, next
-  and where to look). Scenes 2–3's page footage and scene 5's live take are not slides. NO FIGURE IS WRITTEN
+  Sworn demo v5.2 (video/DEMO.md) — the authored slides record-demo.mjs drives: scene 1 (d0, the operator starts
+  a proof job), scene 2 (d1, a withdrawal needs a trusted check), scene 4's explorer insert (e1), scene 5
+  (dz, said plainly) and scene 6 (d6, next and where to look). Scenes 3–4 are public-page footage. NO FIGURE IS WRITTEN
   HERE: every hash, line number, URL, quote and screenshot arrives through window.__fill() from its source
   at record time, and __fill throws if a slot is left empty. Text here is labels and the plain-language
   lines of DEMO.md's screen notes only. Look: Sworn's own palette (slides.css), Sworn's mark. Never Tempo's
@@ -13,11 +13,35 @@
 <title>Sworn demo</title>
 <link rel="stylesheet" href="slides.css" />
 <style>
+/* The authored scenes use the real site's 1024×576 capture canvas and its Console dimensions.
+   This keeps sidebar, topbar and content alignment identical to scenes recorded from the live page. */
+html,body{width:1024px;height:576px}body{font-size:16px}
+.header{top:0;left:0;right:0;height:49px;padding:10px 16px;align-items:center;gap:10px;background:rgba(246,243,236,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10}
+.header .brand{font-size:19px}.header .lbl{display:none}.header .spacer{flex:1}.header .toplink{font-size:14px;color:var(--text)}.header .theme{font:11px var(--mono);letter-spacing:.06em;color:var(--muted);border:1px solid var(--border);padding:5px 8px}
+.badge{top:10px;left:154px;right:auto;padding:3px 8px;font-size:11px;background:var(--surface);z-index:11}.foot,.kicker,.note{display:none}
+.scene{padding:57px 16px 0;justify-content:flex-start;gap:0;z-index:1}
 .mark{width:120px;height:120px;display:block}
 .limits{display:flex;flex-wrap:wrap}
 .limits span{border:1px solid var(--border);background:var(--surface);padding:10px 18px;font-size:22px;letter-spacing:-.02em;margin:0 -1px -1px 0}
 .close{display:flex;align-items:center;gap:28px}
 #d6{gap:12px}
+.console{overflow:hidden}
+#e1 .big2{font-size:34px}
+.console{display:grid;grid-template-columns:190px minmax(0,1fr);width:992px;max-width:none;height:455px;border:1px solid var(--border);background:var(--surface);box-shadow:none}
+.console .side{border-right:1px solid var(--border);padding:20px 14px;display:flex;flex-direction:column}
+.console .zone-name{font-size:18px;font-weight:500;letter-spacing:-.02em;padding:0 8px 14px;border-bottom:1px solid var(--border)}
+.console .zone-name small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.console .nav{display:grid;gap:3px;margin-top:16px;font-size:14px}
+.console .nav div{padding:8px;border:1px solid transparent}.console .nav .selected{color:var(--accent);background:#eef0ff;border-color:#d7daf7;font-weight:500}
+.console .side-bottom{margin-top:auto;border-top:1px solid var(--border);padding:12px 8px 0;font-family:var(--mono);font-size:10px;line-height:1.55;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+.console .main{padding:28px 30px 30px;min-width:0}
+.console .crumb{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}.console .topline{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:4px}
+.console h2{font-size:28px;font-weight:400;letter-spacing:-.03em;line-height:1.1}.console .state{font-family:var(--mono);font-size:11px;color:var(--ok);border:1px solid #a6d7b8;background:var(--ok-bg);padding:6px 9px;white-space:nowrap}
+.console .summary{display:grid;grid-template-columns:1.05fr .95fr;gap:12px;margin-top:18px}.console .panel{border:1px solid var(--border);padding:14px 16px;min-width:0}.console .panel .label{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.console .panel .title{font-size:21px;letter-spacing:-.025em;margin-top:3px}.console .metrics{display:flex;gap:0;margin-top:14px}.console .metric{font-size:13px;padding:7px 12px;border:1px solid var(--border);margin-right:-1px}.console .metric b{display:block;font-size:20px;font-weight:400;color:var(--text)}
+.console .evidence{display:flex;align-items:center;gap:8px;margin-top:13px;font-size:15px}.console .check{width:20px;height:20px;border-radius:50%;background:var(--ok);color:white;display:grid;place-items:center;font-size:13px;font-weight:600}.console .mini{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em;margin-top:7px;overflow-wrap:anywhere}
+.console .activity{margin-top:14px;border-top:1px solid var(--border);padding-top:10px}.console .activity-head,.console .activity-row{display:grid;grid-template-columns:1.2fr .9fr 1fr .8fr;gap:12px}.console .activity-head{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 4px 5px}.console .activity-row{font-size:13px;background:#faf9f4;border:1px solid var(--border);padding:8px 4px}.console .verified{color:var(--ok);font-weight:500}.console .inspect{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);text-align:right;margin-top:12px}.console .actions{display:flex;gap:8px;margin-top:12px}.console .actions span{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--border);padding:7px 9px;background:var(--surface)}
+.console .job{margin-top:16px;border:1px solid var(--accent);padding:13px 15px;background:var(--surface)}.console .job-top{display:flex;align-items:start;justify-content:space-between;gap:12px}.console .job h3{font-size:21px;font-weight:400;letter-spacing:-.025em;margin:2px 0 0}.console .job button{border:1px solid var(--accent);background:var(--accent);color:white;font:500 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:9px 11px;white-space:nowrap}.console .job-meta{font:10px/1.5 var(--mono);letter-spacing:.04em;color:var(--muted);margin-top:4px}.console .job-track{display:flex;align-items:center;gap:7px;margin-top:12px;font:10px var(--mono);letter-spacing:.03em;color:var(--muted)}.console .job-track span{border:1px solid var(--border);padding:6px 8px;background:var(--surface)}.console .job-track span.on{border-color:#a6d7b8;background:var(--ok-bg);color:var(--ok)}.console .job-track i{font-style:normal;color:var(--muted)}
 .route{display:grid;gap:0}
 .route .card+.card{margin-top:-1px}
 .route .card{display:grid;grid-template-columns:130px 1fr auto;column-gap:18px;align-items:start;padding:10px 20px}
@@ -41,87 +65,53 @@
 .flow .arr{align-self:center;font-size:16px;padding:0 10px;color:var(--muted);white-space:nowrap;font-family:var(--mono)}
 .flow .gate{border:2px solid var(--accent);color:var(--accent);background:var(--surface);padding:14px 18px;font-size:22px;line-height:1.2}
 .flow .gate small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
-.big2{font-size:44px;font-weight:400;letter-spacing:-.03em;line-height:1.08}
+.big2{font-size:46px;font-weight:400;letter-spacing:-.03em;line-height:1.08}
 .big2 b{font-weight:500;color:var(--accent)}
 .code3 pre{font-size:13.5px}
 .plain{display:grid;gap:0}
 .plain .card+.card{margin-top:-1px}
-.plain .card{font-size:25px;letter-spacing:-.02em;line-height:1.3;padding:16px 22px}
+.plain .card{font-size:28px;letter-spacing:-.02em;line-height:1.25;padding:18px 22px}
 .plain .card b{font-weight:500}
 .plain .card.warn{background:#fff7e6;border-left:3px solid var(--warn)}
 .next{font-size:34px;font-weight:400;letter-spacing:-.03em;line-height:1.15;max-width:1120px}
 .next span{display:block;margin-bottom:6px;font-family:var(--mono);font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 </style>
 
-<div class="header"><span class="brand">Sworn</span><span class="lbl">Built on Tempo</span></div>
+<div class="header"><span class="brand">Sworn</span><span class="spacer"></span><span class="toplink">GitHub</span><span class="theme">AUTO</span></div>
 <div class="badge">Moderato testnet</div>
 <div class="foot">Moderato testnet · unaudited · Zone batches from Tempo's integration tests · no customers or revenue</div>
 
-<!-- scene 1 — a withdrawal needs a trusted check -->
+<!-- scene 1 — the operator starts a real, local proof job -->
+<div class="scene" id="d0">
+  <div class="kicker fade">Prototype · Zone operations console</div>
+  <div class="console fade" data-at="1.4">
+    <aside class="side"><div class="zone-name"><small>Tempo Zone</small>Northstar Pay</div><div class="nav"><div class="selected">Batches</div><div>Proof evidence</div><div>Audit exports</div><div>Settings</div></div><div class="side-bottom">Zone #1<br />Moderato testnet<br />Fixture / dev chain 1337</div></aside>
+    <section class="main"><div class="crumb">Batches / Batch 006</div><div class="topline"><h2>Withdrawal batch</h2><div class="state">Fixture selected</div></div><div class="summary"><div class="panel"><div class="label">Batch contents</div><div class="title">Ready to prove</div><div class="metrics"><div class="metric"><b>1</b>withdrawal</div><div class="metric"><b>2</b>user transactions</div></div></div><div class="panel"><div class="label">Proof scope</div><div class="evidence"><span class="check">✓</span><span>Tempo code in SP1</span></div><div class="mini">Dev chain 1337 · no ZonePortal call</div></div></div><div class="job fade" data-at="4"><div class="job-top"><div><div class="label">Local prover · operator action</div><h3>Generate evidence for Batch 006</h3><div class="job-meta">≈15 min · ≈20 GB RAM · no transaction sent</div></div><button>Start local proof job</button></div><div class="job-track"><span class="on">Queued</span><i>→</i><span class="fade" data-at="9">SP1 Groth16 proving</span><i class="fade" data-at="9">→</i><span class="fade" data-at="14">Read-only verification</span><i class="fade" data-at="14">→</i><span class="fade on" data-at="18">Audit record</span></div></div></section>
+  </div>
+</div>
+
+<!-- scene 2 — a withdrawal needs a trusted check -->
 <div class="scene" id="d1">
-  <div class="kicker fade">A Tempo Zone · a withdrawal</div>
-  <div class="flow fade">
-    <div class="box"><small>Zone user</small>asks to withdraw</div>
-    <span class="arr">→</span>
-    <div class="box"><small>Zone batch</small>includes the withdrawal</div>
-    <span class="arr">→</span>
-    <div class="gate"><small>the Zone's verifier</small>verify(batch) → true?</div>
-    <span class="arr">→</span>
-    <div class="box"><small>Tempo · ZonePortal</small>pays it out</div>
-  </div>
-  <div class="big2 fade" data-at="5">Tempo must <b>trust the check</b> on the batch.</div>
-  <div class="term code3 fade" data-at="6">
-    <div class="bar"><b>Tempo's zones code</b> · <span data-k="portalSrc"></span> · read while recording</div>
-    <pre data-k="portalLines"></pre>
-  </div>
+  <div class="kicker fade">Zone operations console · Batches</div>
+  <div class="console fade" data-at="1.2"><aside class="side"><div class="zone-name"><small>Tempo Zone</small>Northstar Pay</div><div class="nav"><div class="selected">Batches</div><div>Proof evidence</div><div>Audit exports</div><div>Settings</div></div><div class="side-bottom">Zone #1<br />Moderato testnet<br />Fixture / dev chain 1337</div></aside><section class="main"><div class="crumb">Batches / Batch 006</div><div class="topline"><h2>Before audit review</h2><div class="state">Awaiting evidence</div></div><div class="flow" style="margin-top:28px"><div class="box"><small>Operator</small>submits a batch</div><span class="arr">→</span><div class="box"><small>Zone batch</small>includes withdrawal</div><span class="arr">→</span><div class="gate"><small>Zone verifier</small>verify(batch)</div><span class="arr">→</span><div class="box"><small>ZonePortal</small>processes it</div></div><div class="card" style="margin-top:28px"><div class="t"><b>The operational dependency</b></div><div class="big2">Can an auditor independently check <b>this exact batch?</b></div></div></section></div>
 </div>
 
 <!-- scene 3, insert — the attest tx on the explorer (cropped below its header) -->
 <div class="scene" id="e1">
-  <div class="kicker fade">The same transaction · on the explorer · <span data-k="exUrl"></span></div>
-  <div class="excols">
-    <div class="card fade">
-      <div class="t"><b>Transaction</b> · captured while recording</div>
-      <img data-src="exCard" style="height:390px" alt="" />
-    </div>
-    <div class="card fade" data-at="2">
-      <div class="t"><b>Its Events tab</b> · event 0</div>
-      <img data-src="exEvent" style="width:100%" alt="" />
-      <div class="src" style="margin-top:10px" data-k="exTopic"></div>
-      <div class="src" style="margin-top:4px" data-k="exFrom"></div>
-    </div>
-  </div>
+  <div class="kicker fade">Zone operations console · Proof evidence</div>
+  <div class="console fade" data-at=".8"><aside class="side"><div class="zone-name"><small>Tempo Zone</small>Northstar Pay</div><div class="nav"><div>Batches</div><div class="selected">Proof evidence</div><div>Audit exports</div><div>Settings</div></div><div class="side-bottom">Zone #1<br />Moderato testnet<br />Fixture / dev chain 1337</div></aside><section class="main"><div class="crumb">Proof evidence / Batch 006</div><div class="card"><div class="t"><b>On-chain evidence</b></div><div class="big2"><b class="ok">✓ ZoneBatchVerified</b><br />The contract checked the proof on Moderato.</div></div><div class="term" style="margin-top:14px"><div class="bar"><b>Source transaction</b> · captured while recording</div><img data-src="exCard" style="display:block;width:100%;max-height:170px;object-fit:cover;object-position:top" alt="" /></div></section></div>
 </div>
 
 <!-- scene 4 — said plainly -->
 <div class="scene" id="dz">
-  <div class="kicker fade">Said plainly</div>
-  <div class="plain">
-    <div class="card warn fade">This batch comes from <b>Tempo's zones integration tests</b> (<span class="mono" style="font-size:19px" data-k="itest"></span>), on a <b>dev chain (1337)</b>. Its withdrawal is a test withdrawal, <b>not a Moderato Zone's</b>.</div>
-    <div class="card warn fade">No ZonePortal calls this contract. It <b>does not protect withdrawals today</b>.</div>
-    <div class="card warn fade">Holding withdrawals until ZK finality: <b>a proposal (spec 004)</b>, not built.</div>
-  </div>
-  <div class="src fade" data-k="plainSrc"></div>
+  <div class="kicker fade">Zone operations console · Scope & limits</div>
+  <div class="console fade" data-at=".8"><aside class="side"><div class="zone-name"><small>Tempo Zone</small>Northstar Pay</div><div class="nav"><div>Batches</div><div class="selected">Proof evidence</div><div>Audit exports</div><div>Settings</div></div><div class="side-bottom">Zone #1<br />Moderato testnet<br />Fixture / dev chain 1337</div></aside><section class="main"><div class="crumb">Proof evidence / Scope & limits</div><div class="topline"><h2>What this evidence does not do</h2></div><div class="plain" style="margin-top:20px"><div class="card warn"><b>Test batch, not a Moderato Zone.</b><br />Tempo integration test · dev chain 1337.</div><div class="card warn"><b>No ZonePortal calls this contract.</b><br />It does not protect withdrawals today.</div><div class="card warn"><b>Settlement integration is proposed, not built.</b></div></div></section></div>
 </div>
 
 <!-- scene 6 — who it is for, and next (v3.2 route) -->
 <div class="scene" id="d6">
-  <div class="kicker fade">Who it is for</div>
-  <div class="route">
-    <div class="card fade"><div class="when">Near term</div><div><div class="h">Businesses that run Zones and answer to auditors</div><div class="b">Evidence they can match to each batch they settle.</div></div><div class="tag">Not yet a guarantee</div></div>
-    <div class="card fade" data-at="10.5"><div class="when">Later</div><div><div class="h">Tempo builds proofs into settlement</div><div class="src" data-k="specSrc"></div></div><div class="tag">Written, not built</div></div>
-    <div class="card fade" data-at="16"><div class="when">Either way</div><div><div class="h">The service: provers on time, rebuilt at each Tempo upgrade</div></div><div class="tag">To be validated</div></div>
-  </div>
-  <div class="limits fade" data-at="20"><span>Testnet</span><span>unaudited</span><span>Zone batches from Tempo's integration tests</span><span>Moderato: one Zone operator</span><span>no customers</span><span>a slash pays at most the bond</span></div>
-  <div class="src fade" data-at="20" data-k="operatorSrc"></div>
-  <div class="next2 fade" data-at="26">Next: one design partner, and a proof of a batch they supply.</div>
-  <div class="close fade" data-at="29.5">
-    <img class="mark sm" src="../_submission/brand/mark.svg" alt="" />
-    <div>
-      <div class="closing sm">Sworn: Tempo's execution, proven.</div>
-      <div class="links sm"><span data-k="repo"></span> · <b data-k="pageUrl"></b></div>
-    </div>
-  </div>
+  <div class="kicker fade">Zone operations console · Audit exports</div>
+  <div class="console fade" data-at=".8"><aside class="side"><div class="zone-name"><small>Tempo Zone</small>Northstar Pay</div><div class="nav"><div>Batches</div><div>Proof evidence</div><div class="selected">Audit exports</div><div>Settings</div></div><div class="side-bottom">Zone #1<br />Moderato testnet<br />Fixture / dev chain 1337</div></aside><section class="main"><div class="crumb">Audit exports / Roadmap</div><div class="route"><div class="card"><div class="when">Near term</div><div><div class="h">Zone operators who answer to auditors</div><div class="b">Evidence matched to each batch they settle.</div></div><div class="tag">Not a guarantee</div></div><div class="card" data-at="10.5"><div class="when">Later</div><div><div class="h">Tempo builds proofs into settlement</div></div><div class="tag">Written, not built</div></div><div class="card" data-at="16"><div class="when">Either way</div><div><div class="h">Proofs on time, rebuilt for each Tempo upgrade</div></div><div class="tag">To validate</div></div></div><div class="limits" data-at="20"><span>Testnet</span><span>unaudited</span><span>no customers</span></div><div class="next2" data-at="24">Next: one design partner, and a proof of a batch they supply.</div><div class="close" data-at="28"><img class="mark sm" src="../_submission/brand/mark.svg" alt="" /><div><div class="closing sm">Sworn: Tempo's execution, proven.</div><div class="links sm"><span data-k="repo"></span> · <b data-k="pageUrl"></b></div></div></div></section></div>
 </div>
 
 <script src="slides.js"></script>

@@ -18,13 +18,11 @@ export function WalletPage() {
   return (
     <>
       <TopBar page="wallet" />
-      <main className="page">
-        <section className="hero">
-          <h1>On MPP, if a paid answer is wrong, a refund is the server's choice.</h1>
-          <p>
-            Sworn makes the server lock its own money behind each answer — and pays you from it when a zero-knowledge
-            proof shows the answer was wrong. Below, a treasury agent asks before paying.
-          </p>
+      <main className="page customer-page">
+        <section className="customer-hero">
+          <p className="role-tag">Payment protection · Moderato testnet</p>
+          <h1>Know when a successful payment did not reach its recipient.</h1>
+          <p>Sworn reserves a provider's bond before you rely on its payment check. If the check is proven wrong, that bond pays you automatically.</p>
         </section>
         {demo.status === "loading" || demo.status === "idle" ? <p className="loading">Connecting to the local demo backend…</p> : null}
         {demo.status === "error" ? <ErrorBox error={demo.error} title="Demo backend unavailable" /> : null}
@@ -53,14 +51,18 @@ function Flow({ demo }: { demo: DemoConfig }) {
           <span className="sub">Nothing below is simulated: without them the buttons report the error.</span>
         </div>
       ) : null}
-      <div className="roles" data-testid="roles">
-        <span className="role"><b>Paying agent</b> (asks) — this wallet</span>
-        <span className="role"><b>Preflight provider</b> (answers + bonds) — the server</span>
-        <span className="role"><b>Challenger</b> (proves) — anyone; here, the agent's machine</span>
+      <div className="roles user-status" data-testid="roles">
+        <span className="role"><b>Your wallet</b></span>
+        <span className="role"><b>500 USD payment</b></span>
+        <span className="role"><b>Bond-backed check</b></span>
       </div>
-      {demo.agent ? <AgentBalance agent={demo.agent} token={demo.token} /> : null}
-      {honest ? <ScenarioCard step={1} demo={demo} s={honest} /> : <Missing what="DEMO_RECEIVER (R)" />}
-      {liar ? <ScenarioCard step={2} demo={demo} s={liar} /> : <Missing what="DEMO_RECEIVER_BLOCKED (R′)" />}
+      {liar ? <ScenarioCard step={1} demo={demo} s={liar} /> : <Missing what="DEMO_RECEIVER_BLOCKED (R′)" />}
+      <details className="developer-details">
+        <summary>Technical details and control case</summary>
+        <p className="sub">The live demo roles are: paying agent, preflight provider and challenger. Values below are read from the chain.</p>
+        {demo.agent ? <AgentBalance agent={demo.agent} token={demo.token} /> : null}
+        {honest ? <ScenarioCard step={2} demo={demo} s={honest} /> : <Missing what="DEMO_RECEIVER (R)" />}
+      </details>
     </>
   );
 }
@@ -117,30 +119,29 @@ function ScenarioCard({ step, demo, s }: { step: number; demo: DemoConfig; s: Sc
     <section className={`card${liar ? " liar" : ""}`} aria-labelledby={`q-${s.id}`}>
       {liar ? (
         <div className="liar-banner" role="note">
-          demo: this server is configured to lie
+          Demo scenario: this payment check is deliberately wrong
         </div>
       ) : null}
       <div className="card-head">
-        <span className="step-no">Step {step}</span>
-        <span className={`badge ${liar ? "liar" : "honest"}`}>{liar ? "dishonest-demo server" : "honest server"}</span>
+        <span className="step-no">{liar ? "Payment review" : `Control · step ${step}`}</span>
+        <span className={`badge ${liar ? "liar" : "honest"}`}>{liar ? "test scenario" : "correct result"}</span>
       </div>
-      <span className="role-tag">Paying agent asks</span>
+      <span className="role-tag">Recipient check</span>
       <h2 className="question" id={`q-${s.id}`}>
-        Pay {s.amount} USD to {liar ? "R′" : "R"} <AddrLink address={s.receiver} />?
+        Send {s.amount} USD
       </h2>
       {liar ? (
         <p className="sub" style={{ margin: 0 }}>
-          R′ has a receive policy that blocks this sender. Tempo does not reject such a transfer — it moves the money to{" "}
-          <code>ReceivePolicyGuard</code>.
+          This recipient's receive policy will divert the payment rather than reject it. The check below is deliberately wrong so the protection path can be shown.
         </p>
       ) : null}
 
       <div className="row">
         <button className="btn" onClick={buy} disabled={answer.status === "loading"}>
-          {answer.status === "loading" ? "Buying preflight…" : "Buy preflight"}
+          {answer.status === "loading" ? "Checking recipient…" : "Check recipient"}
         </button>
         <span className="sub">
-          from <span className="mono">{s.serverUrl || "(server URL unset)"}</span>, paid over MPP
+          A provider answers and locks its own bond before you pay.
         </span>
       </div>
 
@@ -150,7 +151,7 @@ function ScenarioCard({ step, demo, s }: { step: number; demo: DemoConfig; s: Sc
         <>
           <div className="row">
             <button className="btn secondary" onClick={pay} disabled={payment.status === "loading"}>
-              {payment.status === "loading" ? "Sending…" : `Send ${s.amount} to ${liar ? "R′" : "R"}`}
+              {payment.status === "loading" ? "Sending payment…" : `Send ${s.amount} USD`}
             </button>
           </div>
           <PaymentView p={payment} answer={answer.value} />
@@ -176,18 +177,11 @@ function AnswerView({ a, liar, price }: { a: Loadable<VerifiedAnswer>; liar: boo
   const q = v.response.question;
   return (
     <div className={`result ${liar ? "bad" : "ok"}`} data-testid="answer">
-      <span className="role-tag">Preflight provider answers + bonds</span>
-      <span className="sub">
-        As of block <b className="num">{q.blockNumber.toString()}</b>
-        {liar ? " · the server claims" : ""}:
-      </span>
-      <span className="big">
-        receiver {signed(v.receiverDelta, d)}
-        {liar ? " (claimed)" : ""}
-      </span>
+      <span className="role-tag">Payment check complete</span>
+      <span className="big">{liar ? "500 USD protection reserved" : "Recipient check passed"}</span>
+      <span>{liar ? "If this check is proven wrong, you can claim the provider's 500 USD bond." : `The check expects the recipient to receive ${signed(v.receiverDelta, d)}.`}</span>
       <span>
-        Reserved <b className="num">{money(v.reserved.coverage, d)}</b> from the server's bond ·{" "}
-        <TxLink hash={v.response.reserveTx}>reserve tx</TxLink> · status <b>{v.status}</b>
+        Provider bond reserved: <b className="num">{money(v.reserved.coverage, d)}</b> · <TxLink hash={v.response.reserveTx}>on-chain receipt</TxLink>
       </span>
       {price?.txHash ? (
         <span className="sub">
@@ -195,7 +189,7 @@ function AnswerView({ a, liar, price }: { a: Loadable<VerifiedAnswer>; liar: boo
         </span>
       ) : null}
       <details>
-        <summary>What was checked on chain</summary>
+        <summary>Technical check details</summary>
         <ul className="checks">
           <li>
             <code>Reserved</code> event in that tx, from Sworn <AddrLink address={v.response.sworn} />, server{" "}
@@ -227,35 +221,25 @@ function PaymentView({ p, answer }: { p: Loadable<PaymentOutcome>; answer: Verif
   const diverted = v.diverted > 0n;
   return (
     <div className={`result ${diverted ? "bad" : "ok"}`} data-testid="payment">
-      <span className="role-tag">What actually happened</span>
+      <span className="role-tag">Payment result</span>
       <span className="big" data-testid="tx-status">
-        {v.success ? "✓ transaction succeeded" : "✗ transaction reverted"}
+        {v.success ? (diverted ? "Sent — but not delivered" : "Payment delivered") : "Payment did not send"}
       </span>
-      <span className="sub">
-        On chain, block <b className="num">{v.blockNumber.toString()}</b> · <TxLink hash={v.txHash}>payment tx</TxLink>
-      </span>
+      <span className="sub">The chain accepted the transfer. <TxLink hash={v.txHash}>View receipt</TxLink></span>
       <div className="contrast" data-testid="contrast">
         <div>
-          <span className="sub">receiver</span>
+          <span className="sub">Recipient received</span>
           <span className="huge">{signed(credited, d)}</span>
         </div>
         <div>
-          <span className="sub">ReceivePolicyGuard</span>
+          <span className="sub">Held in guard</span>
           <span className="huge">{signed(v.guardBalance.after - v.guardBalance.before, d)}</span>
         </div>
       </div>
       {diverted ? (
-        <span>
-          <b className="num">{money(v.diverted, d)}</b> went to <AddrLink address={RECEIVE_POLICY_GUARD} label="ReceivePolicyGuard" />
-          {v.blockedByPolicy ? " (TransferBlocked: the receiver's policy)" : ""}.
-        </span>
+        <span><b>You may now prove the payment check was wrong and claim its reserved protection.</b></span>
       ) : null}
-      {credited !== answer.receiverDelta ? (
-        <span className="sub">
-          The answer said {signed(answer.receiverDelta, d)} as of block {answer.response.question.blockNumber.toString()}. Whether it
-          was wrong <i>about that block</i> is for the proof to decide — not this page.
-        </span>
-      ) : null}
+      <details><summary>Technical payment details</summary><span className="sub">Block {v.blockNumber.toString()} · check claimed {signed(answer.receiverDelta, d)} at block {answer.response.question.blockNumber.toString()} · diverted amount {money(v.diverted, d)} to <AddrLink address={RECEIVE_POLICY_GUARD} label="ReceivePolicyGuard" />.</span></details>
     </div>
   );
 }
@@ -311,12 +295,12 @@ function ChallengePanel({ s, answer, raw, demo }: { s: Scenario; answer: Verifie
 
   return (
     <div className="card" style={{ background: "var(--surface-2)" }} data-testid="challenge">
-      <span className="role-tag">Challenger proves</span>
+      <span className="role-tag">Claim protection</span>
       <div className="row">
         <button className="btn" onClick={start} disabled={job.status === "loading" || (job.status === "ok" && job.value.phase !== "failed")}>
-          Challenge the answer
+          Prove the check was wrong
         </button>
-        <span className="sub">Anyone may do this; the agent does it itself.</span>
+        <span className="sub">Sworn re-runs the recorded execution and pays only if the check is proven wrong.</span>
       </div>
       {job.status === "error" ? <ErrorBox error={job.error} title="Challenge could not start" /> : null}
       {job.status === "ok" ? <JobView job={job.value} N={N} now={tick + skew.current} /> : null}
@@ -324,7 +308,7 @@ function ChallengePanel({ s, answer, raw, demo }: { s: Scenario; answer: Verifie
       {slash.status === "error" ? <ErrorBox error={slash.error} /> : null}
       {slash.status === "ok" ? (
         <div className="result ok" data-testid="payout">
-          <span className="big">You were paid {money(slash.value.coverage, slash.value.decimals)} from the server's bond</span>
+          <span className="big">✓ {money(slash.value.coverage, slash.value.decimals)} paid from the provider's bond</span>
           <span>
             Agent balance <span className="num">{money(slash.value.clientBalance.before, slash.value.decimals)}</span> →{" "}
             <b className="num">{money(slash.value.clientBalance.after, slash.value.decimals)}</b> at block{" "}

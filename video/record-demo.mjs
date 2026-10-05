@@ -1,6 +1,6 @@
-// Records video/demo.mp4 — Sworn's ≤ 3 min CWF demo v2.1, six scenes, SILENT, 1920×1080 — plus video/demo.srt
-// and video/demo.marks.json, from the edit plan video/DEMO.md (v2.1: Moderato's prototype verifier, then
-// Sworn on the Zone batch with a withdrawal, the disclosure, bonded answers, next).
+// Records video/demo.mp4 — Sworn's ≤ 3 min CWF demo v5.2, six scenes, SILENT, 1920×1080 — plus video/demo.srt
+// and video/demo.marks.json. It follows a Zone operator's need for independently checkable batch evidence,
+// then shows the real proof on a Zone batch with a withdrawal and its explicit present-day limits.
 //
 //   DEMO_PAGE_URL=http://localhost:4173/ node video/record-demo.mjs   # then: node video/split-scenes.mjs demo
 //   PREVIEW=<dir> node video/record-demo.mjs   # one PNG per authored slide + all source checks; records nothing
@@ -9,9 +9,10 @@
 // eth_getCode / receipts. Scene lengths: max(DEMO.md's "≈ N s" target, words ÷ 2.2 w/s rounded up to 0.5 s).
 // Every figure on screen is read now from the source DEMO.md's claims table names; a missing or changed
 // source THROWS:
-//   scene 1  zones @ ac49071f ZonePortal.sol: submitBatch → verify → revert InvalidProof → enqueue withdrawals;
+//   scene 1  local Operator worker: fixed fixture only; zone-prove.sh → zone-attest.sh without --send.
+//   scene 2  zones @ ac49071f ZonePortal.sol: submitBatch → verify → revert InvalidProof → enqueue withdrawals;
 //            processWithdrawals → dequeue (line numbers read, order checked).
-//   scenes 2–3  the page (DEMO_PAGE_URL), recorded in a real browser. Before recording, the recorder makes
+//   scenes 3–4  the page (DEMO_PAGE_URL), recorded in a real browser. Before recording, the recorder makes
 //            its own three eth_calls: Sworn verify(real) = true, Sworn verify(height+1) reverts InvalidProof(),
 //            and Moderato's 0x5A56… (code = tempo ZONE_VERIFIER_RUNTIME, pre-T13 selector 0x7106a43e, which
 //            must differ from IVerifier.verify's) with the malformed batch = true. Every value the page shows
@@ -19,16 +20,15 @@
 //            all three rows, the comparison line, the disclosures) is compared with those reads,
 //            deployments/moderato.json and the fixture. "Verify again" is clicked twice; each click must
 //            change "Called at". The superseded verifier must appear nowhere. Explorer of 0xa630, cropped.
-//   scene 4  deployments/moderato.json SwornZoneVerifierWithdrawal (batch, deviations), README, spec 004.
-//   scene 5  the live take video/takes/demo-20261003T131156Z (take.json ↔ demoLiveTake ↔ Moderato), as in v2.
-//   scene 6  (v2.2: the pitch v3.2 route) spec 004 (header, §6 "not built"), zone_factory, Tempo's ZoneFactory on Moderato
+//   scene 5  deployments/moderato.json SwornZoneVerifierWithdrawal (batch, deviations), README, spec 004.
+//   scene 6  spec 004 (header, §6 "not built"), zone_factory, Tempo's ZoneFactory on Moderato
 //            (one admin, 1-of-1 Safe owner), README limits, the repo (public), the page (HTTP 200).
 // v2 (four scenes, hardfork batch) is in git: HEAD:video/record-demo.mjs before v2.1.
 import path from "node:path";
 import { mkdirSync, rmSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import {
-  parseAbiItem, parseAbi, decodeEventLog, getAddress, formatUnits, toEventSelector, toFunctionSelector, keccak256,
+  parseAbiItem, decodeEventLog, getAddress, toEventSelector, toFunctionSelector, keccak256,
   encodeFunctionData,
 } from "viem";
 import {
@@ -40,20 +40,21 @@ import {
 const MAX_TOTAL = 180;
 const PUBLISHED = "https://psyto.github.io/sworn/";
 const PAGE = process.env.DEMO_PAGE_URL || PUBLISHED;
-const TAKE = "video/takes/demo-20261003T131156Z";
-const work = path.join(dir, "takes", "demo-v2"); // intermediates (gitignored)
+// Match the real-site capture exactly. Its 1024×576 CSS canvas at 1.875× becomes 1920×1080.
+const CONSOLE_VIEWPORT = { width: 1024, height: 576, deviceScaleFactor: 1.875 };
+const work = path.join(dir, "takes", "demo-v5"); // intermediates (gitignored)
 mkdirSync(work, { recursive: true });
 
 // ── the script ───────────────────────────────────────────────────────────────────────────────────
 const scenes = parseScenes("video/DEMO.md");
-if (scenes.length !== 6) fail(`DEMO.md has ${scenes.length} scenes, expected 6 (v2.1)`);
+if (scenes.length !== 6) fail(`DEMO.md has ${scenes.length} scenes, expected 6 (v5.2)`);
 const md = read("video/DEMO.md", "DEMO.md");
 const targets = [...md.matchAll(/^## Scene (\d+) — .*· ≈ (\d+(?:\.\d+)?) s\s*$/gm)].map((m) => +m[2]);
 if (targets.length !== 6) fail("DEMO.md: every scene heading needs its \"≈ N s\" target");
 const holds = scenes.map((s, i) => Math.max(s.hold, targets[i]));
 const TOTAL = holds.reduce((a, b) => a + b, 0);
 const words = scenes.reduce((a, s) => a + s.words, 0);
-log(`• demo v2.2: scene lengths = max(target, words ÷ 2.2)`);
+log(`• demo v5.2: scene lengths = max(target, words ÷ 2.2)`);
 for (const [i, s] of scenes.entries()) log(`    scene ${s.n}: ${String(s.words).padStart(3)} words (${s.hold} s of voice) → ${holds[i]} s  (${s.title})`);
 log(`    total ${TOTAL} s, ${words} words`);
 if (words > 330) fail(`DEMO.md narration is ${words} words > the plan's hard cap 330`);
@@ -61,14 +62,18 @@ if (TOTAL > MAX_TOTAL) fail(`demo runs ${TOTAL} s > ${MAX_TOTAL} s`);
 const narr = scenes.map((s) => s.text).join(" ");
 for (const banned of [/the same input/i, /\bbroken\b/i, /secures? withdrawals/i, /protects withdrawals(?! yet)/i, /every batch/i, /our customers are/i])
   if (banned.test(narr)) fail(`DEMO.md narration says ${banned}`);
-// Scene 2 is page; scene 3 is page (A) + explorer + page (C).
+const operatorWorker = read("operator/server.mjs", "local Operator worker");
+for (const s of ["127.0.0.1", "zone-prove.sh", "zone-attest.sh", "deposit_and_withdrawal_blocks5-6"]) {
+  if (!operatorWorker.includes(s)) fail(`operator/server.mjs no longer demonstrates ${s}`);
+}
+if (!read("docs/operator-console.md", "Operator Console documentation").includes("without `--send`")) fail("Operator Console documentation no longer states the no-send boundary");
+// Scene 3 is page; scene 4 is page (A) + explorer + page (C).
 const S3 = { pageA: 14, explorer: 8 };
-S3.pageC = holds[2] - S3.pageA - S3.explorer;
-if (S3.pageC < 10) fail(`scene 3 leaves only ${S3.pageC} s for the rows`);
+S3.pageC = holds[3] - S3.pageA - S3.explorer;
+if (S3.pageC < 10) fail(`scene 4 leaves only ${S3.pageC} s for the rows`);
 const IDLE = 6; // seconds of page recording cut out where the explorer insert goes (the page scrolls there)
 
 const flat = (s) => s.replace(/\s+/g, " ").trim();
-const fmt2 = (v, d) => { const [i, f = ""] = formatUnits(v, d).split("."); return `${i}.${(f + "00").slice(0, 2)}`; };
 const lc = (s) => s.toLowerCase();
 
 // ── scene 1: Tempo's portal code ─────────────────────────────────────────────────────────────────
@@ -211,12 +216,12 @@ function checkZoneText(t, when) {
     getAddress(im.sp1Verifier), M.verifierVersion, im.zoneVkey, `${im.parentChainId} (the dev chain`, im.pinnedGenesisArtifactHash,
     "✓ all five equal the constructor arguments", Z.codehash, "✓ equals deployments/moderato.json",
     short(HF.attest.tx), "✓ ZoneBatchVerified, digest and calldata match its fixture",
-    `same ${proofBytes}-byte proof`,
-    `verify(zone ${a.zoneId}, height ${H}, …, withdrawalQueueHash ${short(WQH)}, …, proof)`, "✓ true",
-    `verify(zone ${a.zoneId}, height ${H + 1n}, …, proof)`, "✗ reverts InvalidProof()",
+    "Three live, read-only eth_call", "Sworn · the real withdrawal batch", "✓ true",
+    "Sworn · one field changed", "✗ reverts InvalidProof()", "The proof from the on-chain attest transaction verifies.",
     "Moderato's current prototype verifier (pre-T13 reference stub), an equivalent malformed batch",
-    "Moderato, pre-T13 · called", `${short(PRE)}.verify(zone 99, every block number 0, every hash 0x00…00, verifierConfig 0xdead, proof 0xbeef)`,
-    `selector ${PRE_SEL}`, "not IVerifier's 12", "returns true", STUB_LINE, "Sworn demonstrates the missing ZK check.", COMPARE,
+    "Moderato, pre-T13 · called", "zone 99 · empty hashes · config dead · proof beef", "returns true", STUB_LINE, "Sworn demonstrates the missing ZK check.", COMPARE,
+    "Generate evidence for Batch 006", "Start local proof job", "≈15 min · ≈20 GB RAM · no transaction sent",
+    "Fixture only: one integration-test batch on dev chain 1337.",
     "The batches are not from Moderato.", "Not connected to a ZonePortal; it does not protect withdrawals today.", "is a proposal (spec 004",
   ];
   for (const w of want) if (!lc(t).includes(lc(w))) fail(`page (${when}) does not show "${w}"`);
@@ -257,22 +262,23 @@ async function capturePage() {
       mark(`${label}:results`);
       t.called.push([before, await readat()]);
     };
-    await go("#zone .zone-card.again", "start", false);
+    await go("#zone .proof-job", "start", false);
     await sleep(1500);
-    t.btnRect = await rect("#zone .again button.btn");
 
     const recorder = await newRecorder(page);
     await recorder.start(raw);
     const t0 = Date.now();
     const at = async (s) => sleep(Math.max(0, t0 + s * 1000 - Date.now()));
     function mark(e) { t.marks[e] = (Date.now() - t0) / 1000; log(`    ${t.marks[e].toFixed(1).padStart(5)} s  ${e}`); }
-    const P2 = holds[1];
-    // scene 2: click, then centre Moderato's row
+    const P2 = holds[2];
+    // scene 3: show the local-job control, then click the public evidence check.
     mark("s2");
-    await at(2.5); await click("click1");
-    await at(5); await go("#zone .calls li.row-stub", "center"); mark("stub");
+    await at(6); await go("#zone .zone-card.again", "start");
+    t.btnRect = await rect("#zone .again button.btn"); mark("verifyPanel");
+    await at(8); await click("click1");
+    await at(11); await go("#zone .calls li.row-stub", "center"); mark("stub");
     await at(P2); mark("s3a");
-    // scene 3a: the attest card, then what the batch contains
+    // scene 4a: the attest card, then what the batch contains
     await go("#zone .zone-card", "start");
     await at(P2 + 6); await go("#zone .zone-card .sub-head", "start"); mark("contains");
     await at(P2 + S3.pageA); mark("idle");
@@ -280,7 +286,7 @@ async function capturePage() {
     await go("#zone .again button.btn", "start", false);
     await sleep(1000); t.btnRect2 = await rect("#zone .again button.btn");
     await at(P2 + S3.pageA + IDLE); mark("s3c");
-    // scene 3c: second click, rows 1–2, then the comparison line
+    // scene 4c: second click, rows 1–2, then the comparison line
     await at(P2 + S3.pageA + IDLE + 1); await click("click2");
     await at(P2 + S3.pageA + IDLE + 2.5); await go("#zone .again .calls", "start");
     await at(P2 + S3.pageA + IDLE + S3.pageC - 5); await go("#zone .compare-line", "end"); mark("compare");
@@ -338,54 +344,7 @@ async function explorerShots() {
   } finally { await br.close(); }
 }
 
-// ── scene 5: the live take (as in v2) ────────────────────────────────────────────────────────────
-const take = JSON.parse(read(`${TAKE}/take.json`, "take.json"));
-const L = M.dep.demoLiveTake ?? fail("moderato.json: no demoLiveTake");
-if (L.take !== TAKE) fail(`demoLiveTake.take ${L.take} != ${TAKE}`);
-for (const [k, v] of [["reserveTx", L.dishonestReserve], ["paymentTx", L.paymentDivertedToReceivePolicyGuard], ["payoutTx", L.challengeTx], ["honestReserveTx", L.honestReserve]])
-  if (lc(take[k]) !== lc(v)) fail(`take.json ${k} ${take[k]} != moderato.json demoLiveTake`);
-const sol = read("contracts/src/Sworn.sol", "Sworn source");
-const evSig = (name) => parseAbiItem(`event ${name}(${flat((sol.match(new RegExp(`^\\s*event ${name}\\(([^)]*)\\);`, "m")) ?? fail(`Sworn.sol: no ${name}`))[1])})`);
-const swornEvent = (r, e, what) => {
-  const lg = r.logs.find((l) => getAddress(l.address) === M.SWORN && l.topics[0] === toEventSelector(e)) ?? fail(`${what}: no ${e.name} from Sworn`);
-  return decodeEventLog({ abi: [e], data: lg.data, topics: lg.topics }).args;
-};
-const R500 = 500n * 10n ** BigInt(M.bondDecimals);
-const dres = swornEvent(await receipt(L.dishonestReserve, "dishonest reserve"), evSig("Reserved"), "dishonest reserve");
-if (dres.coverage !== R500) fail(`dishonest reserve coverage ${dres.coverage}`);
-const GUARD_SRC = "tempo/crates/contracts/src/precompiles/mod.rs";
-const GUARD = getAddress((read(GUARD_SRC, "Tempo precompile addresses").match(/RECEIVE_POLICY_GUARD_ADDRESS: Address =\s*address!\("(0x[0-9a-fA-F]{40})"\)/) ?? fail(`${GUARD_SRC}: no RECEIVE_POLICY_GUARD_ADDRESS`))[1]);
-const payR = await receipt(L.paymentDivertedToReceivePolicyGuard, "payment");
-const payBlock = parseInt(payR.blockNumber, 16);
-if (payBlock !== L.paymentBlock) fail(`payment block ${payBlock} != moderato.json`);
-const payTx = await rpc("eth_getTransactionByHash", [L.paymentDivertedToReceivePolicyGuard]);
-const TOKEN = getAddress(payTx.to);
-if (!payTx.input.startsWith(toFunctionSelector("transfer(address,uint256)"))) fail("payment is not a TIP-20 transfer(address,uint256)");
-const RPRIME = getAddress("0x" + payTx.input.slice(34, 74));
-const tdec = Number(await call(TOKEN, "decimals() view returns (uint8)"));
-const bal = async (who, b) => call(TOKEN, "balanceOf(address) view returns (uint256)", [who], b);
-const gDelta = (await bal(GUARD, payBlock)) - (await bal(GUARD, payBlock - 1));
-const rDelta = (await bal(RPRIME, payBlock)) - (await bal(RPRIME, payBlock - 1));
-if (gDelta !== 500n * 10n ** BigInt(tdec) || rDelta !== 0n) fail(`payment: guard Δ ${gDelta}, R′ Δ ${rDelta} (want +500 / 0)`);
-const chR = await receipt(L.challengeTx, "challenge");
-const chBlock = parseInt(chR.blockNumber, 16);
-const sl = swornEvent(chR, evSig("Slashed"), "challenge");
-if (sl.coverage !== R500 || getAddress(sl.client) !== getAddress(M.dep.roles.client)) fail("challenge: Slashed is not 500 to the client");
-const cDelta = (await call(M.bondToken, "balanceOf(address) view returns (uint256)", [M.dep.roles.client], chBlock)) - (await call(M.bondToken, "balanceOf(address) view returns (uint256)", [M.dep.roles.client], chBlock - 1));
-if (cDelta !== R500) fail(`challenge: client Δ ${cDelta}`);
-const job = take.jobs.at(-1).job;
-const realProve = (job.phaseStartedAt.submitting - job.phaseStartedAt.proving) / 1000;
-const mmss = (s) => `${Math.floor(s / 60)} min ${String(Math.round(s % 60)).padStart(2, "0")} s`;
-if (mmss(realProve) !== L.provingRealTime) fail(`take proving ${mmss(realProve)} != moderato.json ${L.provingRealTime}`);
-const ev2 = (e) => (take.events.find((x) => x.e.startsWith(e)) ?? fail(`take.json: no "${e}" mark`)).t;
-const BUY = ev2("buy"), ANSWER = ev2("answer");
-const takeClip = path.join(repo, TAKE, "scene1.mp4");
-const takeDur = duration(takeClip);
-const SPED_TO = 3;
-const sped = ANSWER - BUY;
-log(`• take: reserve ${short(L.dishonestReserve)} 500; payment ${short(L.paymentDivertedToReceivePolicyGuard)}: guard +${fmt2(gDelta, tdec)}, R′ +${fmt2(rDelta, tdec)}; challenge ${short(L.challengeTx)} Slashed 500, client +${fmt2(cDelta, M.bondDecimals)}; proving ${mmss(realProve)}; speed-up ${sped.toFixed(1)} s → ${SPED_TO} s`);
-
-// ── scenes 4 and 6: disclosures, spec 004, limits ────────────────────────────────────────────────
+// ── scenes 5 and 6: disclosures, spec 004, limits ────────────────────────────────────────────────
 if (!/D2 no portal caller check/.test(HF.deviations) || !/D1-D4 as SwornZoneVerifier/.test(Z.deviations)) fail("moderato.json: deviations no longer name D2 (no portal)");
 if (!/not that withdrawals are secured/.test(Z.deviations)) fail("moderato.json SwornZoneVerifierWithdrawal.deviations changed");
 const spec4 = flat(read("docs/specs/004-tee-plus-zk.md", "spec 004"));
@@ -396,7 +355,7 @@ const fv = fac.findIndex((l) => l.trim() === "verifier: ZONE_VERIFIER_ADDRESS,")
 if (fv < 0) fail(`${FACTORY}: verifier assignment moved`);
 for (const s of ["**The batches are not from Moderato.**", "Tempo's zones integration tests", "It does not secure withdrawals", "Unaudited.", "Traction: none.", "Revenue today: zero.", "`challenge()` pays the reserved coverage to the client"])
   if (!flat(readmeText).includes(flat(s))) fail(`README no longer says "${s}"`);
-// v3.2 route (scene 6): "one Zone operator" read now from Tempo's ZoneFactory on Moderato.
+// Scene 6: "one Zone operator" read now from Tempo's ZoneFactory on Moderato.
 const FADDR = getAddress((read("tempo/crates/contracts/src/precompiles/zone_factory.rs", "zone_factory.rs").match(/ZONE_FACTORY_ADDRESS: Address = address!\("(0x[0-9a-fA-F]{40})"\)/) ?? fail("zone_factory.rs: no ZONE_FACTORY_ADDRESS"))[1]);
 const nZones = Number(await call(FADDR, "nextZoneId() view returns (uint32)")) - 1;
 if (nZones < 1) fail("ZoneFactory: no Zones");
@@ -416,7 +375,7 @@ const pub = await fetchText(PUBLISHED, "published page");
 if (!/<title>Sworn/.test(pub)) fail(`${PUBLISHED}: no "<title>Sworn"`);
 
 const data = {
-  scenes: ["d1", "e1", "dz", "d6"],
+  scenes: ["d0", "d1", "e1", "dz", "d6"],
   portalSrc: `tempoxyz/zones @ ${ZONES_REF} · ZonePortal.sol`, portalLines,
   exUrl: `explore.testnet.tempo.xyz/tx/${short(Z.attest.tx)}`,
   exTopic: `topic0 ${short(topic0, 6)} = keccak256 of ${zev.name}(…) from SwornZoneVerifier.sol`,
@@ -435,7 +394,7 @@ log(`• explorer: ${short(Z.attest.tx)} card ${Math.round(shots.cw)}×${Math.ro
 if (process.env.PREVIEW) {
   const outDir = path.resolve(process.env.PREVIEW);
   mkdirSync(outDir, { recursive: true });
-  const br = await launch();
+    const br = await launch(CONSOLE_VIEWPORT);
   try {
     const page = await br.newPage();
     await page.goto("file://" + path.join(dir, "demo.html"), { waitUntil: "load" });
@@ -450,7 +409,7 @@ if (process.env.PREVIEW) {
   log(`• preview PNGs in ${outDir}`);
   process.exit(0);
 }
-await checkOverflow("demo.html", data, data.scenes);
+await checkOverflow("demo.html", data, data.scenes, CONSOLE_VIEWPORT);
 log("• layout: nothing outside its card or the frame");
 
 // ── overlays (this ffmpeg has no drawtext): transparent 1920×1080 PNGs ──────────────────────────
@@ -471,56 +430,43 @@ const ENC = ["-c:v", "libx264", "-profile:v", "high", "-level", "4.0", "-crf", "
 const ff = (args) => execFileSync(FFMPEG, ["-v", "error", ...args, "-y"]);
 const VF = "fps=30,scale=1920:1080,setsar=1,scale=in_range=full:out_range=tv,format=yuv420p";
 
-// ── scene 1 ─────────────────────────────────────────────────────────────────────────────────────
+// ── scenes 1–2: the Zone operator's need ────────────────────────────────────────────────────────
 const scene1 = path.join(work, "scene1.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["d1"], holds: [holds[0]], raw: path.join(work, "s1.raw.mp4"), out: scene1 });
+await recordSlides({ html: "demo.html", data, ids: ["d0"], holds: [holds[0]], raw: path.join(work, "s1.raw.mp4"), out: scene1, viewport: CONSOLE_VIEWPORT });
+const scene2 = path.join(work, "scene2.mp4");
+await recordSlides({ html: "demo.html", data, ids: ["d1"], holds: [holds[1]], raw: path.join(work, "s2.raw.mp4"), out: scene2, viewport: CONSOLE_VIEWPORT });
 
-// ── scenes 2–3: the page ────────────────────────────────────────────────────────────────────────
-log("• scenes 2–3: recording the page …");
+// ── scenes 3–4: the page ────────────────────────────────────────────────────────────────────────
+log("• scenes 3–4: recording the page …");
 const pg = await capturePage();
-const P = { click: path.join(work, "pill-click.png"), click2: path.join(work, "pill-click2.png"), speed: path.join(work, "pill-speed.png") };
-const factor = sped / SPED_TO;
+const P = { click: path.join(work, "pill-click.png"), click2: path.join(work, "pill-click2.png") };
 await pills([
-  { file: P.click, pos: `top:${(((pg.btnRect.top + pg.btnRect.bottom) / 2) * 1.25 - 26).toFixed(0)}px;left:${((pg.btnRect.right + 24) * 1.25).toFixed(0)}px`, html: pill(`“Verify again” clicked · live`, "three read-only eth_calls · the page also ran them when it loaded") },
-  { file: P.click2, pos: `top:${(((pg.btnRect2.top + pg.btnRect2.bottom) / 2) * 1.25 - 26).toFixed(0)}px;left:${((pg.btnRect2.right + 24) * 1.25).toFixed(0)}px`, html: pill(`“Verify again” clicked again · live`, "the same three read-only eth_calls") },
-  { file: P.speed, pos: "top:150px;right:24px;text-align:right", html: pill(`×${factor.toFixed(1)} · MPP charge + reserve`, `this run: ${sped.toFixed(1)} s real → ${SPED_TO} s · sped up in the edit`) },
+  { file: P.click, pos: `top:${(((pg.btnRect.top + pg.btnRect.bottom) / 2) * 1.25 - 26).toFixed(0)}px;left:${((pg.btnRect.right + 24) * 1.25).toFixed(0)}px`, html: pill(`“Re-verify on chain” clicked · live`, "three read-only eth_calls · the page also ran them when it loaded") },
+  { file: P.click2, pos: `top:${(((pg.btnRect2.top + pg.btnRect2.bottom) / 2) * 1.25 - 26).toFixed(0)}px;left:${((pg.btnRect2.right + 24) * 1.25).toFixed(0)}px`, html: pill(`“Re-verify on chain” clicked again · live`, "the same three read-only eth_calls") },
 ]);
 const k = duration(pg.raw) / pg.wall;
 const K = (e) => pg.marks[e] * k;
-const scene2 = path.join(work, "scene2.mp4"), s3a = path.join(work, "s3a.mp4"), s3x = path.join(work, "s3x.mp4"), s3c = path.join(work, "s3c.mp4");
+const scene3 = path.join(work, "scene3.mp4"), s4a = path.join(work, "s4a.mp4"), s4x = path.join(work, "s4x.mp4"), s4c = path.join(work, "s4c.mp4");
 ff(["-i", pg.raw, "-loop", "1", "-framerate", "30", "-i", P.click, "-filter_complex",
   `[0:v]fps=30,scale=1920:1080,setsar=1[b];[b][1:v]overlay=0:0:shortest=1:enable='between(t,${(K("click1") - 0.3).toFixed(2)},${(K("click1") + 4).toFixed(2)})',scale=in_range=full:out_range=tv,format=yuv420p[v]`,
-  "-map", "[v]", "-an", "-t", String(holds[1]), ...ENC, scene2]);
-ff(["-ss", K("s3a").toFixed(3), "-i", pg.raw, "-vf", VF, "-an", "-t", String(S3.pageA), ...ENC, s3a]);
-await recordSlides({ html: "demo.html", data, ids: ["e1"], holds: [S3.explorer], raw: path.join(work, "s3x.raw.mp4"), out: s3x });
+  "-map", "[v]", "-an", "-t", String(holds[2]), ...ENC, scene3]);
+ff(["-ss", K("s3a").toFixed(3), "-i", pg.raw, "-vf", VF, "-an", "-t", String(S3.pageA), ...ENC, s4a]);
+await recordSlides({ html: "demo.html", data, ids: ["e1"], holds: [S3.explorer], raw: path.join(work, "s4x.raw.mp4"), out: s4x, viewport: CONSOLE_VIEWPORT });
 const c2 = K("click2") - K("s3c");
 ff(["-ss", K("s3c").toFixed(3), "-i", pg.raw, "-loop", "1", "-framerate", "30", "-i", P.click2, "-filter_complex",
   `[0:v]fps=30,scale=1920:1080,setsar=1[b];[b][1:v]overlay=0:0:shortest=1:enable='between(t,${Math.max(0, c2 - 0.3).toFixed(2)},${(c2 + 1.4).toFixed(2)})',scale=in_range=full:out_range=tv,format=yuv420p[v]`,
-  "-map", "[v]", "-an", "-t", String(S3.pageC), ...ENC, s3c]);
-const scene3 = path.join(work, "scene3.mp4");
-concat([s3a, s3x, s3c], scene3);
+  "-map", "[v]", "-an", "-t", String(S3.pageC), ...ENC, s4c]);
+const scene4 = path.join(work, "scene4.mp4");
+concat([s4a, s4x, s4c], scene4);
 rmSync(pg.raw, { force: true });
 
-// ── scene 4: said plainly ───────────────────────────────────────────────────────────────────────
-const scene4 = path.join(work, "scene4.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["dz"], holds: [holds[3]], raw: path.join(work, "s4.raw.mp4"), out: scene4 });
-
-// ── scene 5: the take, re-cut ───────────────────────────────────────────────────────────────────
-log("• scene 5: re-cutting the take …");
+// ── scene 5: said plainly ───────────────────────────────────────────────────────────────────────
 const scene5 = path.join(work, "scene5.mp4");
-const kept = BUY + SPED_TO + (takeDur - ANSWER);
-if (kept > holds[4]) fail(`scene 5 picture ${kept.toFixed(1)} s > its ${holds[4]} s`);
-ff(["-i", takeClip, "-loop", "1", "-framerate", "30", "-i", P.speed, "-filter_complex", [
-  `[0:v]fps=30,scale=1920:1080,setsar=1,split=3[s0][s1][s2]`,
-  `[s0]trim=0:${BUY},setpts=PTS-STARTPTS[a]`,
-  `[s1]trim=${BUY}:${ANSWER},setpts=(PTS-STARTPTS)/${factor},fps=30[b0]`, `[b0][1:v]overlay=0:0:shortest=1[b]`,
-  `[s2]trim=${ANSWER}:${takeDur},setpts=PTS-STARTPTS[c]`,
-  `[a][b][c]concat=n=3:v=1:a=0,tpad=stop_mode=clone:stop_duration=${(holds[4] - kept + 1).toFixed(2)},format=yuv420p[v]`].join(";"),
-  "-map", "[v]", "-an", "-t", String(holds[4]), ...ENC, scene5]);
+await recordSlides({ html: "demo.html", data, ids: ["dz"], holds: [holds[4]], raw: path.join(work, "s5.raw.mp4"), out: scene5, viewport: CONSOLE_VIEWPORT });
 
 // ── scene 6 ─────────────────────────────────────────────────────────────────────────────────────
 const scene6 = path.join(work, "scene6.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["d6"], holds: [holds[5]], raw: path.join(work, "s6.raw.mp4"), out: scene6 });
+await recordSlides({ html: "demo.html", data, ids: ["d6"], holds: [holds[5]], raw: path.join(work, "s6.raw.mp4"), out: scene6, viewport: CONSOLE_VIEWPORT });
 
 // ── assemble ────────────────────────────────────────────────────────────────────────────────────
 const parts = [scene1, scene2, scene3, scene4, scene5, scene6];
@@ -535,14 +481,13 @@ const cues = writeSrt(scenes, starts, path.join(dir, "demo.srt"));
 for (let i = 0; i < 6; i++) ff(["-ss", (starts[i + 1] - 0.2).toFixed(2), "-i", out, "-frames:v", "1", path.join(dir, "frames", `demo-scene${i + 1}.png`)]);
 const r2 = (e) => +K(e).toFixed(2);
 writeJson(path.join(dir, "demo.marks.json"), {
-  name: "demo", script: "video/DEMO.md", version: "2.2", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
-  page: PAGE, published: PUBLISHED, recordedFromPublishedPage: PAGE === PUBLISHED, take: TAKE,
+  name: "demo", script: "video/DEMO.md", version: "5.2", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
+  page: PAGE, published: PUBLISHED, recordedFromPublishedPage: PAGE === PUBLISHED,
   zoneAttest: Z.attest.tx, liveCalls,
-  pageMarks: { click1: r2("click1"), stub: r2("stub"), s3a: r2("s3a"), contains: r2("contains"), s3c: r2("s3c"), click2: r2("click2"), compare: r2("compare") },
+  pageMarks: { verifyPanel: r2("verifyPanel"), click1: r2("click1"), stub: r2("stub"), s3a: r2("s3a"), contains: r2("contains"), s3c: r2("s3c"), click2: r2("click2"), compare: r2("compare") },
   calledAt: pg.called,
-  scene3: { pageA: S3.pageA, explorer: S3.explorer, pageC: S3.pageC, cutOutOfPage: IDLE },
-  scene5: { kept: [[0, BUY], [ANSWER, +takeDur.toFixed(3)]], spedUp: { from: [BUY, ANSWER], realSecs: +sped.toFixed(2), shownSecs: SPED_TO }, timelapse: { realProve: L.provingRealTime, shownSecs: 10, burnedInBy: "the v1 edit of this take" }, heldLastFrame: +(holds[4] - kept).toFixed(2) },
-  note: "Silent. Read each scene's lines over its clip (video/scenes/demo/). Scene 3 has the explorer insert in its middle; scene 5 has silent time at the time-lapse.",
+  scene4: { pageA: S3.pageA, explorer: S3.explorer, pageC: S3.pageC, cutOutOfPage: IDLE },
+  note: "Silent. Read each scene's lines over its clip (video/scenes/demo/). Scene 4 has the explorer insert in its middle.",
   recordedAt: new Date().toISOString(),
 });
 log(`\n✓ ${rel(out)}  (${got.toFixed(2)} s, holds ${holds.join(" / ")}, ${words} words)`);

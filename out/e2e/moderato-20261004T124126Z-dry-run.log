@@ -1,0 +1,20 @@
+TARGET moderato (DRY RUN: reads only, nothing is sent) rpc https://rpc.moderato.tempo.xyz
+CHECK SETUP.chain PASS chain id 42431 at https://rpc.moderato.tempo.xyz
+CHECK SETUP.codehash PASS Sworn 0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6 codehash 0x9082880d4e3d089b7513f642f5b865a8ba28265108cf98e6bc9ca467d7205563 (recorded 0x9082880d4e3d089b7513f642f5b865a8ba28265108cf98e6bc9ca467d7205563)
+CHECK SETUP.verifier PASS Sworn.SP1_VERIFIER=0x2c77329747b7C8B293514A6129404D4cefDd9B18, VERIFIER_HASH=0x4388a21c687fdd5f218d7e3d13190cac4c5355818d3605fd5fb811df468ee696 (SP1 v6.1.0 Groth16)
+CHECK SETUP.vkey PASS Sworn.GUEST_VKEY=0x00727936ca684413200b13362eeb1c4a173a847466026678438ccca724ea7fa9
+  12:41:28 balance deployer/challenger/R' 0x05B4E2B72c173C47213fA3EaC33a9bcb1af25901: pathUSD 999999981070, AlphaUSD 1000000000000
+  12:41:28 balance honest 0xa5a4889b1693CBFDC6d0b701a128F5bBEEcb84f5: pathUSD 998000038174, AlphaUSD 1000000000000
+  12:41:28 balance dishonest 0xD49c5ef3aD21b42f664ba65a7694D56C47535261: pathUSD 998000028507, AlphaUSD 1000000000000
+  12:41:29 balance client 0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F: pathUSD 1001498929282, AlphaUSD 998499999316
+CHECK SETUP.clientFunded PASS client AlphaUSD 998499999316 (needs ≥ 1000000000 for two 500 questions and one real payment)
+PLAN approve(0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6, 2000000000) + bond(0xa5a4889b1693CBFDC6d0b701a128F5bBEEcb84f5, 2000000000) from honest 0xa5a4889b1693CBFDC6d0b701a128F5bBEEcb84f5
+PLAN approve(0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6, 1500000000) + bond(0xD49c5ef3aD21b42f664ba65a7694D56C47535261, 1500000000) from dishonest 0xD49c5ef3aD21b42f664ba65a7694D56C47535261
+  12:41:29 receive policy of R' 0x05B4E2B72c173C47213fA3EaC33a9bcb1af25901 already blocks the client, skip
+  12:41:29 deployment: {"rpc":"https://rpc.moderato.tempo.xyz","sworn":"0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6","swornCodehash":"0x9082880d4e3d089b7513f642f5b865a8ba28265108cf98e6bc9ca467d7205563","otherSworn":"0x2c77329747b7C8B293514A6129404D4cefDd9B18","verifier":"0x2c77329747b7C8B293514A6129404D4cefDd9B18","honestServer":"0xa5a4889b1693CBFDC6d0b701a128F5bBEEcb84f5","dishonestServer":"0xD49c5ef3aD21b42f664ba65a7694D56C47535261","client":"0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F","challenger":"0x05B4E2B72c173C47213fA3EaC33a9bcb1af25901","blockingReceiver":"0x05B4E2B72c173C47213fA3EaC33a9bcb1af25901","plainReceiver":"0xD49c5ef3aD21b42f664ba65a7694D56C47535261","nonReserveTx":"0x9b8afab9a20a780023737b2511bb75f09b9ddc92c4625cd3e6bf384979910f33"}
+PLAN start honest server (0xa5a4889b1693CBFDC6d0b701a128F5bBEEcb84f5) on :8787 and dishonest-demo server (0xD49c5ef3aD21b42f664ba65a7694D56C47535261) on :8788
+PLAN S-1 honest preflight: client 0x7919dD536679de2F2ecA143C38cEF8cFD4764b7F → 0xD49c5ef3aD21b42f664ba65a7694D56C47535261, 500 AlphaUSD, gasLimit 3000000; MPP charge + reserve tx; SDK verify; own witness
+PLAN S-3 nine SDK rejection cases (reads only) + control
+PLAN S-2 dishonest preflight: client → R' 0x05B4E2B72c173C47213fA3EaC33a9bcb1af25901; reserve; witness; REAL payment client→R' (diverted to ReceivePolicyGuard 0xb10c000000000000000000000000000000000000); local Groth16 (~6 min); challenge tx from 0x05B4E2B72c173C47213fA3EaC33a9bcb1af25901; honest challenge by simulation (second local proof, ~6 min, nothing sent)
+PLAN S-4 answerer against the live schedule (reads only)
+DRY RUN DONE failures=0

@@ -96,7 +96,7 @@ export function Hero() {
         )}
         {VIDEOS.demo && (
           <a href={VIDEOS.demo} target="_blank" rel="noreferrer">
-            Demo · 2:35 ↗
+            Demo · 2:32 ↗
           </a>
         )}
         <a href={txUrl(MODERATO, ZONE_TX)} target="_blank" rel="noreferrer">

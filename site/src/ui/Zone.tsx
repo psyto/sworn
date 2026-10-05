@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { MODERATO, addressUrl } from "../chain/config.ts";
 import { short } from "../chain/format.ts";
 import type { Loadable } from "../chain/loadable.ts";
@@ -40,6 +41,72 @@ interface Props {
   onVerify: () => void;
 }
 
+type ProofJobStatus = "queued" | "proving" | "verifying" | "verified" | "failed";
+interface ProofJob {
+  id: string;
+  caseName: string;
+  status: ProofJobStatus;
+  startedAt: string;
+  finishedAt: string | null;
+  fixturePath: string;
+  log: { at: string; source: string; line: string }[];
+  proof: { digest: string; vkey: string; proveWallSecs: number; mode: string } | null;
+  error: string | null;
+}
+interface OperatorHealth {
+  status: "ready";
+  localOnly: true;
+  fixture: { expected: { withdrawals: number; userTransactions: number; estimatedMinutes: number; peakRamGB: number } };
+  current: ProofJob | null;
+}
+
+const OPERATOR = "http://127.0.0.1:4317";
+
+function useLocalProofJob() {
+  const canReachWorker = typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname);
+  const [worker, setWorker] = useState<"checking" | "offline" | "ready">(canReachWorker ? "checking" : "offline");
+  const [job, setJob] = useState<ProofJob | null>(null);
+  const [startError, setStartError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!canReachWorker) return;
+    let stopped = false;
+    let timer: number | undefined;
+    const read = async () => {
+      try {
+        const response = await fetch(`${OPERATOR}/health`);
+        if (!response.ok) throw new Error(`operator returned ${response.status}`);
+        const value = await response.json() as OperatorHealth;
+        if (stopped) return;
+        setWorker("ready");
+        setJob(value.current);
+      } catch {
+        if (!stopped) setWorker("offline");
+      }
+    };
+    const tick = async () => {
+      await read();
+      if (!stopped) timer = window.setTimeout(tick, 2500);
+    };
+    void tick();
+    return () => { stopped = true; if (timer) window.clearTimeout(timer); };
+  }, [canReachWorker]);
+
+  const start = async () => {
+    setStartError(null);
+    try {
+      const response = await fetch(`${OPERATOR}/proof-jobs`, { method: "POST" });
+      const value = await response.json() as { job?: ProofJob; error?: string };
+      if (!response.ok || !value.job) throw new Error(value.error ?? `operator returned ${response.status}`);
+      setJob(value.job);
+    } catch (error) {
+      setStartError(error instanceof Error ? error.message : String(error));
+      setWorker("offline");
+    }
+  };
+  return { worker, job, start, startError };
+}
+
 const Ok = ({ on, children }: { on: boolean; children: string }) =>
   on ? <span className="ok check-line">✓ {children}</span> : <span className="bad-text check-line">✗ does not match</span>;
 
@@ -49,8 +116,48 @@ const H0 = short(MALFORMED.hash, 2);
 export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
   const busy = check.status === "loading";
   const stubTrue = check.status === "ok" && check.value.preT13.result === "true";
+  const [copied, setCopied] = useState(false);
+  const proofJob = useLocalProofJob();
+  const auditRecord = () => JSON.stringify({
+    kind: "Sworn Zone evidence record",
+    scope: "Tempo Zones integration-test fixture on dev chain 1337; not a Moderato Zone batch; no ZonePortal calls this contract.",
+    batch: { withdrawals: BATCH_CONTENTS.withdrawals, userTransactions: BATCH_CONTENTS.userTransactions },
+    attestation: attest.status === "ok" ? { tx: attest.value.txHash, contract: attest.value.contract, block: attest.value.blockNumber.toString() } : null,
+    verification: check.status === "ok" ? { realBatch: "true", changedField: check.value.mutatedError, preT13MalformedBatch: check.value.preT13.result, checkedAt: new Date(check.value.readAt).toISOString() } : null,
+    exportedAt: new Date().toISOString(),
+  }, null, 2);
+  const copyEvidenceLink = async () => {
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}#zone`);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  };
+  const downloadAuditRecord = () => {
+    const file = new Blob([auditRecord()], { type: "application/json" });
+    const url = URL.createObjectURL(file);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "sworn-batch-006-evidence.json";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
   return (
-    <section className="section" id="zone" aria-labelledby="zone-h">
+    <section className="section ops-shell" id="zone" aria-labelledby="zone-h">
+      <aside className="ops-side" aria-label="Zone operations navigation">
+        <p className="ops-zone"><span>Tempo Zone</span>Northstar Pay</p>
+        <nav className="ops-nav" aria-label="Console sections">
+          <span>Batches</span>
+          <span className="selected">Proof evidence</span>
+          <span>Audit exports</span>
+          <span>Settings</span>
+        </nav>
+        <p className="ops-scope">Zone #1<br />Moderato testnet<br />Fixture / dev chain 1337</p>
+      </aside>
+      <div className="ops-main">
+        <div className="ops-crumb"><span>Proof evidence</span><span>Batch 006</span><b>Read live from chain</b></div>
       <div className="section-head">
         <p className="eyebrow">Read live from chain</p>
         <h2 id="zone-h">A Tempo Zone batch with a withdrawal, verified on Moderato</h2>
@@ -75,6 +182,8 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
         </figcaption>
       </figure>
 
+      <ProofJobPanel {...proofJob} />
+
       <div className="zone-grid">
         <div className="card zone-card" aria-live="polite">
           <p className="eyebrow">The attest transaction · the batch with a withdrawal</p>
@@ -93,27 +202,29 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
         <div className="card zone-card again" aria-live="polite" aria-busy={busy}>
           <p className="eyebrow">Check it yourself, now</p>
           <p>
-            Three read-only <code>eth_call</code>s. The first two call Sworn's deployed contract with the same{" "}
-            {FIXTURE.proofBytes}-byte proof the attest transaction sent; the third calls Moderato's own Zone verifier, for
-            comparison. Nothing is signed or sent.
+            Three live, read-only <code>eth_call</code>s. Nothing is signed or sent.
           </p>
-          <button className="btn" onClick={onVerify} disabled={busy}>
-            {busy ? "Calling…" : "Verify again"}
-          </button>
+          <div className="evidence-actions">
+            <button className="btn" onClick={onVerify} disabled={busy}>
+              {busy ? "Calling…" : "Re-verify on chain"}
+            </button>
+            <button className="btn secondary" onClick={() => { void copyEvidenceLink(); }}>
+              {copied ? "Evidence link copied" : "Copy evidence link"}
+            </button>
+            <button className="btn secondary" onClick={downloadAuditRecord}>
+              Download audit record
+            </button>
+          </div>
           {check.status === "ok" ? (
             <>
               <ol className="calls">
                 <li className="row-real">
                   <span className="label">Sworn · the real withdrawal batch</span>
-                  <code>
-                    verify(zone {FIXTURE.zoneId}, height {FIXTURE.nextZoneHeight.toString()}, …, withdrawalQueueHash{" "}
-                    {short(FIXTURE.withdrawalQueueHash)}, …, proof)
-                  </code>
                   <span className="result ok">✓ true</span>
+                  <span className="sub">The proof from the on-chain attest transaction verifies.</span>
                 </li>
                 <li className="row-mutated">
                   <span className="label">Sworn · one field changed</span>
-                  <code>verify(zone {FIXTURE.zoneId}, height {check.value.mutatedHeight.toString()}, …, proof)</code>
                   <span className="result bad">✗ reverts {check.value.mutatedError}()</span>
                   <span className="sub">Change one field and the proof no longer fits.</span>
                 </li>
@@ -121,18 +232,7 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
                   <span className="label">
                     Moderato's current prototype verifier (pre-T13 reference stub), an equivalent malformed batch
                   </span>
-                  <span className="stub-call">
-                    <span className="stub-tag mono">Moderato, pre-T13 · called {clock(check.value.readAt)}</span>
-                    <code>
-                      <AddrLink address={MODERATO.preT13Verifier} label={short(MODERATO.preT13Verifier)} />
-                      .verify(zone {MALFORMED.zoneId}, every block number {MALFORMED.number.toString()}, every hash {H0}, verifierConfig{" "}
-                      {MALFORMED.verifierConfig}, proof {MALFORMED.proof})
-                    </code>
-                    <span className="sub mono">
-                      pre-T13 verify(…), selector {PRE_T13_SELECTOR}: 10 arguments, not IVerifier's 12, so the call is equivalent,
-                      not identical
-                    </span>
-                  </span>
+                  <span className="stub-call"><span className="stub-tag mono">Moderato, pre-T13 · called {clock(check.value.readAt)}</span><span>zone 99 · empty hashes · config dead · proof beef</span></span>
                   <span className={`result ${stubTrue ? "warn" : ""}`}>
                     {check.value.preT13.result === "reverted" ? "reverts" : `returns ${check.value.preT13.result}`}
                   </span>
@@ -150,6 +250,13 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
                       <>This call no longer returns true: Moderato's Zone verifier has changed since this page was written.</>
                     )}
                   </span>
+                  <details className="call-details">
+                    <summary>Technical call details</summary>
+                    <code>
+                      <AddrLink address={MODERATO.preT13Verifier} label={short(MODERATO.preT13Verifier)} />.verify(zone {MALFORMED.zoneId}, every block number {MALFORMED.number.toString()}, every hash {H0}, verifierConfig {MALFORMED.verifierConfig}, proof {MALFORMED.proof})
+                    </code>
+                    <span className="sub mono">pre-T13 verify(…), selector {PRE_T13_SELECTOR}: 10 arguments, not IVerifier's 12, so the call is equivalent, not identical</span>
+                  </details>
                 </li>
               </ol>
               {stubTrue && (
@@ -222,6 +329,44 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
           </ul>
         </div>
       </div>
+      </div>
+    </section>
+  );
+}
+
+function ProofJobPanel({ worker, job, start, startError }: ReturnType<typeof useLocalProofJob>) {
+  const running = job?.status === "queued" || job?.status === "proving" || job?.status === "verifying";
+  return (
+    <section className="proof-job" aria-live="polite" aria-label="Local proof job">
+      <div>
+        <p className="eyebrow">Local prover · operator action</p>
+        <h3>Generate evidence for Batch 006</h3>
+        <p className="sub">Runs the real SP1 Groth16 pipeline for the withdrawal fixture, then runs read-only verification on Moderato.</p>
+      </div>
+      {worker === "offline" ? (
+        <div className="job-offline">
+          <b>Local worker not connected.</b>
+          <span>Start <code>scripts/start-zone-operator.sh</code> locally. The public site cannot start proof jobs.</span>
+        </div>
+      ) : (
+        <div className="job-controls">
+          <button className="btn" onClick={() => { void start(); }} disabled={running || worker === "checking"}>
+            {running ? "Proof job running…" : "Start local proof job"}
+          </button>
+          <span className="job-cost">≈15 min · ≈20 GB RAM · no transaction sent</span>
+        </div>
+      )}
+      {startError && <p className="job-error">Could not start: {startError}</p>}
+      {job && (
+        <div className={`job-state ${job.status}`}>
+          <div><span className="label">Job</span> <code>{job.id}</code></div>
+          <div><span className="label">State</span> <b>{job.status}</b>{job.proof && <> · proof {job.proof.mode} · {Math.round(job.proof.proveWallSecs)} s</>}</div>
+          {job.status === "verified" && <p className="status ok">✓ New proof passed the read-only on-chain checks. Nothing was sent.</p>}
+          {job.error && <p className="job-error">{job.error}</p>}
+          {job.log.length > 0 && <details><summary>Worker log</summary><pre>{job.log.slice(-12).map((line) => `${line.source}: ${line.line}`).join("\n")}</pre></details>}
+        </div>
+      )}
+      <p className="job-boundary">Fixture only: one integration-test batch on dev chain 1337. A real Zone needs its operator's witness, its own deployment and version work.</p>
     </section>
   );
 }

@@ -1,4 +1,4 @@
-# Pitch video: Sworn (≤ 2 min, founder's voice), v3.2, 2026-10-04
+# Pitch video: Sworn (≤ 2 min, founder's voice), v4.0, 2026-10-04
 
 **Form field:** *Pitch video · Public · ≤ 2 min · required.* The page says it is *"one of the first resources
 judges review."*
@@ -13,8 +13,9 @@ judges review."*
   `pitch-v31-r1.md`) are adopted as wording fixes: "for a batch the operator supplies", "match to each batch
   they settle" (matching is the operator's and auditor's work, nothing enforces it on chain), "evidence, not
   yet a guarantee", "written, not built", "the service we want to validate", and the one-operator line.
-- **Screen notes are written for a non-specialist.** Each scene shows who has the problem, then the
-  benefit; the technology appears only as evidence (a transaction, a live call, a source line).
+- **Screen rule:** one scene, one claim, one visual proof. Exact hashes, ABI arguments, citations and
+  explorer metadata remain on the public page and in this source document; they are not narration-sized
+  evidence.
 - **Every sentence has a row in the claims table at the end, or it is not said.** Every figure on screen
   is read by `record-pitch.mjs` from the source in its row, at record time; a missing source or a
   different value stops the recording.
@@ -25,15 +26,11 @@ judges review."*
 
 ## Scene 1: the problem · ≈ 22.5 s
 
-**[Screen: "The problem". Title: "Tempo Zones: private blockchains on Tempo." Two cards side by side, the
-people first: **The operator: sees everything** and **Each user: sees only their own account**, with the
-Zones README's own sentences under them. Then one line: "So no one outside can check that the operator
-ran the ledger correctly." (an outsider cannot get a Zone's blocks or witness). Then the check on a batch,
-two cards: **Tempo's design (T13): a hardware attestation** (Tempo's docs: "Tempo also implements a native
-Nitro attestation verifier activated by T13.") and **Moderato today: a placeholder** with the recorder's
-own live `eth_call`: "Moderato, pre-T13 · called <time> UTC", "an equivalent malformed batch (zone 99, every
-hash 0x00…00, config 0xdead, proof 0xbeef) → returns true", and "the verifier of all 3 Zones on Moderato,
-read from Tempo's Zone factory now".]**
+**[Screen: "The problem". Title: "Private Zones. Public withdrawals." Two cards: **Zone operator: sees
+the full ledger** and **each Zone user: sees only their account**. The single question: "Who checks the batch
+before a withdrawal?" Then one comparison: **Tempo's T13 design: hardware attestation checks each batch**;
+**Moderato today, pre-T13 prototype: malformed batch → TRUE**. The latter is a live, read-only check; exact
+arguments, timestamp and source remain on the public page.]**
 
 > Tempo Zones are private blockchains on Tempo. The operator sees everything; each user sees only their
 > own account. So no one outside can check that the operator ran the ledger correctly. Tempo's design
@@ -56,11 +53,9 @@ version + one digest) and `SwornZoneVerifier.verify` is a `view` function anyone
 ## Scene 3: it worked, on testnet · ≈ 15 s
 
 **[Screen: "On testnet, it worked". The pipeline in one line: Tempo's Zone batch verifier → zero-knowledge
-VM → proof → a contract on Moderato. The attest transaction of the batch **with a withdrawal**: tx
-`0xa630…f770`, ✓ status 1, block and gas, "1 withdrawal · 2 user transactions", labelled "a test batch from
-Tempo's zones integration tests · dev chain 1337". The explorer's transaction card for it (cropped below the
-explorer's header). Then the live result, called while recording: "the real batch → true" and "one field
-changed (height 7) → rejected: reverts InvalidProof()", "eth_call · called <time> UTC".]**
+VM → proof → a contract on Moderato. Three large facts: **1 withdrawal**, **2 user transactions**, **verified
+on Moderato**. Then the live result: **real batch → true**; **one field changed → rejected: InvalidProof()**.
+The transaction hash, explorer and exact call are on the public page, not competing with the conclusion.]**
 
 > On testnet, it worked: Tempo's own Zone verification code, on a test batch that contains a withdrawal,
 > verified by a contract there. Here is the transaction. Change one field, and it's rejected.

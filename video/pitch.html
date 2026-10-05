@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  Sworn pitch v3.2 (video/PITCH.md) — the slides record-pitch.mjs drives. NO FIGURE IS WRITTEN HERE: every
+  Sworn pitch v4.0 (video/PITCH.md) — the slides record-pitch.mjs drives. NO FIGURE IS WRITTEN HERE: every
   address, hash, block, quote, count and call time arrives through window.__fill() from its source at record
   time, and __fill throws if a slot is left empty. Text in this file is labels and the plain-language lines
   of PITCH.md's screen notes only. data-at = seconds into the scene, timed to where the narration says it.
@@ -16,16 +16,12 @@
 .brandrow{display:flex;align-items:center;gap:14px}
 .scene{gap:14px}
 h1.sm{font-size:44px}
-.who .h{font-size:30px;font-weight:400;letter-spacing:-.03em;line-height:1.1}
-.who .q{font-size:15px;font-weight:300;margin-top:6px;color:var(--muted)}
-.who .q::before{content:"“"}.who .q::after{content:"”"}
-.sayline{font-size:26px;font-weight:400;letter-spacing:-.02em;line-height:1.25}
-.chk .h{font-size:26px;font-weight:400;letter-spacing:-.025em;line-height:1.15}
-.chk .q{font-size:15px;margin-top:6px}
-.chk .q::before{content:"“"}.chk .q::after{content:"”"}
+.who .h{font-size:34px;font-weight:400;letter-spacing:-.03em;line-height:1.1}
+.sayline{font-size:30px;font-weight:400;letter-spacing:-.025em;line-height:1.2}
+.chk .h{font-size:30px;font-weight:400;letter-spacing:-.025em;line-height:1.15}
 .chk.bad{background:var(--bad-bg)}
 .chk.bad .h b{color:var(--bad);font-weight:500}
-.live{font-family:var(--mono);font-size:13px;line-height:1.5;margin-top:6px}
+.live{font-family:var(--mono);font-size:16px;line-height:1.5;margin-top:8px}
 .live b{font-weight:500}
 .flow{display:flex;align-items:stretch;gap:0}
 .flow .box{border:1px solid var(--border);background:var(--surface);padding:14px 18px;font-size:22px;letter-spacing:-.02em;line-height:1.2;flex:1}
@@ -34,15 +30,15 @@ h1.sm{font-size:44px}
 .flow .gate{border:2px solid var(--accent);color:var(--accent);background:var(--surface);padding:14px 18px;font-size:22px;letter-spacing:-.02em;line-height:1.2;flex:1.3}
 .flow .gate small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 .pubs{display:flex;flex-wrap:wrap;margin-top:8px}
-.pubs span{border:1px solid var(--border);background:var(--surface-2);padding:6px 12px;font-size:16px;margin:0 -1px -1px 0}
+.pubs span{border:1px solid var(--border);background:var(--surface-2);padding:8px 14px;font-size:18px;margin:0 -1px -1px 0}
 .bigline{font-size:30px;font-weight:400;letter-spacing:-.03em;line-height:1.15}
-.ev{display:grid;grid-template-columns:120px 1fr;column-gap:12px;font-size:15px;line-height:1.6}
-.ev .k{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);align-self:center}
-.ev .v{font-family:var(--mono);font-size:14px;overflow-wrap:anywhere;min-width:0}
-.status-ok{color:var(--ok);font-weight:500;font-size:18px;margin-bottom:4px}
+.proof-facts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+.proof-facts>*+*{margin-left:-1px}
+.proof-facts .fact{border:1px solid var(--border);background:var(--surface);padding:18px 20px}
+.proof-facts .fact small{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.proof-facts .fact b{font-size:30px;font-weight:400;letter-spacing:-.03em}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0}
 .grid2>*+*{margin-left:-1px}
-.shotcard img{display:block;border:1px solid var(--border);max-width:100%;max-height:250px}
 .result{display:grid;grid-template-columns:auto 1fr 1fr;border:1px solid var(--border);background:var(--surface)}
 .result .lead{background:var(--accent);color:#fff;padding:12px 18px;font-size:20px;font-weight:500;display:flex;align-items:center}
 .result .r{padding:10px 18px;border-left:1px solid var(--border);font-size:19px;line-height:1.35}
@@ -50,7 +46,7 @@ h1.sm{font-size:44px}
 .result .r b{font-weight:500}
 .route{display:grid;gap:0}
 .route .card+.card{margin-top:-1px}
-.route .card{display:grid;grid-template-columns:150px 1fr auto;column-gap:18px;align-items:start;padding:14px 20px}
+.route .card{display:grid;grid-template-columns:150px 1fr auto;column-gap:18px;align-items:start;padding:16px 20px}
 .route .when{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:500;padding-top:6px}
 .route .h{font-size:26px;font-weight:400;letter-spacing:-.025em;line-height:1.15}
 .route .b{font-size:18px;font-weight:300;margin-top:4px;line-height:1.3}
@@ -72,26 +68,21 @@ h1.sm{font-size:44px}
 <!-- scene 1 — the problem (22.5 s) -->
 <div class="scene" id="p1">
   <div class="brandrow fade"><img class="mark" src="../_submission/brand/mark.svg" alt="" /><span class="kicker">The problem</span></div>
-  <h1 class="sm fade"><span data-k="zonesLine"></span></h1>
+  <h1 class="sm fade">Private Zones. Public withdrawals.</h1>
   <div class="grid2 fade" data-at="3">
-    <div class="card who"><div class="t"><b>The operator</b></div><div class="h">sees everything</div><div class="q" data-k="opQuote"></div></div>
-    <div class="card who"><div class="t"><b>Each user</b></div><div class="h">sees only their own account</div><div class="q" data-k="userQuote"></div></div>
+    <div class="card who"><div class="t"><b>Zone operator</b></div><div class="h">sees the full ledger</div></div>
+    <div class="card who"><div class="t"><b>Each Zone user</b></div><div class="h">sees only their account</div></div>
   </div>
-  <div class="src fade" data-at="3" data-k="zonesSrc"></div>
-  <div class="sayline fade" data-at="8">So no one outside can check that the operator ran the ledger correctly.</div>
-  <div class="src fade" data-at="8" data-k="outsiderSrc"></div>
+  <div class="sayline fade" data-at="8">Who checks the batch before a withdrawal?</div>
   <div class="grid2">
     <div class="card chk fade" data-at="14">
-      <div class="t"><b>Tempo's design</b> · T13</div>
-      <div class="h">A hardware attestation checks each batch</div>
-      <div class="q" data-k="nitroQuote"></div>
-      <div class="src" style="margin-top:4px" data-k="docsSrc"></div>
+      <div class="t"><b>Tempo's design · T13</b></div>
+      <div class="h">Hardware attestation checks each batch</div>
     </div>
     <div class="card chk bad fade" data-at="17.5">
-      <div class="t"><b data-k="stubWhen"></b></div>
-      <div class="h">A placeholder: <b>returns true</b></div>
-      <div class="live" data-k="stubCall"></div>
-      <div class="src" style="margin-top:4px" data-k="stubSrc"></div>
+      <div class="t"><b>Moderato today · pre-T13 prototype</b></div>
+      <div class="h">Malformed batch → <b>TRUE</b></div>
+      <div class="live">Live, read-only check · prototype stub</div>
     </div>
   </div>
 </div>
@@ -111,9 +102,8 @@ h1.sm{font-size:44px}
   </div>
   <div class="card fade" data-at="10">
     <div class="t"><b>What the proof makes public</b></div>
-    <div class="bigline">Hashes and batch metadata, not transaction contents.</div>
-    <div class="pubs"><span>zone id</span><span>Tempo and anchor block numbers</span><span>block hashes</span><span>deposit and withdrawal queue hashes</span><span>counters</span></div>
-    <div class="src" style="margin-top:8px" data-k="pubSrc"></div>
+    <div class="bigline">Public: hashes and batch metadata.<br />Private: transaction contents.</div>
+    <div class="pubs"><span>no transaction contents</span><span>anyone can verify on chain</span></div>
   </div>
 </div>
 
@@ -123,30 +113,17 @@ h1.sm{font-size:44px}
   <div class="pipe fade">
     <span class="chip">Tempo's Zone batch verifier</span><span class="chip">→ zero-knowledge VM</span><span class="chip">→ proof</span><span class="chip blk">→ a contract on Moderato</span>
   </div>
-  <div class="src fade" data-k="proveSrc"></div>
-  <div class="grid2">
-    <div class="card fade" data-at="1.5">
-      <div class="t"><b>The transaction</b> · <span data-k="batchFrom"></span></div>
-      <div class="status-ok"><span data-k="atStatus"></span></div>
-      <div class="ev">
-        <span class="k">tx</span><span class="v" data-k="atTx"></span>
-        <span class="k">block · gas</span><span class="v" data-k="atBlock"></span>
-        <span class="k">the batch</span><span class="v" data-k="batchLine"></span>
-        <span class="k">contract</span><span class="v" data-k="atTo"></span>
-      </div>
-    </div>
-    <div class="card shotcard fade" data-at="9.5">
-      <div class="t"><b>Explorer</b> · <span data-k="exUrl"></span></div>
-      <img data-src="exShot" alt="" />
-      <div class="src" style="margin-top:6px" data-k="exNote"></div>
-    </div>
+  <div class="proof-facts fade" data-at="2">
+    <div class="fact"><small>Batch</small><b>1 withdrawal</b></div>
+    <div class="fact"><small>Batch</small><b>2 user txs</b></div>
+    <div class="fact"><small>Verified</small><b>on Moderato</b></div>
   </div>
   <div class="result fade" data-at="11.5">
     <span class="lead">Change one field</span>
     <div class="r"><small>the real batch</small><b class="ok" data-k="callReal"></b></div>
     <div class="r"><small data-k="callBadWhat"></small><b class="bad" data-k="callBad"></b></div>
   </div>
-  <div class="src fade" data-at="11.5" data-k="callSrc"></div>
+  <div class="src fade" data-at="11.5">Live, read-only verification · full transaction and call data on sworn.fun</div>
 </div>
 
 <!-- scene 4 — who it is for (31 s) -->
@@ -158,7 +135,6 @@ h1.sm{font-size:44px}
       <div>
         <div class="h">Businesses that run Zones and answer to auditors</div>
         <div class="b">Independent evidence they can match to each batch they settle.</div>
-        <div class="src" data-k="nearSrc"></div>
       </div>
       <div class="tag">Evidence, not yet a guarantee</div>
     </div>
@@ -166,7 +142,6 @@ h1.sm{font-size:44px}
       <div class="when">Later</div>
       <div>
         <div class="h">If Tempo builds proofs into settlement, withdrawals wait for them</div>
-        <div class="src" data-k="laterSrc"></div>
       </div>
       <div class="tag">Written, not built</div>
     </div>
@@ -174,7 +149,6 @@ h1.sm{font-size:44px}
       <div class="when">Either way</div>
       <div>
         <div class="h">The service: provers run on time, rebuilt at each Tempo upgrade</div>
-        <div class="src" data-k="serviceSrc"></div>
       </div>
       <div class="tag">To be validated</div>
     </div>

@@ -157,13 +157,13 @@ export function noOwner() {
 }
 
 // ── recording authored slides ─────────────────────────────────────────────────────────────────────
-export async function launch() {
+export async function launch(viewport = { width: 1280, height: 720, deviceScaleFactor: 1.5 }) {
   const { default: puppeteer } = await import("puppeteer");
   return puppeteer.launch({
     timeout: 180000, // a loaded host (SP1 proving) can take >30 s to open the first tab
     headless: true, // Chromium 107 (puppeteer 19) predates --headless=new; "new" hangs at launch
-    defaultViewport: { width: 1280, height: 720, deviceScaleFactor: 1.5 },
-    args: ["--no-sandbox", "--hide-scrollbars", "--window-size=1280,720", "--force-device-scale-factor=1.5"],
+    defaultViewport: viewport,
+    args: ["--no-sandbox", "--hide-scrollbars", `--window-size=${viewport.width},${viewport.height}`, `--force-device-scale-factor=${viewport.deviceScaleFactor}`],
   });
 }
 export async function newRecorder(page) {
@@ -188,8 +188,8 @@ export const duration = (f) =>
  * Loads `html` (a file in video/), fills its [data-k] slots via window.__fill(data) (which throws on
  * an empty slot), then shows each scene id for its hold. Returns the scene start marks (s).
  */
-export async function recordSlides({ html, data, ids, holds, raw, out }) {
-  const browser = await launch();
+export async function recordSlides({ html, data, ids, holds, raw, out, viewport }) {
+  const browser = await launch(viewport);
   try {
     const page = await browser.newPage();
     page.setDefaultTimeout(600000);
@@ -231,8 +231,8 @@ export async function fontsReady(page) {
 }
 
 /** Overflow check: every [data-k] slot and .card in the shown scenes must sit inside its card / the frame. */
-export async function checkOverflow(html, data, ids) {
-  const browser = await launch();
+export async function checkOverflow(html, data, ids, viewport) {
+  const browser = await launch(viewport);
   try {
     const page = await browser.newPage();
     await page.goto("file://" + path.join(dir, html), { waitUntil: "load", timeout: 600000 });
@@ -243,7 +243,7 @@ export async function checkOverflow(html, data, ids) {
       const r = await page.evaluate((x) => window.__overflow(x), id);
       bad.push(...r.map((m) => `#${id}: ${m}`));
     }
-    if (bad.length) fail(`text overflows its card at 1280×720 CSS px (1920×1080):\n  ${bad.join("\n  ")}`);
+    if (bad.length) fail(`text overflows its card at ${viewport ? `${viewport.width}×${viewport.height}` : "1280×720"} CSS px (1920×1080):\n  ${bad.join("\n  ")}`);
   } finally {
     await browser.close();
   }

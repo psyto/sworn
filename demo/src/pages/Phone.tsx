@@ -34,8 +34,8 @@ export function PhonePage() {
       <div className="phone-wrap">
         <div className="phone" data-testid="phone">
           <div className="phone-top">
-            <span className="sub">Owner · notifications</span>
-            <h1>Treasury agent</h1>
+            <span className="sub">Sworn · payment updates</span>
+            <h1>Your wallet</h1>
             {who.status === "ok" ? (
               <span className="sub">
                 <AddrLink address={who.value.agent} />
@@ -84,7 +84,7 @@ function when(ts?: bigint) {
 
 function NoticeItem({ n, decimals }: { n: Notice; decimals: number }) {
   const amt = <b className="num">{money(n.amount, decimals)}</b>;
-  const title = { reserved: "Answer reserved", diverted: "Payment diverted", compensated: "Compensated" }[n.kind];
+  const title = { reserved: "Payment protection ready", diverted: "Payment needs attention", compensated: "Protection paid" }[n.kind];
   return (
     <li className={`notice ${n.kind}`} data-kind={n.kind}>
       <span className="title">
@@ -93,11 +93,11 @@ function NoticeItem({ n, decimals }: { n: Notice; decimals: number }) {
       </span>
       {n.kind === "reserved" ? (
         <p>
-          A server locked {amt} of its bond behind its answer about block {n.aboutBlock?.toString()}.
+          A provider locked {amt} of its own bond behind your payment check.
         </p>
       ) : null}
-      {n.kind === "diverted" ? <p>{amt} went to ReceivePolicyGuard, not to the receiver: its receive policy blocks this sender.</p> : null}
-      {n.kind === "compensated" ? <p>A preflight answer was wrong. You were paid {amt} from the server's bond.</p> : null}
+      {n.kind === "diverted" ? <p>Your payment was accepted, but the recipient did not receive it. {amt} is held by the payment guard.</p> : null}
+      {n.kind === "compensated" ? <p>The payment check was proven wrong. {amt} was paid to you from the provider's bond.</p> : null}
       <span className="sub">
         block {n.blockNumber.toString()} · <TxLink hash={n.txHash}>explorer</TxLink>
       </span>

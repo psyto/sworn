@@ -54,7 +54,9 @@ exposes hashes and batch metadata, not transaction contents.
    the side, no portal calls `SwornZoneVerifier`, and `attest` stores nothing (spec 003 §5 D2, D4).
    Matching a proof to a settled batch is the operator's and auditor's step. It needs the operator: only
    the operator holds a Zone's witness, and a real Zone needs its own deployment (its genesis and parent
-   chain, and version work, since Moderato's portals are pre-T13).
+   chain, and version work, since Moderato's portals are pre-T13). A [local Operator Console](docs/operator-console.md)
+   can start the existing real proof job for the withdrawal fixture and run read-only checks after it; it is
+   deliberately fixture-only, loopback-only and not a hosted service.
 2. **Later: Tempo builds proofs into settlement.** [Spec 004](docs/specs/004-tee-plus-zk.md) proposes that
    payouts wait for a ZK proof of the exact batch. That design is written, not built, and it would land in
    Tempo's portal and verifier, not in our code.
