@@ -42,6 +42,77 @@ but it is not the product pitched or demoed for CWF:
 > **Status (2026-10-05): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
 > testnet** only. Unaudited. No customers or revenue. Moderato has one effective Zone operator today.
 
+## Sworn in three diagrams
+
+Solid lines are built and running on Moderato testnet today; dashed lines are proposed (spec 004) or not
+connected.
+
+### 1. System overview: who runs what
+
+```mermaid
+flowchart LR
+  subgraph OP["Zone operator (private)"]
+    ZN["Zone node and private ledger"]
+    W[("Batch witness + Zone genesis")]
+  end
+  subgraph SW["Sworn prover (local today)"]
+    C["Operator Console / scripts/zone-prove.sh"]
+    G["SP1 guest: Tempo's own zone_spf::prove_zone_batch"]
+    P["Groth16 proof + public digest"]
+  end
+  subgraph T["Tempo, Moderato testnet"]
+    V["SwornZoneVerifier (IVerifier signature)"]
+    S["SP1VerifierGroth16 v6.1.0"]
+    ZP["Tempo's ZonePortal"]
+  end
+  R["Auditor or counterparty"]
+  ZN --> W --> C --> G --> P
+  P -->|"attest: one tx, emits ZoneBatchVerified"| V
+  V -->|"checks the proof"| S
+  R -->|"verify by eth_call, or read the event"| V
+  ZP -.->|"not connected today; spec 004 proposal"| V
+```
+
+### 2. Use cases
+
+```mermaid
+flowchart LR
+  O(["Zone operator"])
+  A(["Auditor or counterparty"])
+  TP(["Tempo (later)"])
+  U1["Supply a batch witness"]
+  U2["Generate the proof (about 15 min, local)"]
+  U3["Record the proof on Tempo (attest)"]
+  U4["Verify the proof live: true, or InvalidProof if any field changed"]
+  U5["Match the proof to the batch that settled (manual today)"]
+  U6["Pay withdrawals only after the proof passes (proposal)"]
+  O --> U1 --> U2 --> U3
+  A --> U4
+  A --> U5
+  TP -.-> U6
+```
+
+### 3. Data flow: what stays private and what becomes public
+
+```mermaid
+sequenceDiagram
+  participant Op as Zone operator
+  participant Pr as Sworn prover (SP1)
+  participant SZV as SwornZoneVerifier (Tempo)
+  participant Rv as Reviewer
+  Op->>Pr: batch witness + genesis (private: never leaves the prover)
+  Pr->>Pr: re-execute the batch with Tempo's own Zone code
+  Pr->>Pr: commit one digest: Zone id, Tempo blocks and anchor, state and withdrawal-queue hashes, counters, verifier, config, genesis hash, chain
+  Pr->>SZV: attest(batch fields, proof): public hashes and counters, no transactions
+  SZV->>SZV: recompute the digest from the fields, check the Groth16 proof
+  SZV-->>Rv: event ZoneBatchVerified(zone, height, block hashes, digest)
+  Rv->>SZV: verify(same fields, proof) by eth_call
+  SZV-->>Rv: true, or InvalidProof() if any field differs
+```
+
+What a reviewer learns: that Tempo's own Zone code accepts this exact batch. What a reviewer does not learn:
+balances, senders, recipients or amounts inside the Zone.
+
 ## Why it matters
 
 Zones are private by design: the operator has full visibility, and each user can see only their own balances
