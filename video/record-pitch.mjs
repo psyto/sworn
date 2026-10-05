@@ -19,7 +19,7 @@
 //            explorer page of the attest (cropped to its transaction card, no header); the proving log; the
 //            recorder's OWN two eth_calls: verify(real) = true, verify(height+1) reverts InvalidProof().
 //   scene 4  spec 003 §5 D2/D4, spec 004 (header, "Payouts wait for ZK.", §5 upgrades, §6 "not built"), README T12.
-//   scene 5  vendored tempo/Cargo.toml (reth, revm), GitHub (rethlab public), ethglobal.com, README "Who".
+//   scene 5  vendored tempo/Cargo.toml (reth, revm), fabrknt.com/dojo (21 courses), ethglobal.com, README "Who".
 //   scene 6  README status and limits, the factory reads above, GitHub (repo public).
 // The narration is checked for the wording rules (no "the same input", "broken", "protects/secures
 // withdrawals", "every batch", "our customers are").
@@ -243,7 +243,9 @@ const t12 = readme.match(/T12, activates at (\d{4}-\d\d-\d\d \d\d:\d\d UTC)/) ??
 const cargo = read("tempo/Cargo.toml", "vendored tempo Cargo.toml");
 if (!/^reth-[\w-]+ = \{ git = "https:\/\/github\.com\/paradigmxyz\/reth"/m.test(cargo) || !/^revm = \{ version = "([\d.]+)"/m.test(cargo)) fail("tempo/Cargo.toml no longer depends on paradigmxyz/reth and revm");
 const revmV = cargo.match(/^revm = \{ version = "([\d.]+)"/m)[1];
-const rethlabRepo = ghRepoPublic("psyto/rethlab", "rethlab");
+const DOJO = "https://fabrknt.com/dojo";
+const dojo = flat(await fetchText(DOJO, "Fabrknt Dojo"));
+if (!/21 courses/.test(dojo) || !/Reth/.test(dojo)) fail(`${DOJO}: no longer says "21 courses" on Reth`);
 const EG = "https://ethglobal.com/showcase/reckn-47t6m";
 const eg = (await fetchText(EG, "ETHGlobal showcase")).replace(/<!-- -->/g, "");
 const prize = eg.match(/<h4[^>]*>\s*(Uniswap Foundation)\s*-\s*(.*?)\s*(3rd place)\s*<\/h4>/) ?? fail(`${EG}: no "Uniswap Foundation … 3rd place" prize`);
@@ -289,7 +291,7 @@ const data = {
   serviceSrc: `spec 004 §5: each hardfork that changes Zone execution needs a new guest and vkey · next Tempo upgrade: T12 on Moderato, ${t12[1]}`,
   // 5
   stackSrc: `Tempo's own Cargo.toml: reth from github.com/paradigmxyz/reth · revm ${revmV}`,
-  rethlab: `rethlab: Reth source-reading courses · ${rethlabRepo}`,
+  rethlab: `Fabrknt Dojo: 21 source-grounded courses on Rust, Reth, Revm, Alloy · ${DOJO}`,
   ethglobal: `ETHGlobal Tokyo 2026: ${prize[1]}, ${prize[3]}`,
   ethglobalSrc: `with Reckn · ${prize[2].trim()} · ${EG.replace(/^https:\/\//, "")}`,
   banking: BANK, bankingSrc: "README “Who” · read while recording",

@@ -87,7 +87,7 @@ paying for.” Close: “Sworn: audit-ready evidence for private execution.”]*
 | 3.2 | Real proof verifies; a changed next Zone height reverts `InvalidProof()`. | Recorder's own read-only `eth_call`s. |
 | 4.1 | Buyer, operations contract, payment model and willingness to pay are commercial hypotheses. | No customer, payer agreement, price or revenue is claimed. Spec 004 §5 supports the engineering fact that execution upgrades require a new guest and verification key. |
 | 5.1 | Sworn runs Tempo code and binds to Tempo IVerifier-shaped inputs; Tempo uses Reth and Revm. | Specs 003/004 and Tempo `Cargo.toml`. |
-| 5.2 | Founder works on and teaches Reth and has 15 years building banking systems in Japan. | `README.md` “Who”; `github.com/psyto/rethlab`. |
+| 5.2 | Founder works on and teaches Reth and has 15 years building banking systems in Japan. | `README.md` “Who”; fabrknt.com/dojo (21 courses, fetched by the recorder). |
 | 5.3 | The founder's previous project (Reckn) won a Uniswap Foundation prize at ETHGlobal Tokyo 2026 (3rd place, Best Uniswap Stack Contribution). | ethglobal.com/showcase/reckn-47t6m, fetched by the recorder; `README.md` “Who”. |
 | 5.4 | The upgrade claim is a design intent (“built to track”), not a track record: the pinned guest predates Moderato's T12. | `README.md` “What is not done”. |
 | 6.1 | Testnet-only, unaudited, integration-test fixture, no customers. | `README.md` status and verifier limitations, checked by the recorder. |

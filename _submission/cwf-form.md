@@ -38,7 +38,7 @@ The first product hypothesis is Proof Operations for a Zone business that must g
 ## Why did you decide to build this, and why build it now? · ≤1000
 
 ```
-I work in Rust on Tempo's stack: Reth, Revm, Alloy and Foundry. I wrote RethLab source-reading courses and rdk, a Reth-based DeFi kit. Reckn, my previous project, won a Uniswap Foundation prize at ETHGlobal Tokyo 2026; I also spent 15 years building banking systems in Japan.
+I work in Rust on Tempo's stack: Reth, Revm, Alloy and Foundry. I wrote Fabrknt Dojo (fabrknt.com/dojo), 21 source-grounded courses on that stack, and rdk, a Reth-based DeFi kit. Reckn, my previous project, won a Uniswap Foundation prize at ETHGlobal Tokyo 2026; I also spent 15 years building banking systems in Japan.
 
 Tempo Zones make the operational gap concrete: the operator has the witness, but an outside reviewer cannot recreate the complete private batch from public data. Tempo's verifier is Rust code; I tested whether it could run in a zkVM and be bound to the inputs a Zone portal understands.
 
@@ -187,7 +187,7 @@ Hypothesis: a Zone business pays for a Proof Operations agreement — proof gene
 ## How long have you each been working on this? Full time? · ≤500
 
 ```
-[FOUNDER] Sworn itself since 2026-10-03. Draft: "One founder. Sworn started on 2026-10-03; the Reth/Revm work it rests on goes back to 2026 (rethlab, rdk, Reckn). [full-time / part-time — founder to state]"
+[FOUNDER] Sworn itself since 2026-10-03. Draft: "One founder. Sworn started on 2026-10-03; the Reth/Revm work it rests on goes back to 2026 (Fabrknt Dojo, rdk, Reckn). [full-time / part-time — founder to state]"
 ```
 
 ## Where is each member based? Do you work in-person? · ≤500

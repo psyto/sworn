@@ -28,7 +28,7 @@ real; the buyer, willingness to pay and distribution channel are not yet validat
 
 | CWF criterion | Honest evidence now | Submission treatment |
 |---|---|---|
-| Founder + market fit | Reth/Revm engineering, RethLab, Reckn award, 15 years in banking systems | Pitch: why this founder can maintain Tempo-specific proof operations. Form: how the opportunity was uncovered. |
+| Founder + market fit | Reth/Revm engineering, Fabrknt Dojo (21 courses), Reckn award, 15 years in banking systems | Pitch: why this founder can maintain Tempo-specific proof operations. Form: how the opportunity was uncovered. |
 | Insight | Private execution creates an external-verification gap; public batch evidence can preserve transaction confidentiality | Pitch and README lead with the operator / reviewer moment, not the zkVM. |
 | Product + execution | Real Tempo Zone code in SP1; on-chain verify; mutation rejection; working local Operator Console | Demo is the technical proof. Pitch shows Console briefly and links to demo/site. |
 | Potential market size | No credible numeric TAM for this precise market. A narrow wedge can expand only with Zone adoption and repeated batches/upgrades. | Do not invent a TAM. State the expansion mechanism and the gating assumption. |

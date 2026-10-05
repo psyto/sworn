@@ -78,7 +78,7 @@ and a decision by its reviewer about whether the evidence is worth repeating or 
 
 **Hiroyuki Saito** ([@psyto](https://github.com/psyto)), solo founder, Japan.
 - **Rust engineer on Tempo's stack:** Reth, Revm, Alloy and Foundry. Author of
-  [RethLab](https://rethlab.fabrknt.com) (21 source-reading courses on that stack) and
+  [Fabrknt Dojo](https://fabrknt.com/dojo) (21 source-grounded courses, 234 lessons, on Rust, Reth, Revm and Alloy) and
   [rdk](https://github.com/psyto/rdk), a DeFi kit on Reth.
 - **Previous project:** [Reckn](https://github.com/psyto/reckn) won a Uniswap Foundation prize at
   ETHGlobal Tokyo 2026.

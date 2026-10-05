@@ -80,7 +80,7 @@ because private payment ledgers for businesses are what Zones are for. If they d
 - [spec 003 Results]
 
 **12. Why you?**
-- Tempo is built on Reth and Revm. I work on that stack and teach it (RethLab, 21 source-reading courses).
+- Tempo is built on Reth and Revm. I work on that stack and teach it (Fabrknt Dojo, fabrknt.com/dojo: 21 source-grounded courses on Rust, Reth, Revm and Alloy).
 - My last project took a Uniswap Foundation prize at ETHGlobal Tokyo.
 - Fifteen years building banking systems: I know what auditors ask an operator for.
 
