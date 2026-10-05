@@ -84,7 +84,7 @@ Japan
 ## Notes for judges — anyone not listed who did meaningful work · ≤600
 
 ```
-Solo founder; no collaborators, contractors or teammates. AI tools used for code review and implementation assistance are documented in the repo (README, docs/reviews/). [FOUNDER: confirm]
+Solo founder; no collaborators, contractors or teammates. AI tools used for code review and implementation assistance are documented in the repo (README, docs/reviews/).
 ```
 
 ## Anything else judges should know · ≤500
@@ -187,7 +187,7 @@ Hypothesis: a Zone business pays for a Proof Operations agreement — proof gene
 ## How long have you each been working on this? Full time? · ≤500
 
 ```
-[FOUNDER] Sworn itself since 2026-10-03. Draft: "One founder. Sworn started on 2026-10-03; the Reth/Revm work it rests on goes back to 2026 (Fabrknt Dojo, rdk, Reckn). [full-time / part-time — founder to state]"
+One founder. Sworn started on 2026-10-03; the Reth/Revm work it rests on goes back to 2026 (Fabrknt Dojo, rdk, Reckn). Part-time.
 ```
 
 ## Where is each member based? Do you work in-person? · ≤500
