@@ -33,7 +33,7 @@ that engine:
 > "Verify again" on the page (three live `eth_call`s: Sworn, the real proof → true; one field changed →
 > `InvalidProof`; for comparison, Moderato's current prototype verifier, the pre-T13 reference stub, returns
 > true for an equivalent malformed batch) ·
-> pitch (2 min) and demo (2:35) videos: *links added once published*.
+> pitch (≤ 2 min) and demo (2:32) videos: *links added once published*.
 >
 > **Status (2026-10-04): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
 > testnet** only. Unaudited. Traction: none. Moderato has one Zone operator today, and we have no customers.
@@ -56,7 +56,9 @@ exposes hashes and batch metadata, not transaction contents.
    the operator holds a Zone's witness, and a real Zone needs its own deployment (its genesis and parent
    chain, and version work, since Moderato's portals are pre-T13). A [local Operator Console](docs/operator-console.md)
    can start the existing real proof job for the withdrawal fixture and run read-only checks after it; it is
-   deliberately fixture-only, loopback-only and not a hosted service.
+   deliberately fixture-only, loopback-only and not a hosted service. It rejects other websites (non-loopback
+   `Host`, cross-site `Origin`) and needs an `X-Sworn-Operator` header to start a job; that is a cross-site
+   boundary, not authorization against other local processes.
 2. **Later: Tempo builds proofs into settlement.** [Spec 004](docs/specs/004-tee-plus-zk.md) proposes that
    payouts wait for a ZK proof of the exact batch. That design is written, not built, and it would land in
    Tempo's portal and verifier, not in our code.
@@ -203,6 +205,12 @@ Two more slashes were recorded live for the demo video, on the same day:
 (`demoLiveTakeFirst`, `demoLiveTake`).
 
 ## What is not done
+
+- **Being checked (2026-10-05): our own Zone on Moderato.** Running a Zone sequencer and a Solidity
+  `ZonePortal` of our own on Moderato, with `SwornZoneVerifier` as its verifier, would let a portal accept a
+  batch and queue its withdrawals only after the ZK proof verifies. A feasibility check is under way
+  (`spikes/own-zone/`); until it reports, the batches above remain integration-test batches and no portal
+  calls the verifier.
 
 - **TEE + ZK is a design proposal, not built.** [Spec 004](docs/specs/004-tee-plus-zk.md) proposes that Nitro settles
   and a ZK proof of the exact batch commitment releases payouts. The proof statement it needs, the portal
