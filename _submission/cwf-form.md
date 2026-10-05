@@ -18,7 +18,7 @@ Sworn
 ## Brief description · Public · ≤500
 
 ```
-Tempo Zones are private blockchains on Tempo: the operator sees everything, each user only their own account, so no one outside can check the operator ran the ledger correctly. Sworn makes that checkable: for a batch the operator supplies, a zero-knowledge proof that Tempo's own Zone code accepts it, verifiable by anyone on chain, exposing hashes, not transactions. A contract on Tempo's testnet verified one for a test batch with a withdrawal.
+Audit-ready proof for private execution on Tempo. A Tempo Zone is a private ledger: only the operator holds the batch and its witness, so an auditor or counterparty cannot check it. For a batch the operator supplies, Sworn runs Tempo's own Zone code in a zero-knowledge VM and produces proof anyone can verify on chain, exposing hashes, not transactions. A contract on Tempo's testnet verified one for a test batch with a withdrawal.
 ```
 
 ## Project website · Public
@@ -185,7 +185,7 @@ What is missing is not the engine but the Tempo-specific service: someone accoun
 ## How do you make money, or how do you plan to? · ≤500
 
 ```
-Near term: Zone operators that answer to auditors pay for the service: proving the batches they supply, on time, plus rebuilding the prover at each Tempo upgrade. Later, if Tempo builds proofs into settlement (spec 004, written, not built), the same service runs for Tempo's design. Today: no customers, no revenue, and no payer has agreed. Next: one design partner.
+Hypothesis, to validate with design partners: a Proof Operations contract with a Zone business that must give a counterparty or auditor confidence before it settles. It would pay for proof generation for each batch it supplies, plus keeping the proof pipeline compatible through Tempo upgrades. Later, if Tempo builds proofs into settlement (spec 004, written, not built), the same service applies. Today: no customers, no revenue.
 ```
 
 ## How long have you each been working on this? Full time? · ≤500

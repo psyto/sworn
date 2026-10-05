@@ -1,4 +1,4 @@
-// Records video/pitch.mp4 — Sworn's ≤ 2 min CWF pitch v4.0, six scenes, SILENT, 1920×1080 — and
+// Records video/pitch.mp4 — Sworn's ≤ 2 min CWF pitch v5.1, six scenes, SILENT, 1920×1080 — and
 // video/pitch.srt with the narration of video/PITCH.md timed to where each scene landed.
 //
 //   node video/record-pitch.mjs            # then: node video/split-scenes.mjs pitch
@@ -37,14 +37,14 @@ const scenes = parseScenes("video/PITCH.md");
 if (scenes.length !== 6) fail(`PITCH.md has ${scenes.length} scenes, expected 6`);
 const TOTAL = scenes.reduce((a, s) => a + s.hold, 0);
 const WORDS = scenes.reduce((a, s) => a + s.words, 0);
-log(`• pitch v4.0: scene holds (words ÷ 2.2 w/s, rounded up to 0.5 s)`);
+log(`• pitch v5.1: scene holds (words ÷ 2.2 w/s, rounded up to 0.5 s)`);
 for (const s of scenes) log(`    scene ${s.n}: ${String(s.words).padStart(3)} words → ${s.hold.toFixed(1)} s  (${s.title})`);
 log(`    total ${TOTAL.toFixed(1)} s, ${WORDS} words`);
 if (TOTAL > MAX_TOTAL) fail(`pitch runs ${TOTAL} s > ${MAX_TOTAL} s — cut words in PITCH.md`);
 const narr = scenes.map((s) => s.text).join(" ");
 for (const banned of [/the same input/i, /\bbroken\b/i, /protects? withdrawals/i, /secures? withdrawals/i, /every batch/i, /our customers are/i])
   if (banned.test(narr)) fail(`PITCH.md narration says ${banned}`);
-for (const must of ["evidence, not yet a guarantee", "written, not built", "one Zone operator today", "we have no customers", "the service we want to validate"])
+for (const must of ["audit-ready evidence", "operator selects the batch", "buyer we are pursuing", "worth paying for", "No customer claimed"])
   if (!narr.includes(must)) fail(`PITCH.md narration no longer says "${must}"`);
 
 const ZONES_REF = "ac49071f";
@@ -332,7 +332,7 @@ const cues = writeSrt(scenes, starts, path.join(dir, "pitch.srt"));
 const ffmpeg = process.env.FFMPEG_PATH || "/opt/homebrew/bin/ffmpeg";
 for (let i = 0; i < 6; i++) execFileSync(ffmpeg, ["-v", "error", "-ss", (starts[i + 1] - 0.2).toFixed(2), "-i", out, "-frames:v", "1", path.join(dir, "frames", `pitch-scene${i + 1}.png`), "-y"]);
 writeJson(path.join(dir, "pitch.marks.json"), {
-  name: "pitch", script: "video/PITCH.md", version: "4.0", holds: scenes.map((s) => s.hold), titles: scenes.map((s) => s.title),
+  name: "pitch", script: "video/PITCH.md", version: "5.1", holds: scenes.map((s) => s.hold), titles: scenes.map((s) => s.title),
   words: scenes.map((s) => s.words), totalWords: WORDS,
   liveCalls: { moderatoPreT13Malformed: "true", moderatoPreT13At: stubAt.toISOString(), swornReal: "true", swornMutated: "InvalidProof()", swornAt: callAt.toISOString(), preT13Selector: PRE_SEL },
   moderatoZones: { count: nZones, admin, factoryOwner: fOwner, safeOwners, safeThreshold: Number(safeT) },

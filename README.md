@@ -1,6 +1,6 @@
 # Sworn
 
-**Zero-knowledge proofs of Tempo's own execution.**
+**Audit-ready proof for private execution on Tempo.** Zero-knowledge proofs of Tempo's own Zone execution.
 
 Tempo Zones are private blockchains on Tempo. The operator sees everything; each user sees only their own
 account. So no one outside can check that the operator ran the ledger correctly. Sworn makes that
