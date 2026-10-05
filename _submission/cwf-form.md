@@ -1,4 +1,4 @@
-# CWF submission form: Sworn (draft v3.2, 2026-10-04, follows video/PITCH.md v3.2 and _submission/CRITERIA-MAP.md)
+# CWF submission form: Sworn (submission draft v5.2, 2026-10-05)
 
 **Every field below is written to be pasted.** Limits are the form's own (field list and limits taken
 from the copy of this form kept for the previous entry); `scripts/cwf-form.sh` counts them.
@@ -18,7 +18,7 @@ Sworn
 ## Brief description · Public · ≤500
 
 ```
-Audit-ready proof for private execution on Tempo. A Tempo Zone is a private ledger: only the operator holds the batch and its witness, so an auditor or counterparty cannot check it. For a batch the operator supplies, Sworn runs Tempo's own Zone code in a zero-knowledge VM and produces proof anyone can verify on chain, exposing hashes, not transactions. A contract on Tempo's testnet verified one for a test batch with a withdrawal.
+Before a private Tempo Zone releases a withdrawal batch, Sworn creates independently verifiable, audit-ready evidence for that operator-supplied batch without exposing customer transaction contents. It runs Tempo's own Zone verifier in SP1; a contract on Moderato verified a proof for Tempo's integration-test batch with one withdrawal. Testnet only: no live Zone integration, customers or revenue.
 ```
 
 ## Project website · Public
@@ -30,33 +30,31 @@ https://psyto.github.io/sworn/
 ## What are you building, and who is it for? · ≤1000
 
 ```
-Sworn runs Tempo's own Zone batch verifier (zone_spf::prove_zone_batch) inside the SP1 zkVM. For a batch the operator supplies, it produces a proof that Tempo's code accepts that batch, bound to the inputs of Tempo's IVerifier. Anyone can verify it on chain; its public values are hashes and batch metadata, not transaction contents. On Moderato, SwornZoneVerifier verified a test batch with a withdrawal (tx 0xa63009fd…f770); change one field and it is rejected.
+Sworn runs Tempo's own Zone batch verifier (zone_spf::prove_zone_batch) inside the SP1 zkVM. For a batch an operator supplies, it produces a proof bound to Tempo's IVerifier-shaped inputs. Anyone can verify it on chain; public values are hashes and batch metadata, not transaction contents. On Moderato, SwornZoneVerifier verified a Tempo integration-test batch with one withdrawal (tx 0xa63009fd…f770); changing one field is rejected.
 
-Who it is for. Near term: businesses that run Zones and answer to auditors. They get independent evidence they can match to each batch they settle. It is evidence, not yet a guarantee: no portal calls the verifier and it stores nothing. Later: if Tempo builds proofs into settlement, withdrawals can wait for them (spec 004: written, not built). Either way, the service is running provers on time and rebuilding them at each Tempo upgrade.
+The first product hypothesis is Proof Operations for a Zone business that must give a reviewer evidence before settlement: per-batch proof generation plus maintenance through Tempo upgrades. This is not withdrawal protection or a live Zone integration: no ZonePortal calls Sworn and no customer has requested or paid for it. The first test is one operator-supplied batch, delivered with reproducible verification instructions to its reviewer.
 ```
 
 ## Why did you decide to build this, and why build it now? · ≤1000
 
 ```
-I work in Rust on the stack Tempo is built on: Reth, Revm, Alloy, Foundry. I wrote rethlab (rethlab.fabrknt.com), source-reading courses on Reth, and rdk, a DeFi kit on Reth. My previous project, Reckn, took 3rd place for Uniswap Foundation at ETHGlobal Tokyo 2026, adjudicating payments by deterministic re-execution.
+I work in Rust on Tempo's stack: Reth, Revm, Alloy and Foundry. I wrote RethLab source-reading courses and rdk, a Reth-based DeFi kit. Reckn, my previous project, won a Uniswap Foundation prize at ETHGlobal Tokyo 2026; I also spent 15 years building banking systems in Japan.
 
-Reading Tempo's Zones docs, I found the gap: the check on a Zone batch is an attestation or a stub, and ZK proving "is not implemented". Tempo's own batch verifier exists as ordinary Rust. Nobody had put it, or Tempo's EVM, inside a zkVM.
+Tempo Zones make the operational gap concrete: the operator has the witness, but an outside reviewer cannot recreate the complete private batch from public data. Tempo's verifier is Rust code; I tested whether it could run in a zkVM and be bound to the inputs a Zone portal understands.
 
-On 2026-10-03, tempo-revm ran in SP1 and matched 40 of 40 real Moderato transactions. On 10-04, Tempo's Zone batch verifier ran in SP1, and a contract on Moderato verified the proof.
-
-Why now: Zones are on testnet, before operators settle real money and before their auditors settle on what evidence to ask for. Tempo's attestation verifier arrives with T13; a check anyone can re-run is easiest to add beside it now.
+Inside this hackathon, Tempo's Zone verifier ran in SP1 and a contract on Moderato verified the proof. Why now is a hypothesis, not a claim of demand: Zones are still testnet, so a first operator can shape evidence requirements before a workflow is entrenched.
 ```
 
 ## How does your product use these chains? · ≤500
 
 ```
-Tempo (Moderato). SwornZoneVerifier, with Tempo's IVerifier signature, verifies a Groth16 proof of a Tempo Zone batch on Tempo (0x00F6ed34…64e5). Sworn.sol holds bonds and pays slashes in PathUSD (0xc54b7e52…02c6). Both use the SP1 Groth16 verifier deployed on Tempo. Inside the proofs run Tempo's own code: Zones' prove_zone_batch, and tempo-revm with the TIP-20, TIP-403 and fee-token precompiles, bound to Tempo's block hash.
+Tempo (Moderato). SwornZoneVerifier, with Tempo's IVerifier signature, verifies a Groth16 proof of a Tempo Zone batch on Tempo (0x00F6ed34…64e5). It uses the SP1 Groth16 verifier deployed on Tempo. Inside the proof runs Tempo Zones' own prove_zone_batch code, bound to the IVerifier-shaped batch inputs and destination chain.
 ```
 
 ## What technologies are you using or integrating with? · ≤500
 
 ```
-Tempo: Tempo Zones (zone-spf, the IVerifier interface, the Nitro attestation fields), tempo-revm (patched to build for the zkVM), TIP-20, TIP-403 receive policies, fee tokens, MPP (mppx). The Paradigm stack: Reth, Revm, Alloy (sol!, EIP-712), Foundry (forge, anvil). Succinct SP1 6.3 (zkVM guests, Groth16, verified on-chain by SP1VerifierGroth16 v6.1.0). TypeScript, viem and React for the SDK, server, demo and live page.
+Tempo: Zones (zone-spf, the IVerifier interface, ZonePortal), Foundry on Tempo (64 forge tests, deployment), the TypeScript SDK (viem), Tempo transactions (type 0x76), TIP-20 and receive policies (a blocked transfer that succeeds), the Machine Payments Protocol (mppx), tempo-revm. Paradigm stack: Reth, Revm, Alloy (sol!, EIP-712). Succinct SP1 6.3: zkVM guests and Groth16, verified on-chain by SP1VerifierGroth16 v6.1.0. React for the live page and demo.
 ```
 
 ## Which chains · select
@@ -68,7 +66,7 @@ Tempo
 ## Category · Public
 
 ```
-[FOUNDER — choose from the form's list. Recommendation: Infrastructure, since the product is a proof engine for Tempo's execution; Payments is the fallback.]
+Infrastructure
 ```
 
 ## Is your project a mobile-focused dApp?
@@ -92,7 +90,7 @@ Solo founder; no collaborators, contractors or teammates. AI tools used for code
 ## Anything else judges should know · ≤500
 
 ```
-Everything in github.com/psyto/sworn was written inside the window, from 2026-10-03. Prior work, disclosed: the no-owner design discipline comes from my earlier psyto/reckn (no code reused). Tempo and Tempo Zones are fetched at pinned commits and patched, not vendored. The Zone batch proved comes from Tempo's own zones integration tests (dev chain), not from Moderato. Testnet only, unaudited, no revenue.
+Everything in github.com/psyto/sworn was written inside the window, from 2026-10-03. Tempo and Tempo Zones are fetched at pinned commits and patched, not vendored. The proof is for Tempo's integration-test fixture on dev chain 1337, not a Moderato Zone. The public page independently re-checks the proof from a browser. Testnet-only, unaudited, no customer or revenue claim.
 ```
 
 ---
@@ -120,7 +118,7 @@ The repo starts 2026-10-03, inside the window. Start at README.md. docs/specs/ h
 ## Demo video · ≤3 min · required
 
 ```
-[TO RECORD after the Moderato run — script in _submission/DEMO-SCRIPT.md (to write)]
+[FOUNDER: paste the public demo-video URL after adding your narration to video/demo.mp4]
 ```
 
 ## Live product link
@@ -138,7 +136,7 @@ https://psyto.github.io/sworn/ reads Moderato in your browser. Nothing to sign o
 ## Pitch video · Public · ≤2 min · required
 
 ```
-[TO RECORD — founder's voice]
+[FOUNDER: paste the public pitch-video URL after adding your narration to video/pitch.mp4]
 ```
 
 ## X profile · Public
@@ -154,20 +152,18 @@ https://psyto.github.io/sworn/ reads Moderato in your browser. Nothing to sign o
 ## How do you know people actually need, or will need this product? · ≤1000
 
 ```
-I have no customers, and I will not claim one. Moderato has one Zone operator today, and Zone creation is owner-gated.
+There is no direct demand validation yet: no customer, design partner, auditor request or revenue. Moderato has one effective Zone operator today and creation is owner-gated. I will not treat technical proof as customer traction.
 
-What I can show is the gap, in Tempo's own words and code. A Zone's operator sees everything and each user sees only their own account, so no outsider can check the ledger. Tempo's design checks batches with a Nitro attestation (T13); today's testnet verifier returns true for any input; Tempo's docs say ZK proof generation "is not implemented". The Zones README says the operator keeps full visibility "for compliance", which is where auditors come in.
+The reason to test the hypothesis is structural. A Zone operator has the private ledger and witness; an outside reviewer cannot recreate its batch from public data. Sworn can turn an operator-supplied batch into independently checkable evidence without publishing transactions. Whether that changes an audit, sales or settlement-review outcome is unproven.
 
-The need is a hypothesis to test with one party: a business running a Zone that must show an auditor its batches were executed correctly, and would value independent evidence it can match to each batch it settles. The next step is one design partner, and a proof of a batch they supply. If no operator wants that evidence, the later route is Tempo building proofs into settlement (spec 004).
+The validation sequence is concrete: find a Zone business that can supply a witness and has a reviewer; prove one supplied batch; give the reviewer reproducible verification instructions; ask whether the operator needs the next batch or upgrade proved and who owns that budget. A repeat need is the first demand signal. If no operator values it, the service thesis fails rather than becoming a claimed market.
 ```
 
 ## How far along are you? Do you have users? · ≤1000
 
 ```
 No users, no revenue. Built and measured inside the window, all on Moderato testnet:
-- Tempo Zones: Tempo's own batch verifier runs in SP1 on 5 real batches from Tempo's zones integration tests, matching native output (19-26M cycles; tampering rejected). Proofs bound to IVerifier's inputs were verified on Moderato, including a batch with a withdrawal (tx 0xa63009fd…f770; also 0xb14b7127…3b80).
-- tempo-revm in SP1: 40 of 40 real Moderato transactions re-executed match their receipts.
-- Three real slashes on Moderato: a lying answer server's bond paid the client, each by a Groth16 proof.
+- Tempo Zones: Tempo's own batch verifier runs in SP1 on 5 integration-test batches, matching native output (19-26M cycles; tampering rejected). Proofs bound to IVerifier's inputs were verified on Moderato, including a fixture with a withdrawal (tx 0xa63009fd…f770; also 0xb14b7127…3b80).
 - 64 forge tests, including real proofs; contracts with no owner.
 - A public page that reads the on-chain evidence and re-runs the Zone proof check in your browser. Pitch and demo videos.
 ```
@@ -175,17 +171,17 @@ No users, no revenue. Built and measured inside the window, all on Moderato test
 ## Who else is building in this space, and what are they getting wrong? · ≤1000
 
 ```
-Tempo itself: Zones' design (T13) checks batches with an AWS Nitro attestation. It is fast, but it is trust in one vendor's hardware, and an outsider cannot re-check it. Tempo's docs say ZK proving is not implemented. Tempo could build ZK in-house; Sworn is a working version today, offered beside the attestation, not instead of it.
+Tempo's Zone design includes an AWS Nitro attestation path; Tempo's docs also state that ZK proof generation is not implemented. Tempo can build ZK internally, and may be the most natural eventual competitor or partner. Sworn is a working proof beside the attestation path, not a replacement or claimed adoption.
 
-General-purpose provers (Succinct SP1, RISC Zero, Boundless) prove programs. Someone still has to port Tempo's code (Sworn needed patches to tempo-revm, zone-spf and two crates), bind the proof to exactly what a Zone's portal checks, and rebuild it at each Tempo upgrade. Succinct's rsp proves reth blocks, not Tempo.
+General-purpose provers such as SP1, RISC Zero and Boundless can prove programs. The Tempo-specific work is porting the code, binding the proof to the batch-input shape a Zone portal understands, and rebuilding it whenever Tempo execution changes. Sworn needed patches across tempo-revm, zone-spf and dependencies to reach a real on-chain proof.
 
-What is missing is not the engine but the Tempo-specific service: someone accountable for running the provers on time for an operator, and keeping them in step with Tempo's hardforks. That service is what we want to validate.
+The differentiation is therefore execution and maintenance, not exclusive cryptography. It is only defensible if a first operator values the operational service enough to repeat it.
 ```
 
 ## How do you make money, or how do you plan to? · ≤500
 
 ```
-Hypothesis, to validate with design partners: a Proof Operations contract with a Zone business that must give a counterparty or auditor confidence before it settles. It would pay for proof generation for each batch it supplies, plus keeping the proof pipeline compatible through Tempo upgrades. Later, if Tempo builds proofs into settlement (spec 004, written, not built), the same service applies. Today: no customers, no revenue.
+Hypothesis: a Zone business pays for a Proof Operations agreement — proof generation for each batch it supplies plus compatibility maintenance through Tempo upgrades. The initial sale is a paid or unpaid design-partner proof; conversion is a repeat batch or upgrade need that has an identified budget owner. I do not have a price, payer agreement, customer or revenue yet. Settlement integration is a separate Tempo proposal, not a prerequisite for testing this evidence service.
 ```
 
 ## How long have you each been working on this? Full time? · ≤500
