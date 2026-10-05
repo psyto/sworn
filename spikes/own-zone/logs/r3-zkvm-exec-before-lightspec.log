@@ -1,0 +1,3 @@
+cycles(total_instruction_count): 276320014
+publicValues match native host: PASS
+vkey(bytes32): 0x008e0750ca319004aabbd8ea234996fc371f4d9aeb4cf741a78805fe72c5f980

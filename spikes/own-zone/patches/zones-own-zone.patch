@@ -1,0 +1,842 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -11874,10 +11874,23 @@
+ name = "tempo-zone"
+ version = "0.3.1"
+ dependencies = [
++ "alloy-consensus",
++ "alloy-primitives",
++ "alloy-provider",
++ "clap",
++ "eyre",
++ "reth-chainspec",
+  "reth-cli-util",
+  "reth-node-core",
+  "rustls",
++ "serde_json",
++ "tempo-alloy",
++ "tempo-precompiles",
++ "tempo-primitives",
++ "tokio",
++ "zone-chainspec",
+  "zone-node",
++ "zone-primitives",
+ ]
+ 
+ [[package]]
+--- a/bin/tempo-zone/Cargo.toml
++++ b/bin/tempo-zone/Cargo.toml
+@@ -20,6 +20,21 @@
+ reth-cli-util.workspace = true
+ reth-node-core.workspace = true
+ 
++# own-zone-genesis
++zone-chainspec.workspace = true
++zone-primitives = { workspace = true, features = ["std"] }
++tempo-alloy.workspace = true
++tempo-primitives.workspace = true
++tempo-precompiles.workspace = true
++alloy-primitives.workspace = true
++alloy-consensus.workspace = true
++reth-chainspec.workspace = true
++alloy-provider = { workspace = true, features = ["reqwest"] }
++clap.workspace = true
++eyre.workspace = true
++serde_json.workspace = true
++tokio.workspace = true
++
+ # tls
+ rustls = { version = "0.23", features = ["aws-lc-rs"] }
+ 
+@@ -27,6 +42,11 @@
+ name = "tempo-zone"
+ path = "src/main.rs"
+ 
++# OWN-ZONE: deterministic genesis for a standalone portal (spikes/own-zone).
++[[bin]]
++name = "own-zone-genesis"
++path = "src/own_genesis.rs"
++
+ [features]
+ default = ["asm-keccak", "jemalloc", "keccak-cache-global"]
+ 
+--- a/crates/chainspec/src/lib.rs
++++ b/crates/chainspec/src/lib.rs
+@@ -83,6 +83,17 @@
+             .expect("ZoneChainSpec validates its chain ID during construction")
+             .1
+     }
++    /// OWN-ZONE: a non-factory portal pinned in the Zone genesis (`config.swornZonePortal`).
++    /// The genesis artifact hash therefore pins the portal. `None` keeps the TIP-1091 address.
++    pub fn portal_override(&self) -> Option<Address> {
++        self.inner
++            .genesis()
++            .config
++            .extra_fields
++            .get("swornZonePortal")
++            .and_then(|value| value.as_str())
++            .and_then(|value| value.parse::<Address>().ok())
++    }
+ }
+ 
+ fn insert_zone_fork_activations(spec: &mut TempoChainSpec) {
+--- a/crates/spf/src/types.rs
++++ b/crates/spf/src/types.rs
+@@ -39,7 +39,10 @@
+ 
+     /// Returns the canonical TIP-1091 portal address for this zone.
+     pub fn portal(&self) -> Address {
+-        tempo_precompiles::zone_factory::portal_address(self.chain_spec.zone_id())
++        // OWN-ZONE: a genesis-pinned portal outside the factory, else the TIP-1091 address.
++        self.chain_spec
++            .portal_override()
++            .unwrap_or_else(|| tempo_precompiles::zone_factory::portal_address(self.chain_spec.zone_id()))
+     }
+ 
+     /// Crates a [`ZoneEvmConfig`] for the given L1 storage reader.
+--- a/crates/node/src/cli.rs
++++ b/crates/node/src/cli.rs
+@@ -207,7 +207,9 @@
+         return ZoneEvmConfig::new_without_l1(chain_spec);
+     };
+ 
+-    let portal_address = tempo_precompiles::zone_factory::portal_address(chain_spec.zone_id());
++    let portal_address = chain_spec // OWN-ZONE
++        .portal_override()
++        .unwrap_or_else(|| tempo_precompiles::zone_factory::portal_address(chain_spec.zone_id()));
+     let cache = L1StateCache::default();
+     let provider = ProviderBuilder::new_with_network::<TempoNetwork>()
+         .connect_http(l1_rpc_url)
+@@ -267,7 +269,11 @@
+         "--sequencer.enable-prover requires a sequencer or an rpc_only P2P follower"
+     );
+     eyre::ensure!(
+-        !args.enable_prover || !should_sequence_blocks || args.prover_address.is_some(),
++        !args.enable_prover
++            || !should_sequence_blocks
++            || args.prover_address.is_some()
++            // OWN-ZONE: in-process SPF + external Sworn Groth16 proof (OWN_ZONE_PROOF_DIR).
++            || std::env::var_os("OWN_ZONE_PROOF_DIR").is_some(),
+         "settlement proving requires --sequencer.prover-address for Nitro attestation"
+     );
+ 
+--- a/crates/node/src/rpc.rs
++++ b/crates/node/src/rpc.rs
+@@ -395,14 +395,34 @@
+         .into_iter()
+         .map(|(account, slots)| (account, slots.into_iter().collect::<Vec<_>>()))
+         .collect::<Vec<_>>();
+-    let proofs = provider
+-        .client()
+-        .request::<_, Vec<EIP1186AccountProofResponse>>(
+-            "eth_getMultiProof",
+-            (targets, BlockId::number(tempo_block_number)),
+-        )
+-        .await
+-        .wrap_err_with(|| format!("eth_getMultiProof at Tempo block {tempo_block_number}"))?;
++    // OWN-ZONE: public Moderato RPC rejects eth_getMultiProof (HTTP 413). With
++    // OWN_ZONE_SINGLE_PROOFS set, fetch one eth_getProof per account (same EIP-1186 nodes).
++    let proofs = if std::env::var("OWN_ZONE_SINGLE_PROOFS").is_ok() {
++        let mut proofs = Vec::with_capacity(targets.len());
++        for (account, slots) in targets {
++            let proof = provider
++                .client()
++                .request::<_, EIP1186AccountProofResponse>(
++                    "eth_getProof",
++                    (account, slots, BlockId::number(tempo_block_number)),
++                )
++                .await
++                .wrap_err_with(|| {
++                    format!("eth_getProof({account}) at Tempo block {tempo_block_number}")
++                })?;
++            proofs.push(proof);
++        }
++        proofs
++    } else {
++        provider
++            .client()
++            .request::<_, Vec<EIP1186AccountProofResponse>>(
++                "eth_getMultiProof",
++                (targets, BlockId::number(tempo_block_number)),
++            )
++            .await
++            .wrap_err_with(|| format!("eth_getMultiProof at Tempo block {tempo_block_number}"))?
++    };
+ 
+     let mut nodes = BTreeMap::new();
+     for proof in proofs {
+--- a/crates/sequencer/src/settlement.rs
++++ b/crates/sequencer/src/settlement.rs
+@@ -207,9 +207,17 @@
+ 
+ impl Default for BatchAnchorConfig {
+     fn default() -> Self {
++        // OWN-ZONE: a Groth16 proof takes ~15 min, so a direct anchor must have that much EIP-2935
++        // headroom left when the batch is prepared. OWN_ZONE_ANCHOR_SAFETY_MARGIN (blocks) raises the
++        // margin; anchors older than (window - margin) fall back to ancestry mode with a fresh anchor.
++        let safety_margin = std::env::var("OWN_ZONE_ANCHOR_SAFETY_MARGIN")
++            .ok()
++            .and_then(|v| v.parse().ok())
++            .filter(|m| *m < DEFAULT_EIP2935_HISTORY_WINDOW)
++            .unwrap_or(DEFAULT_EIP2935_SAFETY_MARGIN);
+         Self {
+             history_window: DEFAULT_EIP2935_HISTORY_WINDOW,
+-            safety_margin: DEFAULT_EIP2935_SAFETY_MARGIN,
++            safety_margin,
+         }
+     }
+ }
+@@ -341,7 +349,37 @@
+     ) -> std::result::Result<BatchSubmitted, BatchSubmitError> {
+         let settlement_abi = SettlementAbi::from_l1(&self.l1_provider).await?;
+         let batch = &prepared.batch;
+-        let (verifier_config, proof) = settlement_proof(proof_bundle)?;
++        // OWN-ZONE: with OWN_ZONE_PROOF_DIR set, wait for the Sworn prover to drop
++        // `<dir>/<nextBlockHash>.proof` (hex Groth16 proof for this exact batch) and submit it with
++        // the Sworn verifierConfig. The batch anchor must stay inside the EIP-2935 window meanwhile.
++        let (verifier_config, proof) = match std::env::var("OWN_ZONE_PROOF_DIR") {
++            Ok(dir) => {
++                // Keyed by the anchor too: the proof binds the anchor, and a re-prepared batch
++                // (new anchor) needs a new proof.
++                let path = format!(
++                    "{dir}/{}-{}.proof",
++                    prepared.batch.next_block_hash,
++                    prepared.anchor_block_number()
++                );
++                info!(%path, "OWN-ZONE: waiting for the Sworn Groth16 proof");
++                let started = std::time::Instant::now();
++                let proof = loop {
++                    if let Ok(hex) = std::fs::read_to_string(&path) {
++                        break alloy_primitives::hex::decode(hex.trim())
++                            .map_err(|e| eyre::eyre!("bad proof file {path}: {e}"))?;
++                    }
++                    if started.elapsed() > Duration::from_secs(3 * 3600) {
++                        return Err(eyre::eyre!("OWN-ZONE: no proof at {path}").into());
++                    }
++                    tokio::time::sleep(Duration::from_secs(2)).await;
++                };
++                info!(%path, proof_len = proof.len(), waited_s = started.elapsed().as_secs(), "OWN-ZONE: proof found");
++                let tag = std::env::var("OWN_ZONE_VERIFIER_CONFIG")
++                    .unwrap_or_else(|_| "sworn-sp1-groth16-v1".to_string());
++                (Bytes::from(tag.into_bytes()), Bytes::from(proof))
++            }
++            Err(_) => settlement_proof(proof_bundle)?,
++        };
+         let block_transition = BlockTransition {
+             prevBlockHash: batch.prev_block_hash,
+             nextBlockHash: batch.next_block_hash,
+@@ -1212,6 +1250,11 @@
+ impl SettlementAbi {
+     /// Resolve the settlement selector and attestation format from the live Tempo L1 hardfork.
+     pub async fn from_l1(provider: &DynProvider<TempoNetwork>) -> Result<Self> {
++        // OWN-ZONE: our standalone portal is the T13 Solidity shape even on a pre-T13 L1 (Moderato
++        // is T11), and anvil has no `tempo_forkSchedule`. Force the T13 selector/statement.
++        if std::env::var("OWN_ZONE_FORCE_T13_SETTLEMENT").is_ok() {
++            return Ok(Self::T13);
++        }
+         let t13_active = provider
+             .is_hardfork_active(TempoHardfork::T13)
+             .await
+@@ -1381,6 +1424,15 @@
+ 
+ fn settlement_proof(proof_bundle: Option<&ProofBundle>) -> Result<(Bytes, Bytes)> {
+     let Some(proof_bundle) = proof_bundle else {
++        // OWN-ZONE: a Sworn-verified portal needs its own verifierConfig tag. The rehearsal (accept-all
++        // SP1) submits an empty proof; a real run would carry the Groth16 proof from the Sworn prover.
++        if let Ok(tag) = std::env::var("OWN_ZONE_VERIFIER_CONFIG") {
++            let proof = std::env::var("OWN_ZONE_PROOF_HEX")
++                .ok()
++                .map(|hex| alloy_primitives::hex::decode(hex).expect("OWN_ZONE_PROOF_HEX"))
++                .unwrap_or_default();
++            return Ok((Bytes::from(tag.into_bytes()), Bytes::from(proof)));
++        }
+         return Ok((Bytes::from_static(NITRO_VERIFIER_CONFIG_V1), Bytes::new()));
+     };
+     eyre::ensure!(
+--- a/crates/sequencer/src/prover.rs
++++ b/crates/sequencer/src/prover.rs
+@@ -197,9 +197,21 @@
+ /// the SPIKE-DUMP, run on real settlement batches) but does not require durable witness persistence
+ /// or a Nitro attestation; the batch is then submitted exactly as with no prover configured.
+ pub(crate) fn spike_observe_prover() -> bool {
+-    std::env::var_os("ZONE_SPF_OBSERVE_PROVER").is_some()
++    std::env::var_os("ZONE_SPF_OBSERVE_PROVER").is_some() || own_zone_mode()
++}
++
++/// OWN-ZONE: in-process SPF validation on every settlement candidate, *with* the durable per-block
++/// proof collector (unlike ZONE_SPF_OBSERVE_PROVER), and no Nitro bundle: the Groth16 proof comes
++/// from OWN_ZONE_PROOF_DIR at submission (settlement.rs).
++pub(crate) fn own_zone_mode() -> bool {
++    std::env::var_os("OWN_ZONE_PROOF_DIR").is_some()
+ }
+ 
++/// Only the test-only observe mode skips durable witness persistence.
++fn skip_witness_persistence() -> bool {
++    std::env::var_os("ZONE_SPF_OBSERVE_PROVER").is_some() && !own_zone_mode()
++}
++
+ /// SPIKE-WITHDRAWAL: the error the worker returns when validation succeeded but no attestation exists.
+ pub(crate) const SPIKE_NO_ATTESTATION: &str =
+     "attested settlement requires a remote prover with Nitro NSM support";
+@@ -477,7 +489,7 @@
+         proofs,
+         &zone_inputs,
+         expected_next_hash,
+-        job.response.is_some() && !spike_observe_prover(), // SPIKE-WITHDRAWAL
++        job.response.is_some() && !skip_witness_persistence(), // SPIKE-WITHDRAWAL / OWN-ZONE
+     )
+     .await?;
+     metrics
+--- a/crates/node/tests/it/utils.rs
++++ b/crates/node/tests/it/utils.rs
+@@ -1050,6 +1050,67 @@
+         .await
+     }
+ 
++    /// OWN-ZONE: start a zone against a standalone (non-factory) portal. The genesis pins the
++    /// portal in `config.swornZonePortal`, which the patched SPF uses instead of the TIP-1091
++    /// address derived from the zone id. Returns the node and the exact genesis it runs.
++    pub(crate) async fn start_from_l1_own_portal(
++        l1_http_url: &url::Url,
++        l1_ws_url: &url::Url,
++        portal_address: Address,
++    ) -> eyre::Result<(Self, Genesis)> {
++        let (mut genesis, _) = build_l1_anchored_genesis(l1_http_url, portal_address).await?;
++        genesis.config.extra_fields.insert(
++            "swornZonePortal".to_string(),
++            serde_json::Value::String(portal_address.to_string()),
++        );
++        // Pin every Tempo fork (T0..T13) at 0 in the Zone genesis, so the Zone runs T13 rules
++        // (matching the T13 Solidity portal) regardless of the parent's built-in schedule. With
++        // parent 42431 the pinned MODERATO spec has no T12/T13, which would otherwise be inherited.
++        for fork in [
++            "t0Time", "t1Time", "t1aTime", "t1bTime", "t1cTime", "t2Time", "t3Time", "t4Time",
++            "t5Time", "t6Time", "t7Time", "t8Time", "t9Time", "t10Time", "t11Time", "t12Time",
++            "t13Time",
++        ] {
++            genesis
++                .config
++                .extra_fields
++                .insert(fork.to_string(), serde_json::Value::from(0u64));
++        }
++        let signer = l1_dev_signer();
++        let node = Self::launch_with_genesis(
++            l1_ws_url.to_string(),
++            portal_address,
++            next_unique_chain_id(),
++            Some(genesis.clone()),
++            signer,
++        )
++        .await?;
++        Ok((node, genesis))
++    }
++
++    /// OWN-ZONE: start a zone with an exact, pre-built genesis (anchored before the portal exists).
++    pub(crate) async fn start_with_own_genesis(
++        l1_ws_url: &url::Url,
++        portal_address: Address,
++        genesis: Genesis,
++    ) -> eyre::Result<Self> {
++        let interval = std::env::var("OWN_ZONE_BATCH_INTERVAL")
++            .ok()
++            .and_then(|v| v.parse().ok())
++            .unwrap_or(8);
++        Self::launch_with_genesis_and_withdrawal_batch_interval(
++            l1_ws_url.to_string(),
++            portal_address,
++            next_unique_chain_id(),
++            Some(genesis),
++            l1_dev_signer(),
++            interval,
++            None,
++            true,
++        )
++        .await
++    }
++
+     /// Run the scheduled T12 -> T13 transition against a real L1 and return the proof chain spec.
+     pub(crate) async fn start_from_l1_with_t13(
+         l1_http_url: &url::Url,
+--- a/crates/node/tests/it/main.rs
++++ b/crates/node/tests/it/main.rs
+@@ -11,6 +11,7 @@
+ mod l1_e2e;
+ mod network_chaos_e2e;
+ mod network_chaos_p2p_e2e;
++mod own_zone;
+ mod precompiles;
+ mod proof_wal;
+ mod redacted_rpc;
+--- a/bin/tempo-zone/src/own_genesis.rs
++++ b/bin/tempo-zone/src/own_genesis.rs
+@@ -0,0 +1,108 @@
++//! OWN-ZONE (Sworn spike): deterministic Zone genesis for a standalone (non-factory) portal.
++//!
++//! Given an L1 anchor block and the portal address (or deployer + CREATE nonce), writes:
++//!   <out>/genesis.json           the file to pass to `tempo-zone node --chain`
++//!   <out>/genesis-artifact.json  the exact bytes the node hands the guest (keccak = verifier pin)
++//!   <out>/summary.json           anchor, portal, ids, keccak
++//! Same inputs -> same bytes. Read-only RPC (eth_chainId, eth_getBlockByNumber, eth_getCode).
++use alloy_consensus::Sealable as _;
++use alloy_primitives::{Address, B256, keccak256};
++use reth_chainspec::EthChainSpec as _;
++use alloy_provider::{Provider, ProviderBuilder};
++use clap::Parser;
++use eyre::{WrapErr as _, ensure, eyre};
++use tempo_alloy::TempoNetwork;
++use tempo_primitives::TempoHeader;
++
++#[derive(Parser, Debug)]
++struct Args {
++    /// Tempo L1 HTTP RPC (read-only use).
++    #[arg(long)]
++    l1_rpc: String,
++    /// Anchor block number: must be BEFORE the portal is deployed.
++    #[arg(long)]
++    anchor: u64,
++    #[arg(long)]
++    zone_id: u32,
++    /// Portal address (alternative to --deployer/--portal-nonce).
++    #[arg(long)]
++    portal: Option<Address>,
++    /// Portal deployer; the portal address is CREATE(deployer, portal_nonce).
++    #[arg(long)]
++    deployer: Option<Address>,
++    #[arg(long)]
++    portal_nonce: Option<u64>,
++    /// Refuse unless the L1 reports this chain id.
++    #[arg(long, default_value_t = 42431)]
++    expect_chain_id: u64,
++    #[arg(long)]
++    out: std::path::PathBuf,
++}
++
++const FORKS: [&str; 17] = [
++    "t0Time", "t1Time", "t1aTime", "t1bTime", "t1cTime", "t2Time", "t3Time", "t4Time", "t5Time",
++    "t6Time", "t7Time", "t8Time", "t9Time", "t10Time", "t11Time", "t12Time", "t13Time",
++];
++
++#[tokio::main]
++async fn main() -> eyre::Result<()> {
++    let args = Args::parse();
++    let portal = match (args.portal, args.deployer, args.portal_nonce) {
++        (Some(p), None, None) => p,
++        (None, Some(d), Some(n)) => d.create(n),
++        _ => return Err(eyre!("give --portal, or --deployer and --portal-nonce")),
++    };
++    let provider = ProviderBuilder::new_with_network::<TempoNetwork>()
++        .connect(&args.l1_rpc)
++        .await
++        .wrap_err("connect L1")?;
++    let parent_chain_id = provider.get_chain_id().await?;
++    ensure!(
++        parent_chain_id == args.expect_chain_id,
++        "L1 chain id {parent_chain_id} != expected {}",
++        args.expect_chain_id
++    );
++    let block = provider
++        .get_block_by_number(args.anchor.into())
++        .await?
++        .ok_or_else(|| eyre!("anchor block {} not found", args.anchor))?;
++    let header: &TempoHeader = block.header.as_ref();
++    let anchor_hash = header.hash_slow();
++    ensure!(anchor_hash == block.header.hash, "anchor header hash mismatch (non-canonical header encoding?)");
++    let code = provider.get_code_at(portal).block_id(args.anchor.into()).await?;
++    ensure!(code.is_empty(), "portal {portal} already has code at anchor block {}: the anchor must precede the portal deployment", args.anchor);
++
++    let (mut genesis, _) =
++        zone_node::genesis::l1_anchored_genesis(header, tempo_precompiles::PATH_USD_ADDRESS)?;
++    genesis.config.chain_id = zone_primitives::constants::zone_chain_id(parent_chain_id, args.zone_id)?;
++    genesis
++        .config
++        .extra_fields
++        .insert("swornZonePortal".to_string(), serde_json::Value::String(portal.to_string()));
++    for fork in FORKS {
++        genesis.config.extra_fields.insert(fork.to_string(), serde_json::Value::from(0u64));
++    }
++    // Exactly what the node's prover dumps: the composed chainspec genesis, via serde_json::Value.
++    let spec = zone_chainspec::ZoneChainSpec::from_genesis(genesis.clone())?;
++    let artifact = serde_json::to_vec(&serde_json::to_value(spec.inner.genesis())?)?;
++    let artifact_hash: B256 = keccak256(&artifact);
++
++    std::fs::create_dir_all(&args.out)?;
++    std::fs::write(args.out.join("genesis.json"), serde_json::to_vec_pretty(&genesis)?)?;
++    std::fs::write(args.out.join("genesis-artifact.json"), &artifact)?;
++    let summary = serde_json::json!({
++        "parentChainId": parent_chain_id,
++        "zoneId": args.zone_id,
++        "zoneChainId": genesis.config.chain_id,
++        "anchorBlock": args.anchor,
++        "anchorHash": anchor_hash,
++        "portal": portal,
++        "deployer": args.deployer,
++        "portalNonce": args.portal_nonce,
++        "genesisArtifactBytes": artifact.len(),
++        "genesisArtifactKeccak": artifact_hash,
++    });
++    std::fs::write(args.out.join("summary.json"), serde_json::to_vec_pretty(&summary)?)?;
++    println!("{}", serde_json::to_string_pretty(&summary)?);
++    Ok(())
++}
+--- a/crates/node/tests/it/own_zone.rs
++++ b/crates/node/tests/it/own_zone.rs
+@@ -0,0 +1,359 @@
++//! OWN-ZONE rehearsal (Sworn spike, spikes/own-zone): a Zone whose portal is a standalone Solidity
++//! `OwnZonePortal` (not created by the native ZoneFactory) and whose verifier is `SwornZoneVerifier`.
++//!
++//! The L1 is a real in-process Tempo dev node (pinned tempo 346c22eb) configured like Moderato:
++//! chain id 42431, T11 active (no T12/T13), eth_getProof window 250 blocks. The SP1 verifier
++//! behind SwornZoneVerifier is an accept-all mock, so the batch settles without a Groth16 proof;
++//! the witness the sequencer validated is dumped (ZONE_SPF_DUMP_DIR) for the zkVM guest.
++//!
++//! Env: OWN_ZONE_ARTIFACTS = path to spikes/own-zone/contracts/out (forge build output).
++
++use crate::utils::{L1TestNode, ZoneAccount, ZoneTestNode, spawn_sequencer};
++use alloy::{
++    primitives::{Address, B256, Bytes, U256, TxKind},
++    providers::Provider,
++    sol,
++    sol_types::{SolCall, SolValue},
++};
++use alloy_rpc_types_eth::TransactionRequest;
++use reth_chainspec::EthChainSpec as _;
++use std::time::Duration;
++use tempo_precompiles::PATH_USD_ADDRESS;
++
++const L1_TIMEOUT: Duration = Duration::from_secs(60);
++const ZONE_ID: u32 = 4242;
++const VKEY: B256 = alloy::primitives::b256!(
++    "007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39"
++);
++const MESSENGER: Address = alloy::primitives::address!("5A4d000000000000000000000000000000000000");
++
++sol! {
++    function initialize(
++        uint32 _zoneId,
++        address _initialToken,
++        bool accessEnforced,
++        bool gatewayEnforced,
++        address[] _allowedAccounts,
++        address[] _zoneGateways,
++        address _messenger,
++        address _admin,
++        address[] initialSequencers,
++        uint8 _threshold,
++        address _verifier,
++        string _rpcUrl
++    );
++    function withdrawalBatchIndex() external view returns (uint64);
++    function verifier() external view returns (address);
++}
++
++fn artifact(name: &str) -> eyre::Result<Vec<u8>> {
++    let dir = std::env::var("OWN_ZONE_ARTIFACTS")
++        .map_err(|_| eyre::eyre!("set OWN_ZONE_ARTIFACTS to spikes/own-zone/contracts/out"))?;
++    let path = std::path::Path::new(&dir).join(format!("{name}.sol/{name}.json"));
++    let json: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(&path)?)?;
++    let hex = json["bytecode"]["object"].as_str().ok_or_else(|| eyre::eyre!("no bytecode"))?;
++    Ok(alloy::primitives::hex::decode(hex)?)
++}
++
++async fn deploy(l1: &L1TestNode, init: Vec<u8>) -> eyre::Result<Address> {
++    let provider = l1.dev_provider();
++    let mut tx = TransactionRequest::default().input(Bytes::from(init).into());
++    tx.to = Some(TxKind::Create);
++    let receipt = provider.send_transaction(tx).await?.get_receipt().await?;
++    eyre::ensure!(receipt.status(), "deployment failed");
++    receipt.contract_address.ok_or_else(|| eyre::eyre!("no contract address"))
++}
++
++async fn start_moderato_like_l1() -> eyre::Result<L1TestNode> {
++    let window: u64 = std::env::var("OWN_ZONE_L1_PROOF_WINDOW")
++        .ok()
++        .and_then(|v| v.parse().ok())
++        .unwrap_or(250);
++    L1TestNode::start_with(move |cfg| {
++        let mut genesis = cfg.chain.genesis().clone();
++        genesis.config.chain_id = 42431;
++        // Moderato today: T11 active, T12 scheduled 2026-10-08, T13 unscheduled.
++        if std::env::var("OWN_ZONE_L1_T13").is_err() {
++            genesis.config.extra_fields.remove("t12Time");
++            genesis.config.extra_fields.remove("t13Time");
++        }
++        cfg.chain = std::sync::Arc::new(tempo_chainspec::TempoChainSpec::from_genesis(genesis));
++        cfg.rpc.rpc_eth_proof_window = window;
++    })
++    .await
++}
++
++#[tokio::test(flavor = "multi_thread")]
++async fn test_own_portal_deposit_and_withdrawal() -> eyre::Result<()> {
++    reth_tracing::init_test_tracing();
++
++    // --- L1 shaped like Moderato ---
++    let l1 = start_moderato_like_l1().await?;
++    let provider = l1.dev_provider();
++    let chain_id = provider.get_chain_id().await?;
++    eyre::ensure!(chain_id == 42431, "L1 chain id {chain_id}");
++    let fork: serde_json::Value = provider.raw_request("tempo_forkSchedule".into(), ()).await?;
++    println!("OWN-ZONE L1 chain {chain_id}, tempo_forkSchedule.active = {}", fork["active"]);
++
++    // --- Contracts: accept-all SP1 mock -> SwornZoneVerifier -> OwnZonePortal ---
++    let mock_sp1 = deploy(&l1, artifact("AcceptAllSP1")?).await?;
++    let mut v_init = artifact("SwornZoneVerifier")?;
++    v_init.extend_from_slice(
++        &(mock_sp1, VKEY, U256::from(42431u64), ZONE_ID, B256::repeat_byte(0x11)).abi_encode_params(),
++    );
++    let verifier = deploy(&l1, v_init).await?;
++    let portal = deploy(&l1, artifact("OwnZonePortal")?).await?;
++    let init = initializeCall {
++        _zoneId: ZONE_ID,
++        _initialToken: PATH_USD_ADDRESS,
++        accessEnforced: false,
++        gatewayEnforced: false,
++        _allowedAccounts: vec![],
++        _zoneGateways: vec![],
++        _messenger: MESSENGER,
++        _admin: l1.admin_address(),
++        initialSequencers: vec![l1.dev_address()],
++        _threshold: 1,
++        _verifier: verifier,
++        _rpcUrl: String::new(),
++    };
++    let receipt = provider
++        .send_transaction(TransactionRequest::default().to(portal).input(init.abi_encode().into()))
++        .await?
++        .get_receipt()
++        .await?;
++    eyre::ensure!(receipt.status(), "OwnZonePortal.initialize failed");
++    l1.fund_user(l1.admin_address(), 10_000_000).await?;
++    let encryption_key = k256::SecretKey::from(l1.dev_signer().credential());
++    l1.set_sequencer_encryption_key(portal, &encryption_key).await?;
++    println!("OWN-ZONE mockSP1 {mock_sp1} verifier {verifier} portal {portal}");
++
++    // --- Zone node against the non-factory portal ---
++    let (zone, genesis) =
++        ZoneTestNode::start_from_l1_own_portal(l1.http_url(), l1.ws_url(), portal).await?;
++    if let Ok(dir) = std::env::var("ZONE_SPF_DUMP_DIR") {
++        std::fs::write(
++            format!("{dir}/own-zone-genesis.json"),
++            serde_json::to_vec_pretty(&genesis)?,
++        )?;
++        std::fs::write(
++            format!("{dir}/own-zone-addresses.json"),
++            serde_json::to_vec_pretty(&serde_json::json!({
++                "l1ChainId": chain_id, "mockSp1": mock_sp1, "verifier": verifier, "portal": portal,
++                "zoneId": ZONE_ID, "zoneChainId": zone_primitives::constants::zone_chain_id(42431, ZONE_ID)?,
++            }))?,
++        )?;
++    }
++    println!("OWN-ZONE zone chain id {}", zone_primitives::constants::zone_chain_id(42431, ZONE_ID)?);
++    zone.wait_for_l2_tempo_finalized(0, L1_TIMEOUT).await?;
++
++    // --- Deposit ---
++    let recipient_signer = l1.signer_at(2);
++    let recipient = recipient_signer.address();
++    let mut depositor = ZoneAccount::from_l1_and_zone(&l1, &zone, portal);
++    let deposit_amount: u128 = 1_000_000;
++    l1.fund_user(depositor.address(), deposit_amount).await?;
++    depositor
++        .deposit_with_memo(deposit_amount, recipient, B256::ZERO, L1_TIMEOUT, &zone)
++        .await?;
++    println!("OWN-ZONE deposit minted on zone");
++
++    // --- Sequencer (submitBatch -> SwornZoneVerifier) + withdrawal ---
++    let _sequencer = spawn_sequencer(&l1, &zone, portal, l1.dev_signer()).await;
++    let mut recipient_account = ZoneAccount::with_signer(recipient_signer, &l1, &zone, portal);
++    let withdrawal_amount: u128 = 500_000;
++    let before = l1.balance_of(PATH_USD_ADDRESS, recipient).await?;
++    recipient_account.withdraw(withdrawal_amount).await?;
++    l1.wait_for_withdrawal_on_l1(portal, recipient, before, withdrawal_amount, L1_TIMEOUT)
++        .await?;
++    let index = provider
++        .call(TransactionRequest::default().to(portal).input(withdrawalBatchIndexCall {}.abi_encode().into()))
++        .await?;
++    println!(
++        "OWN-ZONE withdrawal paid on L1 through OwnZonePortal; withdrawalBatchIndex = {}",
++        U256::from_be_slice(&index)
++    );
++
++    // Record every submitBatch the sequencer sent: the exact verifier inputs the portal used.
++    if let Ok(dir) = std::env::var("ZONE_SPF_DUMP_DIR") {
++        use alloy::rpc::types::Filter;
++        let logs = provider
++            .get_logs(&Filter::new().address(portal).from_block(0u64))
++            .await?;
++        let mut batches = Vec::new();
++        for log in logs {
++            let Some(tx_hash) = log.transaction_hash else { continue };
++            // Tempo AA transactions (type 0x76) carry `calls`; read the raw JSON.
++            let tx: serde_json::Value =
++                provider.raw_request("eth_getTransactionByHash".into(), (tx_hash,)).await?;
++            let input_hex = tx["calls"][0]["input"]
++                .as_str()
++                .or_else(|| tx["input"].as_str())
++                .unwrap_or("0x");
++            let input = alloy::primitives::hex::decode(input_hex)?;
++            if let Ok(call) = tempo_zone_contracts::submitBatchCall::abi_decode(&input) {
++                if batches.iter().any(|(h, _): &(B256, serde_json::Value)| *h == tx_hash) {
++                    continue;
++                }
++                let receipt: serde_json::Value = provider
++                    .raw_request("eth_getTransactionReceipt".into(), (tx_hash,))
++                    .await?;
++                batches.push((tx_hash, serde_json::json!({
++                    "txHash": tx_hash,
++                    "l1Block": receipt["blockNumber"],
++                    "gasUsed": receipt["gasUsed"],
++                    "status": receipt["status"],
++                    "tempoBlockNumber": call.tempoBlockNumber,
++                    "recentTempoBlockNumber": call.recentTempoBlockNumber,
++                    "prevBlockHash": call.blockTransition.prevBlockHash,
++                    "nextBlockHash": call.blockTransition.nextBlockHash,
++                    "prevProcessedHash": call.depositQueueTransition.prevProcessedHash,
++                    "nextProcessedHash": call.depositQueueTransition.nextProcessedHash,
++                    "prevDepositNumber": call.depositQueueTransition.prevDepositNumber,
++                    "nextDepositNumber": call.depositQueueTransition.nextDepositNumber,
++                    "prevProcessedTokenCount": call.tokenEnablementTransition.prevProcessedTokenCount,
++                    "nextProcessedTokenCount": call.tokenEnablementTransition.nextProcessedTokenCount,
++                    "withdrawalQueueHash": call.withdrawalQueueHash,
++                    "verifierConfig": call.verifierConfig,
++                    "proof": call.proof,
++                    "nextZoneHeight": call.nextZoneHeight,
++                    "anchorBlockHash": provider
++                        .get_block_by_number(call.tempoBlockNumber.into())
++                        .await?
++                        .map(|b| b.header.hash),
++                })));
++            }
++        }
++        let batches: Vec<_> = batches.into_iter().map(|(_, v)| v).collect();
++        println!("OWN-ZONE recorded {} submitBatch calls", batches.len());
++        std::fs::write(format!("{dir}/own-zone-submitbatch.json"), serde_json::to_vec_pretty(&batches)?)?;
++    }
++    Ok(())
++}
++
++fn artifact_at(file: &str, name: &str) -> eyre::Result<Vec<u8>> {
++    let dir = std::env::var("OWN_ZONE_ARTIFACTS")?;
++    let path = std::path::Path::new(&dir).join(format!("{file}/{name}.json"));
++    let json: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(&path)?)?;
++    let hex = json["bytecode"]["object"].as_str().ok_or_else(|| eyre::eyre!("no bytecode"))?;
++    Ok(alloy::primitives::hex::decode(hex)?)
++}
++
++/// Production-order genesis: anchored at an L1 block *before* the portal exists (like the factory's
++/// pre-creation anchor), pinning the (predicted) portal address and every fork. Returns the genesis
++/// to launch with, and keccak256 of the exact artifact bytes the node will dump for the guest.
++async fn own_genesis_at(
++    l1: &L1TestNode,
++    portal: Address,
++    anchor_block: u64,
++) -> eyre::Result<(alloy_genesis::Genesis, B256, Vec<u8>)> {
++    let l1_provider = alloy::providers::ProviderBuilder::new_with_network::<tempo_alloy::TempoNetwork>()
++        .connect_http(l1.http_url().clone());
++    let block = l1_provider
++        .get_block_by_number(anchor_block.into())
++        .await?
++        .ok_or_else(|| eyre::eyre!("anchor block"))?;
++    let header: &tempo_primitives::TempoHeader = block.header.as_ref();
++    let (mut genesis, _) = zone_node::genesis::l1_anchored_genesis(header, PATH_USD_ADDRESS)?;
++    genesis.config.extra_fields.insert(
++        "swornZonePortal".to_string(),
++        serde_json::Value::String(portal.to_string()),
++    );
++    for fork in [
++        "t0Time", "t1Time", "t1aTime", "t1bTime", "t1cTime", "t2Time", "t3Time", "t4Time", "t5Time",
++        "t6Time", "t7Time", "t8Time", "t9Time", "t10Time", "t11Time", "t12Time", "t13Time",
++    ] {
++        genesis.config.extra_fields.insert(fork.to_string(), serde_json::Value::from(0u64));
++    }
++    let mut with_id = genesis.clone();
++    with_id.config.chain_id = zone_primitives::constants::zone_chain_id(42431, ZONE_ID)?;
++    let spec = zone_chainspec::ZoneChainSpec::from_genesis(with_id)?;
++    let bytes = serde_json::to_vec(&serde_json::to_value(spec.inner.genesis())?)?;
++    Ok((genesis, alloy::primitives::keccak256(&bytes), bytes))
++}
++
++/// Real Groth16 end to end: SwornZoneVerifier wired to the real SP1 Groth16 verifier (v6.1.0),
++/// pinned to this zone's genesis; the sequencer waits for `OWN_ZONE_PROOF_DIR/<nextBlockHash>.proof`
++/// produced by `spikes/own-zone/scripts/prover-watch.sh`. Long (one Groth16 per batch).
++#[tokio::test(flavor = "multi_thread")]
++#[ignore = "needs the Sworn prover watcher; ~15 min per batch"]
++async fn test_own_portal_real_groth16() -> eyre::Result<()> {
++    reth_tracing::init_test_tracing();
++    let vkey: B256 = std::env::var("OWN_ZONE_VKEY")?.parse()?;
++    let dump = std::env::var("ZONE_SPF_DUMP_DIR")?;
++    let timeout = Duration::from_secs(
++        std::env::var("OWN_ZONE_TIMEOUT_S").ok().and_then(|v| v.parse().ok()).unwrap_or(5400),
++    );
++
++    let l1 = start_moderato_like_l1().await?;
++    let provider = l1.dev_provider();
++    let dev = l1.dev_address();
++
++    // 1. the real SP1 Groth16 verifier (same bytecode as Moderato's 0x2c77…9B18 gateway route)
++    let sp1 = deploy(&l1, artifact_at("SP1VerifierGroth16.sol", "SP1Verifier")?).await?;
++
++    // 2. genesis anchored before the portal exists; portal address predicted from the deployer nonce
++    let anchor = provider.get_block_number().await?;
++    let nonce = provider.get_transaction_count(dev).await?;
++    let predicted_verifier = dev.create(nonce);
++    let predicted_portal = dev.create(nonce + 1);
++    let (genesis, artifact_hash, artifact_bytes) = own_genesis_at(&l1, predicted_portal, anchor).await?;
++
++    // 3. verifier pinned to that artifact, then the portal (must land on the predicted addresses)
++    let mut v_init = artifact("SwornZoneVerifier")?;
++    v_init.extend_from_slice(&(sp1, vkey, U256::from(42431u64), ZONE_ID, artifact_hash).abi_encode_params());
++    let verifier = deploy(&l1, v_init).await?;
++    let portal = deploy(&l1, artifact("OwnZonePortal")?).await?;
++    eyre::ensure!(verifier == predicted_verifier && portal == predicted_portal, "address prediction");
++    let init = initializeCall {
++        _zoneId: ZONE_ID,
++        _initialToken: PATH_USD_ADDRESS,
++        accessEnforced: false,
++        gatewayEnforced: false,
++        _allowedAccounts: vec![],
++        _zoneGateways: vec![],
++        _messenger: MESSENGER,
++        _admin: l1.admin_address(),
++        initialSequencers: vec![dev],
++        _threshold: 1,
++        _verifier: verifier,
++        _rpcUrl: String::new(),
++    };
++    let receipt = provider
++        .send_transaction(TransactionRequest::default().to(portal).input(init.abi_encode().into()))
++        .await?
++        .get_receipt()
++        .await?;
++    eyre::ensure!(receipt.status(), "initialize failed");
++    l1.fund_user(l1.admin_address(), 10_000_000).await?;
++    let encryption_key = k256::SecretKey::from(l1.dev_signer().credential());
++    l1.set_sequencer_encryption_key(portal, &encryption_key).await?;
++    std::fs::write(format!("{dump}/own-zone-pinned.genesis.json"), &artifact_bytes)?;
++    std::fs::write(
++        format!("{dump}/own-zone-addresses.json"),
++        serde_json::to_vec_pretty(&serde_json::json!({
++            "l1ChainId": 42431, "sp1Groth16": sp1, "verifier": verifier, "portal": portal,
++            "zoneId": ZONE_ID, "vkey": vkey, "genesisArtifactHash": artifact_hash,
++            "genesisAnchorBlock": anchor, "initializeBlock": receipt.block_number,
++        }))?,
++    )?;
++    println!("OWN-ZONE real: sp1 {sp1} verifier {verifier} portal {portal} genesis {artifact_hash} anchor {anchor}");
++
++    // 4. zone from that exact genesis
++    let zone = ZoneTestNode::start_with_own_genesis(l1.ws_url(), portal, genesis).await?;
++    zone.wait_for_l2_tempo_finalized(0, L1_TIMEOUT).await?;
++    let recipient_signer = l1.signer_at(2);
++    let recipient = recipient_signer.address();
++    let mut depositor = ZoneAccount::from_l1_and_zone(&l1, &zone, portal);
++    l1.fund_user(depositor.address(), 1_000_000).await?;
++    depositor.deposit_with_memo(1_000_000, recipient, B256::ZERO, L1_TIMEOUT, &zone).await?;
++    println!("OWN-ZONE real: deposit minted on zone");
++
++    let _sequencer = spawn_sequencer(&l1, &zone, portal, l1.dev_signer()).await;
++    let mut recipient_account = ZoneAccount::with_signer(recipient_signer, &l1, &zone, portal);
++    let before = l1.balance_of(PATH_USD_ADDRESS, recipient).await?;
++    recipient_account.withdraw(500_000).await?;
++    l1.wait_for_withdrawal_on_l1(portal, recipient, before, 500_000, timeout).await?;
++    println!("OWN-ZONE real: withdrawal paid on L1 after Groth16-verified settlement");
++    Ok(())
++}

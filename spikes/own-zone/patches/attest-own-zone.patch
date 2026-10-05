@@ -1,0 +1,51 @@
+--- a/attest/Cargo.toml
++++ b/attest/Cargo.toml
+@@ -7,6 +7,8 @@
+ [dependencies]
+ zone-spf = { path = "../zones/crates/spf" }
+ zone-chainspec = { path = "../zones/crates/chainspec" }
++# OWN-ZONE: light L1 spec for genesis artifacts that pin every fork themselves.
++tempo-chainspec = { git = "https://github.com/tempoxyz/tempo", rev = "346c22eb4293ac1f5edd27d4afd1f99323bc527c", default-features = false }
+ alloy-genesis = { version = "2.4.1", default-features = false }
+ alloy-primitives = { version = "1.7.2", default-features = false }
+ alloy-sol-types = { version = "1.7.2", default-features = false }
+--- a/attest/src/lib.rs
++++ b/attest/src/lib.rs
+@@ -150,6 +150,27 @@
+     pv[..32].copy_from_slice(ZONE_GUEST_VERSION.as_slice());
+     pv[32..].copy_from_slice(digest.as_slice());
+     pv
++}
++
++/// OWN-ZONE: a genesis artifact that pins a standalone portal (`swornZonePortal`) must also carry every
++/// fork activation itself. Its spec is then built against the small DEV L1 spec instead of the built-in
++/// parent spec: for parent 42431 that is MODERATO, whose 2.6 MB genesis costs ~250M zkVM cycles to load.
++/// Inheritance only fills *missing* `*Block`/`*Time` fields, and the check below makes sure none is
++/// missing, so the resulting spec is exactly what the artifact says. Other artifacts are unchanged.
++fn zone_chainspec_for(genesis: alloy_genesis::Genesis) -> Result<zone_chainspec::ZoneChainSpec, Error> {
++    if genesis.config.extra_fields.contains_key("swornZonePortal") {
++        let zone = serde_json::to_value(&genesis.config).map_err(|e| Error::Genesis(e.to_string()))?;
++        let dev = serde_json::to_value(&tempo_chainspec::spec::DEV.inner.genesis().config)
++            .map_err(|e| Error::Genesis(e.to_string()))?;
++        for name in dev.as_object().into_iter().flat_map(|o| o.keys()) {
++            if (name.ends_with("Block") || name.ends_with("Time")) && zone.get(name).is_none() {
++                return Err(Error::Genesis(format!("own-zone genesis must pin `{name}`")));
++            }
++        }
++        return zone_chainspec::ZoneChainSpec::from_genesis_with_l1(genesis, &tempo_chainspec::spec::DEV)
++            .map_err(|e| Error::ChainSpec(format!("{e:?}")));
++    }
++    zone_chainspec::ZoneChainSpec::from_genesis(genesis).map_err(|e| Error::ChainSpec(format!("{e:?}")))
+ }
+ 
+ /// Spec §4, steps 1–4 (the commit itself is the caller's). The guest panics on `Err`.
+@@ -161,8 +182,7 @@
+     let genesis_artifact_hash = keccak256(&input.genesis_bytes);
+     let genesis: alloy_genesis::Genesis = serde_json::from_slice(&input.genesis_bytes)
+         .map_err(|e| Error::Genesis(e.to_string()))?;
+-    let spec = zone_chainspec::ZoneChainSpec::from_genesis(genesis)
+-        .map_err(|e| Error::ChainSpec(format!("{e:?}")))?;
++    let spec = zone_chainspec_for(genesis)?;
+     // 2. Tempo's own stateless proof function, unchanged.
+     let config = zone_spf::SpfConfig::new(Arc::new(spec));
+     let public_inputs = input.witness.public_inputs.clone();

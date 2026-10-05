@@ -1,0 +1,28 @@
+No files changed, compilation skipped
+Traces:
+  [5741470] → new R1Settle@0x9f7cF1d1F558E57ef88a59ac3D47214eF25B6A06
+    └─ ← [Return] 5486 bytes of code
+  [388392] R1Settle::run()
+    ├─ [0] VM::envAddress("PORTAL") [staticcall]
+    ├─ [0] VM::envString("MODE") [staticcall]
+    ├─ [0] VM::envUint("TEMPO_BLOCK") [staticcall]
+    ├─ [2225] 0x0000F90827F1C53a10cb7A02335B175320002935::00000000(00000000000000000000000000000000000000000000000002476e65) [staticcall]
+    ├─ [2903] 0x2Ab64AA9A592d28A63317947517b427F42a6AE0f::currentDepositQueueHash() [staticcall]
+    ├─ [2657] 0x2Ab64AA9A592d28A63317947517b427F42a6AE0f::depositCount() [staticcall]
+    ├─ [3855] 0x2Ab64AA9A592d28A63317947517b427F42a6AE0f::zoneId() [staticcall]
+    ├─ [3235] 0x2Ab64AA9A592d28A63317947517b427F42a6AE0f::sequencerSetVersion() [staticcall]
+    ├─ [2641] 0x2Ab64AA9A592d28A63317947517b427F42a6AE0f::withdrawalBatchIndex() [staticcall]
+    ├─ [2619] 0x2Ab64AA9A592d28A63317947517b427F42a6AE0f::verifier() [staticcall]
+    ├─ [0] VM::sign("<pk>", 0x94b7eb962dc950dbb70a548cc6629f0a7fed79ba76795e2ee611b6bff7ca0dc2) [staticcall]
+    ├─ [0] VM::startBroadcast(<pk>)
+    ├─ [330495] 0x2Ab64AA9A592d28A63317947517b427F42a6AE0f::submitBatch(38235749 [3.823e7], 0, BlockTransition({ prevBlockHash: 0x0000000000000000000000000000000000000000000000000000000000000000, nextBlockHash: 0x8c419a45f0ae2e70dd4b952f8bda2139d811875ffebb62bb5f01f822ec793803 }), DepositQueueTransition({ prevProcessedHash: 0x0000000000000000000000000000000000000000000000000000000000000000, nextProcessedHash: 0x0000000000000000000000000000000000000000000000000000000000000000, prevDepositNumber: 0, nextDepositNumber: 0 }), TokenEnablementTransition({ prevProcessedTokenCount: 0, nextProcessedTokenCount: 1 }), 0x296547c256f361a3585cb61df7d8e63011a3a4d094017d1631944be67a0fb76b, 0x73776f726e2d7370312d67726f746831362d7631, 0xdeadbeef, 1, [0xf364a9d5f2eb43fcab38e87df7b0c55a38a04e1ddf6686456fbf3b1045afe1a450fae986b0532d6f05f6c4e364fd785a9b5cb87e6b78944b827152d9842f1dca1c])
+    └─ ← [Revert] InvalidProof()
+Error: script failed: InvalidProof()
+Error: encode length mismatch: expected 12 types, got 1
+Traces:
+  [9310] 0x23eF3C941DDF0f08095D69780AaE7276d80130Ec::verify(4242, 38235749 [3.823e7], 38235749 [3.823e7], 0xfc703382d1755a7b88af00beb3643b910ffa4b095218ad0aeb9bbd799c99ee28, 1, 1, (0x00000000000000000
+    ├─ [1139] 0x2c77329747b7C8B293514A6129404D4cefDd9B18::verifyProof(0x007ef7314d2624af811844d494aac02736de7a36ce6f5ef52345fcd0bdac5b39, 0x6fa127679dd53cd8b71ca0ba6579645bc4104bec6c1a180c236d63c47168
+    │   └─ ← [Revert] WrongVerifierSelector(0xdeadbeef, 0x4388a21c)
+    └─ ← [Revert] InvalidProof()
+Error: Transaction failed.
+Gas used: 284718

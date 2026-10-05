@@ -1,0 +1,16 @@
+OWN-ZONE real: sp1 0x5FbDB2315678afecb367f032d93F642f64180aa3 verifier 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 portal 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 genesis 0xbf728a8a9c39d83b98acd3628521d7236e256764c6a9b1f774cb3e94a0bc52f0 anchor 1
+OWN-ZONE real: deposit minted on zone
+2026-10-05T05:43:12.783511Z  INFO zone::sequencer::prover: Prover validated batch zone_from=1 zone_to=2 prev_block_hash=0x0000000000000000000000000000000000000000000000000000000000000000 next_block_hash=0x010369ceb899394fe26d3f4a86d03877f985a1d03ef7e9478df7b750ac24ba0a elapsed_ms=29 witness_bytes=9831 blocks=2 deposits=0 withdrawals=0 transactions=0 zone_state_nodes=34 tempo_state_nodes=10
+2026-10-05T05:43:12.784627Z  INFO run{outbox=0x1c00000000000000000000000000000000000002 inbox=0x1c00000000000000000000000000000000000001}:process_block_range{shutdown=CancellationToken { is_cancelled: false }}:submit_batch{portal=0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 tempo_block=8 anchor_block=8 prev_block_hash=0x0000000000000000000000000000000000000000000000000000000000000000 next_block_hash=0x010369ceb899394fe
+2026-10-05T05:58:04.922247Z  INFO run{outbox=0x1c00000000000000000000000000000000000002 inbox=0x1c00000000000000000000000000000000000001}:process_block_range{shutdown=CancellationToken { is_cancelled: false }}:submit_batch{portal=0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 tempo_block=8 anchor_block=8 prev_block_hash=0x0000000000000000000000000000000000000000000000000000000000000000 next_block_hash=0x010369ceb899394fe
+2026-10-05T05:58:05.690716Z  INFO run{outbox=0x1c00000000000000000000000000000000000002 inbox=0x1c00000000000000000000000000000000000001}:process_block_range{shutdown=CancellationToken { is_cancelled: false }}: zone_sequencer::monitor: Batch successfully submitted to L1 last_zone_block=2 blocks_in_batch=2 tempo_block_number=8 withdrawal_batch_index=1 withdrawal_queue_index=11579208923731619542357098500868790785326998
+[prover-watch 05:43:11] watching /private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/dump3 (verifier 0xe7f1725e7734ce288f8367e1bb143e90bb3f0512, chain 42431, mode groth16)
+[prover-watch 05:43:14] zone4242-chain1424314242-blocks1-2: native host OK, digest 0x8c2ff7fa2a011c3fe67698a0a2cce86c988dc9ff112027db4a12c15a7d9c0afb; proving (groth16)
+[prover-watch 05:58:04] zone4242-chain1424314242-blocks1-2: done in 890 s -> 0x010369ceb899394fe26d3f4a86d03877f985a1d03ef7e9478df7b750ac24ba0a
+client init wall: 13.366716334s
+execute wall: 548.15275ms
+cycles(total_instruction_count): 21176559
+publicValues match native host: PASS
+setup wall: 3.566056083s
+vkey(bytes32): 0x00ab5a9e697e8e1f81e1db06c7e41afd5dd046438f50b972a48c417d724a5c7b
+PROVE groth16 wall: 870.695717583s

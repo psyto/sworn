@@ -1,0 +1,12 @@
+[prover-watch 10:51:19] watching /private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/runs/dress4/dump (verifier 0x6BdBb69660E6849b98e8C524d266a0005D3655F7, chain 42431, mode groth16)
+[prover-watch 10:51:22] zone4242-chain1424314242-blocks1-2-a13945: native host OK, digest 0xd70a9d08e03b626741630d210f7242f219f7476a7be5ac9144429db89918c74b; proving (groth16)
+[prover-watch 11:30:51] zone4242-chain1424314242-blocks1-2-a13945: done in 2369 s -> 0x37844b0ca722b8c5d14c4ae74b032cfb94baa6ca5ab946ec2e26bc7798a271ea
+[prover-watch 11:30:54] zone4242-chain1424314242-blocks3-5-a13948: native host OK, digest 0xfe485b99b0cbed8a35326ddb0d3da214600fb1fafdf586715cf93e37a3e55d47; proving (groth16)
+[prover-watch 12:10:02] zone4242-chain1424314242-blocks3-5-a13948: done in 2348 s -> 0xba4be67d2d706a095ecb78ec0e83bc0aafd032ddc0f4a76739a1e25e902f356f
+[prover-watch 12:10:06] zone4242-chain1424314242-blocks6-7-a13950: native host OK, digest 0x7e97b7918a2d8c8f6c4bcecdec176f939c62d93297882ea3aa7ac140662db87d; proving (groth16)
+[prover-watch 13:43:07] zone4242-chain1424314242-blocks6-7-a13950: done in 5581 s -> 0xf9bcbf72cd92dff804ea3b7345ef183e4499bdb800ca57f682e8d9deb646a7e6
+[prover-watch 13:43:10] zone4242-chain1424314242-blocks8-105-a16503: native host OK, digest 0x36a26810b5f07d4051781522535333bad934c54f98c9ab434b1bafd6da5c50e6; proving (groth16)
+zone4242-chain1424314242-blocks1-2-a13945 cycles=21121475 groth16_wall=729.65386125
+zone4242-chain1424314242-blocks3-5-a13948 cycles=26353969 groth16_wall=686.853140375
+zone4242-chain1424314242-blocks6-7-a13950 cycles=24655694 groth16_wall=1301.855911625
+zone4242-chain1424314242-blocks8-105-a16503 cycles= groth16_wall=

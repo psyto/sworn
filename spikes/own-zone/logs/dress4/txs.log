@@ -1,0 +1,11 @@
+tx 0xfa1f0fa7d0e13c641ab0ffa23941f93d1277d4085fbd430c213f07367a3e456c block 13941 gasUsed 3869331 contract 0x6bdbb69660e6849b98e8c524d266a0005d3655f7
+tx 0xc4d2c9d2539972dea9f7087356d3b1e9010fd05b1ec0bfe70a980a9a749d2aa4 block 13942 gasUsed 24968428 contract 0x9b06d17ce54b06df4a644900492036e3ac384517
+tx 0x7d1ec8eb0ad545e20671858d0e49f18d6bfa12405f1d5d71a75252c0d248e3ca block 13943 gasUsed 3086000 contract None
+tx 0x6d284b624c559112244bcee252de5afe116734df4cdd139083e606d8cc665054 block 13944 gasUsed 1054778 contract None
+tx 0xb44c71695eecf6c28b801c708929915a4d5ef32845f692315ecb44d7f491e56c block 13947 gasUsed 277930 contract None
+Fetching sequencer encryption key...
+Encryption key index: 0, x: 0x7805be0fc5186c4437306b531c8e981d3922e5fc81d72d527931b995445fb78e, parity: 0x3
+Sending deposit of 1000000 to 0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc...
+Deposit sent! (block 13948)
+Explorer: https://explore.moderato.tempo.xyz/tx/0xf1113edfac7c81852bbbd536b75d7260e595be520cf97e789586201020086a29
+zone requestWithdrawal 0x1 block 7

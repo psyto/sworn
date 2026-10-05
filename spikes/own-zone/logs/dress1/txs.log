@@ -1,0 +1,18 @@
+tx 0x8b80fed5439c6aebac248510085c302b0d137a63600adfdfd1f17396c2eeb38f block 439 gasUsed 3869331 contract 0x0116686e2291dbd5e317f47fadbfb43b599786ef
+tx 0xaef6b312435bd4d364d66bf29b927e208859cacb1aeb981cb87ad47bc3f96c8e block 458 gasUsed 24968428 contract 0x9baab117304f7d6517048e371025db8f89a8dbe5
+tx 0x4d9c66fbd7fa9707bf5906617d183e4999e60e0fd6be2db47a31e9b9c1a52826 block 460 gasUsed 3356614 contract None
+tx 0xd8cd909448ba87100d2fd8e28fba99b1cfeee90a35f0c71de26e877a290d3f33 block 462 gasUsed 1054711 contract None
+tx 0x92b66f23958987177578ad769b088577a50ee49b6f4933ffa0fb7b98f24533a6 block 515 gasUsed 282942 contract None
+Fetching sequencer encryption key...
+Encryption key index: 0, x: 0x9a4ab212cb92775d227af4237c20b81f4221e9361d29007dfc16c79186b577cb, parity: 0x2
+Sending deposit of 1000000 to 0x14dC79964da2C08b23698B3D3cc7Ca32193d9955...
+Deposit sent! (block 520)
+Explorer: https://explore.moderato.tempo.xyz/tx/0x2f5f2f4d953d35bdcfcf465fc22b7e08bfa3c6e49353da5af6373d1b4319ca21
+Waiting for deposit to be processed on L2...
+Deposit processed on L2! (block 42)
+  Token:  0x20C0000000000000000000000000000000000000
+  Sender: 0x14dC79964da2C08b23698B3D3cc7Ca32193d9955
+  To:     0x14dC79964da2C08b23698B3D3cc7Ca32193d9955
+  Amount: 1000000
+  Memo:   0x0000000000000000000000000000000000000000000000000000000000000000
+zone requestWithdrawal 0x1 block 65

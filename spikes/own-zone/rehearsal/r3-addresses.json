@@ -1,0 +1,11 @@
+{
+  "genesisAnchorBlock": 1,
+  "genesisArtifactHash": "0xbf728a8a9c39d83b98acd3628521d7236e256764c6a9b1f774cb3e94a0bc52f0",
+  "initializeBlock": 5,
+  "l1ChainId": 42431,
+  "portal": "0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0",
+  "sp1Groth16": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+  "verifier": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+  "vkey": "0x00ab5a9e697e8e1f81e1db06c7e41afd5dd046438f50b972a48c417d724a5c7b",
+  "zoneId": 4242
+}

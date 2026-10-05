@@ -1,0 +1,14 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+script = "script"
+test = "test"
+optimizer = true
+via_ir = true
+evm_version = "prague"
+# lib/ is not committed: run ../fetch-libs.sh (tempo-std 96f88296 = zones ac49071f's pin, forge-std v1.16.2).
+remappings = [
+    "tempo-std/=lib/tempo-std/src/",
+    "forge-std/=lib/forge-std/src/",
+]

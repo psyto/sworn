@@ -1,0 +1,14 @@
+# LOCAL anvil 1.8.4 --network tempo fork of Moderato (chain 42431, fork block 38235749). Nothing sent to Moderato.
+R1L1Wiring.s.sol CREATE SwornZoneVerifier  gasUsed=3619331 status=0x1 block=38235795 tx=0x8f20244e72cfefb21bce12317a29228e29c515755b72ea5723b8a3ec63d544a9
+R1L1Wiring.s.sol CREATE AcceptAllSP1  gasUsed=745003 status=0x1 block=38235796 tx=0x380cdab12b6858b025262c53e1ef85279d617ed7a6300180047eff451dde1814
+R1L1Wiring.s.sol CREATE SwornZoneVerifier  gasUsed=3619331 status=0x1 block=38235797 tx=0x8fcac2797442e7f1d0a89107fc24dbacc794fd0609ab90f54b4f7cffa4fd42fa
+R1L1Wiring.s.sol CREATE OwnZonePortal  gasUsed=24968428 status=0x1 block=38235798 tx=0xda647095c413a4a27b8b7e3dad38741c1240cfc5aeb710a6e1f2582faf377809
+R1L1Wiring.s.sol CREATE OwnZonePortal  gasUsed=24968428 status=0x1 block=38235799 tx=0x1039c0224221ff527eb908ef3b90e05c4289ad05eee1cd9d5d908b9f084fc51f
+R1L1Wiring.s.sol CALL OwnZonePortal initialize gasUsed=3092512 status=0x1 block=38235800 tx=0x63637e9141d1719a526cbc3cbe65ff992a9d7e95745904ff9da7229165dc153a
+R1L1Wiring.s.sol CALL OwnZonePortal initialize gasUsed=3092512 status=0x1 block=38235801 tx=0x3ef0b7d02b15205955b68f5feeab78401960a93f65299cd63344160851f18670
+R1L1Wiring.s.sol CALL OwnZonePortal setSequencerEncryptionKey gasUsed=802497 status=0x1 block=38235802 tx=0x9d803d5b22445664b023527776e5d45e205ded63b0437ea5de126a1500fdde5b
+R1L1Wiring.s.sol CALL OwnZonePortal setSequencerEncryptionKey gasUsed=802509 status=0x1 block=38235803 tx=0xe4d43f33ff07dfbfe170110c93f23aceff9d2c1012296754ebd9448ec9e125be
+R1L1Wiring.s.sol CALL 0x20c0000000000000000000000000000000000000 approve gasUsed=33290 status=0x1 block=38235804 tx=0x3bb1a014ead79eb35582841c2e66e275636d212311ad296f32bbc23614b4a8d7
+R1L1Wiring.s.sol CALL OwnZonePortal deposit gasUsed=587139 status=0x1 block=38235805 tx=0xb8b6c96cf51f8e5d197c06d3ffec2f093cf515d9e4c820c0ba476f6c51a9d3e1
+R1Settle.s.sol CALL 0x4a18d09777df5a5650f3ab98dd6a7f07d84fec2e submitBatch gasUsed=1594929 status=0x1 block=38235806 tx=0xf887091e72dc0be353853578bde73bef501443c63c3c6830aba76ffacc42b3ac
+R1Settle.s.sol CALL 0x4a18d09777df5a5650f3ab98dd6a7f07d84fec2e processWithdrawals gasUsed=329468 status=0x1 block=38235807 tx=0x9a722fefbe1ba0874c9c80b2408b4691c448ff1fe5729f3eebe0d02bc81d2f74

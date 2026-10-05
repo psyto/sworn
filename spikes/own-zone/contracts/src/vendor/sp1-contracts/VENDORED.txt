@@ -1,0 +1,18 @@
+Vendored, unmodified, from succinctlabs/sp1-contracts (MIT), tag v6.1.0, commit 2ac5ecb
+("feat: add v6.1.0 verifier contracts (#75)"), copied from the local checkout at
+/Users/hiroyusai/src/reckn/zk-verdict/contracts/lib/sp1-contracts/contracts/src/ on 2026-10-03.
+
+  ISP1Verifier.sol                 sha256 9e918032a5aa799c1319b14b013154d6a40ca6e5f2267c9f540560abd7fd7689
+  v6.1.0/SP1VerifierGroth16.sol    sha256 48e1db5baca3b102242ebd88280b3689a088076688146cd0d98876f5dacb76d0
+  v6.1.0/Groth16Verifier.sol       sha256 d5e777120d9f675aefcc8c0c8786d4043acb8e063646e60818564b44fb2ec457
+
+The two v6.1.0 files are byte-identical to the ones sp1-sdk 6.3.1 installs in
+~/.sp1/circuits/groth16/v6.1.0/ (sp1-prover-6.3.1/SP1_CIRCUIT_VERSION = "v6.1.0"), i.e. the circuit
+the Rust half (sp1-sdk =6.3.1, sp1-zkvm =6.3.1) proves against.
+
+  VERSION()       = "v6.1.0"
+  VERIFIER_HASH() = 0x4388a21c687fdd5f218d7e3d13190cac4c5355818d3605fd5fb811df468ee696  (selector 0x4388a21c)
+  VK_ROOT()       = 0x002f850ee998974d6cc00e50cd0814b098c05bfade466d28573240d057f25352
+
+The contract inside SP1VerifierGroth16.sol is named `SP1Verifier`; Sworn's spec calls it
+SP1VerifierGroth16V6. Do not edit these files; re-vendor instead.

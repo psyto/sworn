@@ -1,0 +1,1 @@
+NATIVE REJECTED: prove_zone_batch: Tempo witness is missing account 0x5ad0000000000000000000000000000000001092 slot 0x...1a at block 12   (unpatched spikes/zone-spf host, vkey 0x007ef731…5b39, on own-zone batch blocks6-7)

@@ -1,0 +1,8 @@
+[prover-watch 07:36:11] watching /private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/runs/scripttest/dump (verifier 0x0116686E2291dbd5e317F47faDBFb43B599786Ef, chain 42431, mode groth16)
+[prover-watch 07:36:15] zone4242-chain1424314242-blocks1-3: native host OK, digest 0xe71cccfba265994087baa243d387438549ed9be9761c5e90b65d16225c21075e; proving (groth16)
+[prover-watch 07:57:31] zone4242-chain1424314242-blocks1-3: done in 1276 s -> 0x7da84796df538f3c7a0de55d32b34c41d84671180980c2af89a9d3b02318395b
+[prover-watch 07:57:38] zone4242-chain1424314242-blocks4-42: native host OK, digest 0x1b45259bad8f804e559acd955b4c97bdcec964ab475af2aa3fa4501c2b1e61d0; proving (groth16)
+/Users/hiroyusai/src/sworn/spikes/own-zone/scripts/prover-watch.sh: line 17: 49365 Terminated: 15          "$RUNNER" "$ELF" "$w/input.bin" groth16 "$w/fixture.json" > "$w/prove.log" 2>&1
+/private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/runs/scripttest/proofs/work/zone4242-chain1424314242-blocks1-3/prove.log:cycles(total_instruction_count): 29050159
+/private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/runs/scripttest/proofs/work/zone4242-chain1424314242-blocks1-3/prove.log:PROVE groth16 wall: 1240.7662305s
+/private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/runs/scripttest/proofs/work/zone4242-chain1424314242-blocks4-42/prove.log:cycles(total_instruction_count): 120978871

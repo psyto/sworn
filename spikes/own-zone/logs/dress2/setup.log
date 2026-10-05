@@ -1,0 +1,36 @@
+[own-zone genesis] anchor 6359; verifier will be 0x95bD8D42f30351685e96C62EDdc0d0613bf9a87A (nonce 0); portal 0x98eDDadCfde04dC22a0e62119617e74a6Bc77313 (nonce 1); genesis keccak 0x6e0ac1b245391f2798f6cc90b7597528a8b3fd80158a42bec2cc6514b45cf379
+[own-zone genesis] Re-run is deterministic: own-zone-genesis --anchor 6359 --deployer 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f --portal-nonce 1 gives the same keccak.
+[own-zone deploy-verifier] SwornZoneVerifier(0x8464135c8F25Da09e49BC8782676a84730C318bC, 0x00ab5a9e697e8e1f81e1db06c7e41afd5dd046438f50b972a48c417d724a5c7b, 42431, 4242, 0x6e0ac1b245391f2798f6cc90b7597528a8b3fd80158a42bec2cc6514b45cf379) -> expected 0x95bD8D42f30351685e96C62EDdc0d0613bf9a87A; estimateGas 3901207
+tx 0x9d7c0d785daaeea6c9039014ec1b4e13cd0fb353cd18a41cf000df00b7e434d9 block 6361 gasUsed 3869331 contract 0x95bd8d42f30351685e96c62eddc0d0613bf9a87a
+[own-zone deploy-verifier] check PARENT_CHAIN_ID()(uint256) = 42431 [4.243e4]
+[own-zone deploy-verifier] check PINNED_ZONE_ID()(uint32) = 4242
+[own-zone deploy-verifier] check PINNED_GENESIS_ARTIFACT_HASH()(bytes32) = 0x6e0ac1b245391f2798f6cc90b7597528a8b3fd80158a42bec2cc6514b45cf379
+[own-zone deploy-verifier] check ZONE_VKEY()(bytes32) = 0x00ab5a9e697e8e1f81e1db06c7e41afd5dd046438f50b972a48c417d724a5c7b
+[own-zone deploy-verifier] check SP1_VERIFIER()(address) = 0x8464135c8F25Da09e49BC8782676a84730C318bC
+[own-zone deploy-portal] OwnZonePortal -> expected 0x98eDDadCfde04dC22a0e62119617e74a6Bc77313; estimateGas 25167757
+tx 0x6a45a9865ec44a113ebea6aa2b1e73247c81e163076ecb0a01c852394423ac99 block 6363 gasUsed 24968428 contract 0x98eddadcfde04dc22a0e62119617e74a6bc77313
+[own-zone deploy-portal] check INITIALIZER = 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f (want 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f)
+[own-zone initialize] initialize(4242 0x20C0000000000000000000000000000000000000 false false [] [] 0x5A4d000000000000000000000000000000000000 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f [0xa0Ee7A142d267C1f36714E4a8F75612F20a79720] 1 0x95bD8D42f30351685e96C62EDdc0d0613bf9a87A )
+tx 0xd3b6d3974524f24d65e995bf618f677cf68343f3a4316075edd4110ec497e0ab block 6364 gasUsed 3092512 contract None
+[own-zone initialize] check zoneId=4242 verifier=0x95bD8D42f30351685e96C62EDdc0d0613bf9a87A isSequencer=true enabledTokens=1
+[own-zone encryption-key] setSequencerEncryptionKey(x=0x3255458e24278e31d5940f304b16300fdff3f6efd3e2a030b5818310ac67af45, yParity=2, v=28, r, s)  [the sequencer key is also the deposit-decryption key]
+tx 0x8c0a1dffb8fca4ec44a9d31d94f5b0beebcf30436c41d30808a82b9ace5d93e9 block 6365 gasUsed 1054756 contract None
+[own-zone encryption-key] check encryptionKeyCount = 1
+[own-zone deposit] approve(0x98eDDadCfde04dC22a0e62119617e74a6Bc77313, 1000000) + encrypted deposit of 1000000 pathUSD to 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC on the zone
+tx 0xe7cfa8cdaf4842af03a7961f19880cf11015839dd87d97f69a87c7f342b803ec block 6366 gasUsed 527942 contract None
+/Users/hiroyusai/src/sworn/spikes/own-zone/scripts/own-zone.sh: line 178: wait_args[@]: unbound variable
+[own-zone deposit] approve(0x98eDDadCfde04dC22a0e62119617e74a6Bc77313, 1000000) + encrypted deposit of 1000000 pathUSD to 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC on the zone
+tx 0xe4898c472258820cf902bba389f58d823dbe517a75c5431c2d4fc091d87e0f8d block 6386 gasUsed 25842 contract None
+Fetching sequencer encryption key...
+Encryption key index: 0, x: 0x3255458e24278e31d5940f304b16300fdff3f6efd3e2a030b5818310ac67af45, parity: 0x2
+Sending deposit of 1000000 to 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC...
+Deposit sent! (block 6388)
+Explorer: https://explore.moderato.tempo.xyz/tx/0x2cab8998e37ceafe86475717fec287621824bac8cb1e67bf732807731c2ecde8
+[own-zone start] env OWN_ZONE_ANCHOR_SAFETY_MARGIN=3000 OWN_ZONE_PROOF_DIR=/private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/runs/dress2/proofs ZONE_SPF_DUMP_DIR=/private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/runs/dress2/dump OWN_ZONE_VERIFIER_CONFIG=sworn-sp1-groth16-v1 OWN_ZONE_FORCE_T13_SETTLEMENT=1 OWN_ZONE_SINGLE_PROOFS=1
+[own-zone start] /private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/zones/target/release/tempo-zone node --chain /private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/runs/dress2/genesis/genesis.json --l1.rpc-url ws://127.0.0.1:18546 --l1.portal-address 0x98eDDadCfde04dC22a0e62119617e74a6Bc77313 --http --http.addr 127.0.0.1 --http.port 9555 --http.api all --datadir /private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/runs/dress2/zone-data --port 30319 --discovery.port 30319 --authrpc.port 18571 --redacted-rpc.port 18572 --sequencer --sequencer.enable-prover --zone.batch-interval-blocks 1000000 --sequencer-key-file <(fifo: $OWN_ZONE_SEQUENCER_KEY)
+[own-zone start] prover: DUMP=/private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/runs/dress2/dump PROOF_DIR=/private/tmp/claude-502/-Users-hiroyusai-src/5932ed58-6fcc-49e6-9e11-08d2c253f0fb/scratchpad/own-zone/runs/dress2/proofs VERIFIER=0x95bD8D42f30351685e96C62EDdc0d0613bf9a87A DEST_CHAIN=42431 GENESIS_HASH=0x6e0ac1b245391f2798f6cc90b7597528a8b3fd80158a42bec2cc6514b45cf379 /Users/hiroyusai/src/sworn/spikes/own-zone/scripts/prover-watch.sh
+[own-zone start] zone node pid 57892, prover pid 57893, zone head 4
+[own-zone withdraw] on the zone: approve(ZoneOutbox) + requestWithdrawal(0x20C0000000000000000000000000000000000000, 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 500000, 0, 0, 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x, 0x)
+[own-zone withdraw] zone balance 1000000 (deposit minted)
+zone approve 0x1
+zone requestWithdrawal 0x1 block 6
