@@ -79,7 +79,10 @@ function useLocalProofJob() {
         const value = await response.json() as OperatorHealth;
         if (stopped) return;
         setWorker("ready");
-        setJob(value.current);
+        // A persisted fixture job should not become the landing page's state. Keep a recent result visible
+        // while an operator is actually working, but start a fresh page in the ready state.
+        const isRecent = value.current && Date.now() - Date.parse(value.current.startedAt) < 10 * 60 * 1000;
+        setJob(isRecent ? value.current : null);
       } catch {
         if (!stopped) setWorker("offline");
       }
@@ -149,7 +152,8 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
     URL.revokeObjectURL(url);
   };
   return (
-    <section className="section ops-shell" id="zone" aria-labelledby="zone-h">
+    <section className="section ops-shell" id="evidence" aria-labelledby="zone-h">
+      <span id="zone" className="anchor" aria-hidden="true" />
       <aside className="ops-side" aria-label="Zone operations navigation">
         <p className="ops-zone"><span>Example operator · illustration</span>Example Zone</p>
         <div className="ops-nav" aria-hidden="true" title="Static labels, not navigation">
@@ -161,7 +165,7 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
       <div className="ops-main">
         <div className="ops-crumb"><span>Proof evidence</span><span>Zone blocks 5–6</span><b>Read live from chain</b></div>
       <div className="section-head">
-        <p className="eyebrow">Read live from chain</p>
+        <p className="eyebrow">Technical evidence</p>
         <h2 id="zone-h">A Tempo Zone batch with a withdrawal, verified on Moderato</h2>
         <p className="lede">
           Tempo's own Zone batch verifier ran inside SP1 on a batch with {BATCH_CONTENTS.withdrawals} withdrawal and{" "}

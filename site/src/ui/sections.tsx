@@ -54,102 +54,112 @@ export function Topbar() {
 const ZONE_TX = deployments.SwornZoneVerifierWithdrawal.attest.tx;
 /** YouTube links for the two submission videos; null until published (then the links appear). */
 const VIDEOS: { pitch: string | null; demo: string | null } = { pitch: null, demo: null };
-const DOCS = "https://tempo.xyz/developers/docs/protocol/zones/proving";
 
 export function Hero() {
   return (
     <section className="hero">
-      <h1>Tempo's execution, proven.</h1>
-      <p className="lede">
-        Tempo Zones are private blockchains anchored to Tempo, and Tempo's docs say ZK proof generation for Zones{" "}
-        <a href={DOCS} target="_blank" rel="noreferrer">
-          “is not implemented”
-        </a>
-        . Sworn runs Tempo's own Zone batch verifier inside a zero-knowledge VM, and a contract on Moderato verified the proof of a test batch.
-      </p>
-      <ul className="chips" aria-label="Results on Moderato">
-        <li>
-          <a className="chip" href={txUrl(MODERATO, ZONE_TX)} target="_blank" rel="noreferrer">
-            <span className="chip-mark" aria-hidden>✓</span>
-            <span>
-              Zone batch with a withdrawal, verified on Moderato
-              <span className="chip-sub mono">tx {short(ZONE_TX)} ↗</span>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a className="chip" href="#slashes">
-            <span className="chip-mark" aria-hidden>3</span>
-            <span>
-              3 slashes on Moderato
-              <span className="chip-sub mono">same engine, Tempo's EVM ↓</span>
-            </span>
-          </a>
-        </li>
-      </ul>
-      <nav className="fast-path" aria-label="For judges: the fast path">
-        <span className="eyebrow">Fast path</span>
-        {VIDEOS.pitch && (
-          <a href={VIDEOS.pitch} target="_blank" rel="noreferrer">
-            Pitch · 2 min ↗
-          </a>
-        )}
-        {VIDEOS.demo && (
-          <a href={VIDEOS.demo} target="_blank" rel="noreferrer">
-            Demo · 2:32 ↗
-          </a>
-        )}
+      <div className="hero-copy">
+        <p className="eyebrow">Private Zone evidence</p>
+        <h1>Make a private Zone batch independently reviewable.</h1>
+        <p className="lede">
+          A Zone operator can supply its private batch witness. Sworn turns that exact batch into evidence a reviewer
+          can verify on chain—without receiving the private ledger or customer transactions.
+        </p>
+        <div className="hero-actions">
+          <a className="btn" href="#evidence">See the verified evidence</a>
+          <a className="text-action" href="#operations">See the Proof Operations test ↓</a>
+        </div>
+      </div>
+      <aside className="hero-proof" aria-label="Built evidence">
+        <p className="eyebrow">Built and verifiable</p>
+        <strong>1 withdrawal<br />2 user transactions</strong>
+        <p>A contract on Moderato verified the proof for Tempo&apos;s integration-test batch.</p>
         <a href={txUrl(MODERATO, ZONE_TX)} target="_blank" rel="noreferrer">
-          The Moderato proof tx ↗
+          Open the proof transaction <span className="mono">{short(ZONE_TX)} ↗</span>
         </a>
-        <a href="#zone">Verify it again in your browser ↓</a>
-      </nav>
+      </aside>
+      <p className="hero-boundary">
+        Testnet evidence only: this fixture is from development chain 1337. No ZonePortal calls Sworn and it does not
+        protect withdrawals today.
+      </p>
     </section>
   );
 }
 
-export function WhyItMatters() {
+export function ReviewGap() {
   return (
-    <section className="section" aria-labelledby="why">
+    <section className="section story-section" aria-labelledby="review-gap">
       <div className="section-head">
-        <p className="eyebrow">The point</p>
-        <h2 id="why">Why it matters</h2>
+        <p className="eyebrow">The review gap</p>
+        <h2 id="review-gap">Private execution should not require blind trust.</h2>
         <p className="lede">
-          Tempo Zones are private: the operator sees everything, and each user sees only their own account. So no one
-          outside can check that the operator ran the ledger correctly. Sworn makes that checkable: for a batch the
-          operator supplies, a zero-knowledge proof that Tempo's own Zone code accepts it, which anyone can verify on
-          chain. The proof exposes hashes and batch metadata, not transaction contents.
+          Tempo Zones are private by design. That is useful for customers, but it leaves a reviewer unable to recreate
+          the operator&apos;s complete batch from public data.
         </p>
       </div>
-      <ol className="roles steps" aria-label="Who it is for">
+      <div className="audience-grid" aria-label="The two sides of a private-batch review">
+        <article className="audience-card operator">
+          <p className="eyebrow">Zone operator</p>
+          <h3>Has the private ledger and batch witness.</h3>
+          <p>It can generate a proof, but should not have to disclose customer transactions to explain a batch.</p>
+        </article>
+        <article className="audience-card reviewer">
+          <p className="eyebrow">Auditor or counterparty</p>
+          <h3>Needs a defensible answer about one exact batch.</h3>
+          <p>It needs evidence it can independently check—not a spreadsheet, assertion or copy of the ledger.</p>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+export function ProofFlow() {
+  return (
+    <section className="section story-section" aria-labelledby="proof-flow">
+      <div className="section-head">
+        <p className="eyebrow">The product</p>
+        <h2 id="proof-flow">From an operator-supplied batch to independent evidence.</h2>
+      </div>
+      <ol className="product-steps" aria-label="How Sworn creates evidence">
         <li>
-          <span className="role-tag">Near term</span>
-          <b>Businesses that run Zones and answer to auditors</b>
-          <span>
-            Independent evidence they can match to each batch they settle. Evidence, not yet a guarantee: no Zone's portal
-            calls this contract, and it stores nothing.
-          </span>
+          <span className="step-number">01</span>
+          <h3>Supply the batch witness</h3>
+          <p>The Zone operator chooses a batch it is allowed to share for review.</p>
         </li>
         <li>
-          <span className="role-tag">Later</span>
-          <b>Tempo builds proofs into settlement</b>
-          <span>
-            Withdrawals could wait for a proof.{" "}
-            <a href={SPEC4} target="_blank" rel="noreferrer">
-              Spec 004
-            </a>
-            : written, not built.
-          </span>
+          <span className="step-number">02</span>
+          <h3>Prove Tempo&apos;s own execution</h3>
+          <p>Sworn runs the Zone batch verifier in SP1 and exposes a digest, not customer transaction contents.</p>
         </li>
         <li>
-          <span className="role-tag">Either way</span>
-          <b>The service</b>
-          <span>Running the provers on time, and rebuilding them at each Tempo upgrade. Still to be validated.</span>
+          <span className="step-number">03</span>
+          <h3>Let the reviewer verify it</h3>
+          <p>Anyone can check the proof against the exact batch-shaped inputs on chain.</p>
         </li>
       </ol>
+    </section>
+  );
+}
+
+export function OperationsTest() {
+  return (
+    <section className="section story-section operations" id="operations" aria-labelledby="operations-h">
+      <div className="section-head">
+        <p className="eyebrow">The business test</p>
+        <h2 id="operations-h">Earn the right to Proof Operations.</h2>
+        <p className="lede">
+          The evidence is built. The commercial question is deliberately narrow: will a Zone business need this work to
+          recur for its next batch or its next Tempo upgrade?
+        </p>
+      </div>
+      <ol className="operation-test">
+        <li><b>1. First batch</b><span>An operator supplies a witness for a real review.</span></li>
+        <li><b>2. Independent check</b><span>Its reviewer receives the proof and reproducible verification instructions.</span></li>
+        <li><b>3. Repeat need</b><span>A next batch or execution upgrade identifies whether there is a budget and recurring work.</span></li>
+      </ol>
       <p className="note">
-        <b>Today:</b> Moderato has one Zone operator, and we have no customers. <b>Next:</b> one design partner, and a proof
-        of a batch they supply.
+        <b>What is true today:</b> Moderato has one effective Zone operator; Sworn has no customer, revenue, design
+        partner or payer agreement. The commercial thesis becomes credible only after this repeat test.
       </p>
     </section>
   );
@@ -164,7 +174,6 @@ export function Footer() {
         <li>Zone batches from Tempo's integration tests (dev chain)</li>
         <li>Does not protect withdrawals today</li>
         <li>No customers, revenue or mainnet</li>
-        <li>A slash pays at most the reserved bond</li>
       </ul>
       <ul className="links">
         <li>
