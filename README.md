@@ -282,11 +282,15 @@ Two more slashes were recorded live for the demo video, on the same day:
 
 ## What is not done
 
-- **Being checked (2026-10-05): our own Zone on Moderato.** Running a Zone sequencer and a Solidity
-  `ZonePortal` of our own on Moderato, with `SwornZoneVerifier` as its verifier, would let a portal accept a
-  batch and queue its withdrawals only after the ZK proof verifies. A feasibility check is under way
-  (`spikes/own-zone/`); until it reports, the batches above remain integration-test batches and no portal
-  calls the verifier.
+- **Scheduled for 2026-10-07: our own Zone on Moderato.** We plan to run our own Zone sequencer and a Solidity
+  `ZonePortal` on Moderato, with `SwornZoneVerifier` as its verifier, so that the portal accepts a batch, and
+  queues its withdrawals, only after the ZK proof verifies.
+  - **Local dress rehearsal passed (2026-10-05).** It used the real `tempo-zone` CLI against a local Tempo L1
+    set up like Moderato, with the 250-block proof window enforced.
+  - Three batches (setup, deposit, withdrawal) were each Groth16-proven and settled through `submitBatch` →
+    `SwornZoneVerifier`, and the withdrawal was paid (`spikes/own-zone/DRESS.md`).
+  - The live run on Moderato has not happened yet. Until it does, the batches above remain integration-test
+    batches and no portal calls the verifier.
 
 - **TEE + ZK is a design proposal, not built.** [Spec 004](docs/specs/004-tee-plus-zk.md) proposes that Nitro settles
   and a ZK proof of the exact batch commitment releases payouts. The proof statement it needs, the portal

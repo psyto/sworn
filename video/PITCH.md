@@ -20,7 +20,7 @@ product can exist, not the pitch's subject.
 **[Headline: “Before a Zone releases a withdrawal batch.” A Zone business card holds a blurred private ledger
 (“Private ledger · batch witness”, locked); a “Withdrawal batch” token slides out of it toward a card for the
 “Auditor / settlement counterparty: needs evidence, not the private ledger”, whose “?” resolves into “Can it
-independently check this exact batch?” The answer: “Sworn creates audit-ready proof.”]**
+independently check this exact batch?” The answer: “Sworn creates audit-ready evidence.”]**
 
 > Before a Zone business releases a withdrawal batch, an auditor or settlement counterparty may need to
 > check it. But the operator holds the private ledger and the batch witness. Sworn creates independently
