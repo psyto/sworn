@@ -1,24 +1,25 @@
 <!doctype html>
 <!--
-  Sworn demo v5.3 (video/DEMO.md) — the authored slides record-demo.mjs drives: scene 1 (d0, the operator starts
-  a proof job), scene 2 (d1, a withdrawal needs a trusted check), scene 4's explorer insert (e1), scene 5
-  (dz, said plainly) and scene 6 (d6, next and where to look). Scenes 3–4 are public-page footage. NO FIGURE IS WRITTEN
-  HERE: every hash, line number, URL, quote and screenshot arrives through window.__fill() from its source
-  at record time, and __fill throws if a slot is left empty. Text here is labels and the plain-language
-  lines of DEMO.md's screen notes only. Look: Sworn's own palette (slides.css), Sworn's mark. Never Tempo's
-  logo or wordmark (the explorer is cropped below its header); no other chain is named.
-  v2 (four scenes) is in git history: HEAD:video/demo.html before v2.1.
+  Sworn demo v5.4 (video/DEMO.md) — the authored slides record-demo.mjs drives: scene 1 (d0, the operator starts
+  a proof job; its progress bar advances), scene 2 (d1, a withdrawal needs a trusted check), scene 3 (dflow, the
+  page's "Only hashes cross this line" diagram, full frame — flow.css), scene 5's explorer insert (e1), scene 6
+  (dz, said plainly) and scene 7 (d6, next and where to look). Scenes 4–5 are public-page footage. NO FIGURE IS
+  WRITTEN HERE: every hash, line number, URL, quote and screenshot arrives through window.__fill() from its source
+  at record time, and __fill throws if a slot is left empty. Text here is labels and the plain-language lines of
+  DEMO.md's screen notes only. Look: Sworn's own palette (slides.css), Sworn's mark. Never Tempo's logo or
+  wordmark (the explorer is cropped below its header); no other chain is named.
 -->
 <meta charset="utf-8" />
 <title>Sworn demo</title>
 <link rel="stylesheet" href="slides.css" />
+<link rel="stylesheet" href="flow.css" />
 <style>
 /* The authored scenes use the real site's 1024×576 capture canvas and its Console dimensions.
    This keeps sidebar, topbar and content alignment identical to scenes recorded from the live page. */
 html,body{width:1024px;height:576px}body{font-size:16px}
 .header{top:0;left:0;right:0;height:49px;padding:10px 16px;align-items:center;gap:10px;background:rgba(246,243,236,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10}
 .header .brand{font-size:19px}.header .lbl{display:none}.header .spacer{flex:1}.header .toplink{font-size:14px;color:var(--text)}.header .theme{font:11px var(--mono);letter-spacing:.06em;color:var(--muted);border:1px solid var(--border);padding:5px 8px}
-.console{position:relative}.illus{position:absolute;right:14px;bottom:12px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:#7a5b00;background:#fbf3dc;border:1px solid #e6cf8f;padding:5px 9px;z-index:5}
+.console{position:relative}.illus{position:absolute;right:16px;bottom:22px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:#7a5b00;background:#fbf3dc;border:1px solid #e6cf8f;padding:5px 9px;z-index:5}
 .badge{top:10px;left:154px;right:auto;padding:3px 8px;font-size:11px;background:var(--surface);z-index:11}.foot,.kicker,.note{display:none}
 .scene{padding:57px 16px 0;justify-content:flex-start;gap:0;z-index:1}
 .mark{width:120px;height:120px;display:block}
@@ -88,6 +89,27 @@ html,body{width:1024px;height:576px}body{font-size:16px}
 .plain .card.warn{background:#fff7e6;border-left:3px solid var(--warn)}
 .next{font-size:34px;font-weight:400;letter-spacing:-.03em;line-height:1.15;max-width:1120px}
 .next span{display:block;margin-bottom:6px;font-family:var(--mono);font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+#dflow{padding:49px 16px 60px;gap:0;justify-content:center}
+#dflow .df-head h2{font-size:30px;font-weight:400;letter-spacing:-.03em;line-height:1.1;margin-top:4px}
+#dflow .dfx{font-size:16.5px;margin-top:4px}
+#dflow .df-learns{display:grid;gap:2px;margin-top:14px;font-size:17px}
+#dflow .df-learns b{font-weight:500}
+#dflow .df-foot{position:absolute;left:16px;right:16px;bottom:12px;display:grid;gap:3px;font-size:12px;color:var(--muted)}
+#dflow .df-foot .src{font-size:10.5px}#dflow .df-foot b{font-weight:500;color:var(--text)}
+.console .job-bar{position:relative;height:4px;margin-top:10px;background:var(--surface-2);overflow:hidden}
+.console .job-bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent);transition:width 1.2s ease}
+.console .job-bar i.in{width:var(--w)}
+.console .job-bar i.done{background:var(--ok)}
+.console .job-track span{transition:border-color .4s,background .4s,color .4s}
+.console .job-track span.cur{border-color:var(--accent);color:var(--accent);background:#eef0ff}
+.console .job-track span.cur.off{border-color:#a6d7b8;background:var(--ok-bg);color:var(--ok)}
+.console .job button{transition:transform .15s,background .3s}
+.console .job button.in{animation:press .35s ease;background:#1d2160}
+@keyframes press{40%{transform:scale(.95)}}
+.flow .box,.flow .gate{transition:border-color .45s,box-shadow .45s,background .45s}
+.flow .hl.in{border-color:var(--accent);box-shadow:0 0 0 2px rgba(43,48,120,.12)}
+.flow .gate.hl.in{background:#eef0ff}
+.flow .arr{transition:color .45s}.flow .arr.in{color:var(--accent)}
 </style>
 
 <div class="header"><span class="brand">Sworn</span><span class="spacer"></span><span class="toplink">GitHub</span><span class="theme">AUTO</span></div>
@@ -97,19 +119,29 @@ html,body{width:1024px;height:576px}body{font-size:16px}
 <!-- scene 1 — the operator starts a real, local proof job -->
 <div class="scene" id="d0">
   <div class="kicker fade">Prototype · Zone operations console</div>
-  <div class="console fade" data-at="0.8"><div class="illus">Illustration of the operator workflow · the real proof and checks follow</div>
+  <div class="console fade" data-at="0.8">
     <aside class="side"><div class="zone-name"><small>Example operator · illustration</small>Example Zone</div><div class="nav"><div class="selected">Batches</div><div>Proof evidence</div></div><div class="side-bottom">Test fixture<br />zone 1 · dev chain 1337</div></aside>
-    <section class="main"><div class="crumb">Batches / Zone blocks 5–6</div><div class="topline"><h2>Withdrawal batch</h2><div class="state">Fixture selected</div></div><div class="summary"><div class="panel"><div class="label">Batch contents</div><div class="title">Ready to prove</div><div class="metrics"><div class="metric"><b>1</b>withdrawal</div><div class="metric"><b>2</b>user transactions</div></div></div><div class="panel"><div class="label">Proof scope</div><div class="evidence"><span class="check">✓</span><span>Tempo code in SP1</span></div><div class="mini">Dev chain 1337 · no ZonePortal call</div></div></div><div class="job fade" data-at="2.4"><div class="job-top"><div><div class="label">Local prover · operator action</div><h3>Generate evidence for Zone blocks 5–6</h3><div class="job-meta">≈15 min · ≈20 GB RAM · no transaction sent</div></div><button>Start local proof job</button></div><div class="job-track"><span class="on">Queued</span><i>→</i><span class="fade" data-at="5.4">SP1 Groth16 proving</span><i class="fade" data-at="5.4">→</i><span class="fade" data-at="8.4">Read-only verification</span><i class="fade" data-at="8.4">→</i><span class="fade on" data-at="10.8">Audit record</span></div></div></section>
+    <section class="main"><div class="crumb">Batches / Zone blocks 5–6</div><div class="topline"><h2>Withdrawal batch</h2><div class="state">Fixture selected</div></div><div class="summary"><div class="panel"><div class="label">Batch contents</div><div class="title">Ready to prove</div><div class="metrics"><div class="metric"><b>1</b>withdrawal</div><div class="metric"><b>2</b>user transactions</div></div></div><div class="panel"><div class="label">Proof scope</div><div class="evidence"><span class="check">✓</span><span>Tempo code in SP1</span></div><div class="mini">Dev chain 1337 · no ZonePortal call</div></div></div><div class="job fade" data-at="2.4"><div class="job-top"><div><div class="label">Local prover · operator action</div><h3>Generate evidence for Zone blocks 5–6</h3><div class="job-meta">≈15 min · ≈20 GB RAM · no transaction sent</div></div><button data-at="3.2">Start local proof job</button></div><div class="job-track"><span class="cur" data-at="3.3" data-off="4.6">Queued</span><i>→</i><span class="cur" data-at="4.6" data-off="8.4">SP1 Groth16 proving</span><i>→</i><span class="cur" data-at="8.4" data-off="10.6">Read-only verification</span><i>→</i><span class="cur" data-at="10.6" data-off="11.4">Audit record</span></div><div class="job-bar"><i data-at="3.3" style="--w:10%;transition-duration:.6s"></i><i data-at="4.6" style="--w:64%;transition-duration:3.8s;transition-timing-function:linear"></i><i data-at="8.4" style="--w:90%;transition-duration:2.2s"></i><i class="done" data-at="10.6" style="--w:100%;transition-duration:.8s"></i></div></div></section>
   </div>
+  <div class="illus">Illustration of the operator workflow · the real proof and checks follow</div>
 </div>
 
 <!-- scene 2 — a withdrawal needs a trusted check -->
 <div class="scene" id="d1">
   <div class="kicker fade">Zone operations console · Batches</div>
-  <div class="console fade" data-at="1.2"><div class="illus">Illustration of the operator workflow · the real proof and checks follow</div><aside class="side"><div class="zone-name"><small>Example operator · illustration</small>Example Zone</div><div class="nav"><div class="selected">Batches</div><div>Proof evidence</div></div><div class="side-bottom">Test fixture<br />zone 1 · dev chain 1337</div></aside><section class="main"><div class="crumb">Batches / Zone blocks 5–6</div><div class="topline"><h2>Before audit review</h2><div class="state">Awaiting evidence</div></div><div class="flow" style="margin-top:28px"><div class="box"><small>Operator</small>submits a batch</div><span class="arr">→</span><div class="box"><small>Zone batch</small>includes withdrawal</div><span class="arr">→</span><div class="gate"><small>Zone verifier</small>verify(batch)</div><span class="arr">→</span><div class="box"><small>ZonePortal</small>processes it</div></div><div class="card" style="margin-top:28px"><div class="t"><b>The operational dependency</b></div><div class="big2">Can an auditor independently check <b>this exact batch?</b></div></div></section></div>
+  <div class="console fade" data-at="1.2"><aside class="side"><div class="zone-name"><small>Example operator · illustration</small>Example Zone</div><div class="nav"><div class="selected">Batches</div><div>Proof evidence</div></div><div class="side-bottom">Test fixture<br />zone 1 · dev chain 1337</div></aside><section class="main"><div class="crumb">Batches / Zone blocks 5–6</div><div class="topline"><h2>Before audit review</h2><div class="state">Awaiting evidence</div></div><div class="flow" style="margin-top:28px"><div class="box hl" data-at="1.8"><small>Operator</small>submits a batch</div><span class="arr" data-at="2.5">→</span><div class="box hl" data-at="2.7"><small>Zone batch</small>includes withdrawal</div><span class="arr" data-at="3.4">→</span><div class="gate hl" data-at="3.6"><small>Zone verifier</small>verify(batch)</div><span class="arr" data-at="4.6">→</span><div class="box hl" data-at="4.8"><small>ZonePortal</small>processes it</div></div><div class="card fade" data-at="6.2" style="margin-top:28px"><div class="t"><b>The operational dependency</b></div><div class="big2">Can an auditor independently check <b>this exact batch?</b></div></div></section></div>
+  <div class="illus">Illustration of the operator workflow · the real proof and checks follow</div>
 </div>
 
-<!-- scene 3, insert — the attest tx on the explorer (cropped below its header) -->
+<!-- scene 3 — what stays private: the shared "Only hashes cross this line" motif (flow.css), full frame,
+     revealed with the narration. The digest chip is the fixture's digest, filled by the recorder. -->
+<div class="scene" id="dflow">
+  <div class="df-head"><h2 class="fade">What stays private, and what becomes public.</h2></div>
+  <div data-flow="cards:.5,step:.3,wit:2.4,ring:3.9,chip:5.2,cross:5.6,badge:7.6,ok:9.0,bad:10.0,lock:11.0"></div>
+  <div class="df-learns"><p class="fade" data-at="9.4"><b>Learns:</b> Tempo's own Zone code accepts this exact batch.</p><p class="fade" data-at="11"><b>Does not learn:</b> balances, senders, recipients or amounts inside the Zone.</p></div>
+  <div class="df-foot fade" data-at=".6"><span>Checked off the settlement path today: no ZonePortal calls this verifier, and it does not protect withdrawals.</span><span class="src">diagram · digest <b data-k="digest"></b> = the proven fixture's, emitted in <b data-k="attestShort"></b></span></div>
+</div>
+
 <div class="scene" id="e1">
   <div class="kicker fade">Zone operations console · Proof evidence</div>
   <div class="console fade" data-at=".8"><aside class="side"><div class="zone-name"><small>Example operator · illustration</small>Example Zone</div><div class="nav"><div>Batches</div><div class="selected">Proof evidence</div></div><div class="side-bottom">Test fixture<br />zone 1 · dev chain 1337</div></aside><section class="main"><div class="crumb">Proof evidence / Zone blocks 5–6</div><div class="card"><div class="t"><b>On-chain evidence</b></div><div class="big2"><b class="ok">✓ ZoneBatchVerified</b><br />The contract checked the proof on Moderato.</div></div><div class="term" style="margin-top:14px"><div class="bar"><b>Source transaction</b> · captured while recording</div><img data-src="exCard" style="display:block;width:100%;max-height:170px;object-fit:cover;object-position:top" alt="" /></div></section></div>

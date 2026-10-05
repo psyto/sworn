@@ -1,4 +1,4 @@
-// Records video/demo.mp4 — Sworn's ≤ 3 min CWF demo v5.3, six scenes, SILENT, 1920×1080 — plus video/demo.srt
+// Records video/demo.mp4 — Sworn's ≤ 3 min CWF demo v5.4, seven scenes, SILENT, 1920×1080 — plus video/demo.srt
 // and video/demo.marks.json. It follows a Zone operator's need for independently checkable batch evidence,
 // then shows the real proof on a Zone batch with a withdrawal and its explicit present-day limits.
 //
@@ -12,7 +12,9 @@
 //   scene 1  local Operator worker: fixed fixture only; zone-prove.sh → zone-attest.sh without --send.
 //   scene 2  zones @ ac49071f ZonePortal.sol: submitBatch → verify → revert InvalidProof → enqueue withdrawals;
 //            processWithdrawals → dequeue (line numbers read, order checked).
-//   scenes 3–4  the page (DEMO_PAGE_URL), recorded in a real browser. Before recording, the recorder makes
+//   scene 3  authored data-flow diagram (demo.html #dflow, the page's motif); its digest = fixture = the attest
+//            event's; the page's data-flow section must still say the same sentences.
+//   scenes 4–5  the page (DEMO_PAGE_URL), recorded in a real browser. Before recording, the recorder makes
 //            its own three eth_calls: Sworn verify(real) = true, Sworn verify(height+1) reverts InvalidProof(),
 //            and Moderato's 0x5A56… (code = tempo ZONE_VERIFIER_RUNTIME, pre-T13 selector 0x7106a43e, which
 //            must differ from IVerifier.verify's) with the malformed batch = true. Every value the page shows
@@ -20,8 +22,8 @@
 //            all three rows, the comparison line, the disclosures) is compared with those reads,
 //            deployments/moderato.json and the fixture. "Verify again" is clicked twice; each click must
 //            change "Called at". The superseded verifier must appear nowhere. Explorer of 0xa630, cropped.
-//   scene 5  deployments/moderato.json SwornZoneVerifierWithdrawal (batch, deviations), README, spec 004.
-//   scene 6  spec 004 (header, §6 "not built"), zone_factory, Tempo's ZoneFactory on Moderato
+//   scene 6  deployments/moderato.json SwornZoneVerifierWithdrawal (batch, deviations), README, spec 004.
+//   scene 7  spec 004 (header, §6 "not built"), zone_factory, Tempo's ZoneFactory on Moderato
 //            (one admin, 1-of-1 Safe owner), README limits, the repo (public), the page (HTTP 200).
 // v2 (four scenes, hardfork batch) is in git: HEAD:video/record-demo.mjs before v2.1.
 import path from "node:path";
@@ -47,14 +49,14 @@ mkdirSync(work, { recursive: true });
 
 // ── the script ───────────────────────────────────────────────────────────────────────────────────
 const scenes = parseScenes("video/DEMO.md");
-if (scenes.length !== 6) fail(`DEMO.md has ${scenes.length} scenes, expected 6 (v5.3)`);
+if (scenes.length !== 7) fail(`DEMO.md has ${scenes.length} scenes, expected 7 (v5.4)`);
 const md = read("video/DEMO.md", "DEMO.md");
 const targets = [...md.matchAll(/^## Scene (\d+) — .*· ≈ (\d+(?:\.\d+)?) s\s*$/gm)].map((m) => +m[2]);
-if (targets.length !== 6) fail("DEMO.md: every scene heading needs its \"≈ N s\" target");
+if (targets.length !== 7) fail("DEMO.md: every scene heading needs its \"≈ N s\" target");
 const holds = scenes.map((s, i) => Math.max(s.hold, targets[i]));
 const TOTAL = holds.reduce((a, b) => a + b, 0);
 const words = scenes.reduce((a, s) => a + s.words, 0);
-log(`• demo v5.3: scene lengths = max(target, words ÷ 2.2)`);
+log(`• demo v5.4: scene lengths = max(target, words ÷ 2.2)`);
 for (const [i, s] of scenes.entries()) log(`    scene ${s.n}: ${String(s.words).padStart(3)} words (${s.hold} s of voice) → ${holds[i]} s  (${s.title})`);
 log(`    total ${TOTAL} s, ${words} words`);
 if (words > 330) fail(`DEMO.md narration is ${words} words > the plan's hard cap 330`);
@@ -67,10 +69,10 @@ for (const s of ["127.0.0.1", "zone-prove.sh", "zone-attest.sh", "deposit_and_wi
   if (!operatorWorker.includes(s)) fail(`operator/server.mjs no longer demonstrates ${s}`);
 }
 if (!read("docs/operator-console.md", "Operator Console documentation").includes("without `--send`")) fail("Operator Console documentation no longer states the no-send boundary");
-// Scene 3 is page; scene 4 is page (A) + explorer + page (C).
+// Scene 4 is page; scene 5 is page (A) + explorer + page (C).
 const S3 = { pageA: 14, explorer: 8 };
-S3.pageC = holds[3] - S3.pageA - S3.explorer;
-if (S3.pageC < 10) fail(`scene 4 leaves only ${S3.pageC} s for the rows`);
+S3.pageC = holds[4] - S3.pageA - S3.explorer;
+if (S3.pageC < 10) fail(`scene 5 leaves only ${S3.pageC} s for the rows`);
 const IDLE = 6; // seconds of page recording cut out where the explorer insert goes (the page scrolls there)
 
 const flat = (s) => s.replace(/\s+/g, " ").trim();
@@ -270,7 +272,7 @@ async function capturePage() {
     const t0 = Date.now();
     const at = async (s) => sleep(Math.max(0, t0 + s * 1000 - Date.now()));
     function mark(e) { t.marks[e] = (Date.now() - t0) / 1000; log(`    ${t.marks[e].toFixed(1).padStart(5)} s  ${e}`); }
-    const P2 = holds[2];
+    const P2 = holds[3];
     // scene 3: show the local-job control, then click the public evidence check.
     mark("s2");
     await at(6); await go("#evidence .zone-card.again", "start");
@@ -375,7 +377,8 @@ const pub = await fetchText(PUBLISHED, "published page");
 if (!/<title>Sworn/.test(pub)) fail(`${PUBLISHED}: no "<title>Sworn"`);
 
 const data = {
-  scenes: ["d0", "d1", "e1", "dz", "d6"],
+  scenes: ["d0", "d1", "dflow", "e1", "dz", "d6"],
+  digest: short(fx.digest), attestShort: `attest ${short(Z.attest.tx)}`,
   portalSrc: `tempoxyz/zones @ ${ZONES_REF} · ZonePortal.sol`, portalLines,
   exUrl: `explore.testnet.tempo.xyz/tx/${short(Z.attest.tx)}`,
   exTopic: `topic0 ${short(topic0, 6)} = keccak256 of ${zev.name}(…) from SwornZoneVerifier.sol`,
@@ -390,6 +393,23 @@ for (const [k, v] of Object.entries(data)) if (typeof v === "string") assertFres
 
 const shots = await explorerShots();
 data.exCard = shots.card; data.exEvent = shots.row;
+// Scene 3 is an authored, full-frame version of the page's data-flow diagram (demo.html #dflow, flow.css). Its
+// digest chip is the fixture's digest (= the attest event's, checked above). The live page's data-flow section
+// must still say the same things in words.
+{
+  const { default: puppeteer } = await import("puppeteer");
+  const br = await puppeteer.launch({ headless: true, timeout: 180000, args: ["--no-sandbox", "--hide-scrollbars"], defaultViewport: { width: 1000, height: 900 } });
+  try {
+    const p = await br.newPage();
+    await p.goto(PAGE, { waitUntil: "networkidle2", timeout: 120000 });
+    const sec = await p.waitForSelector('section[aria-labelledby="data-flow"]', { timeout: 60000 });
+    const txt = flat(await sec.evaluate((e) => e.innerText));
+    for (const w of ["What stays private, and what becomes public.", "Only hashes and counters reach Tempo", "Never published", "Learns: Tempo's own Zone code accepts this exact batch.",
+      "Does not learn: balances, senders, recipients or amounts inside the Zone.", "no ZonePortal calls this verifier", "InvalidProof()"])
+      if (!lc(txt).includes(lc(w))) fail(`page data-flow section does not say "${w}"`);
+  } finally { await br.close(); }
+  log(`• page: data-flow section says the scene-3 sentences; diagram digest ${data.digest} = fixture = event`);
+}
 log(`• explorer: ${short(Z.attest.tx)} card ${Math.round(shots.cw)}×${Math.round(shots.ch)} CSS px, header excluded`);
 if (process.env.PREVIEW) {
   const outDir = path.resolve(process.env.PREVIEW);
@@ -430,14 +450,16 @@ const ENC = ["-c:v", "libx264", "-profile:v", "high", "-level", "4.0", "-crf", "
 const ff = (args) => execFileSync(FFMPEG, ["-v", "error", ...args, "-y"]);
 const VF = "fps=30,scale=1920:1080,setsar=1,scale=in_range=full:out_range=tv,format=yuv420p";
 
-// ── scenes 1–2: the Zone operator's need ────────────────────────────────────────────────────────
+// ── scenes 1–3: the Zone operator's need ────────────────────────────────────────────────────────
 const scene1 = path.join(work, "scene1.mp4");
 await recordSlides({ html: "demo.html", data, ids: ["d0"], holds: [holds[0]], raw: path.join(work, "s1.raw.mp4"), out: scene1, viewport: CONSOLE_VIEWPORT });
 const scene2 = path.join(work, "scene2.mp4");
 await recordSlides({ html: "demo.html", data, ids: ["d1"], holds: [holds[1]], raw: path.join(work, "s2.raw.mp4"), out: scene2, viewport: CONSOLE_VIEWPORT });
+const sceneDF = path.join(work, "sceneDF.mp4");
+await recordSlides({ html: "demo.html", data, ids: ["dflow"], holds: [holds[2]], raw: path.join(work, "sDF.raw.mp4"), out: sceneDF, viewport: CONSOLE_VIEWPORT });
 
-// ── scenes 3–4: the page ────────────────────────────────────────────────────────────────────────
-log("• scenes 3–4: recording the page …");
+// ── scenes 4–5: the page ────────────────────────────────────────────────────────────────────────
+log("• scenes 4–5: recording the page …");
 const pg = await capturePage();
 const P = { click: path.join(work, "pill-click.png"), click2: path.join(work, "pill-click2.png") };
 await pills([
@@ -449,7 +471,7 @@ const K = (e) => pg.marks[e] * k;
 const scene3 = path.join(work, "scene3.mp4"), s4a = path.join(work, "s4a.mp4"), s4x = path.join(work, "s4x.mp4"), s4c = path.join(work, "s4c.mp4");
 ff(["-i", pg.raw, "-loop", "1", "-framerate", "30", "-i", P.click, "-filter_complex",
   `[0:v]fps=30,scale=1920:1080,setsar=1[b];[b][1:v]overlay=0:0:shortest=1:enable='between(t,${(K("click1") - 0.3).toFixed(2)},${(K("click1") + 4).toFixed(2)})',scale=in_range=full:out_range=tv,format=yuv420p[v]`,
-  "-map", "[v]", "-an", "-t", String(holds[2]), ...ENC, scene3]);
+  "-map", "[v]", "-an", "-t", String(holds[3]), ...ENC, scene3]);
 ff(["-ss", K("s3a").toFixed(3), "-i", pg.raw, "-vf", VF, "-an", "-t", String(S3.pageA), ...ENC, s4a]);
 await recordSlides({ html: "demo.html", data, ids: ["e1"], holds: [S3.explorer], raw: path.join(work, "s4x.raw.mp4"), out: s4x, viewport: CONSOLE_VIEWPORT });
 const c2 = K("click2") - K("s3c");
@@ -460,16 +482,16 @@ const scene4 = path.join(work, "scene4.mp4");
 concat([s4a, s4x, s4c], scene4);
 rmSync(pg.raw, { force: true });
 
-// ── scene 5: said plainly ───────────────────────────────────────────────────────────────────────
+// ── scene 6: said plainly ───────────────────────────────────────────────────────────────────────
 const scene5 = path.join(work, "scene5.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["dz"], holds: [holds[4]], raw: path.join(work, "s5.raw.mp4"), out: scene5, viewport: CONSOLE_VIEWPORT });
+await recordSlides({ html: "demo.html", data, ids: ["dz"], holds: [holds[5]], raw: path.join(work, "s5.raw.mp4"), out: scene5, viewport: CONSOLE_VIEWPORT });
 
-// ── scene 6 ─────────────────────────────────────────────────────────────────────────────────────
+// ── scene 7 ─────────────────────────────────────────────────────────────────────────────────────
 const scene6 = path.join(work, "scene6.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["d6"], holds: [holds[5]], raw: path.join(work, "s6.raw.mp4"), out: scene6, viewport: CONSOLE_VIEWPORT });
+await recordSlides({ html: "demo.html", data, ids: ["d6"], holds: [holds[6]], raw: path.join(work, "s6.raw.mp4"), out: scene6, viewport: CONSOLE_VIEWPORT });
 
 // ── assemble ────────────────────────────────────────────────────────────────────────────────────
-const parts = [scene1, scene2, scene3, scene4, scene5, scene6];
+const parts = [scene1, scene2, sceneDF, scene3, scene4, scene5, scene6];
 parts.forEach((f, i) => { const d = duration(f); if (Math.abs(d - holds[i]) > 0.12) fail(`scene ${i + 1} clip is ${d} s, expected ${holds[i]} s`); });
 const out = path.join(dir, "demo.mp4");
 concat(parts, out);
@@ -478,18 +500,18 @@ if (Math.abs(got - TOTAL) > 0.25) fail(`demo.mp4 is ${got} s, expected ${TOTAL} 
 if (got > MAX_TOTAL) fail(`demo.mp4 is ${got} s > ${MAX_TOTAL} s`);
 const starts = holds.reduce((acc, h) => [...acc, acc.at(-1) + h], [0]);
 const cues = writeSrt(scenes, starts, path.join(dir, "demo.srt"));
-for (let i = 0; i < 6; i++) ff(["-ss", (starts[i + 1] - 0.2).toFixed(2), "-i", out, "-frames:v", "1", path.join(dir, "frames", `demo-scene${i + 1}.png`)]);
+for (let i = 0; i < 7; i++) ff(["-ss", (starts[i + 1] - 0.2).toFixed(2), "-i", out, "-frames:v", "1", path.join(dir, "frames", `demo-scene${i + 1}.png`)]);
 const r2 = (e) => +K(e).toFixed(2);
 writeJson(path.join(dir, "demo.marks.json"), {
-  name: "demo", script: "video/DEMO.md", version: "5.3", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
+  name: "demo", script: "video/DEMO.md", version: "5.4", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
   page: PAGE, published: PUBLISHED, recordedFromPublishedPage: PAGE === PUBLISHED,
   zoneAttest: Z.attest.tx, liveCalls,
   pageMarks: { verifyPanel: r2("verifyPanel"), click1: r2("click1"), stub: r2("stub"), s3a: r2("s3a"), contains: r2("contains"), s3c: r2("s3c"), click2: r2("click2"), compare: r2("compare") },
   calledAt: pg.called,
   scene4: { pageA: S3.pageA, explorer: S3.explorer, pageC: S3.pageC, cutOutOfPage: IDLE },
-  note: "Silent. Read each scene's lines over its clip (video/scenes/demo/). Scene 4 has the explorer insert in its middle.",
+  note: "Silent. Read each scene's lines over its clip (video/scenes/demo/). Scene 5 has the explorer insert in its middle.",
   recordedAt: new Date().toISOString(),
 });
 log(`\n✓ ${rel(out)}  (${got.toFixed(2)} s, holds ${holds.join(" / ")}, ${words} words)`);
-log(`✓ video/demo.srt  (${cues} cues) · video/demo.marks.json · video/frames/demo-scene{1..6}.png`);
+log(`✓ video/demo.srt  (${cues} cues) · video/demo.marks.json · video/frames/demo-scene{1..7}.png`);
 log(`  next: node video/split-scenes.mjs demo`);

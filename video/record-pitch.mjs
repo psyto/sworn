@@ -13,8 +13,10 @@
 //            (outsiders cannot build a witness); the recorder's OWN eth_call to Moderato's 0x5A56… (code = tempo
 //            ZONE_VERIFIER_RUNTIME, pre-T13 selector 0x7106a43e ≠ IVerifier's) with an equivalent malformed batch
 //            = true; Tempo's ZoneFactory: nextZoneId, zones(1..n).verifier / admin / sequencers, owner() Safe.
-//   scene 2  spec 003 §3 (public values), SwornZoneVerifier.sol (verify is view).
-//   scene 3  deployments/moderato.json ↔ Moderato (SwornZoneVerifierWithdrawal codehash, the attest 0xa630… —
+//   scene 2  spec 003 §3 (public values), SwornZoneVerifier.sol (verify is view); the data-flow motif's digest chip
+//            = the fixture's digest = the attest's ZoneBatchVerified digest.
+//   scene 3  (cycles and Groth16 seconds count up to the proving log's figures, = moderato.json)
+//            deployments/moderato.json ↔ Moderato (SwornZoneVerifierWithdrawal codehash, the attest 0xa630… —
 //            batch counts, withdrawalQueueHash = fixture = calldata — and its ZoneBatchVerified event); the
 //            explorer page of the attest (cropped to its transaction card, no header); the proving log; the
 //            recorder's OWN two eth_calls: verify(real) = true, verify(height+1) reverts InvalidProof().
@@ -270,9 +272,11 @@ const data = {
   stubWhen: `Moderato, pre-T13 · called ${utc(stubAt)} UTC`,
   stubCall: `${short(PRE)}.verify(…) with an equivalent malformed batch: zone 99, every hash 0x00…00, config 0xdead, proof 0xbeef → true`,
   stubSrc: `eth_call, read-only · selector ${PRE_SEL} (pre-T13, 10 arguments) · the verifier of all ${nZones} Zones on Moderato (Tempo's Zone factory, read now)`,
-  // 2
+  // 2 — the motif's digest chip: the fixture's digest, = the attest event's (checked in scene 3's reads)
+  digest: short(fx.digest),
   pubSrc: "spec 003 §3: the proof's public values are a guest version and one digest of these fields · SwornZoneVerifier.verify(…) is a view function: any address can call it",
   // 3
+  cycles: cycles.toLocaleString("en-US"), groth16: `${Math.round(wall)} s`,
   proveSrc: `Tempo's zone_spf::prove_zone_batch @ ${ZONES_REF} in SP1 · ${cycles.toLocaleString("en-US")} cycles · Groth16 proof in ${Math.round(wall)} s, locally`,
   batchFrom: `a test batch from Tempo's zones integration tests · dev chain ${bm[1]}`,
   atStatus: "✓ status 1 · ZoneBatchVerified emitted", atTx: short(Z.attest.tx, 8),

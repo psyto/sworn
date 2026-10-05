@@ -1,11 +1,11 @@
-# Demo video: Sworn (≤ 3 min, founder's voice), v5.3, 2026-10-05
+# Demo video: Sworn (≤ 3 min, founder's voice), v5.4, 2026-10-05
 
 **One product, one user.** This demo follows a Zone operator who needs independently checkable evidence for a
 batch. It does not show the separate bonded-answer payment prototype or imitate a retail wallet. The operator
 workflow is an authored explanatory view; the proof, read-only checks, contract event and explorer record that
 follow are real.
 
-**Status: v5.3 scripted as silent picture + script + subtitles.** `video/demo.mp4` is 1920×1080. The founder
+**Status: v5.4 scripted as silent picture + script + subtitles.** `video/demo.mp4` is 1920×1080. The founder
 records the narration in their own voice using `video/scenes/demo/NARRATION.md`; `demo.srt` follows the same
 timing. `record-demo.mjs` rereads the cited public chain state before it records, using only read-only RPC calls.
 
@@ -15,31 +15,45 @@ Holding withdrawals until ZK finality is a proposal for Tempo, not a deployed Sw
 
 | scene | target | picture |
 |---|---:|---|
-| 1 Start a proof job | 24 s | authored operator workflow (`d0`) |
-| 2 Why the check matters | 17 s | authored ZonePortal flow (`d1`) |
-| 3 Operator Console and prototype verifier, live | 30 s | local Operator Console + public evidence page; read-only live call |
-| 4 Real proof, on chain | 36 s | public page + explorer event + a live mutation check |
-| 5 Said plainly | 13 s | authored scope disclosure (`dz`) |
-| 6 GTM test and next step | 31 s | authored validation route (`d6`) |
+| 1 Start a proof job | 15 s | authored operator workflow (`d0`) |
+| 2 Why the check matters | 11 s | authored ZonePortal flow (`d1`) |
+| 3 What stays private | 14 s | authored data-flow diagram (`dflow`), the page's motif |
+| 4 Operator Console and prototype verifier, live | 30 s | local Operator Console + public evidence page; read-only live call |
+| 5 Real proof, on chain | 36 s | public page + explorer event + a live mutation check |
+| 6 Said plainly | 13 s | authored scope disclosure (`dz`) |
+| 7 GTM test and next step | 31 s | authored validation route (`d6`) |
 
 ## Scene 1 — start a proof job · ≈ 15 s
 
 **[A deliberately labelled desktop **Zone Operations Console**. The operator sees Zone blocks 5–6, its one withdrawal
-and two user transactions, and starts a local proof job. The status progresses from queued to the real SP1 Groth16
-pipeline, then to read-only on-chain verification. The console is labelled on screen "Illustration of the operator workflow"; the operator is a generic "Example Zone"; the sidebar says `Test fixture · zone 1 · dev chain 1337`; the card says
+and two user transactions, and presses “Start local proof job”. A progress bar advances through Queued → SP1
+Groth16 proving → Read-only verification → Audit record (time compressed; the real job takes about 15 minutes). The
+console is labelled on screen "Illustration of the operator workflow"; the operator is a generic "Example Zone"; the sidebar says `Test fixture · zone 1 · dev chain 1337`; the card says
 `No transaction sent`. This is a fixture-only local workflow, not a hosted service or settlement integration.]**
 
 > A Zone operator picks a batch with one withdrawal and two user transactions and starts Sworn's local proof job: Tempo's code runs in a zero-knowledge VM, and the result goes to an auditor.
 
 ## Scene 2 — why the batch check matters · ≈ 11 s
 
-**[Zone operator submits a batch → batch includes withdrawal → Zone verifier → ZonePortal processes it.
-Headline: the operator and auditor must trust the check. The graphic is a simplified explanation of the
+**[Zone operator submits a batch → batch includes withdrawal → Zone verifier → ZonePortal processes it; each step
+lights in turn. Headline: the operator and auditor must trust the check. The graphic is a simplified explanation of the
 ZonePortal flow, not a claim that the demonstrated Sworn verifier is connected to it.]**
 
 > Tempo's portal pays a withdrawal only after the Zone verifier accepts the batch, so everyone involved must be able to trust that check.
 
-## Scene 3 — Operator Console and Moderato's prototype verifier, live · ≈ 30 s
+## Scene 3 — what stays private · ≈ 14 s
+
+**[A full-frame authored version of the public page's data-flow diagram, “Only hashes cross this line”, revealed
+with the narration: the witness moves from the Zone operator's blurred, never-published ledger into the Sworn prover
+and stops there; the prover emits the fixture's real digest chip, which alone crosses the dashed line to
+SwornZoneVerifier on Tempo (“✓ ZoneBatchVerified”); the reviewer sees “✓ true”, then “✗ InvalidProof() — one field
+changed”. Below: “Learns / Does not learn” and the off-the-settlement-path disclosure. The recorder checks that the
+live page's data-flow section still says these sentences.]**
+
+> The witness stays with the operator and the prover. Only hashes and counters reach Tempo: enough to check the
+> proof, not to see balances, senders or amounts.
+
+## Scene 4 — Operator Console and Moderato's prototype verifier, live · ≈ 30 s
 
 **[The local Operator Console is visible first: its control can start the real fixture-only proving job, requiring
 about 15 minutes and 20 GB RAM, without a transaction. The evidence panel then visibly clicks “Re-verify on chain”.
@@ -51,7 +65,7 @@ prototype stub. This is never described as the same input as Sworn's T13 ABI.]**
 > reads Moderato live. Its pre-T13 prototype verifier accepts a malformed batch. Sworn demonstrates the missing
 > ZK check.
 
-## Scene 4 — Sworn on the batch with a withdrawal · ≈ 36 s
+## Scene 5 — Sworn on the batch with a withdrawal · ≈ 36 s
 
 **[The page shows the successful attest transaction for the integration-test fixture, its one withdrawal and two
 user transactions. An explorer insert shows `ZoneBatchVerified` emitted by the contract. After a second
@@ -63,7 +77,7 @@ read-only click, the real batch returns true and changing one field reverts `Inv
 > malformed batch is accepted by Moderato's current prototype verifier, while Sworn rejects a mutation of its
 > proven batch.
 
-## Scene 5 — said plainly · ≈ 13 s
+## Scene 6 — said plainly · ≈ 13 s
 
 **[Three plain disclosure cards: test batch on dev chain 1337; no ZonePortal calls this contract; settlement
 integration is proposed, not built.]**
@@ -71,7 +85,7 @@ integration is proposed, not built.]**
 > To be clear: this batch comes from a dev chain, not a Moderato Zone. No portal uses it, and it does not protect
 > withdrawals yet.
 
-## Scene 6 — GTM test and next step · ≈ 31 s
+## Scene 7 — GTM test and next step · ≈ 31 s
 
 **[The Console shows the test sequence: a Zone business supplies its witness; its reviewer re-verifies one
 batch; a repeat need for the next batch or upgrade is the conversion test. “GTM test, not traction” is

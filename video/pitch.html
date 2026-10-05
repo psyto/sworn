@@ -1,8 +1,10 @@
 <!doctype html>
-<!-- Sworn pitch v5.2. Dynamic chain facts are supplied by record-pitch.mjs at recording time. -->
+<!-- Sworn pitch v5.2 (picture v5.3: one motion language with the page and the demo — flow.css). Dynamic chain
+     facts (digest, cycles, Groth16 time, live call results) are supplied by record-pitch.mjs at recording time. -->
 <meta charset="utf-8" />
 <title>Sworn pitch</title>
 <link rel="stylesheet" href="slides.css" />
+<link rel="stylesheet" href="flow.css" />
 <style>
 .scene{gap:16px}.mark{width:48px;height:48px}.brandrow{display:flex;align-items:center;gap:14px}h1.sm{font-size:50px}.question{font-size:34px;line-height:1.15;letter-spacing:-.03em}
 .grid2,.grid3{display:grid;gap:0}.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr 1fr 1fr}.grid2>*+*,.grid3>*+*{margin-left:-1px}.k{display:block;font:500 11px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
@@ -12,6 +14,38 @@
 .buy .card{min-height:178px;padding:18px 20px}.buy .h{font-size:25px;line-height:1.15;letter-spacing:-.025em}.buy .b{font-size:17px;line-height:1.35;margin-top:9px;color:var(--muted)}.tag{font:500 12px var(--mono);letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--warn);color:var(--warn);padding:7px 10px;align-self:flex-start;background:#fff7e6}
 .why .card{min-height:150px;padding:18px 20px}.why .h{font-size:24px;line-height:1.15;letter-spacing:-.025em}.why .b{font-size:17px;line-height:1.35;margin-top:9px;color:var(--muted)}.stack{display:flex;gap:0}.stack span{border:1px solid var(--border);background:var(--surface);padding:8px 15px;font-size:18px;margin-left:-1px}.stack span:first-child{margin-left:0}
 .truth{display:flex;flex-wrap:wrap}.truth span{border:1px solid var(--border);background:var(--surface);padding:11px 17px;font-size:23px;letter-spacing:-.02em;margin:-1px 0 0 -1px}.next{font-size:34px;line-height:1.15;letter-spacing:-.03em}.close{display:flex;align-items:center;gap:22px}.close .mark{width:90px;height:90px}.closing{font-size:44px;letter-spacing:-.04em;line-height:1.05}.fine{font:12px var(--mono);color:var(--muted);letter-spacing:.04em}
+
+.ico{width:1em;height:1em;flex:none;vertical-align:-.14em}
+.moment{display:grid;grid-template-columns:1fr 250px 1fr;align-items:stretch}
+.moment .card{padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.moment .h{font-size:25px;line-height:1.15;letter-spacing:-.03em}
+.vault{background:var(--surface-2)}
+.vledger{display:grid;gap:5px;margin-top:8px;filter:blur(3.4px)}.vledger span{display:flex;justify-content:space-between;font:13px var(--mono);opacity:.75}.vledger i{font-style:normal}
+.vlock{display:flex;align-items:center;gap:8px;margin-top:6px;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);transition:color .5s}.vlock.in{color:var(--accent)}
+.lane{position:relative}
+.lane-line{position:absolute;left:0;right:0;top:50%;border-top:1.5px dashed var(--border)}
+.batch{position:absolute;top:50%;left:-40px;transform:translateY(-50%);display:inline-flex;align-items:center;gap:7px;white-space:nowrap;padding:8px 12px;font:500 14px var(--mono);color:var(--accent);background:var(--surface);border:1px solid var(--accent);opacity:0;transition:left 1.8s cubic-bezier(.4,0,.2,1),opacity .4s}
+.batch.in{left:46px;opacity:1}
+.qbox{position:relative;margin-top:auto;min-height:84px;display:grid;align-items:center}
+.qmark{position:absolute;left:0;top:50%;transform:translateY(-50%) scale(.6);font-size:64px;font-weight:300;line-height:1;color:var(--accent);opacity:0;transition:opacity .4s,transform .5s cubic-bezier(.3,1.5,.5,1)}
+.qmark.in{opacity:1;transform:translateY(-50%) scale(1)}.qmark.off{opacity:0;transform:translateY(-50%) scale(.6)}
+.qtext{font-size:27px;line-height:1.15;letter-spacing:-.03em;color:var(--accent);opacity:0;transform:translateY(6px);transition:opacity .6s,transform .6s}.qtext.in{opacity:1;transform:none}
+.p2flow{font-size:19px}
+.p2cap{font:13px var(--mono);color:var(--muted)}
+.p3src{margin-top:6px}
+#p3 .fact b{font-size:44px;font-weight:300;letter-spacing:-.035em;line-height:1.1}#p3 .fact b.sm{font-size:29px;font-weight:400}#p3 .fact{padding:16px 22px}#p3 .result .r{font-size:25px;padding:16px 22px}
+.count{opacity:0;transition:opacity .3s}.count.in{opacity:1}
+.draw{display:inline-block;clip-path:inset(0 100% 0 0);transition:clip-path 1s cubic-bezier(.4,0,.2,1)}.draw.in{clip-path:inset(0 0 0 0)}
+.result .r{transition:background .5s}.result .r.badbox.in{background:var(--bad-bg)}
+.flip{display:inline-block;opacity:0;transform:perspective(400px) rotateX(90deg);transition:opacity .3s,transform .45s ease-out}
+.flip.in{opacity:1;transform:none;animation:shake .5s ease .5s}
+@keyframes shake{20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+.prog{position:relative;height:16px;margin-bottom:-4px}
+.prog .track{position:absolute;left:0;right:0;top:7px;height:2px;background:var(--border)}
+.prog .fill{position:absolute;left:0;top:7px;height:2px;width:0;background:var(--accent);transition:width 1.2s cubic-bezier(.4,0,.2,1)}.prog .fill.in{width:var(--w)}
+.prog .node{position:absolute;top:2px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--surface);border:2px solid var(--border);transition:border-color .4s .9s,background .4s .9s}.prog .node.in{border-color:var(--accent);background:var(--accent)}
+.blk{border:1px solid var(--border);background:var(--surface);padding:20px 26px;align-self:flex-start}
+.stamp{opacity:0;transform:scale(2.4) rotate(-14deg);transition:opacity .2s,transform .5s cubic-bezier(.3,1.45,.5,1)}.stamp.in{opacity:1;transform:none}
 </style>
 
 <div class="header"><span class="brand">Sworn</span><span class="lbl">Built on Tempo</span></div>
@@ -21,27 +55,35 @@
 <div class="scene" id="p1">
   <div class="brandrow fade"><img class="mark" src="../_submission/brand/mark.svg" alt="" /><span class="kicker">The operational moment</span></div>
   <h1 class="sm fade">Before a Zone releases a withdrawal batch.</h1>
-  <div class="grid2 fade" data-at="3"><div class="card person"><span class="k">Zone business</span><div class="h">holds the private ledger and batch witness</div><div class="b">can produce the evidence</div></div><div class="card person"><span class="k">Auditor / settlement counterparty</span><div class="h">needs evidence, not the private ledger</div><div class="b">must independently check the batch</div></div></div>
-  <div class="question fade" data-at="9">Can it independently check this exact batch?</div>
-  <div class="answer fade" data-at="14"><div class="h">Sworn creates audit-ready proof.</div><div class="b">For the exact batch — without exposing customer transactions.</div></div>
+  <div class="moment">
+    <div class="card vault fade" data-at="1.2"><span class="k">Zone business</span><div class="h">holds the private ledger and batch witness</div>
+      <div class="vledger"><span><i>sender → recipient</i><i>amount</i></span><span><i>sender → recipient</i><i>amount</i></span><span><i>account → withdrawal</i><i>amount</i></span><span><i>sender → recipient</i><i>amount</i></span></div>
+      <div class="vlock" data-at="7.6"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5.2 7V5a2.8 2.8 0 0 1 5.6 0v2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg> Private ledger · batch witness</div></div>
+    <div class="lane fade" data-at="1.2"><span class="lane-line"></span><span class="batch" data-at="3.4"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 1.5h6l3 3v10h-9z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.5 1.5v3h3M5.5 8h5M5.5 10.5h5M5.5 13h3" fill="none" stroke="currentColor" stroke-width="1.1"/></svg> Withdrawal batch</span></div>
+    <div class="card rev fade" data-at="2.4"><span class="k">Auditor / settlement counterparty</span><div class="h">needs evidence, not the private ledger</div>
+      <div class="qbox"><span class="qmark" data-at="5.4" data-off="10">?</span><span class="qtext" data-at="10.2">Can it independently check this exact batch?</span></div></div>
+  </div>
+  <div class="answer fade" data-at="12.6"><div class="h">Sworn creates audit-ready proof.</div><div class="b">For the exact batch — without exposing customer transactions.</div></div>
 </div>
 
 <div class="scene" id="p2">
   <div class="kicker fade">The product workflow</div><h1 class="sm fade">The operator starts a proof job.</h1>
-  <div class="product fade" data-at="2"><img class="console-shot" src="frames/demo-scene1.png" alt="Operator Console showing the selected batch and proof-job action" /><div class="product-copy"><div class="card"><span class="k">Operator Console</span><div class="h">Select Zone blocks 5–6.<br />Start local proof job.</div><div class="b">One withdrawal · two user transactions.</div></div><div class="card"><span class="k">Output</span><div class="h">Tempo code in SP1 → proof → read-only verification</div><div class="b">Fixture workflow · no transaction sent.</div></div></div></div>
+  <div class="p2flow" data-flow="cards:.8,step:.3,btn:2.6,wit:3.6,ring:5.2,chip:9.5,cross:10.3,badge:12.3,ok:13.4,bad:14.4"></div>
+  <div class="p2cap fade" data-at="1.6">Fixture workflow: Tempo code in SP1 → proof → read-only verification. No transaction sent.</div>
 </div>
 
 <div class="scene" id="p3">
   <div class="kicker fade">The evidence is real</div><h1 class="sm fade">Working on Tempo testnet.</h1>
-  <div class="pipe fade" data-at="1.5"><span>Tempo Zone code</span><span>zero-knowledge VM</span><span>Groth16 proof</span><span>verified on Moderato</span></div>
-  <div class="proof-facts fade" data-at="4"><div class="fact"><small>Batch</small><b>1 withdrawal</b></div><div class="fact"><small>Batch</small><b>2 user txs</b></div><div class="fact"><small>Contract</small><b>verified</b></div></div>
-  <div class="result fade" data-at="10"><div class="r"><small>Real batch</small><b class="ok" data-k="callReal"></b></div><div class="r"><small>One field changed</small><b class="bad" data-k="callBad"></b></div></div>
+  <div class="pipe fade" data-at="1.2"><span>Tempo Zone code</span><span>zero-knowledge VM</span><span>Groth16 proof</span><span>verified on Moderato</span></div>
+  <div class="fade" data-at="2.4"><div class="proof-facts"><div class="fact"><small>SP1 cycles</small><b class="count num" data-at="2.7" data-k="cycles"></b></div><div class="fact"><small>Groth16 proof</small><b class="count num" data-at="3.1" data-k="groth16"></b></div><div class="fact"><small>Batch</small><b class="sm">1 withdrawal<br />2 user transactions</b></div></div><div class="src p3src" data-k="proveSrc"></div></div>
+  <div class="fade" data-at="5.6"><div class="result"><div class="r"><small>Real batch</small><b class="ok draw" data-at="6.2" data-k="callReal"></b></div><div class="r badbox" data-at="8.6"><small data-k="callBadWhat"></small><b class="bad flip" data-at="8.6" data-k="callBad"></b></div></div><div class="src p3src" data-k="callSrc"></div></div>
 </div>
 
 <div class="scene" id="p4">
   <div class="kicker fade">The go-to-market test</div><h1 class="sm fade">Earn the right to a recurring contract.</h1>
-  <div class="grid3 buy fade" data-at="2"><div class="card"><span class="k">1. Operator</span><div class="h">Supplies its own witness</div><div class="b">A Zone business is the only party that can begin the proof workflow.</div></div><div class="card"><span class="k">2. First proof</span><div class="h">Reviewer re-verifies one batch</div><div class="b">Deliver proof evidence and reproducible verification instructions.</div></div><div class="card"><span class="k">3. Repeat need</span><div class="h">Next batch or next upgrade</div><div class="b">Only then is Proof Operations a recurring contract.</div></div></div>
-  <div class="tag fade" data-at="18">GTM test — not traction claimed</div>
+  <div class="prog fade" data-at="1"><span class="track"></span><i class="fill" data-at="1.8" style="--w:16.67%"></i><i class="fill" data-at="5.2" style="--w:50%"></i><i class="fill" data-at="10.4" style="--w:83.33%"></i><b class="node" data-at="1.8" style="left:16.67%"></b><b class="node" data-at="5.2" style="left:50%"></b><b class="node" data-at="10.4" style="left:83.33%"></b></div>
+  <div class="grid3 buy"><div class="card fade" data-at="2"><span class="k">1. Operator</span><div class="h">Supplies its own witness</div><div class="b">A Zone business is the only party that can begin the proof workflow.</div></div><div class="card fade" data-at="5.4"><span class="k">2. First proof</span><div class="h">Reviewer re-verifies one batch</div><div class="b">Deliver proof evidence and reproducible verification instructions.</div></div><div class="card fade" data-at="10.6"><span class="k">3. Repeat need</span><div class="h">Next batch or next upgrade</div><div class="b">Only then is Proof Operations a recurring contract.</div></div></div>
+  <div class="tag fade" data-at="17">GTM test — not traction claimed</div>
 </div>
 
 <div class="scene" id="p5">
@@ -52,9 +94,9 @@
 
 <div class="scene" id="p6">
   <div class="kicker fade">The honest ask</div><h1 class="sm fade">What is true today.</h1>
-  <div class="truth fade" data-at="2"><span>Testnet</span><span>unaudited</span><span>Tempo integration-test batch</span><span>no customer claimed</span></div>
-  <div class="next fade" data-at="6">Next: a design partner supplies a batch<br />and decides whether the proof is worth paying for.</div>
-  <div class="close fade" data-at="11"><img class="mark" src="../_submission/brand/mark.svg" alt="" /><div><div class="closing">Audit-ready evidence for private execution.</div><div class="fine"><span data-k="repo"></span> · <b>psyto.github.io/sworn</b></div></div></div>
+  <div class="truth fade" data-at="1.5"><span>Testnet</span><span>unaudited</span><span>Tempo integration-test batch</span><span>no customer claimed</span></div>
+  <div class="next fade" data-at="5.2">Next: a design partner supplies a batch<br />and decides whether the proof is worth paying for.</div>
+  <div class="close blk fade" data-at="9.6"><img class="mark stamp" data-at="10.2" src="../_submission/brand/mark.svg" alt="" /><div><div class="closing fade" data-at="10.9">Audit-ready evidence for private execution.</div><div class="fine fade" data-at="11.5"><span data-k="repo"></span> · <b>psyto.github.io/sworn</b></div></div></div>
 </div>
 
 <script src="slides.js"></script>

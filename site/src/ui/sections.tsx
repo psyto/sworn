@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import deployments from "../../../deployments/moderato.json";
 import { MODERATO, txUrl } from "../chain/config.ts";
 import { short } from "../chain/format.ts";
+import { FIXTURE } from "../chain/zone.ts";
 
 const REPO = "https://github.com/psyto/sworn";
 const DEPLOYMENTS = `${REPO}/blob/main/deployments/moderato.json`;
@@ -141,6 +142,64 @@ export function ProofFlow() {
   );
 }
 
+/** The digest the guest committed for the proven fixture, as the diagram's chip shows it (read from the fixture). */
+const DIGEST = short(FIXTURE.digest);
+
+/**
+ * "Only hashes cross this line": Private · Zone operator → Sworn prover · SP1 ┆ Public · Tempo → Reviewer.
+ * A CSS-only 8 s loop (styles.css, "data flow"). Without motion the diagram is static and fully visible.
+ */
+function FlowDiagram() {
+  return (
+    <div className="dfx" role="img" aria-label={`Diagram: the batch witness goes from the Zone operator to the Sworn prover and stops there. Only the digest ${DIGEST} crosses to Tempo, where SwornZoneVerifier emits ZoneBatchVerified; a reviewer's check returns true, or InvalidProof() if one field changes.`}>
+      <div className="dfx-stage" aria-hidden="true">
+        <div className="dfx-card dfx-private">
+          <p className="eyebrow">Private · Zone operator</p>
+          <div className="dfx-ledger">
+            <span><i>sender → recipient</i><i>amount</i></span>
+            <span><i>sender → recipient</i><i>amount</i></span>
+            <span><i>account → withdrawal</i><i>amount</i></span>
+          </div>
+          <p className="dfx-lock"><Lock /> Never published</p>
+          <div className="dfx-slot"><span className="dfx-doc dfx-wit-home"><Doc /> witness</span></div>
+        </div>
+        <span className="dfx-wire w1" />
+        <div className="dfx-card dfx-prover">
+          <p className="eyebrow">Sworn prover · SP1</p>
+          <h3>Tempo&apos;s own Zone code</h3>
+          <p className="dfx-run"><span className="dfx-ring" /> <span>re-executes the batch</span></p>
+          <div className="dfx-slot"><span className="dfx-chip dfx-chip-p">{DIGEST}</span></div>
+        </div>
+        <div className="dfx-bnd"><span className="dfx-bnd-l">Only hashes{" "}<br />cross this line</span></div>
+        <div className="dfx-card dfx-public">
+          <p className="eyebrow">Public · Tempo</p>
+          <h3>SwornZoneVerifier</h3>
+          <p className="dfx-badge">✓ ZoneBatchVerified</p>
+          <div className="dfx-slot"><span className="dfx-chip dfx-chip-t">{DIGEST}</span></div>
+        </div>
+        <span className="dfx-wire w3" />
+        <div className="dfx-card dfx-reviewer">
+          <p className="eyebrow">Reviewer</p>
+          <h3>verify(…)</h3>
+          <p className="dfx-ok">✓ true</p>
+          <p className="dfx-bad">✗ InvalidProof() — one field changed</p>
+          <div className="dfx-slot" />
+        </div>
+        <span className="dfx-tok dfx-tok-wit"><i><Doc /></i></span>
+        <span className="dfx-tok dfx-tok-dig"><i>{DIGEST}</i></span>
+        <span className="dfx-tok dfx-tok-pulse"><i /></span>
+      </div>
+    </div>
+  );
+}
+
+const Doc = () => (
+  <svg className="dfx-ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 1.5h6l3 3v10h-9z" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" /><path d="M9.5 1.5v3h3M5.5 8h5M5.5 10.5h5M5.5 13h3" fill="none" stroke="currentColor" strokeWidth="1.1" /></svg>
+);
+const Lock = () => (
+  <svg className="dfx-ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7.5" fill="none" stroke="currentColor" strokeWidth="1.3" /><path d="M5.2 7V5a2.8 2.8 0 0 1 5.6 0v2" fill="none" stroke="currentColor" strokeWidth="1.3" /></svg>
+);
+
 export function DataFlow() {
   return (
     <section className="section story-section" aria-labelledby="data-flow">
@@ -152,29 +211,12 @@ export function DataFlow() {
           reviewer needs to check the proof.
         </p>
       </div>
-      <ol className="dataflow" aria-label="Data flow from the Zone operator to the reviewer">
-        <li className="df-lane private">
-          <p className="eyebrow">Private · Zone operator</p>
-          <h3>Batch witness and Zone genesis</h3>
-          <p>The Zone blocks, balances and transactions of one batch. Never published.</p>
-        </li>
-        <li className="df-lane prover">
-          <p className="eyebrow">Sworn prover · SP1</p>
-          <h3>Re-execute with Tempo&apos;s own Zone code</h3>
-          <p>Commits one digest: Zone id, Tempo blocks and anchor, state and withdrawal-queue hashes, counters, verifier,
-            config, genesis hash, chain.</p>
-        </li>
-        <li className="df-lane public">
-          <p className="eyebrow">Public · Tempo</p>
-          <h3>Proof checked by SwornZoneVerifier</h3>
-          <p>The batch fields and a Groth16 proof; the contract recomputes the digest and emits ZoneBatchVerified.</p>
-        </li>
-        <li className="df-lane reviewer">
-          <p className="eyebrow">Reviewer</p>
-          <h3>Verify, with no ledger access</h3>
-          <p>An eth_call returns true, or InvalidProof() if any field differs.</p>
-        </li>
-      </ol>
+      <FlowDiagram />
+      <p className="df-commits">
+        The prover commits one digest: Zone id, Tempo blocks and anchor, state and withdrawal-queue hashes, counters,
+        verifier, config, genesis hash, chain. The contract recomputes it from the batch fields and checks the Groth16
+        proof.
+      </p>
       <div className="df-learns" aria-label="What a reviewer learns">
         <p><b>Learns:</b> Tempo&apos;s own Zone code accepts this exact batch.</p>
         <p><b>Does not learn:</b> balances, senders, recipients or amounts inside the Zone.</p>
