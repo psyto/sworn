@@ -4,7 +4,7 @@ import { makePublicClient } from "./chain/client.ts";
 import { MODERATO } from "./chain/config.ts";
 import { idle, load, type Loadable } from "./chain/loadable.ts";
 import { HARDFORK_BATCH, readAttestLine, readZoneAttest, verifyZoneNow, type AttestLine, type VerifyNow, type ZoneAttest } from "./chain/zone.ts";
-import { Footer, Hero, OperationsTest, ProofFlow, ReviewGap, Topbar } from "./ui/sections.tsx";
+import { DataFlow, Footer, Hero, OperationsTest, ProofFlow, ReviewGap, Topbar } from "./ui/sections.tsx";
 import { ZoneSection } from "./ui/Zone.tsx";
 import "./ui/styles.css";
 
@@ -38,6 +38,7 @@ function App() {
         <Hero />
         <ReviewGap />
         <ProofFlow />
+        <DataFlow />
         <OperationsTest />
         <ZoneSection attest={zone} also={also} check={check} onRetry={() => { void readZone(); void readAlso(); }} onVerify={() => void verifyNow()} />
       </main>

@@ -327,3 +327,22 @@ p { margin: 0; }
 .fast-path { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-top: 20px; }
 .fast-path .eyebrow { margin: 0; }
 .fast-path a { font-weight: 500; }
+
+/* data flow: private → prover → public → reviewer */
+.dataflow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.df-lane { position: relative; display: grid; align-content: start; gap: 8px; padding: 22px; border: 1px solid var(--border); background: var(--surface); }
+.df-lane + .df-lane { margin-left: -1px; }
+.df-lane h3 { font-size: 19px; letter-spacing: -.02em; line-height: 1.2; }
+.df-lane p:last-child { color: var(--muted); font-size: 14px; }
+.df-lane.private { background: var(--surface-2); border-top: 3px solid var(--muted); }
+.df-lane.public { border-top: 3px solid var(--accent); }
+.df-lane.prover, .df-lane.reviewer { border-top: 3px solid var(--border); }
+.df-lane + .df-lane::before { content: "→"; position: absolute; left: -11px; top: 22px; width: 20px; text-align: center; color: var(--muted); background: var(--bg, transparent); }
+.df-learns { display: grid; gap: 6px; }
+.df-learns p { margin: 0; }
+.df-learns .df-note { color: var(--muted); font-size: 14px; }
+@media (max-width: 760px) {
+  .dataflow { grid-template-columns: minmax(0, 1fr); }
+  .df-lane + .df-lane { margin-left: 0; margin-top: -1px; }
+  .df-lane + .df-lane::before { content: "↓"; left: 50%; top: -12px; transform: translateX(-50%); }
+}

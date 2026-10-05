@@ -141,6 +141,50 @@ export function ProofFlow() {
   );
 }
 
+export function DataFlow() {
+  return (
+    <section className="section story-section" aria-labelledby="data-flow">
+      <div className="section-head">
+        <p className="eyebrow">Data flow</p>
+        <h2 id="data-flow">What stays private, and what becomes public.</h2>
+        <p className="lede">
+          The batch witness goes to the prover and stops there. Only hashes and counters reach Tempo, and that is all a
+          reviewer needs to check the proof.
+        </p>
+      </div>
+      <ol className="dataflow" aria-label="Data flow from the Zone operator to the reviewer">
+        <li className="df-lane private">
+          <p className="eyebrow">Private · Zone operator</p>
+          <h3>Batch witness and Zone genesis</h3>
+          <p>The Zone blocks, balances and transactions of one batch. Never published.</p>
+        </li>
+        <li className="df-lane prover">
+          <p className="eyebrow">Sworn prover · SP1</p>
+          <h3>Re-execute with Tempo&apos;s own Zone code</h3>
+          <p>Commits one digest: Zone id, Tempo blocks and anchor, state and withdrawal-queue hashes, counters, verifier,
+            config, genesis hash, chain.</p>
+        </li>
+        <li className="df-lane public">
+          <p className="eyebrow">Public · Tempo</p>
+          <h3>Proof checked by SwornZoneVerifier</h3>
+          <p>The batch fields and a Groth16 proof; the contract recomputes the digest and emits ZoneBatchVerified.</p>
+        </li>
+        <li className="df-lane reviewer">
+          <p className="eyebrow">Reviewer</p>
+          <h3>Verify, with no ledger access</h3>
+          <p>An eth_call returns true, or InvalidProof() if any field differs.</p>
+        </li>
+      </ol>
+      <div className="df-learns" aria-label="What a reviewer learns">
+        <p><b>Learns:</b> Tempo&apos;s own Zone code accepts this exact batch.</p>
+        <p><b>Does not learn:</b> balances, senders, recipients or amounts inside the Zone.</p>
+        <p className="df-note">Today the proof is checked off the settlement path: no ZonePortal calls this verifier, and it does
+          not protect withdrawals (spec 004 is a proposal).</p>
+      </div>
+    </section>
+  );
+}
+
 export function OperationsTest() {
   return (
     <section className="section story-section operations" id="operations" aria-labelledby="operations-h">
