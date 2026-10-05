@@ -15,89 +15,81 @@ But the operator holds the private ledger and the batch witness.
 Sworn creates independently verifiable, audit-ready evidence for that exact batch, without exposing customer transaction contents.
 
 5
-00:00:20,000 --> 00:00:26,462
+00:00:20,000 --> 00:00:26,382
 The operator selects the batch in Sworn's local console and starts a proof job.
 
 6
-00:00:26,512 --> 00:00:31,578
+00:00:26,432 --> 00:00:31,436
 Sworn runs Tempo's own Zone verification code in a zero-knowledge VM,
 
 7
-00:00:31,628 --> 00:00:37,159
+00:00:31,486 --> 00:00:36,950
 then creates proof evidence that a third party can verify on chain.
 
 8
-00:00:37,209 --> 00:00:39,950
-The private transaction contents stay private.
-
-9
-00:00:40,000 --> 00:00:42,693
+00:00:37,000 --> 00:00:39,693
 We have done this on Moderato:
 
-10
-00:00:42,743 --> 00:00:49,093
+9
+00:00:39,743 --> 00:00:46,093
 a test batch with one withdrawal and two user transactions verified by a contract.
 
-11
-00:00:49,143 --> 00:00:51,836
+10
+00:00:46,143 --> 00:00:48,836
 Change one input, and verification fails.
 
-12
-00:00:51,886 --> 00:00:55,950
+11
+00:00:48,886 --> 00:00:52,950
 This is a working proof pipeline, not a mockup.
 
+12
+00:00:53,000 --> 00:00:58,470
+We start with one Zone business whose operator can supply its witness.
+
 13
-00:00:56,000 --> 00:01:04,283
-The buyer we are pursuing is a Zone business that must give a counterparty confidence before it settles.
+00:00:58,520 --> 00:01:04,450
+First, we prove one of its batches and give its reviewer reproducible verification.
 
 14
-00:01:04,333 --> 00:01:07,524
-It would pay Sworn for two things:
+00:01:04,500 --> 00:01:11,350
+If it asks for the next batch or upgrade, that becomes a Proof Operations contract.
 
 15
-00:01:07,574 --> 00:01:13,543
-proof generation for each batch it supplies, and compatibility maintenance through Tempo upgrades.
+00:01:11,400 --> 00:01:15,950
+That is our go-to-market test — not traction we claim today.
 
 16
-00:01:13,593 --> 00:01:17,246
-That is the contract we want to test.
+00:01:16,000 --> 00:01:19,138
+ZK proving for Zones is still unimplemented.
 
 17
-00:01:17,296 --> 00:01:20,950
-We will validate the demand with design partners.
+00:01:19,188 --> 00:01:25,968
+Sworn runs Tempo's code, binds to portal-shaped inputs, and is built to track execution upgrades.
 
 18
-00:01:21,000 --> 00:01:23,246
-Generic proving tools run programs.
+00:01:26,018 --> 00:01:30,521
+The market is not proven — Moderato has one effective operator.
 
 19
-00:01:23,296 --> 00:01:26,919
-They do not deliver a Tempo-specific evidence operation.
+00:01:30,571 --> 00:01:34,620
+I work on Reth and Revm, teach that stack,
 
 20
-00:01:26,969 --> 00:01:32,889
-Sworn already runs Tempo's code, binds to the batch inputs its portal understands,
+00:01:34,670 --> 00:01:41,450
+won a Uniswap Foundation prize at ETHGlobal Tokyo, and spent fifteen years building banking systems.
 
 21
-00:01:32,939 --> 00:01:36,103
-and is built to track execution upgrades.
-
-22
-00:01:36,153 --> 00:01:43,450
-I work on Reth and Revm, teach that stack, and have fifteen years building banking systems.
-
-23
-00:01:43,500 --> 00:01:46,256
+00:01:41,500 --> 00:01:44,256
 Today: testnet, unaudited, Tempo integration-test batch.
 
-24
-00:01:46,306 --> 00:01:47,660
+22
+00:01:44,306 --> 00:01:45,660
 No customer claimed.
 
-25
-00:01:47,710 --> 00:01:55,144
+23
+00:01:45,710 --> 00:01:53,144
 Next, a design partner supplies a batch and decides if independent proof is worth paying for.
 
-26
-00:01:55,194 --> 00:01:57,950
-Sworn: audit-ready proof for private execution.
+24
+00:01:53,194 --> 00:01:55,950
+Sworn: audit-ready evidence for private execution.

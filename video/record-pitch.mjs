@@ -1,4 +1,4 @@
-// Records video/pitch.mp4 — Sworn's ≤ 2 min CWF pitch v5.1, six scenes, SILENT, 1920×1080 — and
+// Records video/pitch.mp4 — Sworn's ≤ 2 min CWF pitch v5.2, six scenes, SILENT, 1920×1080 — and
 // video/pitch.srt with the narration of video/PITCH.md timed to where each scene landed.
 //
 //   node video/record-pitch.mjs            # then: node video/split-scenes.mjs pitch
@@ -37,14 +37,14 @@ const scenes = parseScenes("video/PITCH.md");
 if (scenes.length !== 6) fail(`PITCH.md has ${scenes.length} scenes, expected 6`);
 const TOTAL = scenes.reduce((a, s) => a + s.hold, 0);
 const WORDS = scenes.reduce((a, s) => a + s.words, 0);
-log(`• pitch v5.1: scene holds (words ÷ 2.2 w/s, rounded up to 0.5 s)`);
+log(`• pitch v5.2: scene holds (words ÷ 2.2 w/s, rounded up to 0.5 s)`);
 for (const s of scenes) log(`    scene ${s.n}: ${String(s.words).padStart(3)} words → ${s.hold.toFixed(1)} s  (${s.title})`);
 log(`    total ${TOTAL.toFixed(1)} s, ${WORDS} words`);
 if (TOTAL > MAX_TOTAL) fail(`pitch runs ${TOTAL} s > ${MAX_TOTAL} s — cut words in PITCH.md`);
 const narr = scenes.map((s) => s.text).join(" ");
 for (const banned of [/the same input/i, /\bbroken\b/i, /protects? withdrawals/i, /secures? withdrawals/i, /every batch/i, /our customers are/i])
   if (banned.test(narr)) fail(`PITCH.md narration says ${banned}`);
-for (const must of ["audit-ready evidence", "operator selects the batch", "buyer we are pursuing", "worth paying for", "No customer claimed"])
+for (const must of ["audit-ready evidence", "operator selects the batch", "go-to-market test", "market is not proven", "No customer claimed"])
   if (!narr.includes(must)) fail(`PITCH.md narration no longer says "${must}"`);
 
 const ZONES_REF = "ac49071f";
@@ -252,7 +252,7 @@ const BANK = "15 years building banking systems in Japan";
 if (!flat(readme).includes(BANK)) fail(`README "Who" no longer says "${BANK}"`);
 
 // ── scene 6: limits ──────────────────────────────────────────────────────────────────────────────
-for (const s of ["## What the Zone verifier is, and is not", "**The batches are not from Moderato.**", "Tempo's zones integration tests", "Unaudited.", "Traction: none.", "It does not secure withdrawals"])
+for (const s of ["## What the Zone verifier is, and is not", "**The batches are not from Moderato.**", "Tempo's zones integration tests", "Unaudited.", "no customers, revenue, design partner or payer agreement", "It does not secure withdrawals"])
   if (!flat(readme).includes(flat(s))) fail(`README no longer says "${s}"`);
 const repoUrl = ghRepoPublic("psyto/sworn", "repo");
 log(`• README limits present; ${repoUrl} public; ETHGlobal: ${prize[1]} ${prize[3]}; tempo: reth + revm ${revmV}`);
@@ -294,7 +294,7 @@ const data = {
   ethglobalSrc: `with Reckn · ${prize[2].trim()} · ${EG.replace(/^https:\/\//, "")}`,
   banking: BANK, bankingSrc: "README “Who” · read while recording",
   // 6
-  limitsSrc: "README: “What the Zone verifier is, and is not” · Status: Moderato testnet only, unaudited, traction none",
+  limitsSrc: "README: “What the Zone verifier is, and is not” · Moderato testnet only, unaudited, no customers/revenue/design partner/payer agreement",
   operatorSrc: `Tempo's Zone factory on Moderato, read now: ${nZones} Zones, one admin and one sequencer set; the factory's owner is a 1-of-1 Safe with that same signer`,
   repo: repoUrl,
 };
@@ -332,7 +332,7 @@ const cues = writeSrt(scenes, starts, path.join(dir, "pitch.srt"));
 const ffmpeg = process.env.FFMPEG_PATH || "/opt/homebrew/bin/ffmpeg";
 for (let i = 0; i < 6; i++) execFileSync(ffmpeg, ["-v", "error", "-ss", (starts[i + 1] - 0.2).toFixed(2), "-i", out, "-frames:v", "1", path.join(dir, "frames", `pitch-scene${i + 1}.png`), "-y"]);
 writeJson(path.join(dir, "pitch.marks.json"), {
-  name: "pitch", script: "video/PITCH.md", version: "5.1", holds: scenes.map((s) => s.hold), titles: scenes.map((s) => s.title),
+  name: "pitch", script: "video/PITCH.md", version: "5.2", holds: scenes.map((s) => s.hold), titles: scenes.map((s) => s.title),
   words: scenes.map((s) => s.words), totalWords: WORDS,
   liveCalls: { moderatoPreT13Malformed: "true", moderatoPreT13At: stubAt.toISOString(), swornReal: "true", swornMutated: "InvalidProof()", swornAt: callAt.toISOString(), preT13Selector: PRE_SEL },
   moderatoZones: { count: nZones, admin, factoryOwner: fOwner, safeOwners, safeThreshold: Number(safeT) },

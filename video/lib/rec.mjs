@@ -21,6 +21,17 @@ export const rel = (p) => path.relative(repo, p);
 export const short = (h, n = 4) => `${h.slice(0, 2 + n)}…${h.slice(-n)}`;
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+/** Keep long headless recordings observable to a supervising terminal without changing their timing. */
+export async function waitWithProgress(ms, label) {
+  let left = ms;
+  while (left > 0) {
+    const step = Math.min(left, 5000);
+    await sleep(step);
+    left -= step;
+    if (left > 0) log(`      ${label} … ${Math.ceil(left / 1000)} s`);
+  }
+}
+
 export function read(p, what) {
   const f = path.join(repo, p);
   if (!existsSync(f)) fail(`${what}: ${p} is missing`);
@@ -205,7 +216,7 @@ export async function recordSlides({ html, data, ids, holds, raw, out, viewport 
       log(`    recording ${id} (${holds[i]} s)`);
       page.evaluate((x) => window.__show(x), id); // fades run in the page while the hold elapses
       const end = holds.slice(0, i + 1).reduce((a, h) => a + h, 0) * 1000;
-      await sleep(Math.max(0, end - (Date.now() - t0)));
+      await waitWithProgress(Math.max(0, end - (Date.now() - t0)), `holding ${id}`);
     }
     marks.push((Date.now() - t0) / 1000);
     await recorder.stop();

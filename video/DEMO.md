@@ -1,11 +1,11 @@
-# Demo video: Sworn (≤ 3 min, founder's voice), v5.2, 2026-10-05
+# Demo video: Sworn (≤ 3 min, founder's voice), v5.3, 2026-10-05
 
 **One product, one user.** This demo follows a Zone operator who needs independently checkable evidence for a
 batch. It does not show the separate bonded-answer payment prototype or imitate a retail wallet. The operator
 workflow is an authored explanatory view; the proof, read-only checks, contract event and explorer record that
 follow are real.
 
-**Status: v5.2 recorded as silent picture + script + subtitles.** `video/demo.mp4` is 1920×1080. The founder
+**Status: v5.3 scripted as silent picture + script + subtitles.** `video/demo.mp4` is 1920×1080. The founder
 records the narration in their own voice using `video/scenes/demo/NARRATION.md`; `demo.srt` follows the same
 timing. `record-demo.mjs` rereads the cited public chain state before it records, using only read-only RPC calls.
 
@@ -20,27 +20,24 @@ Holding withdrawals until ZK finality is a proposal for Tempo, not a deployed Sw
 | 3 Operator Console and prototype verifier, live | 30 s | local Operator Console + public evidence page; read-only live call |
 | 4 Real proof, on chain | 36 s | public page + explorer event + a live mutation check |
 | 5 Said plainly | 13 s | authored scope disclosure (`dz`) |
-| 6 Customer and next step | 31 s | authored route (`d6`) |
+| 6 GTM test and next step | 31 s | authored validation route (`d6`) |
 
-## Scene 1 — start a proof job · ≈ 24 s
+## Scene 1 — start a proof job · ≈ 15 s
 
 **[A deliberately labelled desktop **Zone Operations Console**. The operator sees Zone blocks 5–6, its one withdrawal
 and two user transactions, and starts a local proof job. The status progresses from queued to the real SP1 Groth16
 pipeline, then to read-only on-chain verification. The console is labelled on screen "Illustration of the operator workflow"; the operator is a generic "Example Zone"; the sidebar says `Test fixture · zone 1 · dev chain 1337`; the card says
 `No transaction sent`. This is a fixture-only local workflow, not a hosted service or settlement integration.]**
 
-> A Zone operator selects the batch before an audit. This batch, Zone blocks 5–6, has one withdrawal and two user transactions.
-> They start Sworn's local proof job. It runs Tempo's code in SP1, then performs read-only verification on
-> Moderato. The finished proof record can be sent to an auditor.
+> A Zone operator picks a batch with one withdrawal and two user transactions and starts Sworn's local proof job: Tempo's code runs in a zero-knowledge VM, and the result goes to an auditor.
 
-## Scene 2 — why the batch check matters · ≈ 17 s
+## Scene 2 — why the batch check matters · ≈ 11 s
 
 **[Zone operator submits a batch → batch includes withdrawal → Zone verifier → ZonePortal processes it.
 Headline: the operator and auditor must trust the check. The graphic is a simplified explanation of the
 ZonePortal flow, not a claim that the demonstrated Sworn verifier is connected to it.]**
 
-> Tempo's portal processes a withdrawal from a batch only after the Zone verifier accepts it. So the operational
-> dependency is simple: an operator, auditor, or counterparty must be able to trust the batch check.
+> Tempo's portal pays a withdrawal only after the Zone verifier accepts the batch, so everyone involved must be able to trust that check.
 
 ## Scene 3 — Operator Console and Moderato's prototype verifier, live · ≈ 30 s
 
@@ -74,16 +71,16 @@ integration is proposed, not built.]**
 > To be clear: this batch comes from a dev chain, not a Moderato Zone. No portal uses it, and it does not protect
 > withdrawals yet.
 
-## Scene 6 — who it is for, and next · ≈ 31 s
+## Scene 6 — GTM test and next step · ≈ 31 s
 
-**[The near-term customer is "Zone operators who answer to auditors"; later integration into settlement is
-labelled written, not built; proving operations through upgrades is labelled to validate. The limits and next
-step remain visible.]**
+**[The Console shows the test sequence: a Zone business supplies its witness; its reviewer re-verifies one
+batch; a repeat need for the next batch or upgrade is the conversion test. “GTM test, not traction” is
+visible alongside the limits.]**
 
-> Near term: businesses that run Zones and answer to auditors, with evidence they match to each batch they
-> settle, not yet a guarantee. Later, Tempo could build proofs into settlement; that design is written, not
-> built. The service: provers on time, rebuilt at each upgrade. It's testnet and unaudited, with one Zone
-> operator on Moderato and no customers. Next: one design partner, and a proof of a batch they supply.
+> Sworn has no customers, revenue or payer agreement today. The first test is not broad adoption. A Zone
+> business supplies a batch, its reviewer re-verifies it, and we ask whether it needs the next batch or
+> upgrade proved. Only then is Proof Operations a recurring service. Settlement integration remains a
+> separate Tempo proposal.
 
 ## Claims and sources
 
@@ -96,7 +93,7 @@ step remain visible.]**
 | real batch → true; one changed field → `InvalidProof()` | two read-only calls made by the recorder and shown by the public page |
 | local proof job starts the real pipeline, then read-only checks | `operator/server.mjs`: fixed fixture only, runs `scripts/zone-prove.sh` then `scripts/zone-attest.sh` without `--send` |
 | no portal connection / no withdrawal protection | `SwornZoneVerifierWithdrawal.deviations`, README scope section and spec 004 |
-| customer route and current limits | README: testnet, unaudited, no customers or revenue; spec 004 calls settlement integration a proposal for Tempo |
+| GTM test and current limits | README: testnet, unaudited, no customers/revenue/payer agreement; spec 004 calls settlement integration a proposal for Tempo |
 
 **Never claim:** that this protects withdrawals today; that it proves a live Moderato Zone batch; that the
 prototype and Sworn receive the same ABI input; that Tempo is broken; or that Sworn has customers, revenue,

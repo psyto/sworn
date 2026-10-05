@@ -1,4 +1,4 @@
-// Records video/demo.mp4 — Sworn's ≤ 3 min CWF demo v5.2, six scenes, SILENT, 1920×1080 — plus video/demo.srt
+// Records video/demo.mp4 — Sworn's ≤ 3 min CWF demo v5.3, six scenes, SILENT, 1920×1080 — plus video/demo.srt
 // and video/demo.marks.json. It follows a Zone operator's need for independently checkable batch evidence,
 // then shows the real proof on a Zone batch with a withdrawal and its explicit present-day limits.
 //
@@ -47,14 +47,14 @@ mkdirSync(work, { recursive: true });
 
 // ── the script ───────────────────────────────────────────────────────────────────────────────────
 const scenes = parseScenes("video/DEMO.md");
-if (scenes.length !== 6) fail(`DEMO.md has ${scenes.length} scenes, expected 6 (v5.2)`);
+if (scenes.length !== 6) fail(`DEMO.md has ${scenes.length} scenes, expected 6 (v5.3)`);
 const md = read("video/DEMO.md", "DEMO.md");
 const targets = [...md.matchAll(/^## Scene (\d+) — .*· ≈ (\d+(?:\.\d+)?) s\s*$/gm)].map((m) => +m[2]);
 if (targets.length !== 6) fail("DEMO.md: every scene heading needs its \"≈ N s\" target");
 const holds = scenes.map((s, i) => Math.max(s.hold, targets[i]));
 const TOTAL = holds.reduce((a, b) => a + b, 0);
 const words = scenes.reduce((a, s) => a + s.words, 0);
-log(`• demo v5.2: scene lengths = max(target, words ÷ 2.2)`);
+log(`• demo v5.3: scene lengths = max(target, words ÷ 2.2)`);
 for (const [i, s] of scenes.entries()) log(`    scene ${s.n}: ${String(s.words).padStart(3)} words (${s.hold} s of voice) → ${holds[i]} s  (${s.title})`);
 log(`    total ${TOTAL} s, ${words} words`);
 if (words > 330) fail(`DEMO.md narration is ${words} words > the plan's hard cap 330`);
@@ -241,10 +241,10 @@ async function capturePage() {
     await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: "light" }]);
     await page.emulateTimezone("UTC");
     await page.goto(PAGE, { waitUntil: "networkidle2", timeout: 120000 });
-    await page.waitForFunction(() => { const z = document.querySelector("#zone")?.innerText ?? ""; return z.includes("ZoneBatchVerified emitted") && z.includes("✓ true") && z.includes("returns true") && z.includes("match its fixture"); }, { timeout: 120000, polling: 250 });
+    await page.waitForFunction(() => { const z = document.querySelector("#evidence")?.innerText ?? ""; return z.includes("ZoneBatchVerified emitted") && z.includes("✓ true") && z.includes("returns true") && z.includes("match its fixture"); }, { timeout: 120000, polling: 250 });
     await fontsReady(page).catch(() => fail("the page's Geist fonts did not load"));
     assertFresh(await page.evaluate(() => document.body.innerText), "page (whole)");
-    checkZoneText(await page.evaluate(() => document.querySelector("#zone").innerText), "on load");
+    checkZoneText(await page.evaluate(() => document.querySelector("#evidence").innerText), "on load");
     const hdr = await page.evaluate(() => document.querySelector("header").getBoundingClientRect().height);
     const go = (sel, mode = "start", smooth = true) => page.evaluate((s, m, h, sm) => {
       const el = document.querySelector(s); if (!el) return false;
@@ -253,16 +253,16 @@ async function capturePage() {
       scrollTo({ top: Math.max(0, y), behavior: sm ? "smooth" : "instant" }); return true;
     }, sel, mode, hdr, smooth).then((ok) => ok || fail(`page: no ${sel}`));
     const rect = (sel) => page.evaluate((x) => { const r = document.querySelector(x).getBoundingClientRect(); return { top: r.top, bottom: r.bottom, left: r.left, right: r.right }; }, sel);
-    const readat = () => page.evaluate(() => document.querySelector("#zone .again .readat")?.textContent ?? "");
+    const readat = () => page.evaluate(() => document.querySelector("#evidence .again .readat")?.textContent ?? "");
     const click = async (label) => {
       const before = await readat();
-      await page.click("#zone .again button.btn");
+      await page.click("#evidence .again button.btn");
       mark(label);
-      await page.waitForFunction((b) => { const r = document.querySelector("#zone .again .readat")?.textContent ?? ""; return r && r !== b && document.querySelector("#zone .again .row-stub"); }, { timeout: 30000, polling: 50 }, before);
+      await page.waitForFunction((b) => { const r = document.querySelector("#evidence .again .readat")?.textContent ?? ""; return r && r !== b && document.querySelector("#evidence .again .row-stub"); }, { timeout: 30000, polling: 50 }, before);
       mark(`${label}:results`);
       t.called.push([before, await readat()]);
     };
-    await go("#zone .proof-job", "start", false);
+    await go("#evidence .proof-job", "start", false);
     await sleep(1500);
 
     const recorder = await newRecorder(page);
@@ -273,27 +273,27 @@ async function capturePage() {
     const P2 = holds[2];
     // scene 3: show the local-job control, then click the public evidence check.
     mark("s2");
-    await at(6); await go("#zone .zone-card.again", "start");
-    t.btnRect = await rect("#zone .again button.btn"); mark("verifyPanel");
+    await at(6); await go("#evidence .zone-card.again", "start");
+    t.btnRect = await rect("#evidence .again button.btn"); mark("verifyPanel");
     await at(8); await click("click1");
-    await at(11); await go("#zone .calls li.row-stub", "center"); mark("stub");
+    await at(11); await go("#evidence .calls li.row-stub", "center"); mark("stub");
     await at(P2); mark("s3a");
     // scene 4a: the attest card, then what the batch contains
-    await go("#zone .zone-card", "start");
-    await at(P2 + 6); await go("#zone .zone-card .sub-head", "start"); mark("contains");
+    await go("#evidence .zone-card", "start");
+    await at(P2 + 6); await go("#evidence .zone-card .sub-head", "start"); mark("contains");
     await at(P2 + S3.pageA); mark("idle");
     // cut out: the explorer insert goes here; the page moves to the rows
-    await go("#zone .again button.btn", "start", false);
-    await sleep(1000); t.btnRect2 = await rect("#zone .again button.btn");
+    await go("#evidence .again button.btn", "start", false);
+    await sleep(1000); t.btnRect2 = await rect("#evidence .again button.btn");
     await at(P2 + S3.pageA + IDLE); mark("s3c");
     // scene 4c: second click, rows 1–2, then the comparison line
     await at(P2 + S3.pageA + IDLE + 1); await click("click2");
-    await at(P2 + S3.pageA + IDLE + 2.5); await go("#zone .again .calls", "start");
-    await at(P2 + S3.pageA + IDLE + S3.pageC - 5); await go("#zone .compare-line", "end"); mark("compare");
+    await at(P2 + S3.pageA + IDLE + 2.5); await go("#evidence .again .calls", "start");
+    await at(P2 + S3.pageA + IDLE + S3.pageC - 5); await go("#evidence .compare-line", "end"); mark("compare");
     await at(P2 + S3.pageA + IDLE + S3.pageC + 0.5); mark("end");
     t.wall = (Date.now() - t0) / 1000;
     await recorder.stop();
-    checkZoneText(await page.evaluate(() => document.querySelector("#zone").innerText), "after the clicks");
+    checkZoneText(await page.evaluate(() => document.querySelector("#evidence").innerText), "after the clicks");
     for (const [b, aft] of t.called) {
       if (b === aft) fail(`page: "Called at" did not change (${aft})`);
       const ca = aft.match(/Called at (\d{4}-\d\d-\d\d \d\d:\d\d:\d\d) UTC/) ?? fail(`page: "${aft}"`);
@@ -353,7 +353,7 @@ const FACTORY = "tempo/crates/precompiles/src/zone_factory/mod.rs";
 const fac = read(FACTORY, "vendored zone_factory").split("\n");
 const fv = fac.findIndex((l) => l.trim() === "verifier: ZONE_VERIFIER_ADDRESS,");
 if (fv < 0) fail(`${FACTORY}: verifier assignment moved`);
-for (const s of ["**The batches are not from Moderato.**", "Tempo's zones integration tests", "It does not secure withdrawals", "Unaudited.", "Traction: none.", "Revenue today: zero.", "`challenge()` pays the reserved coverage to the client"])
+for (const s of ["**The batches are not from Moderato.**", "Tempo's zones integration tests", "It does not secure withdrawals", "Unaudited.", "no customers, revenue, design partner or payer agreement"])
   if (!flat(readmeText).includes(flat(s))) fail(`README no longer says "${s}"`);
 // Scene 6: "one Zone operator" read now from Tempo's ZoneFactory on Moderato.
 const FADDR = getAddress((read("tempo/crates/contracts/src/precompiles/zone_factory.rs", "zone_factory.rs").match(/ZONE_FACTORY_ADDRESS: Address = address!\("(0x[0-9a-fA-F]{40})"\)/) ?? fail("zone_factory.rs: no ZONE_FACTORY_ADDRESS"))[1]);
@@ -369,7 +369,7 @@ if (sOwners.length !== 1 || sOwners[0] !== zAdmin || (await call(fOwner, "getThr
 log(`• ZoneFactory: ${nZones} Zones, one admin ${short(zAdmin)}; owner ${short(fOwner)} = 1-of-1 Safe of that admin`);
 const s6 = read("docs/specs/004-tee-plus-zk.md", "spec 004").split("## 6. Status")[1]?.split("\n## ")[0] ?? fail("spec 004: no §6");
 if ((s6.match(/\| not built/g) ?? []).length < 5) fail("spec 004 §6: fewer than 5 rows not built");
-for (const s of ["Moderato has one Zone operator today, and we have no customers.", "evidence, not yet a guarantee"]) if (!flat(readmeText).includes(s)) fail(`README no longer says "${s}"`);
+for (const s of ["no customers, revenue, design partner or payer agreement", "one operator-supplied batch"]) if (!flat(readmeText).includes(s)) fail(`README no longer says "${s}"`);
 const repoUrl = ghRepoPublic("psyto/sworn", "repo");
 const pub = await fetchText(PUBLISHED, "published page");
 if (!/<title>Sworn/.test(pub)) fail(`${PUBLISHED}: no "<title>Sworn"`);
@@ -481,7 +481,7 @@ const cues = writeSrt(scenes, starts, path.join(dir, "demo.srt"));
 for (let i = 0; i < 6; i++) ff(["-ss", (starts[i + 1] - 0.2).toFixed(2), "-i", out, "-frames:v", "1", path.join(dir, "frames", `demo-scene${i + 1}.png`)]);
 const r2 = (e) => +K(e).toFixed(2);
 writeJson(path.join(dir, "demo.marks.json"), {
-  name: "demo", script: "video/DEMO.md", version: "5.2", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
+  name: "demo", script: "video/DEMO.md", version: "5.3", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
   page: PAGE, published: PUBLISHED, recordedFromPublishedPage: PAGE === PUBLISHED,
   zoneAttest: Z.attest.tx, liveCalls,
   pageMarks: { verifyPanel: r2("verifyPanel"), click1: r2("click1"), stub: r2("stub"), s3a: r2("s3a"), contains: r2("contains"), s3c: r2("s3c"), click2: r2("click2"), compare: r2("compare") },

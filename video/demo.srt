@@ -1,115 +1,99 @@
 1
-00:00:00,000 --> 00:00:04,358
-A Zone operator selects the batch before an audit.
+00:00:00,000 --> 00:00:08,586
+A Zone operator picks a batch with one withdrawal and two user transactions and starts Sworn's local proof job:
 
 2
-00:00:04,408 --> 00:00:10,236
-This batch, Zone blocks 5–6, has one withdrawal and two user transactions.
+00:00:08,636 --> 00:00:14,950
+Tempo's code runs in a zero-knowledge VM, and the result goes to an auditor.
 
 3
-00:00:10,286 --> 00:00:13,174
-They start Sworn's local proof job.
+00:00:15,000 --> 00:00:21,167
+Tempo's portal pays a withdrawal only after the Zone verifier accepts the batch,
 
 4
-00:00:13,224 --> 00:00:19,052
-It runs Tempo's code in SP1, then performs read-only verification on Moderato.
+00:00:21,217 --> 00:00:25,950
+so everyone involved must be able to trust that check.
 
 5
-00:00:19,102 --> 00:00:23,950
-The finished proof record can be sent to an auditor.
-
-6
-00:00:24,000 --> 00:00:31,450
-Tempo's portal processes a withdrawal from a batch only after the Zone verifier accepts it.
-
-7
-00:00:31,500 --> 00:00:35,950
-So the operational dependency is simple: an operator, auditor,
-
-8
-00:00:36,000 --> 00:00:40,950
-or counterparty must be able to trust the batch check.
-
-9
-00:00:41,000 --> 00:00:45,394
+00:00:26,000 --> 00:00:30,394
 This is the Operator Console in a browser.
 
-10
-00:00:45,444 --> 00:00:54,283
+6
+00:00:30,444 --> 00:00:39,283
 On a local workstation, the operator can start the real proof job for the supplied fixture.
 
-11
-00:00:54,333 --> 00:00:59,283
+7
+00:00:39,333 --> 00:00:44,283
 It takes about fifteen minutes and sends no transaction.
 
-12
-00:00:59,333 --> 00:01:03,172
+8
+00:00:44,333 --> 00:00:48,172
 The evidence panel then reads Moderato live.
 
-13
-00:01:03,222 --> 00:01:07,617
+9
+00:00:48,222 --> 00:00:52,617
 Its pre-T13 prototype verifier accepts a malformed batch.
 
-14
-00:01:07,667 --> 00:01:10,950
+10
+00:00:52,667 --> 00:00:55,950
 Sworn demonstrates the missing ZK check.
 
-15
-00:01:11,000 --> 00:01:19,063
+11
+00:00:56,000 --> 00:01:04,063
 Now Sworn, on a real batch from Tempo's integration tests: two user transactions and one withdrawal.
 
-16
-00:01:19,113 --> 00:01:26,668
+12
+00:01:04,113 --> 00:01:11,668
 Tempo's own batch verifier ran inside a zero-knowledge VM, and this contract checked the proof.
 
-17
-00:01:26,718 --> 00:01:29,711
+13
+00:01:11,718 --> 00:01:14,711
 Here it is on the explorer.
 
-18
-00:01:29,761 --> 00:01:32,753
+14
+00:01:14,761 --> 00:01:17,753
 Again, live: the real batch, true.
 
-19
-00:01:32,803 --> 00:01:36,809
+15
+00:01:17,803 --> 00:01:21,809
 Change one field, and it reverts: invalid proof.
 
-20
-00:01:36,859 --> 00:01:42,387
+16
+00:01:21,859 --> 00:01:27,387
 An equivalent malformed batch is accepted by Moderato's current prototype verifier,
 
-21
-00:01:42,437 --> 00:01:46,950
+17
+00:01:27,437 --> 00:01:31,950
 while Sworn rejects a mutation of its proven batch.
 
-22
-00:01:47,000 --> 00:01:54,230
+18
+00:01:32,000 --> 00:01:39,230
 To be clear: this batch comes from a dev chain, not a Moderato Zone.
 
-23
-00:01:54,280 --> 00:01:59,950
+19
+00:01:39,280 --> 00:01:44,950
 No portal uses it, and it does not protect withdrawals yet.
 
+20
+00:01:45,000 --> 00:01:50,214
+Sworn has no customers, revenue or payer agreement today.
+
+21
+00:01:50,264 --> 00:01:54,308
+The first test is not broad adoption.
+
+22
+00:01:54,358 --> 00:02:00,158
+A Zone business supplies a batch, its reviewer re-verifies it,
+
+23
+00:02:00,208 --> 00:02:07,176
+and we ask whether it needs the next batch or upgrade proved.
+
 24
-00:02:00,000 --> 00:02:04,521
-Near term: businesses that run Zones and answer to auditors,
+00:02:07,226 --> 00:02:11,856
+Only then is Proof Operations a recurring service.
 
 25
-00:02:04,571 --> 00:02:10,464
-with evidence they match to each batch they settle, not yet a guarantee.
-
-26
-00:02:10,514 --> 00:02:16,407
-Later, Tempo could build proofs into settlement; that design is written, not built.
-
-27
-00:02:16,457 --> 00:02:20,521
-The service: provers on time, rebuilt at each upgrade.
-
-28
-00:02:20,571 --> 00:02:26,464
-It's testnet and unaudited, with one Zone operator on Moderato and no customers.
-
-29
-00:02:26,514 --> 00:02:31,950
-Next: one design partner, and a proof of a batch they supply.
+00:02:11,906 --> 00:02:15,950
+Settlement integration remains a separate Tempo proposal.

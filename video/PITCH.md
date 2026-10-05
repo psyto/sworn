@@ -1,4 +1,4 @@
-# Pitch video: Sworn (≤ 2 min, founder's voice), v5.1, 2026-10-05
+# Pitch video: Sworn (≤ 2 min, founder's voice), v5.2, 2026-10-05
 
 **One sentence.** Before a Zone business releases a withdrawal batch, Sworn creates independently verifiable,
 audit-ready evidence for that exact batch — without exposing customer transaction contents.
@@ -33,7 +33,7 @@ code in SP1 → proof → read-only verification. No transaction sent.”]**
 
 > The operator selects the batch in Sworn's local console and starts a proof job. Sworn runs Tempo's own Zone
 > verification code in a zero-knowledge VM, then creates proof evidence that a third party can verify on
-> chain. The private transaction contents stay private.
+> chain.
 
 ## Scene 3: the evidence is real · ≈ 16 s
 
@@ -44,34 +44,35 @@ Moderato. Three facts: one withdrawal; two user transactions; verified on Modera
 > We have done this on Moderato: a test batch with one withdrawal and two user transactions verified by a
 > contract. Change one input, and verification fails. This is a working proof pipeline, not a mockup.
 
-## Scene 4: what the buyer purchases · ≈ 24.5 s
+## Scene 4: the go-to-market test · ≈ 25 s
 
-**[Headline: “What a Zone business buys.” Three cards: “Before settlement: proof for each supplied batch”;
-“During upgrades: keep the proof pipeline compatible with Tempo execution”; “For counterparties: a proof
-they can check independently.” A small tag reads “Commercial hypothesis — validate with design partners.”]**
+**[Headline: “Earn the right to a recurring contract.” Three cards: “1. An operator supplies its witness”;
+“2. Sworn proves one batch; its reviewer re-verifies”; “3. Repeat for the next batch or upgrade.” A small tag
+reads “GTM test — not traction claimed.”]**
 
-> The buyer we are pursuing is a Zone business that must give a counterparty confidence before it settles.
-> It would pay Sworn for two things: proof generation for each batch it supplies, and compatibility maintenance
-> through Tempo upgrades. That is the contract we want to test. We will
-> validate the demand with design partners.
+> We start with one Zone business whose operator can supply its witness. First, we prove one of its batches
+> and give its reviewer reproducible verification. If it asks for the next batch or upgrade, that becomes a
+> Proof Operations contract. That is our go-to-market test — not traction we claim today.
 
-## Scene 5: why Sworn wins this job · ≈ 22.5 s
+## Scene 5: why now, why Sworn · ≈ 21.5 s
 
-**[Headline: “Why Sworn, not generic ZK.” Three cards: “Tempo execution: runs Tempo's own Zone code”; “Exact
-batch: bound to the inputs Tempo's portal understands”; “Operational fit: rebuilt for Tempo upgrades.” A
-footer ties this to “Reth · Revm · 15 years building banking systems.”]**
+**[Headline: “Why now, why Sworn.” Three cards: “Tempo execution: runs Tempo's own Zone code”; “Exact batch:
+bound to inputs Tempo's portal understands”; “Operational fit: rebuilt for Tempo upgrades.” The footer says
+“ZK proving for Zones: not implemented” and “Reth · Revm · ETHGlobal Tokyo, Uniswap Foundation prize · 15 years · banking systems.”]**
 
-> Generic proving tools run programs. They do not deliver a Tempo-specific evidence operation. Sworn already
-> runs Tempo's code, binds to the batch inputs its portal understands, and is built to track execution upgrades. I work on Reth and Revm, teach that stack, and have fifteen years building banking systems.
+> ZK proving for Zones is still unimplemented. Sworn runs Tempo's code, binds to portal-shaped inputs, and
+> is built to track execution upgrades. The market is not proven — Moderato has one effective operator. I work on Reth
+> and Revm, teach that stack, won a Uniswap Foundation prize at ETHGlobal Tokyo, and spent fifteen years
+> building banking systems.
 
 ## Scene 6: the honest ask · ≈ 14 s
 
-**[Headline: “The first customer proof.” Chips: “testnet”; “unaudited”; “Tempo integration-test batch”; “no
+**[Headline: “The honest ask.” Chips: “testnet”; “unaudited”; “Tempo integration-test batch”; “no
 customer claimed.” Then: “Next: a design partner supplies a batch and decides whether the proof is worth
 paying for.” Close: “Sworn: audit-ready evidence for private execution.”]**
 
 > Today: testnet, unaudited, Tempo integration-test batch. No customer claimed. Next, a design partner supplies
-> a batch and decides if independent proof is worth paying for. Sworn: audit-ready proof for private execution.
+> a batch and decides if independent proof is worth paying for. Sworn: audit-ready evidence for private execution.
 
 ---
 
@@ -87,6 +88,8 @@ paying for.” Close: “Sworn: audit-ready evidence for private execution.”]*
 | 4.1 | Buyer, operations contract, payment model and willingness to pay are commercial hypotheses. | No customer, payer agreement, price or revenue is claimed. Spec 004 §5 supports the engineering fact that execution upgrades require a new guest and verification key. |
 | 5.1 | Sworn runs Tempo code and binds to Tempo IVerifier-shaped inputs; Tempo uses Reth and Revm. | Specs 003/004 and Tempo `Cargo.toml`. |
 | 5.2 | Founder works on and teaches Reth and has 15 years building banking systems in Japan. | `README.md` “Who”; `github.com/psyto/rethlab`. |
+| 5.3 | The founder's previous project (Reckn) won a Uniswap Foundation prize at ETHGlobal Tokyo 2026 (3rd place, Best Uniswap Stack Contribution). | ethglobal.com/showcase/reckn-47t6m, fetched by the recorder; `README.md` “Who”. |
+| 5.4 | The upgrade claim is a design intent (“built to track”), not a track record: the pinned guest predates Moderato's T12. | `README.md` “What is not done”. |
 | 6.1 | Testnet-only, unaudited, integration-test fixture, no customers. | `README.md` status and verifier limitations, checked by the recorder. |
 
 **Not claimed:** that Sworn protects withdrawals today; that any ZonePortal calls Sworn; that a customer,
