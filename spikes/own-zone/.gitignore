@@ -1,3 +1,6 @@
 contracts/out/
 contracts/cache/
 contracts/broadcast/
+build/
+contracts/lib/
+runs/
