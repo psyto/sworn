@@ -1,6 +1,7 @@
 # Own Tempo Zone anchored to Moderato: feasibility (2026-10-05)
 
-Time-boxed spike. **No transaction was sent to any public chain and no key or keystore was used.** The only
+Time-boxed spike. **Before the 2026-10-06 live run (see "Live run" at the end), no transaction was sent to any
+public chain and no key or keystore was used.** The only
 Moderato traffic was read-only RPC (`eth_call`, `eth_getStorageAt`, `eth_getBlockReceipts`, `eth_estimateGas`,
 `tempo_forkSchedule`, `eth_subscribe newHeads`). Everything else ran on local chains: an anvil fork of Moderato,
 and an in-process Tempo node at the pinned tempo `346c22eb`, configured like Moderato.

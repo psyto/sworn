@@ -17,7 +17,7 @@ Tempo (spec 004), not a deployed Sworn feature.
 | scene | target | picture |
 |---|---:|---|
 | 1 Start a proof job | 15 s | authored operator workflow (`d0`) |
-| 2 Why the check matters | 11 s | authored ZonePortal flow (`d1`) |
+| 2 Why the check matters | 12.5 s | authored ZonePortal flow (`d1`) |
 | 3 What stays private | 14 s | authored data-flow diagram (`dflow`), the page's motif |
 | 4 Operator Console and prototype verifier, live | 30 s | local Operator Console + public evidence page; read-only live call |
 | 5 Real proof, on chain | 36 s | public page + explorer event + a live mutation check |
@@ -35,13 +35,14 @@ console is labelled on screen "Illustration of the operator workflow"; the opera
 
 > A Zone operator picks a batch with one withdrawal and two user transactions and starts Sworn's local proof job: Tempo's code runs in a zero-knowledge VM, and the result goes to an auditor.
 
-## Scene 2 — why the batch check matters · ≈ 11 s
+## Scene 2 — why the batch check matters · ≈ 12.5 s
 
 **[Zone operator submits a batch → batch includes withdrawal → Zone verifier → ZonePortal processes it; each step
 lights in turn. Headline: the operator and auditor must trust the check. The graphic is a simplified explanation of the
 ZonePortal flow: the same flow our own Zone's portal ran on Moderato (scene 6).]**
 
-> Tempo's portal pays a withdrawal only after the Zone verifier accepts the batch, so everyone involved must be able to trust that check.
+> A ZonePortal queues a batch's withdrawals only after its verifier accepts the batch, so that check must be
+> trusted. In our own Zone, the verifier is Sworn.
 
 ## Scene 3 — what stays private · ≈ 14 s
 
@@ -53,8 +54,8 @@ changed”. Below: “Learns / Does not learn” and the settlement note (our ow
 Zones are unchanged). The recorder checks that the
 live page's data-flow section still says these sentences.]**
 
-> The witness stays with the operator and the prover. Only hashes and counters reach Tempo: enough to check the
-> proof, not to see balances, senders or amounts.
+> The witness stays with the operator and the prover. Only hashes, counters and batch metadata reach Tempo: enough
+> to check the proof, not to see balances, senders or amounts.
 
 ## Scene 4 — Operator Console and Moderato's prototype verifier, live · ≈ 30 s
 
@@ -85,9 +86,9 @@ read-only click, the real batch returns true and changing one field reverts `Inv
 **[The page's section “A portal that pays a withdrawal only after Sworn's proof passes”, read live: the portal and
 its verifier, three “✓ settled” batches, the payout. Explorer insert: the payout transaction, sent to our portal.]**
 
-> Now our own Zone on Moderato. Its portal called the verifier in each of three batches, and paid this
-> withdrawal only after the last proof passed. Here is the payout on the explorer: zero point five pathUSD,
-> paid by the portal after the proof.
+> Now our own Zone on Moderato. Its portal called the verifier in each of three batches. Only after the last
+> proof passed could this withdrawal be paid: our sequencer then called processWithdrawals. Here is the payout on
+> the explorer: zero point five pathUSD.
 
 ## Scene 7 — said plainly · ≈ 16.5 s
 

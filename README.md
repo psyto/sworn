@@ -7,9 +7,11 @@ evidence without disclosing the private ledger. For an operator-supplied batch, 
 verification code in SP1 and produces a proof anyone can verify on chain. The public output is hashes and
 batch metadata, not customer transaction contents.
 
-**What is built:** on Moderato, our own Zone's portal settles a batch, and so pays a withdrawal, only after
-Sworn's proof passes: three batches proven and settled, then a withdrawal paid
+**What is built:** on Moderato, our own Zone's portal settles a batch, and queues its withdrawals, only after
+Sworn's proof passes: three batches proven and settled, then our sequencer called `processWithdrawals` and the
+withdrawal was paid
 ([payout tx](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), 2026-10-06).
+The proof is a necessary condition for a payout, not a guarantee of one: it is ZK-gated, not censorship-resistant.
 **What is not built:** an integration with Tempo-created Zones (it is our own Zone, with one operator), or a
 customer workflow. Testnet, unaudited.
 
@@ -45,7 +47,7 @@ but it is not the product pitched or demoed for CWF:
 > "Verify again" on the page (three live `eth_call`s: Sworn, the real proof → true; one field changed →
 > `InvalidProof`; for comparison, Moderato's current prototype verifier, the pre-T13 reference stub, returns
 > true for an equivalent malformed batch) ·
-> pitch (1:57) and demo (2:53) videos: *links added once the founder narration is uploaded*.
+> pitch (1:57) and demo (2:55) videos: *links added once the founder narration is uploaded*.
 >
 > **Status (2026-10-06): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
 > testnet** only. Unaudited. No customers or revenue. The Zones created by Tempo's factory on Moderato have one

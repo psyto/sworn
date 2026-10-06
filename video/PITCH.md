@@ -16,7 +16,7 @@ product can exist, not the pitch's subject.
 
 ---
 
-## Scene 1: the operational moment · ≈ 20.5 s
+## Scene 1: the operational moment · ≈ 20 s
 
 **[Headline: “Before a Zone releases a withdrawal batch.” A Zone business card holds a blurred private ledger
 (“Private ledger · batch witness”, locked); a “Withdrawal batch” token slides out of it toward a card for the
@@ -27,7 +27,7 @@ independently check this exact batch?” The answer: “Sworn creates audit-read
 > check it. But the operator holds the private ledger and the batch witness. Sworn creates independently
 > verifiable, audit-ready evidence for that exact batch, without exposing customer transaction contents.
 
-## Scene 2: the product workflow · ≈ 19.5 s
+## Scene 2: the product workflow · ≈ 17 s
 
 **[Headline: “The operator starts a proof job.” The shared data-flow motif (the page's “Only hashes cross this
 line” diagram): the operator presses “Start local proof job”; the witness moves into the Sworn prover (“Tempo's own
@@ -39,7 +39,7 @@ field changed”. Caption: “Fixture workflow: Tempo code in SP1 → proof → 
 > verification code in a zero-knowledge VM, then creates proof evidence that a third party can verify on
 > chain.
 
-## Scene 3: the evidence is real · ≈ 15.5 s
+## Scene 3: the evidence is real · ≈ 18 s
 
 **[Headline: “Proof-gated settlement on Moderato.” Pipeline: Tempo Zone code → ZK VM → Groth16 proof → our portal
 settles on Moderato. Three facts, read now from Moderato: “3 batches proven and settled” (counts up), “0.5 pathUSD
@@ -47,10 +47,11 @@ withdrawal paid after the proof”, the slowest anchor age of 8,190 blocks. Chip
 Result, on the withdrawal batch: “✓ verify(…) → true” draws in; “one field changed → ✗ reverts InvalidProof()” flips red
 with a small shake (both from the recorder's own read-only calls to our Zone's verifier).]**
 
-> On Moderato, our own Zone's portal pays a withdrawal only after Sworn's proof passes. Three batches, proven
-> and checked on chain. Change one input, and it is rejected. A working pipeline, not a mockup.
+> On Moderato, our own one-operator Zone, not a Tempo-created one, settles a batch only after Sworn's proof
+> passes; only then can a withdrawal be paid. Three batches, proven and checked on chain. Change one input, and it
+> is rejected.
 
-## Scene 4: the go-to-market test · ≈ 25 s
+## Scene 4: the go-to-market test · ≈ 23 s
 
 **[Headline: “Earn the right to a recurring contract.” A progress line advances through three cards, each
 appearing as it is spoken: “1. An operator supplies its witness”; “2. Sworn proves one batch; its reviewer
@@ -71,13 +72,13 @@ bound to inputs Tempo's portal understands”; “Operational fit: rebuilt for T
 > and Revm, teach that stack, won a Uniswap Foundation prize at ETHGlobal Tokyo, and spent fifteen years
 > building banking systems.
 
-## Scene 6: the honest ask · ≈ 15.5 s
+## Scene 6: the honest ask · ≈ 13 s
 
 **[Headline: “The honest ask.” Chips: “testnet”; “unaudited”; “our own Zone, one operator”; “no
 customer claimed.” Then: “Next: a design partner supplies a batch and decides whether the proof is worth paying
 for.” The Sworn seal stamps onto the closing block: “Sworn: audit-ready evidence for private execution.” and the URLs.]**
 
-> Today: testnet, unaudited, our own Zone with one operator. No customer claimed. Next, a design partner supplies
+> Today: testnet, unaudited. No customer claimed. Next, a design partner supplies
 > a batch and decides if independent proof is worth paying for. Sworn: audit-ready evidence for private execution.
 
 ---

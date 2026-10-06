@@ -508,7 +508,7 @@ data.exPayout = await explorerCard(OZ.payout.tx, [String(payBlock), "success", O
     await p.goto(PAGE, { waitUntil: "networkidle2", timeout: 120000 });
     const sec = await p.waitForSelector('section[aria-labelledby="data-flow"]', { timeout: 60000 });
     const txt = flat(await sec.evaluate((e) => e.innerText));
-    for (const w of ["What stays private, and what becomes public.", "Only hashes and counters reach Tempo", "Never published", "Learns: Tempo's own Zone code accepts this exact batch.",
+    for (const w of ["What stays private, and what becomes public.", "Only hashes, counters and public batch metadata reach Tempo", "Never published", "Learns: Tempo's own Zone code accepts this exact batch.",
       "Does not learn: balances, senders, recipients or amounts inside the Zone.", "the portal calls this verifier before it queues a withdrawal", "InvalidProof()"])
       if (!lc(txt).includes(lc(w))) fail(`page data-flow section does not say "${w}"`);
   } finally { await br.close(); }

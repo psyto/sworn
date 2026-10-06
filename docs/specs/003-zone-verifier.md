@@ -28,8 +28,9 @@ tests, matched native output, and produced a Groth16 proof of `hardfork_t13_reco
 - **G3 (evidence):** deploy on Moderato and send one `attest` transaction carrying the real proof of
   `hardfork_t13_recovery`, which emits an event anyone can find and re-check.
 
-Non-goals: wiring into a ZonePortal (only Tempo's factory can choose a zone's verifier:
-`tempo zone_factory/mod.rs:110,172`); withdrawals; a Moderato-native Zone batch; replacing Nitro.
+Non-goals (of this spec's fixture deployments; the 2026-10-06 own-Zone run, in the last Results section, went
+further with a portal of our own): wiring into a ZonePortal of a Tempo-created Zone (only Tempo's factory can choose
+such a zone's verifier: `tempo zone_factory/mod.rs:110,172`); withdrawals; a Moderato-native Zone batch; replacing Nitro.
 
 ## 3. The digest
 
@@ -102,7 +103,9 @@ A native host computes the same public values with the same Rust code (shared mo
 - **`attest(...)`**: same arguments, non-view. Runs the same check, then emits
   `ZoneBatchVerified(uint32 zoneId, uint256 nextZoneHeight, bytes32 prevBlockHash, bytes32 nextBlockHash, bytes32 digest)`.
   It writes nothing to storage.
-- **Deliberate deviations from a production verifier**, each stated in NatSpec and in every public text:
+- **Deliberate deviations from a production verifier**, each stated in NatSpec and in every public text. They
+  describe the fixture deployments (parent chain 1337). The own-Zone instance (last Results section) sets
+  `PARENT_CHAIN_ID` = 42431 and is called by its own portal; D2–D3 still apply to it:
   - **D1 `PARENT_CHAIN_ID`:** a constructor argument (1337, the dev chain the batch came from). In
     production it would be `block.chainid`.
   - **D2 no caller check:** Nitro's verifier requires the caller to be the zone's canonical portal. There

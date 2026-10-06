@@ -19,7 +19,7 @@ Sworn
 ## Brief description · Public · ≤500
 
 ```
-Before a private Tempo Zone releases a withdrawal batch, Sworn creates independently verifiable, audit-ready evidence for that operator-supplied batch without exposing customer transaction contents. It runs Tempo's own Zone verifier in SP1. On Moderato, our own Zone's portal pays a withdrawal only after Sworn's proof passes. Testnet only: not a Tempo-created Zone; no customers or revenue.
+Before a private Tempo Zone releases a withdrawal batch, Sworn creates independently verifiable, audit-ready evidence for that operator-supplied batch without exposing customer transaction contents. It runs Tempo's own Zone verifier in SP1. On Moderato, our own Zone's portal settled each batch only after Sworn's proof passed; then a withdrawal was paid. Testnet only: not a Tempo-created Zone; no customers or revenue.
 ```
 
 ## Project website · Public
@@ -43,7 +43,7 @@ I work in Rust on Tempo's stack: Reth, Revm, Alloy and Foundry. I wrote Fabrknt 
 
 Tempo Zones make the operational gap concrete: the operator has the witness, but an outside reviewer cannot recreate the complete private batch from public data. Tempo's verifier is Rust code; I tested whether it could run in a zkVM and be bound to the inputs a Zone portal understands.
 
-Inside this hackathon, Tempo's Zone verifier ran in SP1, a contract on Moderato verified the proof, and our own Zone's portal paid a withdrawal only after it. Why now is a hypothesis, not a claim of demand: Zones are still testnet, so a first operator can shape evidence requirements before a workflow is entrenched.
+Inside this hackathon, Tempo's Zone verifier ran in SP1, a contract on Moderato verified the proof, and our own Zone's portal settled batches, and so a withdrawal, only after it. Why now is a hypothesis, not a claim of demand: Zones are still testnet, so a first operator can shape evidence requirements before a workflow is entrenched.
 ```
 
 ## How does your product use these chains? · ≤500
@@ -163,10 +163,10 @@ The validation sequence is concrete: find a Zone business that can supply a witn
 ## How far along are you? Do you have users? · ≤1000
 
 ```
-No users, no revenue. Built and measured inside the window, all on Moderato testnet:
+No users, no revenue. Built inside the window; on-chain verification and the own-Zone run are on Moderato testnet, the fixture batches ran on dev chain 1337:
 - Our own Zone on Moderato: 3 batches proven and settled through a portal that calls Sworn's verifier; a withdrawal paid after the proof (tx 0xfc311841…e1f1). One operator, not a Tempo-created Zone.
 - Tempo Zones: Tempo's own batch verifier runs in SP1 on 5 integration-test batches, matching native output (19-26M cycles; tampering rejected). Proofs bound to IVerifier's inputs were verified on Moderato, including a fixture with a withdrawal (tx 0xa63009fd…f770; also 0xb14b7127…3b80).
-- 64 forge tests, including real proofs; contracts with no owner.
+- 64 forge tests, including real proofs; the verifiers have no owner (our Zone's portal keeps upstream admin controls).
 - A public page that reads the on-chain evidence and re-runs the Zone proof check in your browser. Pitch and demo videos.
 ```
 

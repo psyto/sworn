@@ -12,8 +12,8 @@ Rules:
 > Tempo Zones are private ledgers: only the operator holds the batch and its witness, so an auditor or a
 > counterparty cannot check that money leaving a Zone came from correct execution. Sworn runs Tempo's own Zone
 > verification code in a zero-knowledge VM and produces a proof anyone can verify on chain, without exposing the
-> transactions. On Tempo's testnet we ran our own Zone whose portal pays a withdrawal only after that proof
-> passes; change one field and it is rejected. No customers yet. Next is one design partner who supplies a real
+> transactions. On Tempo's testnet we ran our own Zone whose portal settles a batch, and so lets a withdrawal be
+> paid, only after that proof passes; change one field and it is rejected. No customers yet. Next is one design partner who supplies a real
 > batch.
 
 ## Product and evidence
@@ -36,8 +36,9 @@ can't get a Tempo-run Zone's batch: only the operator holds the witness.
   party. [docs/research/moderato-zone-feasibility-20261004.md]
 
 **3. Does it protect withdrawals?**
-On our own Zone, yes in the narrow sense: its portal settles a batch, and so pays its withdrawals, only after the
-proof verifies. We ran that on Moderato on 2026-10-06. On Tempo's Zones, no: their verifier is fixed by Tempo's
+On our own Zone, yes in the narrow sense: its portal settles a batch, and queues its withdrawals, only after the
+proof verifies. The proof is a necessary condition, not a guarantee: our sequencer then calls `processWithdrawals`,
+and could also withhold it. We ran that on Moderato on 2026-10-06. On Tempo's Zones, no: their verifier is fixed by Tempo's
 factory, so it stays evidence there. Spec 004 is the design for Tempo's side.
 - *If pressed:* one operator, whose key also decrypts deposits; withdrawals wait for the proof but are not
   censorship-resistant (the operator must prove and process them); callback withdrawals bounce.
@@ -65,15 +66,16 @@ the portal recorded); spec 004 would make it automatic there.
 - Not validated: no customer, no price agreed.
 
 **8. There is one Zone operator on Moderato. Where is the market?**
-Today there isn't one we can sell to, and we say that. The bet is that Zones open to independent operators,
-because private payment ledgers for businesses are what Zones are for. If they don't, the route is Tempo itself
-(proofs in settlement). The next step that tests this is one design partner.
+There is no demonstrated market today, and we say that. The immediate buyer hypothesis is either a Zone team
+with a reviewer requirement or Tempo itself (proofs in settlement, spec 004). A design-partner conversation is the
+next falsifiable test.
 
 **9. Tempo chose a TEE (Nitro). Why would anyone need ZK?**
 - A TEE means trusting one vendor's hardware; a ZK proof anyone can check.
 - Tempo's docs: "ZK proof generation is not implemented".
-- At the reviewed commit, the Nitro verifier's approved measurements were unset. Upstream also defines a "NoProof"
-  fallback, and Moderato's verifier today is a prototype stub that returns true for any input.
+- That is about Moderato's testnet today, not Tempo's production design: at the reviewed commit the Nitro
+  verifier's approved measurements were unset, upstream defines a "NoProof" fallback, and Moderato's pre-T13
+  reference verifier is a prototype stub that returns true for any input.
 - We propose ZK as a second, independent check next to the TEE, not a replacement (spec 004).
 
 **10. Why not Succinct, RISC Zero, or Tempo itself?**
@@ -83,7 +85,9 @@ because private payment ledgers for businesses are what Zones are for. If they d
 - That is the operational work we sell. It is speed and focus, not a durable moat; we say that.
 
 **11. What does a proof cost?**
-- Measured on one laptop (12 cores, 32 GB): 701–891 s and 18.5–19.8 GB peak RAM per batch, 19–26 M cycles.
+- Measured on one laptop (12 cores, 32 GB): the fixture batches took 19–26 M cycles, 701–891 s and 18.5–19.8 GB
+  peak RAM each. The live own-Zone batches took 26–124 M cycles and 664–1,881 s, depending on how many blocks the
+  batch replays. Production cost, throughput and proving networks are not measured.
 - We have not priced it: cost per batch on rented hardware or a proving network, aggregation and pricing are next.
 - [spec 003 Results]
 

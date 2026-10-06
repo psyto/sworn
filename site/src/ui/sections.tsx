@@ -74,13 +74,14 @@ export function Hero() {
       <aside className="hero-proof" aria-label="Built evidence">
         <p className="eyebrow">Built and verifiable</p>
         <strong>3 batches settled<br />1 withdrawal paid</strong>
-        <p>On Moderato, our own Zone&apos;s portal paid a withdrawal only after Sworn&apos;s proof passed.</p>
+        <p>On Moderato, our own Zone&apos;s portal settled each batch only after Sworn&apos;s proof passed; then the withdrawal was paid.</p>
         <a href={txUrl(MODERATO, PAYOUT_TX)} target="_blank" rel="noreferrer">
           Open the payout transaction <span className="mono">{short(PAYOUT_TX)} ↗</span>
         </a>
       </aside>
       <p className="hero-boundary">
-        Testnet. On Moderato, our own Zone&apos;s portal pays a withdrawal only after Sworn&apos;s proof passes. It is not a
+        Testnet. On Moderato, our own Zone&apos;s portal settles a batch, and so lets a withdrawal be paid, only after Sworn&apos;s
+        proof passes; the payout itself is made by our sequencer. It is not a
         Tempo-created Zone, and it is unaudited.
       </p>
     </section>
@@ -207,8 +208,8 @@ export function DataFlow() {
         <p className="eyebrow">Data flow</p>
         <h2 id="data-flow">What stays private, and what becomes public.</h2>
         <p className="lede">
-          The batch witness goes to the prover and stops there. Only hashes and counters reach Tempo, and that is all a
-          reviewer needs to check the proof.
+          The batch witness goes to the prover and stops there. Only hashes, counters and public batch metadata reach Tempo,
+          and that is all a reviewer needs to check the proof: not transaction contents, balances, senders or amounts.
         </p>
       </div>
       <FlowDiagram />

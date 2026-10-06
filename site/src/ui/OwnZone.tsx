@@ -19,8 +19,9 @@ export function OwnZoneSection({ ownZone, onRetry }: { ownZone: Loadable<OwnZone
         <p className="lede">
           We ran our own Zone (zone {OWN_ZONE.zoneId}) on Moderato. Its portal calls <code>SwornZoneVerifier</code> in every{" "}
           <code>submitBatch</code>, so a batch settles, and its withdrawals can be paid, only after the Groth16 proof verifies.
-          Three batches were proven and settled, then the withdrawal was paid. Your browser reads every value below from
-          rpc.moderato.tempo.xyz.
+          Three batches were proven and settled; then our sequencer called <code>processWithdrawals</code> and the withdrawal
+          was paid. The proof is a necessary condition for a payout, not a guarantee of one. Your browser reads every value
+          below from rpc.moderato.tempo.xyz.
         </p>
       </div>
 
