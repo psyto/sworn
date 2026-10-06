@@ -60,14 +60,14 @@ re-verifies”; “3. Repeat for the next batch or upgrade.” A small tag reads
 > and give its reviewer reproducible verification. If it asks for the next batch or upgrade, that becomes a
 > Proof Operations contract. That is our go-to-market test — not traction we claim today.
 
-## Scene 5: why now, why Sworn · ≈ 21.5 s
+## Scene 5: why now, why Sworn · ≈ 26 s
 
 **[Headline: “Why now, why Sworn.” Three cards: “Tempo execution: runs Tempo's own Zone code”; “Exact batch:
 bound to inputs Tempo's portal understands”; “Operational fit: rebuilt for Tempo upgrades.” The footer says
 “ZK proving for Zones: not implemented” and “Reth · Revm · ETHGlobal Tokyo, Uniswap Foundation prize · 15 years · banking systems.”]**
 
 > ZK proving for Zones is still unimplemented. Sworn runs Tempo's code, binds to portal-shaped inputs, and
-> is built to track execution upgrades. The market is not proven — Moderato has one effective operator. I work on Reth
+> is built to track execution upgrades. The market is not proven — Tempo's Zones have one effective operator. I work on Reth
 > and Revm, teach that stack, won a Uniswap Foundation prize at ETHGlobal Tokyo, and spent fifteen years
 > building banking systems.
 

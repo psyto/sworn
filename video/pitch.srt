@@ -59,37 +59,37 @@ If it asks for the next batch or upgrade, that becomes a Proof Operations contra
 That is our go-to-market test — not traction we claim today.
 
 16
-00:01:15,500 --> 00:01:18,638
+00:01:15,500 --> 00:01:18,643
 ZK proving for Zones is still unimplemented.
 
 17
-00:01:18,688 --> 00:01:25,468
+00:01:18,693 --> 00:01:25,485
 Sworn runs Tempo's code, binds to portal-shaped inputs, and is built to track execution upgrades.
 
 18
-00:01:25,518 --> 00:01:30,021
-The market is not proven — Moderato has one effective operator.
+00:01:25,535 --> 00:01:30,503
+The market is not proven — Tempo's Zones have one effective operator.
 
 19
-00:01:30,071 --> 00:01:34,120
+00:01:30,553 --> 00:01:34,608
 I work on Reth and Revm, teach that stack,
 
 20
-00:01:34,170 --> 00:01:40,950
+00:01:34,658 --> 00:01:41,450
 won a Uniswap Foundation prize at ETHGlobal Tokyo, and spent fifteen years building banking systems.
 
 21
-00:01:41,000 --> 00:01:45,053
+00:01:41,500 --> 00:01:45,553
 Today: testnet, unaudited, our own Zone with one operator.
 
 22
-00:01:45,103 --> 00:01:46,421
+00:01:45,603 --> 00:01:46,921
 No customer claimed.
 
 23
-00:01:46,471 --> 00:01:53,715
+00:01:46,971 --> 00:01:54,215
 Next, a design partner supplies a batch and decides if independent proof is worth paying for.
 
 24
-00:01:53,765 --> 00:01:56,450
+00:01:54,265 --> 00:01:56,950
 Sworn: audit-ready evidence for private execution.
