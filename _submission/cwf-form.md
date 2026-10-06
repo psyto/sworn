@@ -2,7 +2,8 @@
 
 **Every field below is written to be pasted.** Limits are the form's own (field list and limits taken
 from the copy of this form kept for the previous entry); `scripts/cwf-form.sh` counts them.
-**`[FILL AFTER MODERATO]`** marks numbers that exist only after the 10-07 deployment — never paste a
+The own-Zone live run happened on 2026-10-06 and its numbers are filled in (`deployments/moderato.json` → `OwnZone`).
+**`[FILL AFTER MODERATO]`** marks numbers that exist only after a Moderato deployment — never paste a
 draft with that marker in it. **`[FOUNDER]`** marks fields only the founder can write or enter.
 
 This replaces the previous CWF entry (one product per team).

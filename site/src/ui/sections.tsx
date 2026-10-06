@@ -257,8 +257,8 @@ export function Footer() {
       <ul className="disclosures" aria-label="Disclosures">
         <li>Moderato testnet only</li>
         <li>Unaudited</li>
-        <li>Zone batches from Tempo's integration tests (dev chain)</li>
-        <li>Does not protect withdrawals today</li>
+        <li>Fixture batches from Tempo's integration tests (dev chain)</li>
+        <li>Live settlement only on our own Zone (one operator), not Tempo's Zones</li>
         <li>No customers, revenue or mainnet</li>
       </ul>
       <ul className="links">

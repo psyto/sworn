@@ -1,5 +1,8 @@
 # 003 — A ZK verifier for Tempo Zone batches, shaped like `IVerifier`
 
+**Update 2026-10-06:** our own Zone on Moderato settled three proven batches through `OwnZonePortal` → a third
+`SwornZoneVerifier` (parent chain 42431) and paid a withdrawal; see "Results (own Zone live run on Moderato)" at the end.
+
 Status: r2 (2026-10-04), after Codex r1 CHANGES (`docs/reviews/003-spec-r1.md`). Builds on the zone-spf spike (`spikes/zone-spf/`), which ran Tempo Zones'
 own `prove_zone_batch` (zones `ac49071f`) inside SP1 on four real batches from the zones integration
 tests, matched native output, and produced a Groth16 proof of `hardfork_t13_recovery` (22,659,079 cycles,

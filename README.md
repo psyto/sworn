@@ -135,8 +135,9 @@ requirement.
 
 **Product hypothesis — Proof Operations.** A Zone business could purchase proof generation for batches it
 supplies plus compatibility maintenance when Tempo execution changes. That is a recurring-service thesis, not
-a customer claim. The evidence is off the settlement path: no portal calls `SwornZoneVerifier`, and `attest`
-stores nothing (spec 003 §5 D2, D4). It therefore does not protect a withdrawal today.
+a customer claim. For Tempo's own Zones the evidence is off the settlement path: their portals do not call
+`SwornZoneVerifier`, and `attest` stores nothing (spec 003 §5 D2, D4), so it protects none of their withdrawals.
+Only our own Zone on Moderato settles through it (a one-operator demonstration, 2026-10-06).
 
 **Go-to-market test.** Start with one Zone business that can lawfully supply its witness and has a reviewer
 who needs evidence. Prove one supplied batch, give the reviewer reproducible verification instructions, then

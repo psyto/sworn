@@ -46,4 +46,5 @@ directly). It still accepts no input and never sends a transaction.
 A real Zone operator must provide its own private witness, genesis artifact, and version-compatible guest.
 This local controller deliberately does not accept arbitrary files or select arbitrary Zones: that would
 need authenticated operator access, input isolation, resource quotas, a job queue, and a Zone-specific
-deployment. ZonePortal settlement remains a Tempo-side change described in spec 004.
+deployment. Settlement through a portal was demonstrated separately, on our own Zone on Moderato (spec 003,
+"Results (own Zone live run on Moderato)"); for Tempo's own Zones it remains a Tempo-side change described in spec 004.
