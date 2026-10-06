@@ -52,7 +52,7 @@ export function Topbar() {
 }
 
 /** The primary Zone evidence: the attest of the batch with a withdrawal. */
-const ZONE_TX = deployments.SwornZoneVerifierWithdrawal.attest.tx;
+const PAYOUT_TX = deployments.OwnZone.payout.tx;
 /** YouTube links for the two submission videos; null until published (then the links appear). */
 const VIDEOS: { pitch: string | null; demo: string | null } = { pitch: null, demo: null };
 
@@ -67,21 +67,21 @@ export function Hero() {
           can verify on chain—without receiving the private ledger or customer transactions.
         </p>
         <div className="hero-actions">
-          <a className="btn" href="#evidence">See the verified evidence</a>
+          <a className="btn" href="#own-zone">See the settlement on Moderato</a>
           <a className="text-action" href="#operations">See the Proof Operations test ↓</a>
         </div>
       </div>
       <aside className="hero-proof" aria-label="Built evidence">
         <p className="eyebrow">Built and verifiable</p>
-        <strong>1 withdrawal<br />2 user transactions</strong>
-        <p>A contract on Moderato verified the proof for Tempo&apos;s integration-test batch.</p>
-        <a href={txUrl(MODERATO, ZONE_TX)} target="_blank" rel="noreferrer">
-          Open the proof transaction <span className="mono">{short(ZONE_TX)} ↗</span>
+        <strong>3 batches settled<br />1 withdrawal paid</strong>
+        <p>On Moderato, our own Zone&apos;s portal paid a withdrawal only after Sworn&apos;s proof passed.</p>
+        <a href={txUrl(MODERATO, PAYOUT_TX)} target="_blank" rel="noreferrer">
+          Open the payout transaction <span className="mono">{short(PAYOUT_TX)} ↗</span>
         </a>
       </aside>
       <p className="hero-boundary">
-        Testnet evidence only: this fixture is from development chain 1337. No ZonePortal calls Sworn and it does not
-        protect withdrawals today.
+        Testnet. On Moderato, our own Zone&apos;s portal pays a withdrawal only after Sworn&apos;s proof passes. It is not a
+        Tempo-created Zone, and it is unaudited.
       </p>
     </section>
   );
@@ -220,8 +220,8 @@ export function DataFlow() {
       <div className="df-learns" aria-label="What a reviewer learns">
         <p><b>Learns:</b> Tempo&apos;s own Zone code accepts this exact batch.</p>
         <p><b>Does not learn:</b> balances, senders, recipients or amounts inside the Zone.</p>
-        <p className="df-note">Today the proof is checked off the settlement path: no ZonePortal calls this verifier, and it does
-          not protect withdrawals (spec 004 is a proposal).</p>
+        <p className="df-note">On our own Zone, the portal calls this verifier before it queues a withdrawal. Tempo&apos;s own
+          Zones are unchanged; spec 004 is a proposal.</p>
       </div>
     </section>
   );

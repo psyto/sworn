@@ -301,7 +301,7 @@
       "block": 38411550,
       "from": "roles.sequencer (processWithdrawals)",
       "gasUsed": 330348,
-      "event": "WithdrawalProcessed(to user, token pathUSD, amount 500000, success true)",
+      "event": "WithdrawalProcessed(to user, token pathUSD, amount 500000, callbackSuccess true)",
       "userPathUSD": {
         "before": "999998999480",
         "after": "999999499480",

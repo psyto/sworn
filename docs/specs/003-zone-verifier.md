@@ -443,7 +443,7 @@ Plan, conditions and runbook: `spikes/own-zone/FEASIBILITY.md`, `RUNBOOK.md`. Re
   | 56–61 | `requestWithdrawal(0.5 pathUSD)` | 31,925,548 | 813 s | 5,133 | `0x4062f79c…83b4` |
 
   - A call trace (`debug_traceTransaction`, callTracer) of each `submitBatch` shows `OwnZonePortal` → STATICCALL `SwornZoneVerifier.verify` → STATICCALL the SP1 gateway `0x2c77…9B18`, with no errors.
-- **Payout:** `processWithdrawals` tx `0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1` (block 38,411,550) emitted `WithdrawalProcessed(user, pathUSD, 500000, success)`.
+- **Payout:** `processWithdrawals` tx `0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1` (block 38,411,550) emitted `WithdrawalProcessed(to user, token pathUSD, amount 500000, callbackSuccess true)`.
   - The user's L1 pathUSD went from 999,998,999,480 to 999,999,499,480, exactly +500,000.
   - The withdrawal could be paid only after the batch containing it was proven and settled.
 - **Time:** 58.5 minutes from the anchor block (09:53:57 UTC) to the payout block (10:52:29 UTC).

@@ -127,7 +127,7 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
   const proofJob = useLocalProofJob();
   const auditRecord = () => JSON.stringify({
     kind: "Sworn Zone evidence record",
-    scope: "Tempo Zones integration-test fixture on dev chain 1337; not a Moderato Zone batch; no ZonePortal calls this contract.",
+    scope: "Tempo Zones integration-test fixture on dev chain 1337; not a Moderato Zone batch; no ZonePortal calls this contract instance (our own Zone uses a separate instance).",
     batch: { withdrawals: BATCH_CONTENTS.withdrawals, userTransactions: BATCH_CONTENTS.userTransactions },
     attestation: attest.status === "ok" ? { tx: attest.value.txHash, contract: attest.value.contract, block: attest.value.blockNumber.toString() } : null,
     verification: check.status === "ok" ? { realBatch: "true", changedField: check.value.mutatedError, preT13MalformedBatch: check.value.preT13.result, checkedAt: new Date(check.value.readAt).toISOString() } : null,
@@ -306,21 +306,21 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
           <p className="eyebrow">What it is not, yet</p>
           <ul>
             <li>
-              <b>The batches are not from Moderato.</b> Both come from Tempo's zones integration tests, on a dev chain (1337):{" "}
+              <b>These batches are not from Moderato.</b> Both come from Tempo's zones integration tests, on a dev chain (1337):{" "}
               <code>{WITHDRAWAL_BATCH.caseName}</code> (the withdrawal is a test withdrawal, not a Moderato Zone's) and{" "}
               <code>{HARDFORK_BATCH.caseName}</code> (no withdrawals).
             </li>
             <li>
-              <b>Not connected to a ZonePortal; it does not protect withdrawals today.</b> Holding withdrawals until ZK finality
-              is a proposal (
+              <b>These two instances are not connected to a ZonePortal.</b> Our own Zone's instance is (
+              <a href="#own-zone">above</a>). For Tempo's own Zones, holding withdrawals until ZK finality is a proposal (
               <a href={SPEC4} target="_blank" rel="noreferrer">
                 spec 004
               </a>
               ), not built.
             </li>
             <li>
-              <b>No Zone settles with it.</b> Tempo's factory fixes each Zone's verifier when the Zone is created, so only Tempo
-              can adopt it.
+              <b>No Tempo-created Zone settles with it.</b> Tempo's factory fixes each Zone's verifier when the Zone is created,
+              so only Tempo can adopt it.
             </li>
             <li>
               <b>No portal caller check.</b> Safe here only because the contract moves and stores nothing.
