@@ -244,7 +244,7 @@ export function OperationsTest() {
         <li><b>3. Repeat need</b><span>A next batch or execution upgrade identifies whether there is a budget and recurring work.</span></li>
       </ol>
       <p className="note">
-        <b>What is true today:</b> Moderato has one effective Zone operator; Sworn has no customer, revenue, design
+        <b>What is true today:</b> the Zones Tempo's factory created on Moderato have one effective operator; Sworn has no customer, revenue, design
         partner or payer agreement. The commercial thesis becomes credible only after this repeat test.
       </p>
     </section>

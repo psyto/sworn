@@ -38,15 +38,18 @@ but it is not the product pitched or demoed for CWF:
    client. No judge, no owner. This has slashed a lying server **three times on Moderato**.
 
 > **For judges, the fast path:** the [live page](https://psyto.github.io/sworn/) ·
-> [the Moderato proof tx](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770)
+> [our own Zone's payout](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), paid only after three proven batches settled (the page's
+> [own-Zone section](https://psyto.github.io/sworn/#own-zone) reads the portal, the receipts and the payout live) ·
+> [the fixture's proof tx](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770)
 > (a Zone batch with one withdrawal, from Tempo's integration tests) ·
 > "Verify again" on the page (three live `eth_call`s: Sworn, the real proof → true; one field changed →
 > `InvalidProof`; for comparison, Moderato's current prototype verifier, the pre-T13 reference stub, returns
 > true for an equivalent malformed batch) ·
-> pitch (1:54) and demo (2:31) videos: *links added once the founder narration is uploaded*.
+> pitch (1:57) and demo (2:53) videos: *links added once the founder narration is uploaded*.
 >
-> **Status (2026-10-05): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
-> testnet** only. Unaudited. No customers or revenue. Moderato has one effective Zone operator today.
+> **Status (2026-10-06): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
+> testnet** only. Unaudited. No customers or revenue. The Zones created by Tempo's factory on Moderato have one
+> effective operator; our own Zone runs outside the factory.
 
 ## Sworn in three diagrams
 
@@ -87,17 +90,19 @@ flowchart TB
 flowchart LR
   O(["Zone operator"])
   A(["Auditor or counterparty"])
-  TP(["Tempo (later)"])
+  OZ(["Our own Zone's portal (live, one operator)"])
+  TP(["Tempo's own Zones (later)"])
   U1["Supply a batch witness"]
   U2["Generate the proof (about 15 min, local)"]
   U3["Record the proof on Tempo (attest)"]
   U4["Verify the proof live: true, or InvalidProof if any field changed"]
-  U5["Match the proof to the batch that settled (manual today)"]
-  U6["Pay withdrawals only after the proof passes (proposal)"]
+  U5["Match the proof to the batch that settled (automatic on our own Zone; manual for Tempo's Zones)"]
+  U6["Pay withdrawals only after the proof passes"]
   O --> U1 --> U2 --> U3
   A --> U4
   A --> U5
-  TP -.-> U6
+  OZ --> U6
+  TP -.->|"proposal, spec 004"| U6
 ```
 
 ### 3. Data flow: what stays private and what becomes public
@@ -146,8 +151,9 @@ per-Zone operations agreement plus per-batch proving. A [local Operator Console]
 starts the existing fixture prover and read-only checks; it is deliberately loopback-only and not a hosted
 service.
 
-**Market boundary.** Moderato currently has one effective operator (three Zones with one admin; creation is
-owner-gated), so there is no demonstrated operator market or numeric TAM today. The expansion thesis is
+**Market boundary.** The Zones Tempo's factory created on Moderato have one effective operator (three Zones
+with one admin; creation is owner-gated). Our own Zone runs outside the factory and is ours, so it is not a
+market signal either: there is no demonstrated operator market or numeric TAM today. The expansion thesis is
 conditional: if independent Zone businesses adopt a review workflow, the work repeats for their batches and
 for each Tempo execution upgrade. [Spec 004](docs/specs/004-tee-plus-zk.md) describes a later settlement
 proposal; it is written, not built, and would require Tempo changes.
@@ -185,9 +191,10 @@ Getting Tempo's code into a zkVM meant patching it (`patches/`, `spikes/zone-spf
 - **Tempo's own Zones are unchanged.** Each Zone's verifier is fixed by Tempo's factory when the Zone is
   created, so only Tempo can adopt it. The two instances below verified batches from Tempo's zones
   integration tests on a dev chain (1337).
-- **Not usable on a current Moderato Zone as is.** It pins parent chain 1337 and one test genesis, and it
-  implements T13's `IVerifier`; Moderato's portals are pre-T13. A real Zone needs its own deployment, its
-  operator's witness and genesis, and version work
+- **The fixture instances are not usable on a Moderato Zone as is.** They pin parent chain 1337 and one test
+  genesis, and implement T13's `IVerifier`; the portals of Tempo's Zones on Moderato are pre-T13. Our own Zone
+  needed a new guest and vkey, its own verifier instance (parent chain 42431, its genesis and portal pinned) and
+  a portal of its own. Any other Zone needs its own deployment, its operator's witness and genesis, and version work
   ([`docs/research/moderato-zone-feasibility-20261004.md`](docs/research/moderato-zone-feasibility-20261004.md)).
 - **No portal caller check.** That is safe only because the contract moves and stores nothing.
 - **The pinned genesis is a trusted choice.** Its hash pins exact bytes; it does not prove they are
@@ -200,7 +207,6 @@ Getting Tempo's code into a zkVM meant patching it (`patches/`, `spikes/zone-spf
 |---|---|---|
 | **Sworn** | [`0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6`](https://explore.testnet.tempo.xyz/address/0xc54b7e52B42F6150dA72c1147d25e8DDf83c02c6) | no owner, admin, pause or upgrade; every constant read back from chain |
 | SP1VerifierGroth16 v6.1.0 | [`0x2c77329747b7C8B293514A6129404D4cefDd9B18`](https://explore.testnet.tempo.xyz/address/0x2c77329747b7C8B293514A6129404D4cefDd9B18) | codehash equals the local build of the vendored, unmodified `sp1-contracts` v6.1.0 |
-
 | **SwornZoneVerifier** | [`0x00F6ed344B9C7F5eBA8788A115f8d6B4c00564e5`](https://explore.testnet.tempo.xyz/address/0x00F6ed344B9C7F5eBA8788A115f8d6B4c00564e5) | `IVerifier`-shaped Zone batch verifier; immutables only, no storage writes; deployed 2026-10-04 (block 38078600) |
 | **SwornZoneVerifier (withdrawal batch)** | [`0xF2e1E74c14B10bE4dda591dbE50F91b88bDcBA11`](https://explore.testnet.tempo.xyz/address/0xF2e1E74c14B10bE4dda591dbE50F91b88bDcBA11) | same code and vkey, pinned to the genesis of the batch with a withdrawal |
 | **OwnZonePortal** (our own Zone) | [`0xE4818EC6ca046693DafCE608C7F2226604F3daE3`](https://explore.testnet.tempo.xyz/address/0xE4818EC6ca046693DafCE608C7F2226604F3daE3) | zone 4242; upstream `ZonePortal` plus a deployer-only `initialize`; calls the verifier below in every `submitBatch` (2026-10-06) |
@@ -208,7 +214,8 @@ Getting Tempo's code into a zkVM meant patching it (`patches/`, `spikes/zone-spf
 | SwornZoneVerifier, superseded | [`0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De`](https://explore.testnet.tempo.xyz/address/0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De) | first deployment; its `verifierConfig` was `0x02`, which upstream zones (`344ff785`, 10-01) defines as NoProof, so it was redeployed with the self-describing tag `"sworn-sp1-groth16-v1"` |
 
 Sworn guest vkey `0x00727936…7fa9`, `GUEST_VERSION = keccak256("sworn-guest-v1")`. Zone guest vkey
-`0x007ef731…5b39`, pinned genesis artifact `0xd39aa765…c11e`. Everything is recorded
+`0x007ef731…5b39`, pinned genesis artifact `0xd39aa765…c11e`; our own Zone's guest vkey `0x00ab5a9e…5c7b`,
+genesis artifact `0xb31abb66…4bbf`. Everything is recorded
 from receipts in [`deployments/moderato.json`](deployments/moderato.json).
 
 ## How the Zone verifier works
@@ -252,7 +259,8 @@ no access key), and a transaction Tempo would reject before execution is itself 
 
 ## What is measured
 
-**Zone verifier** (2026-10-04; logs in `spikes/zone-spf/z-logs/`, numbers in spec 003 "Results"):
+**Zone verifier** (2026-10-04, and the own-Zone live run 2026-10-06; logs in `spikes/zone-spf/z-logs/`, numbers in
+spec 003 "Results"):
 
 | | result |
 |---|---|
@@ -338,13 +346,15 @@ found no public example of `tempo-revm` or `zone-spf` proven in a zkVM.
 
 | path | |
 |---|---|
-| `docs/specs/` | 001 (product; §R3 normative), 002 (server, SDK, challenger, demo), 003 (Zone verifier) |
+| `docs/specs/` | 001 (product; §R3 normative), 002 (server, SDK, challenger, demo), 003 (Zone verifier, with the own-Zone live-run results), 004 (TEE + ZK, a proposal) |
 | `docs/research/` | sourced research behind the positioning (pre-send checks on Tempo, payment exception rates) |
 | `docs/reviews/` | independent adversarial reviews of each spec round, and the exact prompts sent (`payloads/`) |
 | `core/` | `Question`/`Answer`, the fixed transaction, abort rules, EIP-712, header binding, MPT checks, `tempo-revm` execution |
 | `program/`, `runner/`, `host/` | SP1 guest, SP1 execute/prove, native checks (AC-1, AC-2) |
 | `contracts/` | `Sworn.sol`, `SwornZoneVerifier.sol`, vendored SP1 verifier, tests, `scripts/gate.sh`, `scripts/no-owner.sh`, deploy scripts |
 | `spikes/zone-spf/` | Zone guest, shared digest code (`attest/`), native host, patches, pinned genesis, witnesses, logs; `fetch.sh` rebuilds the large trees |
+| `spikes/own-zone/` | our own Zone on Moderato: feasibility, dress rehearsals, runbook, `scripts/own-zone.sh`, `OwnZonePortal`, the pinned guest ELF |
+| `video/` | pitch and demo scripts (`PITCH.md`, `DEMO.md`), slides and recorders; every figure on screen is read while recording |
 | `answerer/`, `server/`, `sdk/`, `challenger/` | answer engine (Rust), MPP server (TS), client SDK (TS), `sworn-witness` / `sworn-challenge` (Rust) |
 | `site/` | the live page ([psyto.github.io/sworn](https://psyto.github.io/sworn/)): read-only, published by `.github/workflows/pages.yml` |
 | `demo/` | agent wallet and owner's phone (Vite + React + viem); every number read from chain |
