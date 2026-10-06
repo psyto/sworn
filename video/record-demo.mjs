@@ -1,6 +1,7 @@
-// Records video/demo.mp4 — Sworn's ≤ 3 min CWF demo v5.4, seven scenes, SILENT, 1920×1080 — plus video/demo.srt
+// Records video/demo.mp4 — Sworn's ≤ 3 min CWF demo v5.5, eight scenes, SILENT, 1920×1080 — plus video/demo.srt
 // and video/demo.marks.json. It follows a Zone operator's need for independently checkable batch evidence,
-// then shows the real proof on a Zone batch with a withdrawal and its explicit present-day limits.
+// then shows the real proof on a Zone batch with a withdrawal, our own Zone's proof-gated payout on Moderato, and
+// the explicit present-day limits.
 //
 //   DEMO_PAGE_URL=http://localhost:4173/ node video/record-demo.mjs   # then: node video/split-scenes.mjs demo
 //   PREVIEW=<dir> node video/record-demo.mjs   # one PNG per authored slide + all source checks; records nothing
@@ -22,8 +23,11 @@
 //            all three rows, the comparison line, the disclosures) is compared with those reads,
 //            deployments/moderato.json and the fixture. "Verify again" is clicked twice; each click must
 //            change "Called at". The superseded verifier must appear nowhere. Explorer of 0xa630, cropped.
-//   scene 6  deployments/moderato.json SwornZoneVerifierWithdrawal (batch, deviations), README, spec 004.
-//   scene 7  spec 004 (header, §6 "not built"), zone_factory, Tempo's ZoneFactory on Moderato
+//   scene 6  our own Zone: moderato.json OwnZone ↔ Moderato (portal.verifier(), the three submitBatch receipts, the
+//            payout's WithdrawalProcessed to the user); the page's #own-zone section (recorded in a real browser)
+//            must show those values; explorer of the payout, cropped.
+//   scene 7  deployments/moderato.json SwornZoneVerifierWithdrawal (batch, deviations), README, spec 004.
+//   scene 8  spec 004 (header, §6 "not built"), zone_factory, Tempo's ZoneFactory on Moderato
 //            (one admin, 1-of-1 Safe owner), README limits, the repo (public), the page (HTTP 200).
 // v2 (four scenes, hardfork batch) is in git: HEAD:video/record-demo.mjs before v2.1.
 import path from "node:path";
@@ -49,17 +53,18 @@ mkdirSync(work, { recursive: true });
 
 // ── the script ───────────────────────────────────────────────────────────────────────────────────
 const scenes = parseScenes("video/DEMO.md");
-if (scenes.length !== 7) fail(`DEMO.md has ${scenes.length} scenes, expected 7 (v5.4)`);
+if (scenes.length !== 8) fail(`DEMO.md has ${scenes.length} scenes, expected 8 (v5.5)`);
 const md = read("video/DEMO.md", "DEMO.md");
 const targets = [...md.matchAll(/^## Scene (\d+) — .*· ≈ (\d+(?:\.\d+)?) s\s*$/gm)].map((m) => +m[2]);
-if (targets.length !== 7) fail("DEMO.md: every scene heading needs its \"≈ N s\" target");
+if (targets.length !== 8) fail("DEMO.md: every scene heading needs its \"≈ N s\" target");
 const holds = scenes.map((s, i) => Math.max(s.hold, targets[i]));
 const TOTAL = holds.reduce((a, b) => a + b, 0);
 const words = scenes.reduce((a, s) => a + s.words, 0);
-log(`• demo v5.4: scene lengths = max(target, words ÷ 2.2)`);
+log(`• demo v5.5: scene lengths = max(target, words ÷ 2.2)`);
 for (const [i, s] of scenes.entries()) log(`    scene ${s.n}: ${String(s.words).padStart(3)} words (${s.hold} s of voice) → ${holds[i]} s  (${s.title})`);
 log(`    total ${TOTAL} s, ${words} words`);
-if (words > 330) fail(`DEMO.md narration is ${words} words > the plan's hard cap 330`);
+// v5.5 adds the own-Zone scene (44 words); the cap rose from 330 to 350. The time limit (180 s) still binds.
+if (words > 350) fail(`DEMO.md narration is ${words} words > the cap 350`);
 if (TOTAL > MAX_TOTAL) fail(`demo runs ${TOTAL} s > ${MAX_TOTAL} s`);
 const narr = scenes.map((s) => s.text).join(" ");
 for (const banned of [/the same input/i, /\bbroken\b/i, /secures? withdrawals/i, /protects withdrawals(?! yet)/i, /every batch/i, /our customers are/i])
@@ -224,7 +229,7 @@ function checkZoneText(t, when) {
     "Moderato, pre-T13 · called", "zone 99 · empty hashes · config dead · proof beef", "returns true", STUB_LINE, "Sworn demonstrates the missing ZK check.", COMPARE,
     "Generate evidence for Zone blocks 5–6", "Start local proof job", "≈15 min · ≈20 GB RAM · no transaction sent",
     "Fixture only: one integration-test batch on dev chain 1337.",
-    "The batches are not from Moderato.", "Not connected to a ZonePortal; it does not protect withdrawals today.", "is a proposal (spec 004",
+    "These batches are not from Moderato.", "These two instances are not connected to a ZonePortal.", "is a proposal (spec 004",
   ];
   for (const w of want) if (!lc(t).includes(lc(w))) fail(`page (${when}) does not show "${w}"`);
   if (/does not match|no longer returns true/.test(t)) fail(`page (${when}) shows a mismatch`);
@@ -346,6 +351,103 @@ async function explorerShots() {
   } finally { await br.close(); }
 }
 
+// ── scene 6: our own Zone on Moderato ────────────────────────────────────────────────────────────
+const OZ = M.dep.OwnZone ?? fail("moderato.json: no OwnZone");
+const OZP = getAddress(OZ.OwnZonePortal.address), OZV = getAddress(OZ.SwornZoneVerifier.address);
+if (getAddress(await call(OZP, "verifier() view returns (address)")) !== OZV) fail(`portal ${OZP} does not call ${OZV}`);
+const BATCH_TOPIC = toEventSelector("BatchSubmitted(uint64,uint256,bytes32,bytes32,bytes32,uint64,uint64)");
+for (const b of OZ.batches) {
+  const r = await receipt(b.submitTx, `submitBatch ${b.zoneBlocks}`);
+  if (getAddress(r.to) !== OZP || !r.logs.some((l) => getAddress(l.address) === OZP && l.topics[0] === BATCH_TOPIC)) fail(`submitBatch ${b.submitTx}: not a BatchSubmitted on the portal`);
+}
+const wpEv = parseAbiItem("event WithdrawalProcessed(address indexed to, bytes32 indexed senderTag, address token, uint128 amount, bool callbackSuccess)");
+const payR = await receipt(OZ.payout.tx, "payout");
+if (getAddress(payR.to) !== OZP) fail(`payout is to ${payR.to}, not the portal`);
+const payLog = payR.logs.find((l) => getAddress(l.address) === OZP && l.topics[0] === toEventSelector(wpEv)) ?? fail("payout: no WithdrawalProcessed");
+const pay = decodeEventLog({ abi: [wpEv], data: payLog.data, topics: payLog.topics }).args;
+if (getAddress(pay.to) !== getAddress(OZ.roles.user) || pay.amount !== BigInt(OZ.payout.userPathUSD.delta)) fail("payout: not the user's 500000");
+const payBlock = parseInt(payR.blockNumber, 16);
+if (payBlock <= OZ.batches.at(-1).submitBlock) fail("payout is not after the last settled batch");
+const payAmt = `${(Number(pay.amount) / 1e6).toFixed(1)} pathUSD`;
+log(`• own Zone: portal ${short(OZP)} → ${short(OZV)}; ${OZ.batches.length} submitBatch receipts; payout ${short(OZ.payout.tx)} block ${payBlock}: ${payAmt} to ${short(pay.to)}`);
+
+function checkOwnZoneText(t, when) {
+  const want = ["A portal that pays a withdrawal only after Sworn's proof passes", `✓ ${OZ.batches.length} batches settled · withdrawal paid`, short(OZP, 6), short(OZV, 6),
+    ...OZ.batches.map((b) => short(b.submitTx)), short(OZ.payout.tx), String(payBlock), "✓ the demo user's 0.5 pathUSD withdrawal",
+    "Our own Zone, not a Tempo-created one.", "One operator.", "Testnet, and not audited."];
+  for (const w of want) if (!lc(t).includes(lc(w))) fail(`page #own-zone (${when}) does not show "${w}"`);
+  if (/does not match|could not read/i.test(t)) fail(`page #own-zone (${when}) shows a mismatch or an error`);
+}
+const OZ_EX = 8; // seconds of the payout explorer insert at the end of scene 6
+async function captureOwnZone(secs) {
+  const browser = await launch();
+  const raw = path.join(work, "own.raw.mp4");
+  try {
+    const page = await browser.newPage();
+    page.setDefaultTimeout(120000);
+    await page.setViewport(CONSOLE_VIEWPORT);
+    await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: "light" }]);
+    await page.emulateTimezone("UTC");
+    await page.goto(PAGE, { waitUntil: "networkidle2", timeout: 120000 });
+    await page.waitForFunction(() => (document.querySelector("#own-zone")?.innerText ?? "").includes("withdrawal paid"), { timeout: 120000, polling: 250 });
+    await fontsReady(page).catch(() => fail("the page's Geist fonts did not load"));
+    checkOwnZoneText(await page.evaluate(() => document.querySelector("#own-zone").innerText), "on load");
+    const hdr = await page.evaluate(() => document.querySelector("header").getBoundingClientRect().height);
+    const go = (sel, smooth = true) => page.evaluate((s, h, sm) => {
+      const el = document.querySelector(s); if (!el) return false;
+      scrollTo({ top: Math.max(0, el.getBoundingClientRect().top + scrollY - h - 14), behavior: sm ? "smooth" : "instant" }); return true;
+    }, sel, hdr, smooth).then((ok) => ok || fail(`page: no ${sel}`));
+    await go("#own-zone", false);
+    await sleep(1200);
+    const recorder = await newRecorder(page);
+    await recorder.start(raw);
+    const t0 = Date.now();
+    const at = async (x) => sleep(Math.max(0, t0 + x * 1000 - Date.now()));
+    // narration: "Its portal called the verifier in each of three batches" (≈ 2.5–6.5 s), then "and paid this
+    // withdrawal only after the last proof passed" (≈ 6.5–11 s); the explorer insert follows.
+    await at(1.5); await go("#own-zone .zone-card .status");
+    await at(3); await go("#own-zone .calls");
+    await at(7); await go("#own-zone .zone-card dl:last-of-type");
+    await at(secs + 0.5);
+    const wall = (Date.now() - t0) / 1000;
+    await recorder.stop();
+    checkOwnZoneText(await page.evaluate(() => document.querySelector("#own-zone").innerText), "after recording");
+    return { raw, wall };
+  } finally { await browser.close(); }
+}
+
+// The explorer card of one transaction (status, block, from, to), captured now, never the header.
+async function explorerCard(tx, wants) {
+  const { default: puppeteer } = await import("puppeteer");
+  const br = await puppeteer.launch({ headless: true, timeout: 180000, args: ["--no-sandbox", "--hide-scrollbars"], defaultViewport: { width: 1280, height: 900, deviceScaleFactor: 2 } });
+  try {
+    const p = await br.newPage();
+    await p.emulateTimezone("UTC");
+    await p.emulateMediaFeatures([{ name: "prefers-color-scheme", value: "light" }]);
+    await p.goto(`${EXPLORER}/tx/${tx}`, { waitUntil: "networkidle2", timeout: 120000 });
+    await p.waitForFunction(() => document.body.innerText.includes("Success"), { timeout: 90000 });
+    const text = lc(await p.evaluate(() => document.body.innerText));
+    for (const w of [tx, ...wants]) if (!text.includes(lc(w))) fail(`explorer ${short(tx)} does not show ${w}`);
+    for (let i = 0; i < 3; i++) {
+      const tt = await p.evaluate(() => document.querySelector('button[title^="Showing "][title$="click to change"]')?.title ?? null);
+      if (!tt || !/relative/i.test(tt)) break;
+      await p.click('button[title^="Showing "][title$="click to change"]'); await sleep(500);
+    }
+    const clip = await p.evaluate(() => {
+      const leaves = [...document.querySelectorAll("body *")].filter((e) => e.children.length === 0);
+      const leaf = (t) => leaves.find((e) => e.textContent.trim() === t);
+      const st = leaf("Status"), to = leaf("To");
+      let card = st;
+      while (card && !(card.innerText.includes("Hash") && card.innerText.includes("Receipt"))) card = card.parentElement;
+      if (!card || !to) return null;
+      const c = card.getBoundingClientRect(), sr = st.getBoundingClientRect(), t = to.getBoundingClientRect();
+      return { x: c.left, y: sr.top - 22, width: c.width, height: t.bottom + 20 - (sr.top - 22) };
+    });
+    if (!clip) fail(`explorer ${short(tx)}: transaction card not found`);
+    return `data:image/png;base64,${await p.screenshot({ clip, encoding: "base64" })}`;
+  } finally { await br.close(); }
+}
+
 // ── scenes 5 and 6: disclosures, spec 004, limits ────────────────────────────────────────────────
 if (!/D2 no portal caller check/.test(HF.deviations) || !/D1-D4 as SwornZoneVerifier/.test(Z.deviations)) fail("moderato.json: deviations no longer name D2 (no portal)");
 if (!/not that withdrawals are secured/.test(Z.deviations)) fail("moderato.json SwornZoneVerifierWithdrawal.deviations changed");
@@ -355,7 +457,7 @@ const FACTORY = "tempo/crates/precompiles/src/zone_factory/mod.rs";
 const fac = read(FACTORY, "vendored zone_factory").split("\n");
 const fv = fac.findIndex((l) => l.trim() === "verifier: ZONE_VERIFIER_ADDRESS,");
 if (fv < 0) fail(`${FACTORY}: verifier assignment moved`);
-for (const s of ["**The batches are not from Moderato.**", "Tempo's zones integration tests", "It does not secure withdrawals", "Unaudited.", "no customers, revenue, design partner or payer agreement"])
+for (const s of ["**Our own Zone, not a Tempo-created one.**", "**Tempo's own Zones are unchanged.**", "Tempo's zones integration tests", "It does not secure withdrawals on Tempo's Zones", "Unaudited.", "no customers, revenue, design partner or payer agreement"])
   if (!flat(readmeText).includes(flat(s))) fail(`README no longer says "${s}"`);
 // Scene 6: "one Zone operator" read now from Tempo's ZoneFactory on Moderato.
 const FADDR = getAddress((read("tempo/crates/contracts/src/precompiles/zone_factory.rs", "zone_factory.rs").match(/ZONE_FACTORY_ADDRESS: Address = address!\("(0x[0-9a-fA-F]{40})"\)/) ?? fail("zone_factory.rs: no ZONE_FACTORY_ADDRESS"))[1]);
@@ -377,7 +479,8 @@ const pub = await fetchText(PUBLISHED, "published page");
 if (!/<title>Sworn/.test(pub)) fail(`${PUBLISHED}: no "<title>Sworn"`);
 
 const data = {
-  scenes: ["d0", "d1", "dflow", "e1", "dz", "d6"],
+  scenes: ["d0", "d1", "dflow", "e1", "e2", "dz", "d6"],
+  ozId: String(OZ.zoneId), payLine: `Our portal paid ${payAmt} after the proof, block ${payBlock.toLocaleString("en-US")}.`,
   digest: short(fx.digest), attestShort: `attest ${short(Z.attest.tx)}`,
   portalSrc: `tempoxyz/zones @ ${ZONES_REF} · ZonePortal.sol`, portalLines,
   exUrl: `explore.testnet.tempo.xyz/tx/${short(Z.attest.tx)}`,
@@ -393,6 +496,7 @@ for (const [k, v] of Object.entries(data)) if (typeof v === "string") assertFres
 
 const shots = await explorerShots();
 data.exCard = shots.card; data.exEvent = shots.row;
+data.exPayout = await explorerCard(OZ.payout.tx, [String(payBlock), "success", OZP]);
 // Scene 3 is an authored, full-frame version of the page's data-flow diagram (demo.html #dflow, flow.css). Its
 // digest chip is the fixture's digest (= the attest event's, checked above). The live page's data-flow section
 // must still say the same things in words.
@@ -405,7 +509,7 @@ data.exCard = shots.card; data.exEvent = shots.row;
     const sec = await p.waitForSelector('section[aria-labelledby="data-flow"]', { timeout: 60000 });
     const txt = flat(await sec.evaluate((e) => e.innerText));
     for (const w of ["What stays private, and what becomes public.", "Only hashes and counters reach Tempo", "Never published", "Learns: Tempo's own Zone code accepts this exact batch.",
-      "Does not learn: balances, senders, recipients or amounts inside the Zone.", "no ZonePortal calls this verifier", "InvalidProof()"])
+      "Does not learn: balances, senders, recipients or amounts inside the Zone.", "the portal calls this verifier before it queues a withdrawal", "InvalidProof()"])
       if (!lc(txt).includes(lc(w))) fail(`page data-flow section does not say "${w}"`);
   } finally { await br.close(); }
   log(`• page: data-flow section says the scene-3 sentences; diagram digest ${data.digest} = fixture = event`);
@@ -482,16 +586,26 @@ const scene4 = path.join(work, "scene4.mp4");
 concat([s4a, s4x, s4c], scene4);
 rmSync(pg.raw, { force: true });
 
-// ── scene 6: said plainly ───────────────────────────────────────────────────────────────────────
-const scene5 = path.join(work, "scene5.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["dz"], holds: [holds[5]], raw: path.join(work, "s5.raw.mp4"), out: scene5, viewport: CONSOLE_VIEWPORT });
+// ── scene 6: our own Zone on Moderato (page footage, then the payout on the explorer) ─────────────
+log("• scene 6: recording the page's #own-zone section …");
+const OZ_PAGE = holds[5] - OZ_EX;
+const og = await captureOwnZone(OZ_PAGE);
+const ozA = path.join(work, "s6a.mp4"), ozX = path.join(work, "s6x.mp4"), sceneOZ = path.join(work, "sceneOZ.mp4");
+ff(["-i", og.raw, "-vf", VF, "-an", "-t", String(OZ_PAGE), ...ENC, ozA]);
+await recordSlides({ html: "demo.html", data, ids: ["e2"], holds: [OZ_EX], raw: path.join(work, "s6x.raw.mp4"), out: ozX, viewport: CONSOLE_VIEWPORT });
+concat([ozA, ozX], sceneOZ);
+rmSync(og.raw, { force: true });
 
-// ── scene 7 ─────────────────────────────────────────────────────────────────────────────────────
+// ── scene 7: said plainly ───────────────────────────────────────────────────────────────────────
+const scene5 = path.join(work, "scene5.mp4");
+await recordSlides({ html: "demo.html", data, ids: ["dz"], holds: [holds[6]], raw: path.join(work, "s5.raw.mp4"), out: scene5, viewport: CONSOLE_VIEWPORT });
+
+// ── scene 8 ─────────────────────────────────────────────────────────────────────────────────────
 const scene6 = path.join(work, "scene6.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["d6"], holds: [holds[6]], raw: path.join(work, "s6.raw.mp4"), out: scene6, viewport: CONSOLE_VIEWPORT });
+await recordSlides({ html: "demo.html", data, ids: ["d6"], holds: [holds[7]], raw: path.join(work, "s6.raw.mp4"), out: scene6, viewport: CONSOLE_VIEWPORT });
 
 // ── assemble ────────────────────────────────────────────────────────────────────────────────────
-const parts = [scene1, scene2, sceneDF, scene3, scene4, scene5, scene6];
+const parts = [scene1, scene2, sceneDF, scene3, scene4, sceneOZ, scene5, scene6];
 parts.forEach((f, i) => { const d = duration(f); if (Math.abs(d - holds[i]) > 0.12) fail(`scene ${i + 1} clip is ${d} s, expected ${holds[i]} s`); });
 const out = path.join(dir, "demo.mp4");
 concat(parts, out);
@@ -500,18 +614,19 @@ if (Math.abs(got - TOTAL) > 0.25) fail(`demo.mp4 is ${got} s, expected ${TOTAL} 
 if (got > MAX_TOTAL) fail(`demo.mp4 is ${got} s > ${MAX_TOTAL} s`);
 const starts = holds.reduce((acc, h) => [...acc, acc.at(-1) + h], [0]);
 const cues = writeSrt(scenes, starts, path.join(dir, "demo.srt"));
-for (let i = 0; i < 7; i++) ff(["-ss", (starts[i + 1] - 0.2).toFixed(2), "-i", out, "-frames:v", "1", path.join(dir, "frames", `demo-scene${i + 1}.png`)]);
+for (let i = 0; i < 8; i++) ff(["-ss", (starts[i + 1] - 0.2).toFixed(2), "-i", out, "-frames:v", "1", path.join(dir, "frames", `demo-scene${i + 1}.png`)]);
 const r2 = (e) => +K(e).toFixed(2);
 writeJson(path.join(dir, "demo.marks.json"), {
-  name: "demo", script: "video/DEMO.md", version: "5.4", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
+  name: "demo", script: "video/DEMO.md", version: "5.5", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
   page: PAGE, published: PUBLISHED, recordedFromPublishedPage: PAGE === PUBLISHED,
   zoneAttest: Z.attest.tx, liveCalls,
+  ownZone: { portal: OZP, verifier: OZV, settled: OZ.batches.map((b) => b.submitTx), payout: OZ.payout.tx, payoutBlock: payBlock, scene6: { page: OZ_PAGE, explorer: OZ_EX } },
   pageMarks: { verifyPanel: r2("verifyPanel"), click1: r2("click1"), stub: r2("stub"), s3a: r2("s3a"), contains: r2("contains"), s3c: r2("s3c"), click2: r2("click2"), compare: r2("compare") },
   calledAt: pg.called,
   scene4: { pageA: S3.pageA, explorer: S3.explorer, pageC: S3.pageC, cutOutOfPage: IDLE },
-  note: "Silent. Read each scene's lines over its clip (video/scenes/demo/). Scene 5 has the explorer insert in its middle.",
+  note: "Silent. Read each scene's lines over its clip (video/scenes/demo/). Scene 5 has the explorer insert in its middle; scene 6 ends on the payout's explorer insert.",
   recordedAt: new Date().toISOString(),
 });
 log(`\n✓ ${rel(out)}  (${got.toFixed(2)} s, holds ${holds.join(" / ")}, ${words} words)`);
-log(`✓ video/demo.srt  (${cues} cues) · video/demo.marks.json · video/frames/demo-scene{1..7}.png`);
+log(`✓ video/demo.srt  (${cues} cues) · video/demo.marks.json · video/frames/demo-scene{1..8}.png`);
 log(`  next: node video/split-scenes.mjs demo`);

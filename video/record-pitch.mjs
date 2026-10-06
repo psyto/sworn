@@ -1,4 +1,4 @@
-// Records video/pitch.mp4 — Sworn's ≤ 2 min CWF pitch v5.2, six scenes, SILENT, 1920×1080 — and
+// Records video/pitch.mp4 — Sworn's ≤ 2 min CWF pitch v5.4, six scenes, SILENT, 1920×1080 — and
 // video/pitch.srt with the narration of video/PITCH.md timed to where each scene landed.
 //
 //   node video/record-pitch.mjs            # then: node video/split-scenes.mjs pitch
@@ -15,7 +15,11 @@
 //            = true; Tempo's ZoneFactory: nextZoneId, zones(1..n).verifier / admin / sequencers, owner() Safe.
 //   scene 2  spec 003 §3 (public values), SwornZoneVerifier.sol (verify is view); the data-flow motif's digest chip
 //            = the fixture's digest = the attest's ZoneBatchVerified digest.
-//   scene 3  (cycles and Groth16 seconds count up to the proving log's figures, = moderato.json)
+//   scene 3  our own Zone (moderato.json OwnZone ↔ Moderato): portal.verifier() = the recorded verifier (codehash),
+//            the three submitBatch receipts (to the portal, BatchSubmitted, blocks), the payout's WithdrawalProcessed
+//            (user, pathUSD, 500000, after the last batch); the recorder's OWN two eth_calls to that verifier with the
+//            call its portal made (from debug_traceTransaction): real = true, height+1 reverts InvalidProof().
+//            Also still read (scene 2's digest chip):
 //            deployments/moderato.json ↔ Moderato (SwornZoneVerifierWithdrawal codehash, the attest 0xa630… —
 //            batch counts, withdrawalQueueHash = fixture = calldata — and its ZoneBatchVerified event); the
 //            explorer page of the attest (cropped to its transaction card, no header); the proving log; the
@@ -28,7 +32,7 @@
 // Reads only. No keys, no transactions.
 import path from "node:path";
 import { execFileSync } from "node:child_process";
-import { parseAbiItem, decodeEventLog, getAddress, toEventSelector, toFunctionSelector, keccak256, encodeFunctionData } from "viem";
+import { parseAbiItem, decodeEventLog, decodeFunctionData, getAddress, toEventSelector, toFunctionSelector, keccak256, encodeFunctionData } from "viem";
 import {
   dir, repo, read, fail, log, rel, short, EXPLORER, RPC, parseScenes, rpc, call, receipt, fetchText, ghFile, ghRepoPublic,
   moderato, recordSlides, checkOverflow, writeSrt, writeJson, duration, sleep,
@@ -39,7 +43,7 @@ const scenes = parseScenes("video/PITCH.md");
 if (scenes.length !== 6) fail(`PITCH.md has ${scenes.length} scenes, expected 6`);
 const TOTAL = scenes.reduce((a, s) => a + s.hold, 0);
 const WORDS = scenes.reduce((a, s) => a + s.words, 0);
-log(`• pitch v5.2: scene holds (words ÷ 2.2 w/s, rounded up to 0.5 s)`);
+log(`• pitch v5.4: scene holds (words ÷ 2.2 w/s, rounded up to 0.5 s)`);
 for (const s of scenes) log(`    scene ${s.n}: ${String(s.words).padStart(3)} words → ${s.hold.toFixed(1)} s  (${s.title})`);
 log(`    total ${TOTAL.toFixed(1)} s, ${WORDS} words`);
 if (TOTAL > MAX_TOTAL) fail(`pitch runs ${TOTAL} s > ${MAX_TOTAL} s — cut words in PITCH.md`);
@@ -193,6 +197,45 @@ const wall = +(plog.match(/PROVE groth16 wall: ([\d.]+)s/) ?? fail("proving log:
 if (cycles !== Z.attest.proving.cycles) fail(`proving log cycles ${cycles} != moderato.json`);
 if (Math.abs(wall - Z.attest.proving.groth16WallSecs) > 0.5) fail(`proving log Groth16 ${wall} s != moderato.json ${Z.attest.proving.groth16WallSecs}`);
 
+// Our own Zone (2026-10-06): the portal calls the recorded verifier; three submitBatch receipts settled through it;
+// the payout's WithdrawalProcessed is the user's 500000 pathUSD; and the withdrawal batch's verifier call, taken
+// from its submitBatch trace, is verified now and rejected with one field changed.
+const OZ = M.dep.OwnZone ?? fail("moderato.json: no OwnZone");
+const PORTAL = getAddress(OZ.OwnZonePortal.address), OZV = getAddress(OZ.SwornZoneVerifier.address);
+if (getAddress(await call(PORTAL, "verifier() view returns (address)")) !== OZV) fail(`portal ${PORTAL} does not call ${OZV}`);
+if (keccak256(await rpc("eth_getCode", [OZV, "latest"])) !== OZ.SwornZoneVerifier.codehash) fail("own-Zone verifier codehash != moderato.json");
+const BATCH_TOPIC = toEventSelector("BatchSubmitted(uint64,uint256,bytes32,bytes32,bytes32,uint64,uint64)");
+const ages = [];
+for (const b of OZ.batches) {
+  const r = await receipt(b.submitTx, `submitBatch ${b.zoneBlocks}`);
+  if (getAddress(r.to) !== PORTAL) fail(`submitBatch ${b.submitTx} is to ${r.to}, not the portal`);
+  if (!r.logs.some((l) => getAddress(l.address) === PORTAL && l.topics[0] === BATCH_TOPIC)) fail(`submitBatch ${b.submitTx}: no BatchSubmitted`);
+  const blk = parseInt(r.blockNumber, 16);
+  if (blk !== b.submitBlock) fail(`submitBatch ${b.submitTx} block ${blk} != moderato.json ${b.submitBlock}`);
+  ages.push(blk - b.anchor);
+}
+const wpEv = parseAbiItem("event WithdrawalProcessed(address indexed to, bytes32 indexed senderTag, address token, uint128 amount, bool callbackSuccess)");
+const payR = await receipt(OZ.payout.tx, "payout");
+const payLog = payR.logs.find((l) => getAddress(l.address) === PORTAL && l.topics[0] === toEventSelector(wpEv)) ?? fail("payout: no WithdrawalProcessed from the portal");
+const pay = decodeEventLog({ abi: [wpEv], data: payLog.data, topics: payLog.topics }).args;
+if (getAddress(pay.to) !== getAddress(OZ.roles.user) || pay.amount !== BigInt(OZ.payout.userPathUSD.delta) || getAddress(pay.token) !== getAddress("0x20C0000000000000000000000000000000000000"))
+  fail(`payout: ${pay.to} ${pay.token} ${pay.amount} is not the user's 500000 pathUSD`);
+if (parseInt(payR.blockNumber, 16) <= OZ.batches.at(-1).submitBlock) fail("payout is not after the last settled batch");
+const wdBatch = OZ.batches.at(-1);
+const trace = await rpc("debug_traceTransaction", [wdBatch.submitTx, { tracer: "callTracer" }]);
+const findCall = (c) => (c.to && getAddress(c.to) === OZV ? c : (c.calls ?? []).map(findCall).find(Boolean));
+const vcall = findCall(trace) ?? fail(`${wdBatch.submitTx}: the portal did not call ${OZV}`);
+if (vcall.input.slice(0, 10) !== IV_SEL) fail(`own-Zone verifier call selector ${vcall.input.slice(0, 10)} != IVerifier ${IV_SEL}`);
+const { args: ozArgs } = decodeFunctionData({ abi: verifyAbi, data: vcall.input });
+const ozH = ozArgs[5];
+const ozOk = await rawCall(OZV, vcall.input);
+if (ozOk.error || BigInt(ozOk.result) !== 1n) fail(`eth_call own-Zone verify(real) did not return true: ${JSON.stringify(ozOk.error ?? ozOk.result)}`);
+const ozMut = [...ozArgs]; ozMut[5] = ozH + 1n;
+const ozBad = await rawCall(OZV, encodeFunctionData({ abi: verifyAbi, functionName: "verify", args: ozMut }));
+const ozAt = new Date();
+if (!ozBad.error || !String(ozBad.error.data ?? "").startsWith(toFunctionSelector("InvalidProof()"))) fail(`eth_call own-Zone verify(height+1) did not revert InvalidProof(): ${JSON.stringify(ozBad)}`);
+log(`• own Zone: portal ${short(PORTAL)} → ${short(OZV)}; ${OZ.batches.length} batches settled (anchor ages ${ages.join(" / ")}); payout ${short(OZ.payout.tx)} ${pay.amount} to ${short(pay.to)}; verify(height ${ozH}) = true, (height ${ozH + 1n}) reverts InvalidProof() at ${ozAt.toISOString()}`);
+
 // The explorer, captured now, cropped to its transaction card (the site header carries Tempo's wordmark).
 const exUrl = `${EXPLORER}/tx/${Z.attest.tx}`;
 const topic0 = toEventSelector(zev);
@@ -256,7 +299,7 @@ const BANK = "15 years building banking systems in Japan";
 if (!flat(readme).includes(BANK)) fail(`README "Who" no longer says "${BANK}"`);
 
 // ── scene 6: limits ──────────────────────────────────────────────────────────────────────────────
-for (const s of ["## What the Zone verifier is, and is not", "**The batches are not from Moderato.**", "Tempo's zones integration tests", "Unaudited.", "no customers, revenue, design partner or payer agreement", "It does not secure withdrawals"])
+for (const s of ["## What the Zone verifier is, and is not", "**Our own Zone, not a Tempo-created one.**", "**Tempo's own Zones are unchanged.**", "Tempo's zones integration tests", "Unaudited.", "no customers, revenue, design partner or payer agreement", "It does not secure withdrawals on Tempo's Zones"])
   if (!flat(readme).includes(flat(s))) fail(`README no longer says "${s}"`);
 const repoUrl = ghRepoPublic("psyto/sworn", "repo");
 log(`• README limits present; ${repoUrl} public; ETHGlobal: ${prize[1]} ${prize[3]}; tempo: reth + revm ${revmV}`);
@@ -285,12 +328,17 @@ const data = {
   atTo: `SwornZoneVerifier ${short(ZV, 6)}`,
   exUrl: `explore.testnet.tempo.xyz/tx/${short(Z.attest.tx)}`, exShot: shot.png,
   exNote: `captured while recording · its Events tab: topic0 ${short(topic0, 6)} = ZoneBatchVerified`,
+  settled: String(OZ.batches.length),
+  paid: `${(Number(pay.amount) / 1e6).toFixed(1)} pathUSD`,
+  anchorAge: `${Math.max(...ages).toLocaleString("en-US")} of 8,190 blocks`,
+  settleSrc: `our own Zone ${OZ.zoneId} · portal ${short(PORTAL, 6)} → SwornZoneVerifier ${short(OZV, 6)} → SP1 · submitBatch ${OZ.batches.map((b) => short(b.submitTx)).join(", ")} · payout ${short(OZ.payout.tx)} · read now from Moderato`,
+  callRealWhat: `the withdrawal batch, zone blocks ${wdBatch.zoneBlocks}`,
   callReal: "✓ verify(…) → true",
-  callBadWhat: `one field changed: height ${H} → ${H + 1n}`,
+  callBadWhat: `one field changed: height ${ozH} → ${ozH + 1n}`,
   callBad: "✗ rejected: reverts InvalidProof()",
-  callSrc: `eth_call, read-only, to ${short(ZV, 6)} · called ${utc(callAt)} UTC`,
+  callSrc: `eth_call, read-only, to our Zone's verifier ${short(OZV, 6)}, with the call its portal made in ${short(wdBatch.submitTx)} · called ${utc(ozAt)} UTC`,
   // 4
-  nearSrc: "Checked off to the side: no Zone's portal calls this contract and it stores nothing (spec 003 §5 D2, D4). Matching a proof to a settled batch is the operator's and auditor's step.",
+  nearSrc: "On Tempo's own Zones, checked off to the side: their portals do not call this contract and it stores nothing (spec 003 §5 D2, D4). Only our own Zone settles through it.",
   laterSrc: `spec 004: “A proposal for Tempo, not something Sworn can deploy.” · “Payouts wait for ZK.” · §6: ${notBuilt} parts, not built`,
   serviceSrc: `spec 004 §5: each hardfork that changes Zone execution needs a new guest and vkey · next Tempo upgrade: T12 on Moderato, ${t12[1]}`,
   // 5
@@ -338,11 +386,12 @@ const cues = writeSrt(scenes, starts, path.join(dir, "pitch.srt"));
 const ffmpeg = process.env.FFMPEG_PATH || "/opt/homebrew/bin/ffmpeg";
 for (let i = 0; i < 6; i++) execFileSync(ffmpeg, ["-v", "error", "-ss", (starts[i + 1] - 0.2).toFixed(2), "-i", out, "-frames:v", "1", path.join(dir, "frames", `pitch-scene${i + 1}.png`), "-y"]);
 writeJson(path.join(dir, "pitch.marks.json"), {
-  name: "pitch", script: "video/PITCH.md", version: "5.2", holds: scenes.map((s) => s.hold), titles: scenes.map((s) => s.title),
+  name: "pitch", script: "video/PITCH.md", version: "5.4", holds: scenes.map((s) => s.hold), titles: scenes.map((s) => s.title),
   words: scenes.map((s) => s.words), totalWords: WORDS,
   liveCalls: { moderatoPreT13Malformed: "true", moderatoPreT13At: stubAt.toISOString(), swornReal: "true", swornMutated: "InvalidProof()", swornAt: callAt.toISOString(), preT13Selector: PRE_SEL },
   moderatoZones: { count: nZones, admin, factoryOwner: fOwner, safeOwners, safeThreshold: Number(safeT) },
   zoneAttest: Z.attest.tx,
+  ownZone: { portal: PORTAL, verifier: OZV, settled: OZ.batches.map((b) => b.submitTx), anchorAges: ages, payout: OZ.payout.tx, verifyReal: "true", verifyMutated: "InvalidProof()", at: ozAt.toISOString() },
   recorderMarks: marks.map((m) => +m.toFixed(3)), recordedAt: new Date().toISOString(),
 });
 log(`\n✓ ${rel(out)}  (${got.toFixed(2)} s, holds ${scenes.map((s) => s.hold).join(" / ")}, ${WORDS} words)`);

@@ -1,4 +1,4 @@
-# Pitch video: Sworn (≤ 2 min, founder's voice), v5.2 (picture v5.3: motion), 2026-10-05
+# Pitch video: Sworn (≤ 2 min, founder's voice), v5.4 (own-Zone live run), 2026-10-06
 
 **One sentence.** Before a Zone business releases a withdrawal batch, Sworn creates independently verifiable,
 audit-ready evidence for that exact batch — without exposing customer transaction contents.
@@ -10,8 +10,9 @@ product can exist, not the pitch's subject.
 - **Narration:** six scenes, under 118 seconds.
 - **Product boundary:** the Operator Console starts the local fixture prover. It is not a hosted service,
   takes no arbitrary inputs, uses no keys, and sends no transaction.
-- **Honesty rule:** the demonstrated batch is Tempo's Zone integration-test fixture on development chain 1337.
-  Sworn is testnet-only, unaudited, has no customers, and no ZonePortal calls it today.
+- **Honesty rule:** the live settlement is our own Zone on Moderato (2026-10-06): one operator, not a
+  Tempo-created Zone, stopped after the payout. The workflow in scene 2 uses Tempo's Zone integration-test fixture
+  on development chain 1337. Sworn is testnet-only, unaudited and has no customers; Tempo's own Zones are unchanged.
 
 ---
 
@@ -38,15 +39,16 @@ field changed”. Caption: “Fixture workflow: Tempo code in SP1 → proof → 
 > verification code in a zero-knowledge VM, then creates proof evidence that a third party can verify on
 > chain.
 
-## Scene 3: the evidence is real · ≈ 16 s
+## Scene 3: the evidence is real · ≈ 15.5 s
 
-**[Headline: “The evidence is real.” Pipeline: Tempo Zone code → ZK VM → Groth16 proof → verified on Moderato. The
-proving log's SP1 cycle count and Groth16 time count up to their recorded values; batch: one withdrawal, two user
-transactions. Result: “✓ verify(…) → true” draws in; “one field changed → ✗ reverts InvalidProof()” flips red with a
-small shake (both from the recorder's own read-only calls).]**
+**[Headline: “Proof-gated settlement on Moderato.” Pipeline: Tempo Zone code → ZK VM → Groth16 proof → our portal
+settles on Moderato. Three facts, read now from Moderato: “3 batches proven and settled” (counts up), “0.5 pathUSD
+withdrawal paid after the proof”, the slowest anchor age of 8,190 blocks. Chip: “our own Zone · portal calls Sworn”.
+Result, on the withdrawal batch: “✓ verify(…) → true” draws in; “one field changed → ✗ reverts InvalidProof()” flips red
+with a small shake (both from the recorder's own read-only calls to our Zone's verifier).]**
 
-> We have done this on Moderato: a test batch with one withdrawal and two user transactions verified by a
-> contract. Change one input, and verification fails. This is a working proof pipeline, not a mockup.
+> On Moderato, our own Zone's portal pays a withdrawal only after Sworn's proof passes. Three batches, proven
+> and checked on chain. Change one input, and it is rejected. A working pipeline, not a mockup.
 
 ## Scene 4: the go-to-market test · ≈ 25 s
 
@@ -69,13 +71,13 @@ bound to inputs Tempo's portal understands”; “Operational fit: rebuilt for T
 > and Revm, teach that stack, won a Uniswap Foundation prize at ETHGlobal Tokyo, and spent fifteen years
 > building banking systems.
 
-## Scene 6: the honest ask · ≈ 14 s
+## Scene 6: the honest ask · ≈ 15.5 s
 
-**[Headline: “The honest ask.” Chips: “testnet”; “unaudited”; “Tempo integration-test batch”; “no
+**[Headline: “The honest ask.” Chips: “testnet”; “unaudited”; “our own Zone, one operator”; “no
 customer claimed.” Then: “Next: a design partner supplies a batch and decides whether the proof is worth paying
 for.” The Sworn seal stamps onto the closing block: “Sworn: audit-ready evidence for private execution.” and the URLs.]**
 
-> Today: testnet, unaudited, Tempo integration-test batch. No customer claimed. Next, a design partner supplies
+> Today: testnet, unaudited, our own Zone with one operator. No customer claimed. Next, a design partner supplies
 > a batch and decides if independent proof is worth paying for. Sworn: audit-ready evidence for private execution.
 
 ---
@@ -87,14 +89,15 @@ for.” The Sworn seal stamps onto the closing block: “Sworn: audit-ready evid
 | 1.1 | The operator has full visibility while account holders see only their account; an outsider cannot build the batch witness. | `tempoxyz/zones` README at `ac49071f`, plus `docs/research/moderato-zone-feasibility-20261004.md` §2; reread by the recorder. The counterparty and audit scenario is the buyer hypothesis. |
 | 2.1 | The Console starts the documented local fixture prover; it uses no keys and sends no transaction. | `operator/server.mjs`, `scripts/start-zone-operator.sh`, and `docs/operator-console.md`. |
 | 2.2 | Sworn runs `zone_spf::prove_zone_batch` in SP1 and exposes hashes/metadata rather than transaction contents. | Spec 003 §3 and `spikes/zone-spf`; only an operator-supplied witness can be proved. |
-| 3.1 | Moderato contract verification covered a Tempo integration-test batch with one withdrawal and two user transactions. | Attest `0xa63009fd…f770`, `ZoneBatchVerified`, fixture and `deployments/moderato.json`, reread by the recorder. |
-| 3.2 | Real proof verifies; a changed next Zone height reverts `InvalidProof()`. | Recorder's own read-only `eth_call`s. |
+| 3.1 | On Moderato, our own Zone's portal settled three proven batches through `SwornZoneVerifier` and paid a withdrawal after the proof. | `deployments/moderato.json` → `OwnZone`, reread by the recorder: `portal.verifier()`, the three `submitBatch` receipts (status 1, to the portal, `BatchSubmitted`), the payout's `WithdrawalProcessed` (user, pathUSD, 500000). |
+| 3.2 | Real proof verifies; a changed next Zone height reverts `InvalidProof()`. | Recorder's own read-only `eth_call`s to our Zone's verifier, with the withdrawal batch's verifier call taken from its `submitBatch` trace. |
 | 4.1 | Buyer, operations contract, payment model and willingness to pay are commercial hypotheses. | No customer, payer agreement, price or revenue is claimed. Spec 004 §5 supports the engineering fact that execution upgrades require a new guest and verification key. |
 | 5.1 | Sworn runs Tempo code and binds to Tempo IVerifier-shaped inputs; Tempo uses Reth and Revm. | Specs 003/004 and Tempo `Cargo.toml`. |
 | 5.2 | Founder works on and teaches Reth and has 15 years building banking systems in Japan. | `README.md` “Who”; fabrknt.com/dojo (21 courses, fetched by the recorder). |
 | 5.3 | The founder's previous project (Reckn) won a Uniswap Foundation prize at ETHGlobal Tokyo 2026 (3rd place, Best Uniswap Stack Contribution). | ethglobal.com/showcase/reckn-47t6m, fetched by the recorder; `README.md` “Who”. |
 | 5.4 | The upgrade claim is a design intent (“built to track”), not a track record: the pinned guest predates Moderato's T12. | `README.md` “What is not done”. |
-| 6.1 | Testnet-only, unaudited, integration-test fixture, no customers. | `README.md` status and verifier limitations, checked by the recorder. |
+| 6.1 | Testnet-only, unaudited, our own Zone with one operator, no customers. | `README.md` status and verifier limitations, checked by the recorder. |
 
-**Not claimed:** that Sworn protects withdrawals today; that any ZonePortal calls Sworn; that a customer,
-partner, payer, price, production deployment or audit exists; or that Tempo will adopt this design.
+**Not claimed:** that Sworn protects withdrawals on Tempo's Zones; that our Zone is Tempo-created or runs
+continuously; that a customer, partner, payer, price, production deployment or audit exists; or that Tempo will
+adopt this design.

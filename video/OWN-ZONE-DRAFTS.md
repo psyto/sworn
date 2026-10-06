@@ -1,4 +1,8 @@
-# Narration drafts after the own-Zone live run: pitch v5.4, demo v5.5 (NOT APPLIED, for the founder)
+# Narration drafts after the own-Zone live run: pitch v5.4, demo v5.5
+
+**Applied 2026-10-06** as approved: `PITCH.md` v5.4 and `DEMO.md` v5.5, the recorders and slides updated, and both
+silent videos re-recorded (`pitch.mp4` 116.5 s, `demo.mp4` 173.4 s). The demo's word cap was raised from 330 to 350
+for the new scene. What follows is the draft as it was approved.
 
 Status: draft. `PITCH.md` and `DEMO.md` still match the recorded `pitch.mp4` and `demo.mp4`. Nothing below is
 recorded. The founder approves the wording, then it is applied to `PITCH.md` / `DEMO.md`, the recorders are

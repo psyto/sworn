@@ -1,6 +1,6 @@
 <!doctype html>
-<!-- Sworn pitch v5.2 (picture v5.3: one motion language with the page and the demo — flow.css). Dynamic chain
-     facts (digest, cycles, Groth16 time, live call results) are supplied by record-pitch.mjs at recording time. -->
+<!-- Sworn pitch v5.4 (own-Zone live run; picture motion as v5.3 — flow.css). Dynamic chain facts (digest, settled
+     batches, payout, anchor age, live call results) are supplied by record-pitch.mjs at recording time. -->
 <meta charset="utf-8" />
 <title>Sworn pitch</title>
 <link rel="stylesheet" href="slides.css" />
@@ -32,7 +32,7 @@
 .qtext{font-size:27px;line-height:1.15;letter-spacing:-.03em;color:var(--accent);opacity:0;transform:translateY(6px);transition:opacity .6s,transform .6s}.qtext.in{opacity:1;transform:none}
 .p2flow{font-size:19px}
 .p2cap{font:13px var(--mono);color:var(--muted)}
-.p3src{margin-top:6px}
+.p3src{margin-top:6px}.p3top{display:flex;align-items:center;gap:16px}.tag.own{border-color:var(--accent);color:var(--accent);background:var(--surface)}
 #p3 .fact b{font-size:44px;font-weight:300;letter-spacing:-.035em;line-height:1.1}#p3 .fact b.sm{font-size:29px;font-weight:400}#p3 .fact{padding:16px 22px}#p3 .result .r{font-size:25px;padding:16px 22px}
 .count{opacity:0;transition:opacity .3s}.count.in{opacity:1}
 .draw{display:inline-block;clip-path:inset(0 100% 0 0);transition:clip-path 1s cubic-bezier(.4,0,.2,1)}.draw.in{clip-path:inset(0 0 0 0)}
@@ -50,7 +50,7 @@
 
 <div class="header"><span class="brand">Sworn</span><span class="lbl">Built on Tempo</span></div>
 <div class="badge">Moderato testnet</div>
-<div class="foot">Testnet · unaudited · Tempo integration-test fixture · no customers claimed</div>
+<div class="foot">Testnet · unaudited · our own Zone, one operator · no customers claimed</div>
 
 <div class="scene" id="p1">
   <div class="brandrow fade"><img class="mark" src="../_submission/brand/mark.svg" alt="" /><span class="kicker">The operational moment</span></div>
@@ -73,10 +73,10 @@
 </div>
 
 <div class="scene" id="p3">
-  <div class="kicker fade">The evidence is real</div><h1 class="sm fade">Working on Tempo testnet.</h1>
-  <div class="pipe fade" data-at="1.2"><span>Tempo Zone code</span><span>zero-knowledge VM</span><span>Groth16 proof</span><span>verified on Moderato</span></div>
-  <div class="fade" data-at="2.4"><div class="proof-facts"><div class="fact"><small>SP1 cycles</small><b class="count num" data-at="2.7" data-k="cycles"></b></div><div class="fact"><small>Groth16 proof</small><b class="count num" data-at="3.1" data-k="groth16"></b></div><div class="fact"><small>Batch</small><b class="sm">1 withdrawal<br />2 user transactions</b></div></div><div class="src p3src" data-k="proveSrc"></div></div>
-  <div class="fade" data-at="5.6"><div class="result"><div class="r"><small>Real batch</small><b class="ok draw" data-at="6.2" data-k="callReal"></b></div><div class="r badbox" data-at="8.6"><small data-k="callBadWhat"></small><b class="bad flip" data-at="8.6" data-k="callBad"></b></div></div><div class="src p3src" data-k="callSrc"></div></div>
+  <div class="kicker fade">The evidence is real</div><h1 class="sm fade">Proof-gated settlement on Moderato.</h1>
+  <div class="p3top fade" data-at="1.2"><div class="pipe"><span>Tempo Zone code</span><span>zero-knowledge VM</span><span>Groth16 proof</span><span>our portal settles on Moderato</span></div><span class="tag own">our own Zone · portal calls Sworn</span></div>
+  <div class="fade" data-at="2.4"><div class="proof-facts"><div class="fact"><small>Batches proven and settled</small><b class="count num" data-at="2.7" data-k="settled"></b></div><div class="fact"><small>Withdrawal paid after the proof</small><b class="num" data-k="paid"></b></div><div class="fact"><small>Slowest anchor at settlement</small><b class="sm num" data-k="anchorAge"></b></div></div><div class="src p3src" data-k="settleSrc"></div></div>
+  <div class="fade" data-at="5.6"><div class="result"><div class="r"><small data-k="callRealWhat"></small><b class="ok draw" data-at="6.2" data-k="callReal"></b></div><div class="r badbox" data-at="8.6"><small data-k="callBadWhat"></small><b class="bad flip" data-at="8.6" data-k="callBad"></b></div></div><div class="src p3src" data-k="callSrc"></div></div>
 </div>
 
 <div class="scene" id="p4">
@@ -94,7 +94,7 @@
 
 <div class="scene" id="p6">
   <div class="kicker fade">The honest ask</div><h1 class="sm fade">What is true today.</h1>
-  <div class="truth fade" data-at="1.5"><span>Testnet</span><span>unaudited</span><span>Tempo integration-test batch</span><span>no customer claimed</span></div>
+  <div class="truth fade" data-at="1.5"><span>Testnet</span><span>unaudited</span><span>our own Zone, one operator</span><span>no customer claimed</span></div>
   <div class="next fade" data-at="5.2">Next: a design partner supplies a batch<br />and decides whether the proof is worth paying for.</div>
   <div class="close blk fade" data-at="9.6"><img class="mark stamp" data-at="10.2" src="../_submission/brand/mark.svg" alt="" /><div><div class="closing fade" data-at="10.9">Audit-ready evidence for private execution.</div><div class="fine fade" data-at="11.5"><span data-k="repo"></span> · <b>psyto.github.io/sworn</b></div></div></div>
 </div>

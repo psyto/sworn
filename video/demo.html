@@ -1,9 +1,10 @@
 <!doctype html>
 <!--
-  Sworn demo v5.4 (video/DEMO.md) — the authored slides record-demo.mjs drives: scene 1 (d0, the operator starts
+  Sworn demo v5.5 (video/DEMO.md) — the authored slides record-demo.mjs drives: scene 1 (d0, the operator starts
   a proof job; its progress bar advances), scene 2 (d1, a withdrawal needs a trusted check), scene 3 (dflow, the
-  page's "Only hashes cross this line" diagram, full frame — flow.css), scene 5's explorer insert (e1), scene 6
-  (dz, said plainly) and scene 7 (d6, next and where to look). Scenes 4–5 are public-page footage. NO FIGURE IS
+  page's "Only hashes cross this line" diagram, full frame — flow.css), scene 5's explorer insert (e1), scene 6's
+  explorer insert of our own Zone's payout (e2), scene 7 (dz, said plainly) and scene 8 (d6, next and where to
+  look). Scenes 4–6 are otherwise public-page footage. NO FIGURE IS
   WRITTEN HERE: every hash, line number, URL, quote and screenshot arrives through window.__fill() from its source
   at record time, and __fill throws if a slot is left empty. Text here is labels and the plain-language lines of
   DEMO.md's screen notes only. Look: Sworn's own palette (slides.css), Sworn's mark. Never Tempo's logo or
@@ -40,7 +41,8 @@ html,body{width:1024px;height:576px}body{font-size:16px}
 #d6 .closing.sm{font-size:24px}
 #d6 .links.sm{font-size:12px;margin-top:2px}
 .console{overflow:hidden}
-#e1 .big2{font-size:34px}
+#e1 .big2,#e2 .big2{font-size:34px}
+#dz .plain .card{font-size:23px;padding:13px 22px}
 .console{display:grid;grid-template-columns:190px minmax(0,1fr);width:992px;max-width:none;height:455px;border:1px solid var(--border);background:var(--surface);box-shadow:none}
 .console .side{border-right:1px solid var(--border);padding:20px 14px;display:flex;flex-direction:column}
 .console .zone-name{font-size:18px;font-weight:500;letter-spacing:-.02em;padding:0 8px 14px;border-bottom:1px solid var(--border)}
@@ -114,7 +116,7 @@ html,body{width:1024px;height:576px}body{font-size:16px}
 
 <div class="header"><span class="brand">Sworn</span><span class="spacer"></span><span class="toplink">GitHub</span><span class="theme">AUTO</span></div>
 <div class="badge">Moderato testnet</div>
-<div class="foot">Moderato testnet · unaudited · Zone batches from Tempo's integration tests · no customers, revenue or payer agreement</div>
+<div class="foot">Moderato testnet · unaudited · fixture from Tempo's integration tests · our own Zone, one operator · no customers, revenue or payer agreement</div>
 
 <!-- scene 1 — the operator starts a real, local proof job -->
 <div class="scene" id="d0">
@@ -139,7 +141,7 @@ html,body{width:1024px;height:576px}body{font-size:16px}
   <div class="df-head"><h2 class="fade">What stays private, and what becomes public.</h2></div>
   <div data-flow="cards:.5,step:.3,wit:2.4,ring:3.9,chip:5.2,cross:5.6,badge:7.6,ok:9.0,bad:10.0,lock:11.0"></div>
   <div class="df-learns"><p class="fade" data-at="9.4"><b>Learns:</b> Tempo's own Zone code accepts this exact batch.</p><p class="fade" data-at="11"><b>Does not learn:</b> balances, senders, recipients or amounts inside the Zone.</p></div>
-  <div class="df-foot fade" data-at=".6"><span>Checked off the settlement path today: no ZonePortal calls this verifier, and it does not protect withdrawals.</span><span class="src">diagram · digest <b data-k="digest"></b> = the proven fixture's, emitted in <b data-k="attestShort"></b></span></div>
+  <div class="df-foot fade" data-at=".6"><span>On our own Zone, the portal calls this verifier before it queues a withdrawal. Tempo's own Zones are unchanged; spec 004 is a proposal.</span><span class="src">diagram · digest <b data-k="digest"></b> = the proven fixture's, emitted in <b data-k="attestShort"></b></span></div>
 </div>
 
 <div class="scene" id="e1">
@@ -147,13 +149,19 @@ html,body{width:1024px;height:576px}body{font-size:16px}
   <div class="console fade" data-at=".8"><aside class="side"><div class="zone-name"><small>Example operator · illustration</small>Example Zone</div><div class="nav"><div>Batches</div><div class="selected">Proof evidence</div></div><div class="side-bottom">Test fixture<br />zone 1 · dev chain 1337</div></aside><section class="main"><div class="crumb">Proof evidence / Zone blocks 5–6</div><div class="card"><div class="t"><b>On-chain evidence</b></div><div class="big2"><b class="ok">✓ ZoneBatchVerified</b><br />The contract checked the proof on Moderato.</div></div><div class="term" style="margin-top:14px"><div class="bar"><b>Source transaction</b> · captured while recording</div><img data-src="exCard" style="display:block;width:100%;max-height:170px;object-fit:cover;object-position:top" alt="" /></div></section></div>
 </div>
 
-<!-- scene 4 — said plainly -->
-<div class="scene" id="dz">
-  <div class="kicker fade">Zone operations console · Scope & limits</div>
-  <div class="console fade" data-at=".8"><aside class="side"><div class="zone-name"><small>Example operator · illustration</small>Example Zone</div><div class="nav"><div>Batches</div><div class="selected">Proof evidence</div></div><div class="side-bottom">Test fixture<br />zone 1 · dev chain 1337</div></aside><section class="main"><div class="crumb">Proof evidence / Scope & limits</div><div class="topline"><h2>What this evidence does not do</h2></div><div class="plain" style="margin-top:20px"><div class="card warn"><b>Test batch, not a Moderato Zone.</b><br />Tempo integration test · dev chain 1337.</div><div class="card warn"><b>No ZonePortal calls this contract.</b><br />It does not protect withdrawals today.</div><div class="card warn"><b>Settlement integration is proposed, not built.</b></div></div></section></div>
+<!-- scene 6 — our own Zone's payout on the explorer (inserted into the page footage) -->
+<div class="scene" id="e2">
+  <div class="kicker fade">Zone operations console · Settlement</div>
+  <div class="console fade" data-at=".8"><aside class="side"><div class="zone-name"><small>Our own Zone · Moderato</small>Zone <span data-k="ozId"></span></div><div class="nav"><div>Batches</div><div class="selected">Settlement</div></div><div class="side-bottom">Our own Zone<br />one operator · not Tempo-created</div></aside><section class="main"><div class="crumb">Settlement / payout</div><div class="card"><div class="t"><b>On-chain payout</b></div><div class="big2"><b class="ok">✓ WithdrawalProcessed</b><br /><span data-k="payLine"></span></div></div><div class="term" style="margin-top:14px"><div class="bar"><b>Payout transaction</b> · captured while recording</div><img data-src="exPayout" style="display:block;width:100%;max-height:170px;object-fit:cover;object-position:top" alt="" /></div></section></div>
 </div>
 
-<!-- scene 6 — GTM test and next -->
+<!-- scene 7 — said plainly -->
+<div class="scene" id="dz">
+  <div class="kicker fade">Zone operations console · Scope & limits</div>
+  <div class="console fade" data-at=".8"><aside class="side"><div class="zone-name"><small>Example operator · illustration</small>Example Zone</div><div class="nav"><div>Batches</div><div class="selected">Proof evidence</div></div><div class="side-bottom">Test fixture<br />zone 1 · dev chain 1337</div></aside><section class="main"><div class="crumb">Proof evidence / Scope & limits</div><div class="topline"><h2>Said plainly</h2></div><div class="plain" style="margin-top:20px"><div class="card warn"><b>Fixture: dev chain 1337.</b><br />The batch in scenes 1–5 is from Tempo's integration tests.</div><div class="card warn"><b>Our own Zone, one operator.</b><br />The Zone that paid is ours, not Tempo-created.</div><div class="card warn"><b>Tempo's Zones unchanged.</b><br />Spec 004 is a proposal.</div></div></section></div>
+</div>
+
+<!-- scene 8 — GTM test and next -->
 <div class="scene" id="d6">
   <div class="kicker fade">The GTM test</div>
   <div class="console fade" data-at=".8"><aside class="side"><div class="zone-name"><small>Example operator · illustration</small>Example Zone</div><div class="nav"><div>Batches</div><div>Proof evidence</div></div><div class="side-bottom">Test fixture<br />zone 1 · dev chain 1337</div></aside><section class="main"><div class="crumb">Proof Operations / validation</div><div class="route"><div class="card"><div class="when">1. First wedge</div><div><div class="h">A Zone business supplies its witness</div><div class="b">The proof starts only with an operator-supplied batch.</div></div><div class="tag">Hypothesis</div></div><div class="card" data-at="10.5"><div class="when">2. First proof</div><div><div class="h">Reviewer re-verifies the proof</div><div class="b">Evidence and reproducible verification instructions.</div></div><div class="tag">GTM test</div></div><div class="card" data-at="16"><div class="when">3. Repeat test</div><div><div class="h">Next batch or Tempo upgrade</div><div class="b">Only a repeat need becomes Proof Operations.</div></div><div class="tag">Not traction</div></div></div><div class="limits" data-at="20"><span>Testnet</span><span>unaudited</span><span>no customers</span></div><div class="next2" data-at="24">Next: one supplied batch — then test for a repeat need or budget.</div><div class="close" data-at="28"><img class="mark sm" src="../_submission/brand/mark.svg" alt="" /><div><div class="closing sm">Sworn: audit-ready evidence for private execution.</div><div class="links sm"><span data-k="repo"></span> · <b data-k="pageUrl"></b></div></div></div></section></div>

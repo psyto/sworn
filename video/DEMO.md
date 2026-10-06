@@ -1,17 +1,18 @@
-# Demo video: Sworn (≤ 3 min, founder's voice), v5.4, 2026-10-05
+# Demo video: Sworn (≤ 3 min, founder's voice), v5.5 (own-Zone live run), 2026-10-06
 
 **One product, one user.** This demo follows a Zone operator who needs independently checkable evidence for a
 batch. It does not show the separate bonded-answer payment prototype or imitate a retail wallet. The operator
 workflow is an authored explanatory view; the proof, read-only checks, contract event and explorer record that
 follow are real.
 
-**Status: v5.4 scripted as silent picture + script + subtitles.** `video/demo.mp4` is 1920×1080. The founder
+**Status: v5.5 scripted as silent picture + script + subtitles.** `video/demo.mp4` is 1920×1080. The founder
 records the narration in their own voice using `video/scenes/demo/NARRATION.md`; `demo.srt` follows the same
 timing. `record-demo.mjs` rereads the cited public chain state before it records, using only read-only RPC calls.
 
-**Important scope.** The demonstrated batch is Tempo's Zone integration-test fixture on development chain 1337,
-not a Moderato Zone batch. No ZonePortal calls Sworn today, so this is evidence, not withdrawal protection.
-Holding withdrawals until ZK finality is a proposal for Tempo, not a deployed Sworn feature.
+**Important scope.** The fixture in scenes 1–5 is Tempo's Zone integration-test batch on development chain 1337.
+The settlement in scene 6 is our own Zone on Moderato (2026-10-06): one operator, not a Tempo-created Zone, stopped
+after the payout. Tempo's own Zones are unchanged; holding their withdrawals until ZK finality is a proposal for
+Tempo (spec 004), not a deployed Sworn feature.
 
 | scene | target | picture |
 |---|---:|---|
@@ -20,8 +21,9 @@ Holding withdrawals until ZK finality is a proposal for Tempo, not a deployed Sw
 | 3 What stays private | 14 s | authored data-flow diagram (`dflow`), the page's motif |
 | 4 Operator Console and prototype verifier, live | 30 s | local Operator Console + public evidence page; read-only live call |
 | 5 Real proof, on chain | 36 s | public page + explorer event + a live mutation check |
-| 6 Said plainly | 13 s | authored scope disclosure (`dz`) |
-| 7 GTM test and next step | 31 s | authored validation route (`d6`) |
+| 6 Our own Zone on Moderato | 20 s | public page `#own-zone`, read live + explorer of the payout |
+| 7 Said plainly | 16.5 s | authored scope disclosure (`dz`) |
+| 8 GTM test and next step | 31 s | authored validation route (`d6`) |
 
 ## Scene 1 — start a proof job · ≈ 15 s
 
@@ -37,7 +39,7 @@ console is labelled on screen "Illustration of the operator workflow"; the opera
 
 **[Zone operator submits a batch → batch includes withdrawal → Zone verifier → ZonePortal processes it; each step
 lights in turn. Headline: the operator and auditor must trust the check. The graphic is a simplified explanation of the
-ZonePortal flow, not a claim that the demonstrated Sworn verifier is connected to it.]**
+ZonePortal flow: the same flow our own Zone's portal ran on Moderato (scene 6).]**
 
 > Tempo's portal pays a withdrawal only after the Zone verifier accepts the batch, so everyone involved must be able to trust that check.
 
@@ -47,7 +49,8 @@ ZonePortal flow, not a claim that the demonstrated Sworn verifier is connected t
 with the narration: the witness moves from the Zone operator's blurred, never-published ledger into the Sworn prover
 and stops there; the prover emits the fixture's real digest chip, which alone crosses the dashed line to
 SwornZoneVerifier on Tempo (“✓ ZoneBatchVerified”); the reviewer sees “✓ true”, then “✗ InvalidProof() — one field
-changed”. Below: “Learns / Does not learn” and the off-the-settlement-path disclosure. The recorder checks that the
+changed”. Below: “Learns / Does not learn” and the settlement note (our own Zone's portal calls this verifier; Tempo's
+Zones are unchanged). The recorder checks that the
 live page's data-flow section still says these sentences.]**
 
 > The witness stays with the operator and the prover. Only hashes and counters reach Tempo: enough to check the
@@ -77,15 +80,24 @@ read-only click, the real batch returns true and changing one field reverts `Inv
 > malformed batch is accepted by Moderato's current prototype verifier, while Sworn rejects a mutation of its
 > proven batch.
 
-## Scene 6 — said plainly · ≈ 13 s
+## Scene 6 — our own Zone on Moderato · ≈ 20 s
 
-**[Three plain disclosure cards: test batch on dev chain 1337; no ZonePortal calls this contract; settlement
-integration is proposed, not built.]**
+**[The page's section “A portal that pays a withdrawal only after Sworn's proof passes”, read live: the portal and
+its verifier, three “✓ settled” batches, the payout. Explorer insert: the payout transaction, sent to our portal.]**
 
-> To be clear: this batch comes from a dev chain, not a Moderato Zone. No portal uses it, and it does not protect
-> withdrawals yet.
+> Now our own Zone on Moderato. Its portal called the verifier in each of three batches, and paid this
+> withdrawal only after the last proof passed. Here is the payout on the explorer: zero point five pathUSD,
+> paid by the portal after the proof.
 
-## Scene 7 — GTM test and next step · ≈ 31 s
+## Scene 7 — said plainly · ≈ 16.5 s
+
+**[Three plain disclosure cards: fixture: dev chain 1337; our own Zone, one operator; Tempo's Zones unchanged,
+spec 004 is a proposal.]**
+
+> To be clear: the batch above comes from a dev chain. The Zone that paid is our own Zone on Moderato, run by
+> us, not a Tempo-created Zone. Tempo's own Zones still use their current verifier.
+
+## Scene 8 — GTM test and next step · ≈ 31 s
 
 **[The Console shows the test sequence: a Zone business supplies its witness; its reviewer re-verifies one
 batch; a repeat need for the next batch or upgrade is the conversion test. “GTM test, not traction” is
@@ -93,8 +105,8 @@ visible alongside the limits.]**
 
 > Sworn has no customers, revenue or payer agreement today. The first test is not broad adoption. A Zone
 > business supplies a batch, its reviewer re-verifies it, and we ask whether it needs the next batch or
-> upgrade proved. Only then is Proof Operations a recurring service. Settlement integration remains a
-> separate Tempo proposal.
+> upgrade proved. Only then is Proof Operations a recurring service. Integration with Tempo's own Zones
+> remains a separate proposal.
 
 ## Claims and sources
 
@@ -106,9 +118,10 @@ visible alongside the limits.]**
 | Sworn verified the fixture on Moderato | receipt `0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770`, its `ZoneBatchVerified` event, on-chain code hash and the recorder's live calls |
 | real batch → true; one changed field → `InvalidProof()` | two read-only calls made by the recorder and shown by the public page |
 | local proof job starts the real pipeline, then read-only checks | `operator/server.mjs`: fixed fixture only, runs `scripts/zone-prove.sh` then `scripts/zone-attest.sh` without `--send` |
-| no portal connection / no withdrawal protection | `SwornZoneVerifierWithdrawal.deviations`, README scope section and spec 004 |
+| our own Zone's portal settled 3 proven batches and paid the withdrawal after the proof | `deployments/moderato.json` → `OwnZone`, the page's `#own-zone` section (portal, receipts and `WithdrawalProcessed` read live), checked against the recorder's own reads; explorer of the payout |
+| the fixture instances have no portal; Tempo's own Zones are unchanged | `SwornZoneVerifierWithdrawal.deviations`, README "Is not, yet" and spec 004 |
 | GTM test and current limits | README: testnet, unaudited, no customers/revenue/payer agreement; spec 004 calls settlement integration a proposal for Tempo |
 
-**Never claim:** that this protects withdrawals today; that it proves a live Moderato Zone batch; that the
-prototype and Sworn receive the same ABI input; that Tempo is broken; or that Sworn has customers, revenue,
-production deployment, or an implemented settlement integration.
+**Never claim:** that this protects withdrawals on Tempo's Zones; that our Zone is Tempo-created or a running
+service; that the prototype and Sworn receive the same ABI input; that Tempo is broken; or that Sworn has
+customers, revenue or a production deployment.

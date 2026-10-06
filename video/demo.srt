@@ -79,33 +79,61 @@ An equivalent malformed batch is accepted by Moderato's current prototype verifi
 while Sworn rejects a mutation of its proven batch.
 
 21
-00:01:46,000 --> 00:01:53,230
-To be clear: this batch comes from a dev chain, not a Moderato Zone.
+00:01:46,000 --> 00:01:48,677
+Now our own Zone on Moderato.
 
 22
-00:01:53,280 --> 00:01:58,950
-No portal uses it, and it does not protect withdrawals yet.
+00:01:48,727 --> 00:01:53,223
+Its portal called the verifier in each of three batches,
 
 23
-00:01:59,000 --> 00:02:04,214
-Sworn has no customers, revenue or payer agreement today.
+00:01:53,273 --> 00:01:57,768
+and paid this withdrawal only after the last proof passed.
 
 24
-00:02:04,264 --> 00:02:08,308
-The first test is not broad adoption.
+00:01:57,818 --> 00:02:00,950
+Here is the payout on the explorer:
 
 25
-00:02:08,358 --> 00:02:14,158
-A Zone business supplies a batch, its reviewer re-verifies it,
+00:02:01,000 --> 00:02:05,950
+zero point five pathUSD, paid by the portal after the proof.
 
 26
-00:02:14,208 --> 00:02:21,176
-and we ask whether it needs the next batch or upgrade proved.
+00:02:06,000 --> 00:02:10,992
+To be clear: the batch above comes from a dev chain.
 
 27
-00:02:21,226 --> 00:02:25,856
-Only then is Proof Operations a recurring service.
+00:02:11,042 --> 00:02:15,575
+The Zone that paid is our own Zone on Moderato,
 
 28
-00:02:25,906 --> 00:02:29,950
-Settlement integration remains a separate Tempo proposal.
+00:02:15,625 --> 00:02:18,783
+run by us, not a Tempo-created Zone.
+
+29
+00:02:18,833 --> 00:02:22,450
+Tempo's own Zones still use their current verifier.
+
+30
+00:02:22,500 --> 00:02:27,523
+Sworn has no customers, revenue or payer agreement today.
+
+31
+00:02:27,573 --> 00:02:31,468
+The first test is not broad adoption.
+
+32
+00:02:31,518 --> 00:02:37,105
+A Zone business supplies a batch, its reviewer re-verifies it,
+
+33
+00:02:37,155 --> 00:02:43,868
+and we ask whether it needs the next batch or upgrade proved.
+
+34
+00:02:43,918 --> 00:02:48,377
+Only then is Proof Operations a recurring service.
+
+35
+00:02:48,427 --> 00:02:53,450
+Integration with Tempo's own Zones remains a separate proposal.

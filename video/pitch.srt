@@ -27,69 +27,69 @@ Sworn runs Tempo's own Zone verification code in a zero-knowledge VM,
 then creates proof evidence that a third party can verify on chain.
 
 8
-00:00:37,000 --> 00:00:39,693
-We have done this on Moderato:
+00:00:37,000 --> 00:00:43,332
+On Moderato, our own Zone's portal pays a withdrawal only after Sworn's proof passes.
 
 9
-00:00:39,743 --> 00:00:46,093
-a test batch with one withdrawal and two user transactions verified by a contract.
+00:00:43,382 --> 00:00:46,524
+Three batches, proven and checked on chain.
 
 10
-00:00:46,143 --> 00:00:48,836
-Change one input, and verification fails.
+00:00:46,574 --> 00:00:49,715
+Change one input, and it is rejected.
 
 11
-00:00:48,886 --> 00:00:52,950
-This is a working proof pipeline, not a mockup.
+00:00:49,765 --> 00:00:52,450
+A working pipeline, not a mockup.
 
 12
-00:00:53,000 --> 00:00:58,470
+00:00:52,500 --> 00:00:57,970
 We start with one Zone business whose operator can supply its witness.
 
 13
-00:00:58,520 --> 00:01:04,450
+00:00:58,020 --> 00:01:03,950
 First, we prove one of its batches and give its reviewer reproducible verification.
 
 14
-00:01:04,500 --> 00:01:11,350
+00:01:04,000 --> 00:01:10,850
 If it asks for the next batch or upgrade, that becomes a Proof Operations contract.
 
 15
-00:01:11,400 --> 00:01:15,950
+00:01:10,900 --> 00:01:15,450
 That is our go-to-market test — not traction we claim today.
 
 16
-00:01:16,000 --> 00:01:19,138
+00:01:15,500 --> 00:01:18,638
 ZK proving for Zones is still unimplemented.
 
 17
-00:01:19,188 --> 00:01:25,968
+00:01:18,688 --> 00:01:25,468
 Sworn runs Tempo's code, binds to portal-shaped inputs, and is built to track execution upgrades.
 
 18
-00:01:26,018 --> 00:01:30,521
+00:01:25,518 --> 00:01:30,021
 The market is not proven — Moderato has one effective operator.
 
 19
-00:01:30,571 --> 00:01:34,620
+00:01:30,071 --> 00:01:34,120
 I work on Reth and Revm, teach that stack,
 
 20
-00:01:34,670 --> 00:01:41,450
+00:01:34,170 --> 00:01:40,950
 won a Uniswap Foundation prize at ETHGlobal Tokyo, and spent fifteen years building banking systems.
 
 21
-00:01:41,500 --> 00:01:44,256
-Today: testnet, unaudited, Tempo integration-test batch.
+00:01:41,000 --> 00:01:45,053
+Today: testnet, unaudited, our own Zone with one operator.
 
 22
-00:01:44,306 --> 00:01:45,660
+00:01:45,103 --> 00:01:46,421
 No customer claimed.
 
 23
-00:01:45,710 --> 00:01:53,144
+00:01:46,471 --> 00:01:53,715
 Next, a design partner supplies a batch and decides if independent proof is worth paying for.
 
 24
-00:01:53,194 --> 00:01:55,950
+00:01:53,765 --> 00:01:56,450
 Sworn: audit-ready evidence for private execution.

@@ -1,8 +1,8 @@
 # Drafts to apply only if the own-Zone live run on Moderato succeeds (2026-10-07)
 
 **Applied 2026-10-06** (the run succeeded a day early): README, the live page, the form draft, INTERVIEW.md and
-CRITERIA-MAP.md. The pitch and demo narration are drafted in `video/OWN-ZONE-DRAFTS.md`, pending the founder's
-approval and a re-recording.
+CRITERIA-MAP.md. The pitch (v5.4) and demo (v5.5) narration were applied and the silent videos
+re-recorded the same day (`video/OWN-ZONE-DRAFTS.md`); the founder's voice is still to be added.
 
 `⟨…⟩` marks a value to fill from the run's receipts (`spikes/own-zone/runs/moderato-20261007/`), never from memory.
 
