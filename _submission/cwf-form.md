@@ -18,7 +18,7 @@ Sworn
 ## Brief description · Public · ≤500
 
 ```
-Before a private Tempo Zone releases a withdrawal batch, Sworn creates independently verifiable, audit-ready evidence for that operator-supplied batch without exposing customer transaction contents. It runs Tempo's own Zone verifier in SP1; a contract on Moderato verified a proof for Tempo's integration-test batch with one withdrawal. Testnet only: no live Zone integration, customers or revenue.
+Before a private Tempo Zone releases a withdrawal batch, Sworn creates independently verifiable, audit-ready evidence for that operator-supplied batch without exposing customer transaction contents. It runs Tempo's own Zone verifier in SP1. On Moderato, our own Zone's portal pays a withdrawal only after Sworn's proof passes. Testnet only: not a Tempo-created Zone; no customers or revenue.
 ```
 
 ## Project website · Public
@@ -32,7 +32,7 @@ https://psyto.github.io/sworn/
 ```
 Sworn runs Tempo's own Zone batch verifier (zone_spf::prove_zone_batch) inside the SP1 zkVM. For a batch an operator supplies, it produces a proof bound to Tempo's IVerifier-shaped inputs. Anyone can verify it on chain; public values are hashes and batch metadata, not transaction contents. On Moderato, SwornZoneVerifier verified a Tempo integration-test batch with one withdrawal (tx 0xa63009fd…f770); changing one field is rejected.
 
-The first product hypothesis is Proof Operations for a Zone business that must give a reviewer evidence before settlement: per-batch proof generation plus maintenance through Tempo upgrades. This is not withdrawal protection or a live Zone integration: no ZonePortal calls Sworn and no customer has requested or paid for it. The first test is one operator-supplied batch, delivered with reproducible verification instructions to its reviewer.
+The first product hypothesis is Proof Operations for a Zone business that must give a reviewer evidence before settlement: per-batch proof generation plus maintenance through Tempo upgrades. This is not withdrawal protection for Tempo's Zones: only our own Zone's portal calls Sworn, and no customer has requested or paid for it. The first test is one operator-supplied batch, delivered with reproducible verification instructions to its reviewer.
 ```
 
 ## Why did you decide to build this, and why build it now? · ≤1000
@@ -163,6 +163,7 @@ The validation sequence is concrete: find a Zone business that can supply a witn
 
 ```
 No users, no revenue. Built and measured inside the window, all on Moderato testnet:
+- Our own Zone on Moderato: 3 batches proven and settled through a portal that calls Sworn's verifier; a withdrawal paid after the proof (tx 0xfc311841…e1f1). One operator, not a Tempo-created Zone.
 - Tempo Zones: Tempo's own batch verifier runs in SP1 on 5 integration-test batches, matching native output (19-26M cycles; tampering rejected). Proofs bound to IVerifier's inputs were verified on Moderato, including a fixture with a withdrawal (tx 0xa63009fd…f770; also 0xb14b7127…3b80).
 - 64 forge tests, including real proofs; contracts with no owner.
 - A public page that reads the on-chain evidence and re-runs the Zone proof check in your browser. Pitch and demo videos.

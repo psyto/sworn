@@ -7,9 +7,11 @@ evidence without disclosing the private ledger. For an operator-supplied batch, 
 verification code in SP1 and produces a proof anyone can verify on chain. The public output is hashes and
 batch metadata, not customer transaction contents.
 
-**What is built:** a contract on Moderato verified the proof of Tempo's integration-test batch with one
-withdrawal and two user transactions. **What is not built:** a live Zone integration, withdrawal protection,
-or a customer workflow. The demonstrated batch is from development chain 1337, not a Moderato Zone batch.
+**What is built:** on Moderato, our own Zone's portal settles a batch, and so pays a withdrawal, only after
+Sworn's proof passes: three batches proven and settled, then a withdrawal paid
+([payout tx](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), 2026-10-06).
+**What is not built:** an integration with Tempo-created Zones (it is our own Zone, with one operator), or a
+customer workflow. Testnet, unaudited.
 
 Sworn runs Tempo's own code inside an [SP1](https://github.com/succinctlabs/sp1) zero-knowledge VM and
 checks the resulting Groth16 proof in a contract on [Tempo](https://tempo.xyz). The CWF submission is the
@@ -26,6 +28,10 @@ but it is not the product pitched or demoed for CWF:
    after a first batch without one
    ([tx](https://explore.testnet.tempo.xyz/tx/0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80)).
    Both batches come from Tempo's integration tests, not from a Moderato Zone.
+   **On 2026-10-06 our own Zone on Moderato settled three proven batches through a portal that calls
+   `SwornZoneVerifier`, and then paid a withdrawal**
+   ([payout tx](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1)). It is our Zone and our
+   portal, not a Tempo-created Zone.
 2. **Bonded answers (separate engine experiment).** A server sells an answer about a TIP-20 transfer over
    [MPP](https://mpp.dev) and reserves bond behind it. A wrong answer is proven false by re-running
    **Tempo's own EVM (`tempo-revm`)** inside SP1 against Tempo's own block hash, and the bond pays the
@@ -63,14 +69,16 @@ flowchart TB
   subgraph T["Tempo, Moderato testnet"]
     V["SwornZoneVerifier (IVerifier signature)"]
     S["SP1VerifierGroth16 v6.1.0"]
-    ZP["Tempo's ZonePortal"]
+    ZP["Our ZonePortal (own Zone, live)"]
+    TZ["Tempo's own Zones"]
   end
   R["Auditor or counterparty"]
   ZN --> W --> C --> G --> P
   P -->|"attest: one tx, emits ZoneBatchVerified"| V
   V -->|"checks the proof"| S
   R -->|"verify by eth_call, or read the event"| V
-  ZP -.->|"not connected today; spec 004 proposal"| V
+  ZP -->|"submitBatch calls verify; withdrawals wait for the proof"| V
+  TZ -.->|"unchanged; spec 004 proposal"| V
 ```
 
 ### 2. Use cases
@@ -108,6 +116,7 @@ sequenceDiagram
   SZV-->>Rv: event ZoneBatchVerified(zone, height, block hashes, digest)
   Rv->>SZV: verify(same fields, proof) by eth_call
   SZV-->>Rv: true, or InvalidProof() if any field differs
+  Note over SZV: on our own Zone, the portal calls verify in submitBatch and pays the withdrawal only after it passes
 ```
 
 What a reviewer learns: that Tempo's own Zone code accepts this exact batch. What a reviewer does not learn:
@@ -167,13 +176,14 @@ Getting Tempo's code into a zkVM meant patching it (`patches/`, `spikes/zone-spf
 - Verified on chain by a contract with `IVerifier`'s exact signature. [Spec 003](docs/specs/003-zone-verifier.md).
 
 **Is not, yet** (spec 003 §5 D1–D4, §7):
-- **The batches are not from Moderato.** Both come from Tempo's zones integration tests on a dev chain
-  (1337). `hardfork_t13_recovery` has no withdrawals or user transactions. `deposit_and_withdrawal_blocks5-6`,
-  taken from the Zone sequencer's own batch-validation path, has **one withdrawal and two user
-  transactions** ([tx](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770)). That shows a withdrawal inside a proven batch, not that withdrawals are
-  secured.
-- **No Zone settles with it.** Each Zone's verifier is fixed by Tempo's factory when the Zone is created,
-  so only Tempo can adopt it.
+- **Our own Zone, not a Tempo-created one.** On Moderato our Zone (zone 4242) settles through our own
+  `ZonePortal` (upstream plus one change: the deployer, not the factory, may call `initialize` once), with
+  one operator whose sequencer key also decrypts deposits. Withdrawals wait for the proof, but they are not
+  censorship-resistant: the operator must prove and process them. Callback withdrawals bounce, because
+  Moderato's messenger checks the factory.
+- **Tempo's own Zones are unchanged.** Each Zone's verifier is fixed by Tempo's factory when the Zone is
+  created, so only Tempo can adopt it. The two instances below verified batches from Tempo's zones
+  integration tests on a dev chain (1337).
 - **Not usable on a current Moderato Zone as is.** It pins parent chain 1337 and one test genesis, and it
   implements T13's `IVerifier`; Moderato's portals are pre-T13. A real Zone needs its own deployment, its
   operator's witness and genesis, and version work
@@ -181,7 +191,7 @@ Getting Tempo's code into a zkVM meant patching it (`patches/`, `spikes/zone-spf
 - **No portal caller check.** That is safe only because the contract moves and stores nothing.
 - **The pinned genesis is a trusted choice.** Its hash pins exact bytes; it does not prove they are
   Tempo's authentic spec.
-- **It does not secure withdrawals, is not production-ready, and is not audited.**
+- **It does not secure withdrawals on Tempo's Zones, is not production-ready, and is not audited.**
 
 ## Deployed on Moderato (chain 42431)
 
@@ -192,6 +202,8 @@ Getting Tempo's code into a zkVM meant patching it (`patches/`, `spikes/zone-spf
 
 | **SwornZoneVerifier** | [`0x00F6ed344B9C7F5eBA8788A115f8d6B4c00564e5`](https://explore.testnet.tempo.xyz/address/0x00F6ed344B9C7F5eBA8788A115f8d6B4c00564e5) | `IVerifier`-shaped Zone batch verifier; immutables only, no storage writes; deployed 2026-10-04 (block 38078600) |
 | **SwornZoneVerifier (withdrawal batch)** | [`0xF2e1E74c14B10bE4dda591dbE50F91b88bDcBA11`](https://explore.testnet.tempo.xyz/address/0xF2e1E74c14B10bE4dda591dbE50F91b88bDcBA11) | same code and vkey, pinned to the genesis of the batch with a withdrawal |
+| **OwnZonePortal** (our own Zone) | [`0xE4818EC6ca046693DafCE608C7F2226604F3daE3`](https://explore.testnet.tempo.xyz/address/0xE4818EC6ca046693DafCE608C7F2226604F3daE3) | zone 4242; upstream `ZonePortal` plus a deployer-only `initialize`; calls the verifier below in every `submitBatch` (2026-10-06) |
+| **SwornZoneVerifier (own Zone)** | [`0x15D192a08F41150cae9178D14D55c04F27FF2733`](https://explore.testnet.tempo.xyz/address/0x15D192a08F41150cae9178D14D55c04F27FF2733) | parent chain 42431, zone 4242, our genesis and portal pinned; vkey `0x00ab5a9e…5c7b` |
 | SwornZoneVerifier, superseded | [`0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De`](https://explore.testnet.tempo.xyz/address/0x64bA9F6481aA06cCF505DA3Bd6d0dce6180A42De) | first deployment; its `verifierConfig` was `0x02`, which upstream zones (`344ff785`, 10-01) defines as NoProof, so it was redeployed with the self-describing tag `"sworn-sp1-groth16-v1"` |
 
 Sworn guest vkey `0x00727936…7fa9`, `GUEST_VERSION = keccak256("sworn-guest-v1")`. Zone guest vkey
@@ -248,6 +260,7 @@ no access key), and a transaction Tempo would reject before execution is itself 
 | proving | `hardfork_t13_recovery`: 25.5M cycles, local Groth16 **701 s**, peak 18.5 GB |
 | on Moderato | `verify` returns true for the real proof and reverts when one field changes; `attest` emitted `ZoneBatchVerified` for zone 1, height 10 ([`0xb14b…3b80`](https://explore.testnet.tempo.xyz/tx/0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80), block 38080441, 260,419 gas) |
 | a batch with a withdrawal | `deposit_and_withdrawal_blocks5-6` (1 withdrawal, 2 user transactions), 24.4M cycles, Groth16 891 s; verified on Moderato by a second instance ([`0xa630…f770`](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770), block 38097996) |
+| our own Zone, live on Moderato (2026-10-06) | 3 batches Groth16-proven and settled through `OwnZonePortal` → `SwornZoneVerifier` → SP1: 123.8M / 26.3M / 31.9M cycles, Groth16 1,881 / 664 / 813 s, anchor ages 2,895 / 3,928 / 5,133 of 8,190 blocks; withdrawal paid, user +500,000 ([`0xfc31…e1f1`](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1)); 58.5 min from anchor to payout |
 | contract | every digest field, the immutables (via clone deployments), the chain id, the proof and the vkey are each shown to matter, against the **real** SP1 Groth16 verifier |
 
 **Bonded answers** (2026-10-03; logs in `out/`):
@@ -282,15 +295,13 @@ Two more slashes were recorded live for the demo video, on the same day:
 
 ## What is not done
 
-- **Scheduled for 2026-10-07: our own Zone on Moderato.** We plan to run our own Zone sequencer and a Solidity
-  `ZonePortal` on Moderato, with `SwornZoneVerifier` as its verifier, so that the portal accepts a batch, and
-  queues its withdrawals, only after the ZK proof verifies.
-  - **Local dress rehearsal passed (2026-10-05).** It used the real `tempo-zone` CLI against a local Tempo L1
-    set up like Moderato, with the 250-block proof window enforced.
-  - Three batches (setup, deposit, withdrawal) were each Groth16-proven and settled through `submitBatch` →
-    `SwornZoneVerifier`, and the withdrawal was paid (`spikes/own-zone/DRESS.md`).
-  - The live run on Moderato has not happened yet. Until it does, the batches above remain integration-test
-    batches and no portal calls the verifier.
+- **Our own Zone on Moderato is a one-operator demonstration, not a running service.** On 2026-10-06 we ran
+  our own Zone sequencer and a Solidity `ZonePortal` on Moderato, with `SwornZoneVerifier` as its verifier.
+  Three batches were Groth16-proven and settled, and the withdrawal was paid only after that
+  (spec 003 "Results (own Zone live run on Moderato)", `deployments/moderato.json` → `OwnZone`).
+  - The zone was stopped right after the payout. The local prover is too slow to run a zone continuously
+    (about 15 min per proof).
+  - It is not a Tempo-created Zone, and Tempo's own Zones are unchanged.
 
 - **TEE + ZK is a design proposal, not built.** [Spec 004](docs/specs/004-tee-plus-zk.md) proposes that Nitro settles
   and a ZK proof of the exact batch commitment releases payouts. The proof statement it needs, the portal

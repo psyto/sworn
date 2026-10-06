@@ -3,7 +3,8 @@
 Short answers first; "If pressed" adds one level of detail. Every number here is in the repo (source in brackets).
 Rules:
 - Say what is unknown, plainly.
-- Never claim a customer, a hosted service, a settlement integration or protection of withdrawals.
+- Never claim a customer, a hosted service, or protection of withdrawals on Tempo's Zones. The live settlement
+  is our own Zone, one operator.
 - Never say Tempo or Moderato is "broken".
 
 ## The 30-second answer
@@ -11,8 +12,9 @@ Rules:
 > Tempo Zones are private ledgers: only the operator holds the batch and its witness, so an auditor or a
 > counterparty cannot check that money leaving a Zone came from correct execution. Sworn runs Tempo's own Zone
 > verification code in a zero-knowledge VM and produces a proof anyone can verify on chain, without exposing the
-> transactions. We have verified it on Tempo's testnet, for a test batch with a withdrawal; change one field and
-> it is rejected. No customers yet. Next is one design partner who supplies a real batch.
+> transactions. On Tempo's testnet we ran our own Zone whose portal pays a withdrawal only after that proof
+> passes; change one field and it is rejected. No customers yet. Next is one design partner who supplies a real
+> batch.
 
 ## Product and evidence
 
@@ -21,19 +23,24 @@ Rules:
   tests. The output matches the native run, and tampering is rejected.
 - A contract on Moderato verified the proof of a batch with one withdrawal and two user transactions
   (tx `0xa630…f770`).
+- Our own Zone on Moderato (2026-10-06): three batches proven and settled through a portal that calls the
+  verifier, then a withdrawal paid (tx `0xfc31…e1f1`). [spec 003 "Results (own Zone live run on Moderato)"]
 - Tempo's EVM in SP1 matched 40 of 40 live Moderato transactions and 18 of 18 reverted ones.
 - [README "What is measured"; deployments/moderato.json]
 
 **2. Is the batch real?**
-It is a real Zone batch produced by Tempo's own sequencer code, but in Tempo's integration tests on a dev chain
-(1337), not a live Moderato Zone. An outsider can't get a live Zone's batch: only the operator holds the witness.
+Two kinds. The fixtures are real Zone batches from Tempo's own sequencer code, in Tempo's integration tests on a
+dev chain (1337). The live run is a real Moderato-anchored Zone, but it is our own Zone, run by us. An outsider
+can't get a Tempo-run Zone's batch: only the operator holds the witness.
 - *If pressed:* Zone creation on Moderato is limited to the factory owner, and all three Zones there are run by one
   party. [docs/research/moderato-zone-feasibility-20261004.md]
 
 **3. Does it protect withdrawals?**
-Not today. No portal calls our verifier, so it is evidence, not a guarantee. Putting proofs into settlement needs
-Tempo's portal, or our own Zone. We wrote the design (spec 004) and are checking whether we can run our own Zone on
-Moderato.
+On our own Zone, yes in the narrow sense: its portal settles a batch, and so pays its withdrawals, only after the
+proof verifies. We ran that on Moderato on 2026-10-06. On Tempo's Zones, no: their verifier is fixed by Tempo's
+factory, so it stays evidence there. Spec 004 is the design for Tempo's side.
+- *If pressed:* one operator, whose key also decrypts deposits; withdrawals wait for the proof but are not
+  censorship-resistant (the operator must prove and process them); callback withdrawals bounce.
 
 **4. "Audit-ready", but the code is unaudited?**
 "Audit-ready" describes the output: evidence an auditor can check independently, against the chain. The prover
@@ -44,8 +51,9 @@ Hashes and batch metadata: block hashes, deposit and withdrawal-queue hashes, co
 numbers. Not transaction contents. [spec 003 §3]
 
 **6. How does an auditor tie a proof to the batch that actually settled?**
-Today it is a manual step: compare the proved fields with the batch the portal recorded. Nothing on chain forces
-the match; that is exactly what settlement integration (spec 004) would add.
+On our own Zone, the portal forces it: `submitBatch` passes the batch's own fields to the verifier, so a proof of
+any other batch is rejected. For Tempo's Zones it is still a manual step (compare the proved fields with the batch
+the portal recorded); spec 004 would make it automatic there.
 
 ## Market and business
 
@@ -108,7 +116,8 @@ because the data is private.
 
 **17. What would you do with the next 90 days?**
 1. One design partner and a proof of a batch they supply.
-2. Our own Zone on Moderato with a portal that calls the verifier, so a portal waits for the proof.
+2. Turn the one-off own-Zone run into something repeatable: faster proving (rented hardware or a prover
+   network), so the Zone can keep running instead of stopping after the demo.
 3. Track T12/T13 in the guest.
 4. Price a proof (rented hardware, aggregation).
 
