@@ -221,6 +221,10 @@ const pay = decodeEventLog({ abi: [wpEv], data: payLog.data, topics: payLog.topi
 if (getAddress(pay.to) !== getAddress(OZ.roles.user) || pay.amount !== BigInt(OZ.payout.userPathUSD.delta) || getAddress(pay.token) !== getAddress("0x20C0000000000000000000000000000000000000"))
   fail(`payout: ${pay.to} ${pay.token} ${pay.amount} is not the user's 500000 pathUSD`);
 if (parseInt(payR.blockNumber, 16) <= OZ.batches.at(-1).submitBlock) fail("payout is not after the last settled batch");
+// "From anchor to payout took fifty-eight minutes": the genesis anchor's and the payout's block timestamps, read now.
+const blockTs = async (n) => parseInt((await rpc("eth_getBlockByNumber", ["0x" + n.toString(16), false])).timestamp, 16);
+const payoutSecs = (await blockTs(parseInt(payR.blockNumber, 16))) - (await blockTs(OZ.genesisAnchor));
+if (Math.floor(payoutSecs / 60) !== 58) fail(`anchor → payout is ${payoutSecs} s; PITCH.md scene 3 says "fifty-eight minutes"`);
 const wdBatch = OZ.batches.at(-1);
 const trace = await rpc("debug_traceTransaction", [wdBatch.submitTx, { tracer: "callTracer" }]);
 const findCall = (c) => (c.to && getAddress(c.to) === OZV ? c : (c.calls ?? []).map(findCall).find(Boolean));
@@ -331,6 +335,7 @@ const data = {
   settled: String(OZ.batches.length),
   paid: `${(Number(pay.amount) / 1e6).toFixed(1)} pathUSD`,
   anchorAge: `${Math.max(...ages).toLocaleString("en-US")} of 8,190 blocks`,
+  payoutTime: `${(payoutSecs / 60).toFixed(1)} min`,
   settleSrc: `our own Zone ${OZ.zoneId} · portal ${short(PORTAL, 6)} → SwornZoneVerifier ${short(OZV, 6)} → SP1 · submitBatch ${OZ.batches.map((b) => short(b.submitTx)).join(", ")} · payout ${short(OZ.payout.tx)} · read now from Moderato`,
   callRealWhat: `the withdrawal batch, zone blocks ${wdBatch.zoneBlocks}`,
   callReal: "✓ verify(…) → true",
@@ -391,7 +396,7 @@ writeJson(path.join(dir, "pitch.marks.json"), {
   liveCalls: { moderatoPreT13Malformed: "true", moderatoPreT13At: stubAt.toISOString(), swornReal: "true", swornMutated: "InvalidProof()", swornAt: callAt.toISOString(), preT13Selector: PRE_SEL },
   moderatoZones: { count: nZones, admin, factoryOwner: fOwner, safeOwners, safeThreshold: Number(safeT) },
   zoneAttest: Z.attest.tx,
-  ownZone: { portal: PORTAL, verifier: OZV, settled: OZ.batches.map((b) => b.submitTx), anchorAges: ages, payout: OZ.payout.tx, verifyReal: "true", verifyMutated: "InvalidProof()", at: ozAt.toISOString() },
+  ownZone: { portal: PORTAL, verifier: OZV, settled: OZ.batches.map((b) => b.submitTx), anchorAges: ages, anchorToPayoutSecs: payoutSecs, payout: OZ.payout.tx, verifyReal: "true", verifyMutated: "InvalidProof()", at: ozAt.toISOString() },
   recorderMarks: marks.map((m) => +m.toFixed(3)), recordedAt: new Date().toISOString(),
 });
 log(`\n✓ ${rel(out)}  (${got.toFixed(2)} s, holds ${scenes.map((s) => s.hold).join(" / ")}, ${WORDS} words)`);

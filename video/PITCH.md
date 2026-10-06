@@ -39,27 +39,27 @@ field changed”. Caption: “Fixture workflow: Tempo code in SP1 → proof → 
 > verification code in a zero-knowledge VM, then creates proof evidence that a third party can verify on
 > chain.
 
-## Scene 3: the evidence is real · ≈ 18 s
+## Scene 3: the evidence is real · ≈ 24 s
 
 **[Headline: “Proof-gated settlement on Moderato.” Pipeline: Tempo Zone code → ZK VM → Groth16 proof → our portal
 settles on Moderato. Three facts, read now from Moderato: “3 batches proven and settled” (counts up), “0.5 pathUSD
-withdrawal paid after the proof”, the slowest anchor age of 8,190 blocks. Chip: “our own Zone · portal calls Sworn”.
+withdrawal paid after the proof”, “anchor → payout: 58.5 min” (both block timestamps, read now). Chip: “our own Zone · portal calls Sworn”.
 Result, on the withdrawal batch: “✓ verify(…) → true” draws in; “one field changed → ✗ reverts InvalidProof()” flips red
 with a small shake (both from the recorder's own read-only calls to our Zone's verifier).]**
 
 > On Moderato, our own one-operator Zone, not a Tempo-created one, settles a batch only after Sworn's proof
 > passes; only then can a withdrawal be paid. Three batches, proven and checked on chain. Change one input, and it
-> is rejected.
+> is rejected. From anchor to payout took fifty-eight minutes, every proof made on one laptop.
 
-## Scene 4: the go-to-market test · ≈ 23 s
+## Scene 4: the go-to-market test · ≈ 17.5 s
 
 **[Headline: “Earn the right to a recurring contract.” A progress line advances through three cards, each
 appearing as it is spoken: “1. An operator supplies its witness”; “2. Sworn proves one batch; its reviewer
 re-verifies”; “3. Repeat for the next batch or upgrade.” A small tag reads “GTM test — not traction claimed.”]**
 
-> We start with one Zone business whose operator can supply its witness. First, we prove one of its batches
-> and give its reviewer reproducible verification. If it asks for the next batch or upgrade, that becomes a
-> Proof Operations contract. That is our go-to-market test — not traction we claim today.
+> Go-to-market: one Zone business supplies its witness; we prove one batch and its reviewer re-verifies it. If
+> it asks for the next batch or upgrade, that is a Proof Operations contract. That is our go-to-market test — not
+> traction.
 
 ## Scene 5: why now, why Sworn · ≈ 26 s
 
