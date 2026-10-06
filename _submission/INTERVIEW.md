@@ -125,8 +125,11 @@ because the data is private.
 Introductions to teams building Zones or private payment ledgers on Tempo, and to Tempo's Zones engineers.
 
 **19. A TEE attests in moments; your proof takes 12–15 minutes. Why ZK at all?**
-- Near term, the proof is off the settlement path, so its speed never delays settlement. It only sets when the
-  evidence reaches the auditor.
+- For Tempo's Zones, the evidence product is off the settlement path, so its speed never delays their settlement.
+  It only sets when the evidence reaches the auditor.
+- On our own Zone, the proof *is* on the path, and it does delay settlement: in the live run each batch waited
+  11–32 minutes for its proof (payout 58.5 minutes after the anchor). That is why the Zone was stopped after
+  the demo: this prover cannot keep up with a continuously running Zone.
 - In the settlement design (spec 004), the TEE settles at once and ZK only gates the payout of withdrawals.
   Deposits and Zone execution never wait for it.
 - The trade-off: a TEE is fast but means trusting one vendor's hardware; a ZK proof is slow but anyone can check
