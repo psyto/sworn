@@ -422,3 +422,44 @@ What changes is that it carries a real withdrawal. §7 still applies: this does 
 - **What this shows:** a batch with a withdrawal (`withdrawalQueueHash` `0xcf747192…02e7`) and user transactions is
   proven and verified on chain. It is still a dev-chain batch from Tempo's integration tests, and it says nothing
   about withdrawals being secured (no portal, D1–D4).
+
+## Results (own Zone live run on Moderato, 2026-10-06)
+
+Plan, conditions and runbook: `spikes/own-zone/FEASIBILITY.md`, `RUNBOOK.md`. Record: `deployments/moderato.json` → `OwnZone`.
+
+- **What ran:** our own Zone (zone 4242, zone chain id 1424314242), anchored to Moderato block 38,406,286.
+  - `OwnZonePortal` `0xE4818EC6ca046693DafCE608C7F2226604F3daE3`, deployed outside Tempo's factory. It is upstream `ZonePortal` plus one change: the deployer, not the factory, may call `initialize` once.
+  - Its verifier is a third `SwornZoneVerifier`, `0x15D192a08F41150cae9178D14D55c04F27FF2733`:
+    - `PARENT_CHAIN_ID 42431`, so D1 no longer applies;
+    - zone 4242, with the genesis artifact `0xb31abb66…4bbf` pinning our genesis and portal;
+    - vkey `0x00ab5a9e…5c7b` (new guest, ELF sha256 `6f6fb01e…d6e4`).
+  - One sequencer, run by us.
+- **Three batches**, each Groth16-proven by our guest and settled with a direct EIP-2935 anchor:
+
+  | zone blocks | content | cycles | Groth16 | anchor age at `submitBatch` / 8,190 | `submitBatch` tx |
+  |---|---|---:|---:|---:|---|
+  | 1–51 | setup replay + encrypted deposit (1.0 pathUSD) | 123,831,587 | 1,881 s | 2,895 | `0x8f08d982…472b` |
+  | 52–55 | zone-side `approve(ZoneOutbox)` | 26,251,576 | 664 s | 3,928 | `0x334ab624…84ce` |
+  | 56–61 | `requestWithdrawal(0.5 pathUSD)` | 31,925,548 | 813 s | 5,133 | `0x4062f79c…83b4` |
+
+  - A call trace (`debug_traceTransaction`, callTracer) of each `submitBatch` shows `OwnZonePortal` → STATICCALL `SwornZoneVerifier.verify` → STATICCALL the SP1 gateway `0x2c77…9B18`, with no errors.
+- **Payout:** `processWithdrawals` tx `0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1` (block 38,411,550) emitted `WithdrawalProcessed(user, pathUSD, 500000, success)`.
+  - The user's L1 pathUSD went from 999,998,999,480 to 999,999,499,480, exactly +500,000.
+  - The withdrawal could be paid only after the batch containing it was proven and settled.
+- **Time:** 58.5 minutes from the anchor block (09:53:57 UTC) to the payout block (10:52:29 UTC).
+- **Read-only checks after the run:**
+  - the verifier's immutables match;
+  - `no-owner --zone-verifier` passes on the deployed code (2,993 bytes, STATICCALL ×1, forbidden opcodes 0);
+  - the portal reads `zoneId` 4242, `verifier` = the address above, `withdrawalBatchIndex` 3, `zoneHeight` 61.
+- **Different from the dress rehearsals:**
+  - The zone-side `approve` and the `requestWithdrawal` fell into separate batches, so the demo needed 3 proofs, not 2. The cause of the boundary after block 55 was not investigated.
+  - The watcher's default `MAX_PROOFS=2` would have stopped before the withdrawal batch. During the run, a second watcher with `MAX_PROOFS=3` was started as soon as the first one exited. Nothing else was touched. The default is now 3.
+  - From 10:43 UTC the node logged `block timestamp … is in the future` / `Invalid payload` for blocks far past the demo (zone block ≥ 4,577, under 1 s of skew). Block production continued, and the batches it had already prepared were not affected.
+- **What this shows, and its limits (FEASIBILITY.md C5, risk 6):**
+  - On our own Zone, the portal settles a batch, and so lets a withdrawal be paid, only after Sworn's proof passes.
+  - It is our Zone and our portal, with one operator. It is not a Tempo-created Zone, and Tempo's own Zones are unchanged.
+  - The single sequencer key also decrypts deposits.
+  - Withdrawals are ZK-gated, not censorship-resistant: the operator must prove and process them.
+  - Callback withdrawals bounce, because the messenger checks the factory.
+  - The zone-side fork schedule is pinned at T13 while Moderato is still at T11.
+  - Testnet, unaudited.

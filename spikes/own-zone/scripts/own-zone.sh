@@ -167,7 +167,7 @@ start)
     exec "${cmd[@]}" --sequencer-key-file <(printf '%s' "$OWN_ZONE_SEQUENCER_KEY") ) > "$RUN/zone.log" 2>&1 &
   echo $! > "$RUN/zone.pid"
   ( DUMP="$RUN/dump" PROOF_DIR="$RUN/proofs" VERIFIER="$VERIFIER" DEST_CHAIN="$L1_CHAIN_ID" GENESIS_HASH="$GENESIS_KECCAK" \
-    HOST="$HOST" RUNNER="$RUNNER" ELF="$ELF" MAX_PROOFS="${MAX_PROOFS:-$([ -n "${DEPOSIT_AFTER_START:-}" ] && echo 3 || echo 2)}" \
+    HOST="$HOST" RUNNER="$RUNNER" ELF="$ELF" MAX_PROOFS="${MAX_PROOFS:-$([ -n "${DEPOSIT_AFTER_START:-}" ] && echo 4 || echo 3)}" \
     exec "$here/prover-watch.sh" ) > "$RUN/prover.log" 2>&1 &
   echo $! > "$RUN/prover.pid"
   for _ in $(seq 1 120); do cast block-number --rpc-url "$ZONE_HTTP" >/dev/null 2>&1 && break; sleep 1; done

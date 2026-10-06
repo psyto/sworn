@@ -484,3 +484,10 @@ OWN_ZONE_PROOF_DIR=<proofs> OWN_ZONE_VKEY=0x00ab5a9e…5c7b OWN_ZONE_L1_PROOF_WI
   cargo test -p zone-node --test it -- --exact own_zone::test_own_portal_real_groth16 --include-ignored --nocapture
 # R4 = R5 with OWN_ZONE_L1_PROOF_WINDOW unset (250): the second batch's witness fails (the R4 trap).
 ```
+
+## Live run (2026-10-06): the stop line is met on Moderato
+
+Three Groth16-proven batches of our own Zone settled through `OwnZonePortal` → `SwornZoneVerifier` → SP1 on
+Moderato, and the withdrawal was paid (`WithdrawalProcessed` tx `0xfc311841…e1f1`, user +500,000), 58.5 minutes
+after the anchor and before T12. Details: `docs/specs/003-zone-verifier.md` ("Results (own Zone live run on
+Moderato)") and `deployments/moderato.json` → `OwnZone`. C5 and risk 6 govern every claim made from it.

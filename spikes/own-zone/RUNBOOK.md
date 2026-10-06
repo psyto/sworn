@@ -1,5 +1,8 @@
 # Own Zone on Moderato: founder runbook (live run, 2026-10-07)
 
+**Done 2026-10-06: the live run succeeded** (3 batches settled, withdrawal paid). Results: `docs/specs/003-zone-verifier.md`
+→ "Results (own Zone live run on Moderato)".
+
 **Deadline:** settle before Moderato T12, **2026-10-08 14:00 UTC** (FEASIBILITY.md §5).
 
 **How every step behaves:**
@@ -137,12 +140,15 @@ If any step fails **before `start`**:
 
 ### Variants
 
-- **The default is 2 proven batches:** setup + deposit, then the withdrawal. This is the safest choice, with the
-  fewest proofs.
-- `DEPOSIT_AFTER_START=1 Z setup --send` gives **3 separate batches** (setup, deposit, withdrawal), as in dress 4.
+- **The default gave 2 proven batches in the dress rehearsals** (setup + deposit, then the withdrawal), but **3 in
+  the live run (2026-10-06):** setup + deposit (1–51), the zone-side `approve` (52–55), then the withdrawal
+  (56–61). The boundary after the `approve` was not investigated.
+- `DEPOSIT_AFTER_START=1 Z setup --send` gives **separate setup and deposit batches**, as in dress 4.
   It costs one extra proof (about 15 min) of anchor headroom.
-- The prover watcher stops after `MAX_PROOFS` proofs: 2 by default, 3 with `DEPOSIT_AFTER_START`. Later
-  automatic boundaries grow by about 4 M cycles per zone block and are never needed.
+- The prover watcher stops after `MAX_PROOFS` proofs: 3 by default, 4 with `DEPOSIT_AFTER_START`. In the live
+  run the old default of 2 would have stopped before the withdrawal batch. A watcher with `MAX_PROOFS=3` was
+  started when the first one exited. Later automatic boundaries grow by about 4 M cycles per zone block and are
+  never needed. Run `Z stop` as soon as the withdrawal is paid.
 
 ### Timing rules
 

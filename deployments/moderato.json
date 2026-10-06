@@ -203,5 +203,114 @@
     },
     "earliestWithdraw": "2026-10-05T09:56:53Z (2026-10-05 18:56:53 JST)",
     "log": "out/release-withdraw/unbond-20261004T085647Z-sent.log"
+  },
+  "OwnZone": {
+    "spec": "spikes/own-zone/FEASIBILITY.md, RUNBOOK.md; docs/specs/003-zone-verifier.md (Own Zone live run)",
+    "date": "2026-10-06",
+    "what": "Our own Zone (not Tempo-created): OwnZonePortal deployed outside the factory, calling SwornZoneVerifier on every submitBatch; one sequencer run by us. Three Groth16-proven batches settled, then a withdrawal was paid.",
+    "zoneId": 4242,
+    "zoneChainId": 1424314242,
+    "genesisAnchor": 38406286,
+    "genesisArtifactKeccak": "0xb31abb6674514c663d51848a506133896f4cb638de49ccfdaaad6f08f36e4bbf",
+    "roles": {
+      "deployer": "0x48E3dA92Eb7C33762BdD57c7f59337A337e078bc",
+      "sequencer": "0x7409C7fC5Af2560F8Ee6ff31FE3f46c7a0f0127b",
+      "user": "0x34252B6967c888fa4458AB39716Ed49167d37E00",
+      "note": "dedicated keys created for this run; deployer sent exactly 3 transactions (nonce 0-2)"
+    },
+    "SwornZoneVerifier": {
+      "address": "0x15D192a08F41150cae9178D14D55c04F27FF2733",
+      "codehash": "0xfb0ba07721c33303c89b99b88a98f6f3af53778676829748f7490c3b05a58e56",
+      "deployTx": "0xbe350ad4baddba05b9c1fdce80f6aa4dbacaec1e52e25a0f8d691ab2e52cf08e",
+      "block": 38406293,
+      "gasUsed": 3869331,
+      "verifierConfig": "sworn-sp1-groth16-v1",
+      "constructor": {
+        "sp1Verifier": "0x2c77329747b7C8B293514A6129404D4cefDd9B18",
+        "zoneVkey": "0x00ab5a9e697e8e1f81e1db06c7e41afd5dd046438f50b972a48c417d724a5c7b",
+        "guestElfSha256": "6f6fb01e42cd46a2753b12637242fc4b4b4023f1cce3f24ef1e770b5f636d6e4",
+        "parentChainId": 42431,
+        "pinnedZoneId": 4242,
+        "pinnedGenesisArtifactHash": "0xb31abb6674514c663d51848a506133896f4cb638de49ccfdaaad6f08f36e4bbf"
+      },
+      "noOwnerOnDeployedCode": "OK (2993 bytes sans metadata, STATICCALL x1, forbidden opcodes 0)"
+    },
+    "OwnZonePortal": {
+      "address": "0xE4818EC6ca046693DafCE608C7F2226604F3daE3",
+      "codehash": "0x8fcb9cc9de8bdd17eb40055a7d7f5707dab8f9be8fce97a89b58e42634b3869d",
+      "deployTx": "0x4e05d34ea94370574a6915159fa52271237bbaf46183998760da2c57211b274d",
+      "block": 38406306,
+      "gasUsed": 24968428,
+      "deviation": "upstream ZonePortal plus one change: the deployer, not the factory, may call initialize once",
+      "initializeTx": "0x036c1d12b00828356d9a980ef665ed199e78c09d818c6b3c1249823fbd77dd46",
+      "initializeGas": 3086012,
+      "encryptionKeyTx": "0x0a27ccc6ffba333b675a6ea3d925858b1a69c6516f51cc1e50a9d05fd6860edf",
+      "encryptionKeyGas": 1054756
+    },
+    "deposit": {
+      "approveTx": "0x3d33a488a1ccd43ba1f8adc7064b7e0c239515043bf4c44a18fdcdb909cc5e31",
+      "depositTx": "0x459450f6889db9cc3072b5cb6d636d1c2d846963722b58bc8ae3c28602a3d8e7",
+      "block": 38406327,
+      "gasUsed": 582717,
+      "amount": "1000000",
+      "encrypted": true
+    },
+    "zoneWithdrawalRequest": "zone block 61: approve(ZoneOutbox) in zone block 55, requestWithdrawal(pathUSD, user, 500000) in zone block 61",
+    "batches": [
+      {
+        "zoneBlocks": "1-51",
+        "content": "setup replay + deposit",
+        "cycles": 123831587,
+        "groth16WallSecs": 1881.4,
+        "watcherSecs": 1900,
+        "anchor": 38406403,
+        "submitTx": "0x8f08d982665218c8526e40990640afb1a6d205338ecb7ecfdf2f7878abad472b",
+        "submitBlock": 38409298,
+        "gasUsed": 1563473,
+        "anchorAgeAtSubmit": 2895
+      },
+      {
+        "zoneBlocks": "52-55",
+        "content": "zone-side approve(ZoneOutbox)",
+        "cycles": 26251576,
+        "groth16WallSecs": 664.3,
+        "watcherSecs": 681,
+        "anchor": 38406408,
+        "submitTx": "0x334ab624e4781d5e5d7c6d605727d9460bef6d1402219fc374b3c62a5e6484ce",
+        "submitBlock": 38410336,
+        "gasUsed": 325024,
+        "anchorAgeAtSubmit": 3928
+      },
+      {
+        "zoneBlocks": "56-61",
+        "content": "withdrawal request (1 withdrawal)",
+        "cycles": 31925548,
+        "groth16WallSecs": 812.8,
+        "watcherSecs": 828,
+        "anchor": 38406414,
+        "submitTx": "0x4062f79c8ea25878b41ec63f4ebfaad7164c26d3595fafceaff20cbdb42383b4",
+        "submitBlock": 38411547,
+        "gasUsed": 832104,
+        "anchorAgeAtSubmit": 5133
+      }
+    ],
+    "anchorWindow": "EIP-2935, 8,190 blocks; every batch used a direct anchor (safety margin 3,000 not crossed)",
+    "settlementTrace": "debug_traceTransaction (callTracer) of all 3 submitBatch txs: OwnZonePortal -> STATICCALL SwornZoneVerifier.verify -> STATICCALL SP1 gateway 0x2c77...9B18; no errors",
+    "payout": {
+      "tx": "0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1",
+      "block": 38411550,
+      "from": "roles.sequencer (processWithdrawals)",
+      "gasUsed": 330348,
+      "event": "WithdrawalProcessed(to user, token pathUSD, amount 500000, success true)",
+      "userPathUSD": {
+        "before": "999998999480",
+        "after": "999999499480",
+        "delta": "500000"
+      }
+    },
+    "wallClock": "anchor block 09:53:57 UTC -> payout block 10:52:29 UTC (58.5 min)",
+    "readOnlyChecks": "verifier immutables (PARENT_CHAIN_ID 42431, PINNED_ZONE_ID 4242, genesis keccak, ZONE_VKEY, SP1_VERIFIER) match; portal zoneId 4242, verifier, isSequencer, withdrawalBatchIndex 3, zoneHeight 61; no-owner --zone-verifier on deployed code OK",
+    "runDir": "spikes/own-zone/runs/moderato-20261007 (not committed: logs, proofs, witnesses)",
+    "limits": "our own Zone, not Tempo-created; one operator and one sequencer key (also the deposit-decryption key); callback withdrawals bounce (messenger checks the factory); zone-side fork schedule pinned at T13 while Moderato is T11; testnet, unaudited"
   }
 }

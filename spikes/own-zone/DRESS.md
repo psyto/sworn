@@ -134,3 +134,13 @@ After the run:
 
 
 
+
+## Live run on Moderato (2026-10-06): succeeded
+
+The real run used the same scripts. Results: `docs/specs/003-zone-verifier.md` → "Results (own Zone live run on
+Moderato)"; record: `deployments/moderato.json` → `OwnZone`.
+
+- 3 Groth16-proven batches (1–51, 52–55, 56–61), all with a direct anchor (ages 2,895 / 3,928 / 5,133 of
+  8,190 blocks). The withdrawal was paid at L1 38,411,550, 58.5 min after the anchor.
+- The difference from these rehearsals: the zone-side `approve` got its own batch, so the run needed 3 proofs.
+  `MAX_PROOFS` now defaults to 3.
