@@ -53,6 +53,7 @@ export function Topbar() {
 
 /** The primary Zone evidence: the attest of the batch with a withdrawal. */
 const PAYOUT_TX = deployments.OwnZone.payout.tx;
+const FORGED_TX = deployments.OwnZone.forgedBatch.tx;
 /** YouTube links for the two submission videos; null until published (then the links appear). */
 const VIDEOS: { pitch: string | null; demo: string | null } = { pitch: null, demo: null };
 
@@ -73,10 +74,16 @@ export function Hero() {
       </div>
       <aside className="hero-proof" aria-label="Built evidence">
         <p className="eyebrow">Built and verifiable</p>
-        <strong>3 batches settled<br />1 withdrawal paid</strong>
-        <p>On Moderato, our own Zone&apos;s portal settled each batch only after Sworn&apos;s proof passed; then the withdrawal was paid.</p>
+        <strong>3 batches settled<br />1 withdrawal paid<br />1 forged batch rejected</strong>
+        <p>
+          On Moderato, our own Zone&apos;s portal settled each batch only after Sworn&apos;s proof passed, then the withdrawal was
+          paid. A forged batch, even signed by our own sequencer, was rejected on the proof.
+        </p>
         <a href={txUrl(MODERATO, PAYOUT_TX)} target="_blank" rel="noreferrer">
           Open the payout transaction <span className="mono">{short(PAYOUT_TX)} ↗</span>
+        </a>
+        <a href={txUrl(MODERATO, FORGED_TX)} target="_blank" rel="noreferrer">
+          Open the rejected forged batch <span className="mono">{short(FORGED_TX)} ↗</span>
         </a>
       </aside>
       <p className="hero-boundary">
