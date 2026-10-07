@@ -325,6 +325,54 @@ contract SwornZoneVerifierTest is ZoneBase {
         _acz4(v, MODERATO_SP1, vk, proof);
     }
 
+    // ---------------------------------------------------------------- own Zone live run (Moderato, 2026-10-06)
+
+    /// The three batches our own Zone settled on Moderato (deployments/moderato.json OwnZone). Each vector is the
+    /// verify call OwnZonePortal actually made in that batch's submitBatch, taken from its trace and checked equal to
+    /// the prover's record (spikes/own-zone/scripts/export-vectors.mjs). Each proof is checked against the REAL SP1
+    /// v6.1.0 Groth16 verifier, through the same AC-Z4 cases, at the deployed verifier's address and chain id; the
+    /// portal's exact calldata must verify against the deployed bytecode itself (verifier-code.json).
+    /// One test per batch (each runs ~35 pairing checks).
+    function test_OWNZONE_REAL_groth16_batch_1_51() public {
+        _ownZoneBatch("test/vectors/own-zone/zone4242-blocks1-51.json");
+    }
+
+    function test_OWNZONE_REAL_groth16_batch_52_55() public {
+        _ownZoneBatch("test/vectors/own-zone/zone4242-blocks52-55.json");
+    }
+
+    function test_OWNZONE_REAL_groth16_batch_56_61_withdrawal() public {
+        _ownZoneBatch("test/vectors/own-zone/zone4242-blocks56-61.json");
+    }
+
+    function _ownZoneBatch(string memory file) internal {
+        address ozv = 0x15D192a08F41150cae9178D14D55c04F27FF2733;
+        vm.etch(MODERATO_SP1, address(new SP1VerifierGroth16V6()).code);
+        string memory j = vm.readFile(file);
+        Vec memory v = _vec(file);
+        bytes32 vk = vm.parseJsonBytes32(j, ".vkey");
+        bytes memory proof = vm.parseJsonBytes(j, ".proof");
+        assertEq(v.verifier, ozv);
+        assertEq(v.chainId, 42431);
+        assertEq(v.parentChainId, 42431);
+        assertEq(v.a.zoneId, 4242);
+        assertEq(v.genesisArtifactHash, 0xb31abb6674514c663d51848a506133896f4cb638de49ccfdaaad6f08f36e4bbf);
+        assertEq(v.a.verifierConfig, TAG);
+        assertEq(vk, 0x00ab5a9e697e8e1f81e1db06c7e41afd5dd046438f50b972a48c417d724a5c7b);
+        assertEq(abi.encode(keccak256("sworn-zone-guest-v1"), v.digest), v.publicValues);
+        SP1VerifierGroth16V6(MODERATO_SP1).verifyProof(vk, v.publicValues, proof); // the raw pairing check
+        _acz4(v, MODERATO_SP1, vk, proof);
+        // Then the EXACT bytecode deployed on Moderato (same source, compiled with spikes/own-zone/contracts settings):
+        // the portal's own calldata verifies, and one field changed reverts InvalidProof().
+        bytes memory code = vm.parseJsonBytes(vm.readFile("test/vectors/own-zone/verifier-code.json"), ".code");
+        assertEq(keccak256(code), 0xfb0ba07721c33303c89b99b88a98f6f3af53778676829748f7490c3b05a58e56, "not the deployed verifier's code");
+        vm.etch(ozv, code);
+        (bool ok, bytes memory ret) = ozv.staticcall(vm.parseJsonBytes(j, ".settlement.verifyCalldata"));
+        assertTrue(ok && abi.decode(ret, (bool)), "the portal's own verify call does not verify");
+        assertTrue(_verify(SwornZoneVerifier(ozv), v.a, proof));
+        _expectBoth(SwornZoneVerifier(ozv), _mutated(v.a, 5), proof, SwornZoneVerifier.InvalidProof.selector);
+    }
+
     // ---------------------------------------------------------------- constructor
 
     function test_constructor_rejects_zero_parameters() public {

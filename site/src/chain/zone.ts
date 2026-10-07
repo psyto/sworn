@@ -399,7 +399,7 @@ export async function verifyZoneNow(client: Client, cfg: ChainConfig): Promise<V
 }
 
 /** The custom error of a revert; anything that is not a revert (an RPC failure) is rethrown. */
-function revertName(e: unknown): string {
+export function revertName(e: unknown): string {
   const rev = e instanceof BaseError ? e.walk((x) => x instanceof ContractFunctionRevertedError) : null;
   if (!(rev instanceof ContractFunctionRevertedError)) throw e;
   return rev.data?.errorName ?? rev.signature ?? "revert";

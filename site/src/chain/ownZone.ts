@@ -5,12 +5,16 @@
 //  - the payout receipt: WithdrawalProcessed(to, senderTag, token, amount, callbackSuccess) from the portal;
 //  - the verifier's immutables (parent chain, pinned zone).
 // Reads run one after another (the public RPC rate-limits bursts).
-import { decodeEventLog, getAddress, toEventSelector, type Address, type Client, type Hex, type Log } from "viem";
+import { decodeEventLog, decodeFunctionData, getAddress, toEventSelector, type Address, type Client, type Hex, type Log } from "viem";
 import { getTransactionReceipt, readContract } from "viem/actions";
 import deployments from "../../../deployments/moderato.json";
 import type { ChainConfig } from "./config.ts";
 import { DataError, asDataError } from "./errors.ts";
-import { zoneVerifierAbi } from "./zone.ts";
+import { revertName, zoneVerifierAbi } from "./zone.ts";
+// The withdrawal batch's verify call, exactly as OwnZonePortal made it in submitBatch (taken from the trace by
+// spikes/own-zone/scripts/export-vectors.mjs; forge re-checks it against the deployed bytecode). Named imports keep
+// only these fields in the bundle.
+import { settlement as wdSettlement, args as wdArgs, proof as wdProof } from "../../../contracts/test/vectors/own-zone/zone4242-blocks56-61.json";
 
 const view = <N extends string, Ty extends string>(name: N, type: Ty) =>
   ({ type: "function", name, stateMutability: "view", inputs: [], outputs: [{ name: "", type }] }) as const;
@@ -120,6 +124,53 @@ export async function readOwnZone(client: Client, _cfg: ChainConfig): Promise<Ow
       throw new DataError("block-mismatch", "the payout is not after the last settled batch");
 
     return { portal: p, portalVerifier, zoneId, withdrawalBatchIndex, zoneHeight, parentChainId, pinnedZoneId, batches, payout };
+  } catch (e) {
+    throw asDataError(e);
+  }
+}
+
+export interface OwnZoneVerifyNow {
+  submitTx: Hex;
+  /** The submitBatch transaction's calldata carries this proof and the batch's block and withdrawal-queue hashes. */
+  boundToTx: true;
+  real: boolean;
+  height: bigint;
+  mutatedError: string;
+  readAt: number;
+}
+
+/**
+ * Re-check our own Zone's withdrawal batch, live and read-only: the verify call its portal made (from the
+ * trace, committed as a vector) must be the one the submitBatch transaction carries, must return true now, and
+ * must revert with nextZoneHeight + 1.
+ */
+export async function verifyOwnZoneNow(client: Client): Promise<OwnZoneVerifyNow> {
+  try {
+    const submitTx = wdSettlement.submitTx as Hex;
+    const tx = (await client.request({ method: "eth_getTransactionByHash", params: [submitTx] } as never)) as
+      | { to?: Address | null; input?: Hex; calls?: { to: Address | null; input: Hex }[] }
+      | null;
+    if (!tx) throw new DataError("tx-not-found", `${submitTx} not found`);
+    const call = tx.calls?.length === 1 ? tx.calls[0] : { to: tx.to ?? null, input: tx.input ?? "0x" };
+    if (!call.to || getAddress(call.to) !== OWN_ZONE.portal) throw new DataError("wrong-contract", `${submitTx} is not a call to the portal`);
+    const input = call.input.toLowerCase();
+    for (const [name, value] of [["proof", wdProof], ["prevBlockHash", wdArgs.prevBlockHash], ["nextBlockHash", wdArgs.nextBlockHash], ["withdrawalQueueHash", wdArgs.withdrawalQueueHash]] as const)
+      if (!input.includes(value.slice(2).toLowerCase())) throw new DataError("fixture-mismatch", `${submitTx} does not carry the recorded ${name}`);
+
+    const { args } = decodeFunctionData({ abi: zoneVerifierAbi, data: wdSettlement.verifyCalldata as Hex });
+    const a = [...(args as readonly unknown[])];
+    const real = (await readContract(client, { address: OWN_ZONE.verifier, abi: zoneVerifierAbi, functionName: "verify", args: a } as never)) as boolean;
+    if (real !== true) throw new DataError("verify-false", "verify(the portal's call) did not return true");
+    const height = a[5] as bigint;
+    a[5] = height + 1n;
+    let mutatedError: string | undefined;
+    try {
+      await readContract(client, { address: OWN_ZONE.verifier, abi: zoneVerifierAbi, functionName: "verify", args: a } as never);
+    } catch (e) {
+      mutatedError = revertName(e);
+    }
+    if (mutatedError === undefined) throw new DataError("mutation-accepted", "verify accepted a changed nextZoneHeight");
+    return { submitTx, boundToTx: true, real, height, mutatedError, readAt: Date.now() };
   } catch (e) {
     throw asDataError(e);
   }

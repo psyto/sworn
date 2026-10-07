@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import deployments from "../../deployments/moderato.json";
 import { makePublicClient } from "../src/chain/client.ts";
 import { MODERATO } from "../src/chain/config.ts";
-import { decodePayout, readOwnZone, OWN_ZONE } from "../src/chain/ownZone.ts";
+import { decodePayout, readOwnZone, verifyOwnZoneNow, OWN_ZONE } from "../src/chain/ownZone.ts";
 
 const client = makePublicClient(MODERATO);
 const oz = deployments.OwnZone;
@@ -31,4 +31,14 @@ describe("Own Zone live run (Moderato, read-only)", () => {
   it("decodePayout refuses a receipt without the portal's WithdrawalProcessed event", () => {
     expect(() => decodePayout([], OWN_ZONE.portal)).toThrow(/no WithdrawalProcessed/);
   });
+});
+
+describe("Own Zone: the withdrawal batch's proof, re-verified live", () => {
+  it("the portal's recorded verify call is the one submitBatch carries; it returns true; height+1 reverts InvalidProof()", async () => {
+    const r = await verifyOwnZoneNow(client);
+    expect(r.submitTx).toBe(oz.batches[2].submitTx);
+    expect(r.real).toBe(true);
+    expect(r.height).toBe(61n);
+    expect(r.mutatedError).toBe("InvalidProof");
+  }, 120_000);
 });

@@ -55,7 +55,7 @@ Tempo (Moderato). SwornZoneVerifier, with Tempo's IVerifier signature, verifies 
 ## What technologies are you using or integrating with? · ≤500
 
 ```
-Tempo: Zones (zone-spf, the IVerifier interface, ZonePortal), Foundry on Tempo (64 forge tests, deployment), the TypeScript SDK (viem), Tempo transactions (type 0x76), TIP-20 and receive policies (a blocked transfer that succeeds), the Machine Payments Protocol (mppx), tempo-revm. Paradigm stack: Reth, Revm, Alloy (sol!, EIP-712). Succinct SP1 6.3: zkVM guests and Groth16, verified on-chain by SP1VerifierGroth16 v6.1.0. React for the live page and demo.
+Tempo: Zones (zone-spf, the IVerifier interface, ZonePortal), Foundry on Tempo (67 forge tests, deployment), the TypeScript SDK (viem), Tempo transactions (type 0x76), TIP-20 and receive policies (a blocked transfer that succeeds), the Machine Payments Protocol (mppx), tempo-revm. Paradigm stack: Reth, Revm, Alloy (sol!, EIP-712). Succinct SP1 6.3: zkVM guests and Groth16, verified on-chain by SP1VerifierGroth16 v6.1.0. React for the live page and demo.
 ```
 
 ## Which chains · select
@@ -166,7 +166,7 @@ The validation sequence is concrete: find a Zone business that can supply a witn
 No users, no revenue. Built inside the window; on-chain verification and the own-Zone run are on Moderato testnet, the fixture batches ran on dev chain 1337:
 - Our own Zone on Moderato: 3 batches proven and settled through a portal that calls Sworn's verifier; a withdrawal paid after the proof (tx 0xfc311841…e1f1). One operator, not a Tempo-created Zone.
 - Tempo Zones: Tempo's own batch verifier runs in SP1 on 5 integration-test batches, matching native output (19-26M cycles; tampering rejected). Proofs bound to IVerifier's inputs were verified on Moderato, including a fixture with a withdrawal (tx 0xa63009fd…f770; also 0xb14b7127…3b80).
-- 64 forge tests, including real proofs; the verifiers have no owner (our Zone's portal keeps upstream admin controls).
+- 67 forge tests, including real proofs and the live batches' proofs; the verifiers have no owner (our Zone's portal keeps upstream admin controls).
 - A public page that reads the on-chain evidence and re-runs the Zone proof check in your browser. Pitch and demo videos.
 ```
 

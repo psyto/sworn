@@ -41,7 +41,8 @@ but it is not the product pitched or demoed for CWF:
 
 > **For judges, the fast path:** the [live page](https://psyto.github.io/sworn/) ·
 > [our own Zone's payout](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), paid only after three proven batches settled (the page's
-> [own-Zone section](https://psyto.github.io/sworn/#own-zone) reads the portal, the receipts and the payout live) ·
+> [own-Zone section](https://psyto.github.io/sworn/#own-zone) reads the portal, the receipts and the payout live, and
+> "Re-verify on chain" replays the withdrawal batch's verify call: true, and one field changed → `InvalidProof`) ·
 > [the fixture's proof tx](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770)
 > (a Zone batch with one withdrawal, from Tempo's integration tests) ·
 > "Verify again" on the page (three live `eth_call`s: Sworn, the real proof → true; one field changed →
@@ -271,7 +272,7 @@ spec 003 "Results"):
 | proving | `hardfork_t13_recovery`: 25.5M cycles, local Groth16 **701 s**, peak 18.5 GB |
 | on Moderato | `verify` returns true for the real proof and reverts when one field changes; `attest` emitted `ZoneBatchVerified` for zone 1, height 10 ([`0xb14b…3b80`](https://explore.testnet.tempo.xyz/tx/0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80), block 38080441, 260,419 gas) |
 | a batch with a withdrawal | `deposit_and_withdrawal_blocks5-6` (1 withdrawal, 2 user transactions), 24.4M cycles, Groth16 891 s; verified on Moderato by a second instance ([`0xa630…f770`](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770), block 38097996) |
-| our own Zone, live on Moderato (2026-10-06) | 3 batches Groth16-proven and settled through `OwnZonePortal` → `SwornZoneVerifier` → SP1: 123.8M / 26.3M / 31.9M cycles, Groth16 1,881 / 664 / 813 s, anchor ages 2,895 / 3,928 / 5,133 of 8,190 blocks; withdrawal paid, user +500,000 ([`0xfc31…e1f1`](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1)); 58.5 min from anchor to payout |
+| our own Zone, live on Moderato (2026-10-06) | 3 batches Groth16-proven and settled through `OwnZonePortal` → `SwornZoneVerifier` → SP1: 123.8M / 26.3M / 31.9M cycles, Groth16 1,881 / 664 / 813 s, anchor ages 2,895 / 3,928 / 5,133 of 8,190 blocks; withdrawal paid, user +500,000 ([`0xfc31…e1f1`](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1)); 58.5 min from anchor to payout. Reproduce: the three verify calls the portal made (from the traces, = the prover's records) are test vectors in `contracts/test/vectors/own-zone/`; `forge test --match-test OWNZONE` re-checks each proof against the real SP1 Groth16 verifier and the deployed bytecode itself |
 | contract | every digest field, the immutables (via clone deployments), the chain id, the proof and the vkey are each shown to matter, against the **real** SP1 Groth16 verifier |
 
 **Bonded answers** (2026-10-03; logs in `out/`):
@@ -281,7 +282,7 @@ spec 003 "Results"):
 | fidelity to the live chain | **40 / 40** real Moderato transactions (first tx of a block; 34 type-2, 4 account-abstraction, 2 legacy) re-executed with Tempo's own engine on the previous block's MPT-verified state match their receipts: status, gas, fee, logs, balances (`out/ac2_run.log`) |
 | execution vs. RPC | **5 / 5** countable cases match RPC `eth_call` / `callTracer` / `prestateTracer` diff (fees off, since the RPC's call path charges none); 3 cases the RPC cannot express are reported, not counted (`out/ac1_run3.log`) |
 | proving | receive-policy case **5,970,394 cycles**; local Groth16 **391 s**, peak 15 GB (`out/ac7_groth16.log`) |
-| contract | **59 / 59** forge tests for `Sworn.sol` (64 with the Zone verifier); the gate requires 49 named tests and was seen to fail when one is missing. A **real Groth16 proof** slashes a lying answer and cannot slash the true one (`contracts/test/RealGroth16.t.sol`) |
+| contract | **59 / 59** forge tests for `Sworn.sol` (67 with the Zone verifier); the gate requires 49 named tests and was seen to fail when one is missing. A **real Groth16 proof** slashes a lying answer and cannot slash the true one (`contracts/test/RealGroth16.t.sol`) |
 | full flow | **32 / 32** checks on Tempo's own node (`tempo-localnet` at the vendored commit, chain 42431, Moderato's fork schedule): MPP charge → reserve → SDK verification → dishonest answer → own witness → local proof → challenge pays the client 500; honest answer → `AnswerCorrect`; 9 SDK rejections; live fork-schedule drift refused (`out/e2e/localnet-full-gate.log`) |
 
 ## On Moderato — the first of three slashes (2026-10-03)
@@ -366,7 +367,7 @@ found no public example of `tempo-revm` or `zone-spf` proven in a zkVM.
 
 ```bash
 scripts/fetch-tempo.sh                                   # tempoxyz/tempo at the pinned commit, patched
-cd contracts && forge test                               # 64 tests incl. a real Groth16 slash and a real Zone proof
+cd contracts && forge test                               # 67 tests incl. a real Groth16 slash, a real Zone proof and the own-Zone live batches
 spikes/zone-spf/fetch.sh && spikes/zone-spf/build-guest.sh  # Tempo zones + tempo at pinned commits, patched; Zone guest
 scripts/check-rust-tests.sh                              # required Rust tests
 scripts/check-e2e.sh --log out/e2e/localnet-full-gate.log  # re-gate the recorded full-flow run

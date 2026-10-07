@@ -1,6 +1,6 @@
 import { short } from "../chain/format.ts";
 import type { Loadable } from "../chain/loadable.ts";
-import { OWN_ZONE, type OwnZoneRead } from "../chain/ownZone.ts";
+import { OWN_ZONE, type OwnZoneRead, type OwnZoneVerifyNow } from "../chain/ownZone.ts";
 import { AddrLink, ErrorBox, TxLink } from "./common.tsx";
 
 const REPO = "https://github.com/psyto/sworn";
@@ -10,7 +10,17 @@ const PATH_USD = "0x20C0000000000000000000000000000000000000";
 /** 1000000 base units = 1 pathUSD (6 decimals). */
 const usd = (v: bigint) => `${(Number(v) / 1e6).toFixed(1)} pathUSD`;
 
-export function OwnZoneSection({ ownZone, onRetry }: { ownZone: Loadable<OwnZoneRead>; onRetry: () => void }) {
+const clock = (ms: number) => new Date(ms).toISOString().replace("T", " ").replace(/\.\d+Z$/, " UTC");
+
+interface Props {
+  ownZone: Loadable<OwnZoneRead>;
+  check: Loadable<OwnZoneVerifyNow>;
+  onRetry: () => void;
+  onVerify: () => void;
+}
+
+export function OwnZoneSection({ ownZone, check, onRetry, onVerify }: Props) {
+  const busy = check.status === "loading";
   return (
     <section className="section" id="own-zone" aria-labelledby="own-zone-h">
       <div className="section-head">
@@ -33,6 +43,43 @@ export function OwnZoneSection({ ownZone, onRetry }: { ownZone: Loadable<OwnZone
         ) : (
           <p className="loading">
             <span className="pulse" aria-hidden /> Reading the portal, three settlement receipts and the payout…
+          </p>
+        )}
+      </div>
+
+      <div className="card zone-card again" aria-live="polite" aria-busy={busy}>
+        <p className="eyebrow">Check the withdrawal batch's proof yourself, now</p>
+        <p>
+          Two live, read-only <code>eth_call</code>s to our Zone's verifier, with the exact call its portal made when the
+          withdrawal batch settled. Nothing is signed or sent.
+        </p>
+        <button className="btn" onClick={onVerify} disabled={busy}>
+          {busy ? "Calling…" : "Re-verify on chain"}
+        </button>
+        {check.status === "ok" ? (
+          <>
+            <ol className="calls">
+              <li>
+                <span className="label">The portal's verify call</span>
+                <span className="result ok">✓ true</span>
+                <span className="sub">
+                  The same proof and batch fields that <TxLink hash={check.value.submitTx}>submitBatch {short(check.value.submitTx)}</TxLink>{" "}
+                  carries verify against the deployed contract.
+                </span>
+              </li>
+              <li>
+                <span className="label">One field changed</span>
+                <span className="result bad">✗ reverts {check.value.mutatedError}()</span>
+                <span className="sub mono">nextZoneHeight {check.value.height.toString()} → {(check.value.height + 1n).toString()}</span>
+              </li>
+            </ol>
+            <p className="readat">Called at {clock(check.value.readAt)} on the latest block.</p>
+          </>
+        ) : check.status === "error" ? (
+          <ErrorBox error={check.error} onRetry={onVerify} />
+        ) : (
+          <p className="loading">
+            <span className="pulse" aria-hidden /> {busy ? "Calling verify(…) on Moderato…" : "Waiting for the receipt reads…"}
           </p>
         )}
       </div>

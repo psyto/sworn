@@ -453,6 +453,13 @@ Plan, conditions and runbook: `spikes/own-zone/FEASIBILITY.md`, `RUNBOOK.md`. Re
   - The user's L1 pathUSD went from 999,998,999,480 to 999,999,499,480, exactly +500,000.
   - The withdrawal could be paid only after the batch containing it was proven and settled.
 - **Time:** 58.5 minutes from the anchor block (09:53:57 UTC) to the payout block (10:52:29 UTC).
+- **Reproducible by anyone:** `spikes/own-zone/scripts/export-vectors.mjs` takes each batch's verify call from its
+  `submitBatch` trace, checks it equal to the prover's record (all fields and the proof bytes), and writes it to
+  `contracts/test/vectors/own-zone/` with the deployed verifier's bytecode. `forge test --match-test OWNZONE` runs
+  each real proof through the AC-Z4 cases against the real SP1 v6.1.0 Groth16 verifier, then replays the portal's
+  exact calldata against the deployed bytecode (true; nextZoneHeight + 1 → `InvalidProof()`). The live page's
+  own-Zone section does the same replay for the withdrawal batch with two `eth_call`s, after checking that the
+  `submitBatch` transaction carries that proof and those hashes.
 - **Read-only checks after the run:**
   - the verifier's immutables match;
   - `no-owner --zone-verifier` passes on the deployed code (2,993 bytes, STATICCALL ×1, forbidden opcodes 0);
