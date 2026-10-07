@@ -1,11 +1,11 @@
-# Demo video: Sworn (≤ 3 min, founder's voice), v5.5 (own-Zone live run), 2026-10-06
+# Demo video: Sworn (≤ 3 min, founder's voice), v5.6 (success + forged-batch rejection), 2026-10-07
 
 **One product, one user.** This demo follows a Zone operator who needs independently checkable evidence for a
 batch. It does not show the separate bonded-answer payment prototype or imitate a retail wallet. The operator
 workflow is an authored explanatory view; the proof, read-only checks, contract event and explorer record that
 follow are real.
 
-**Status: v5.5 scripted as silent picture + script + subtitles.** `video/demo.mp4` is 1920×1080. The founder
+**Status: v5.6 scripted as silent picture + script + subtitles.** `video/demo.mp4` is 1920×1080. The founder
 records the narration in their own voice using `video/scenes/demo/NARRATION.md`; `demo.srt` follows the same
 timing. `record-demo.mjs` rereads the cited public chain state before it records, using only read-only RPC calls.
 
@@ -22,8 +22,9 @@ Tempo (spec 004), not a deployed Sworn feature.
 | 4 Operator Console and prototype verifier, live | 30 s | local Operator Console + public evidence page; read-only live call |
 | 5 Real proof, on chain | 36 s | public page + explorer event + a live mutation check |
 | 6 Our own Zone on Moderato | 20 s | public page `#own-zone`, read live + explorer of the payout |
-| 7 Said plainly | 16.5 s | authored scope disclosure (`dz`) |
-| 8 GTM test and next step | 31 s | authored validation route (`d6`) |
+| 7 A forged batch is rejected | 13 s | authored on-chain evidence view, values rechecked live |
+| 8 Said plainly | 16.5 s | authored scope disclosure (`dz`) |
+| 9 GTM test and next step | 18 s | authored validation route (`d6`) |
 
 ## Scene 1 — start a proof job · ≈ 15 s
 
@@ -92,7 +93,17 @@ sent to our portal.]**
 > proof passed could this withdrawal be paid: our sequencer then called processWithdrawals. Here is the payout on
 > the explorer: zero point five pathUSD.
 
-## Scene 7 — said plainly · ≈ 16.5 s
+## Scene 7 — a forged batch is rejected · ≈ 13 s
+
+**[A dedicated Zone Operations Console evidence view, filled while recording from the public chain: the actual
+`submitBatch` transaction, status 0; valid sequencer signature; a made-up withdrawal queue; the real proof replayed;
+`InvalidProof()` in the verifier trace; zone height still 61. This is the real failed transaction, not a simulated
+field mutation.]**
+
+> Our sequencer submitted a forged batch: valid signature, made-up withdrawal queue, replayed proof. The portal
+> rejected it. No batch settled, and the Zone state did not change.
+
+## Scene 8 — said plainly · ≈ 16.5 s
 
 **[Three plain disclosure cards: fixture: dev chain 1337; our own Zone, one operator; Tempo's Zones unchanged,
 spec 004 is a proposal.]**
@@ -100,16 +111,14 @@ spec 004 is a proposal.]**
 > To be clear: the batch above comes from a dev chain. The Zone that paid is our own Zone on Moderato, run by
 > us, not a Tempo-created Zone. Tempo's own Zones still use their current verifier.
 
-## Scene 8 — GTM test and next step · ≈ 31 s
+## Scene 9 — GTM test and next step · ≈ 18 s
 
 **[The Console shows the test sequence: a Zone business supplies its witness; its reviewer re-verifies one
 batch; a repeat need for the next batch or upgrade is the conversion test. “GTM test, not traction” is
 visible alongside the limits.]**
 
-> Sworn has no customers, revenue or payer agreement today. The first test is not broad adoption. A Zone
-> business supplies a batch, its reviewer re-verifies it, and we ask whether it needs the next batch or
-> upgrade proved. Only then is Proof Operations a recurring service. Integration with Tempo's own Zones
-> remains a separate proposal.
+> Sworn has no customers, revenue or payer agreement today. The next test is one Zone business supplying a batch;
+> its reviewer re-verifies it and decides whether the next batch or upgrade is worth paying for.
 
 ## Claims and sources
 
@@ -122,6 +131,7 @@ visible alongside the limits.]**
 | real batch → true; one changed field → `InvalidProof()` | two read-only calls made by the recorder and shown by the public page |
 | local proof job starts the real pipeline, then read-only checks | `operator/server.mjs`: fixed fixture only, runs `scripts/zone-prove.sh` then `scripts/zone-attest.sh` without `--send` |
 | our own Zone's portal settled 3 proven batches and paid the withdrawal after the proof | `deployments/moderato.json` → `OwnZone`, the page's `#own-zone` section (portal, receipts and `WithdrawalProcessed` read live), checked against the recorder's own reads; explorer of the payout |
+| a sequencer-signed forged batch was rejected and left the portal state unchanged | `deployments/moderato.json` → `OwnZone.forgedBatch`; receipt status 0, `debug_traceTransaction` shows `SwornZoneVerifier` reverting `InvalidProof()`, and the recorder reads the portal state after the transaction |
 | the fixture instances have no portal; Tempo's own Zones are unchanged | `SwornZoneVerifierWithdrawal.deviations`, README "Is not, yet" and spec 004 |
 | GTM test and current limits | README: testnet, unaudited, no customers/revenue/payer agreement; spec 004 calls settlement integration a proposal for Tempo |
 

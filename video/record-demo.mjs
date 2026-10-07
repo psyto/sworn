@@ -1,4 +1,4 @@
-// Records video/demo.mp4 — Sworn's ≤ 3 min CWF demo v5.5, eight scenes, SILENT, 1920×1080 — plus video/demo.srt
+// Records video/demo.mp4 — Sworn's ≤ 3 min CWF demo v5.6, nine scenes, SILENT, 1920×1080 — plus video/demo.srt
 // and video/demo.marks.json. It follows a Zone operator's need for independently checkable batch evidence,
 // then shows the real proof on a Zone batch with a withdrawal, our own Zone's proof-gated payout on Moderato, and
 // the explicit present-day limits.
@@ -26,8 +26,9 @@
 //   scene 6  our own Zone: moderato.json OwnZone ↔ Moderato (portal.verifier(), the three submitBatch receipts, the
 //            payout's WithdrawalProcessed to the user); the page's #own-zone section (recorded in a real browser)
 //            must show those values; explorer of the payout, cropped.
-//   scene 7  deployments/moderato.json SwornZoneVerifierWithdrawal (batch, deviations), README, spec 004.
-//   scene 8  spec 004 (header, §6 "not built"), zone_factory, Tempo's ZoneFactory on Moderato
+//   scene 7  an authored evidence view whose transaction/status values are read from the public chain while recording.
+//   scene 8  deployments/moderato.json SwornZoneVerifierWithdrawal (batch, deviations), README, spec 004.
+//   scene 9  spec 004 (header, §6 "not built"), zone_factory, Tempo's ZoneFactory on Moderato
 //            (one admin, 1-of-1 Safe owner), README limits, the repo (public), the page (HTTP 200).
 // v2 (four scenes, hardfork batch) is in git: HEAD:video/record-demo.mjs before v2.1.
 import path from "node:path";
@@ -53,18 +54,18 @@ mkdirSync(work, { recursive: true });
 
 // ── the script ───────────────────────────────────────────────────────────────────────────────────
 const scenes = parseScenes("video/DEMO.md");
-if (scenes.length !== 8) fail(`DEMO.md has ${scenes.length} scenes, expected 8 (v5.5)`);
+if (scenes.length !== 9) fail(`DEMO.md has ${scenes.length} scenes, expected 9 (v5.6)`);
 const md = read("video/DEMO.md", "DEMO.md");
 const targets = [...md.matchAll(/^## Scene (\d+) — .*· ≈ (\d+(?:\.\d+)?) s\s*$/gm)].map((m) => +m[2]);
-if (targets.length !== 8) fail("DEMO.md: every scene heading needs its \"≈ N s\" target");
+if (targets.length !== 9) fail("DEMO.md: every scene heading needs its \"≈ N s\" target");
 const holds = scenes.map((s, i) => Math.max(s.hold, targets[i]));
 const TOTAL = holds.reduce((a, b) => a + b, 0);
 const words = scenes.reduce((a, s) => a + s.words, 0);
-log(`• demo v5.5: scene lengths = max(target, words ÷ 2.2)`);
+log(`• demo v5.6: scene lengths = max(target, words ÷ 2.2)`);
 for (const [i, s] of scenes.entries()) log(`    scene ${s.n}: ${String(s.words).padStart(3)} words (${s.hold} s of voice) → ${holds[i]} s  (${s.title})`);
 log(`    total ${TOTAL} s, ${words} words`);
-// v5.5 adds the own-Zone scene (44 words); the cap rose from 330 to 350. The time limit (180 s) still binds.
-if (words > 350) fail(`DEMO.md narration is ${words} words > the cap 350`);
+// v5.6 gives the real forged-batch rejection its own scene while keeping the final runtime below 180 seconds.
+if (words > 370) fail(`DEMO.md narration is ${words} words > the cap 370`);
 if (TOTAL > MAX_TOTAL) fail(`demo runs ${TOTAL} s > ${MAX_TOTAL} s`);
 const narr = scenes.map((s) => s.text).join(" ");
 for (const banned of [/the same input/i, /\bbroken\b/i, /secures? withdrawals/i, /protects withdrawals(?! yet)/i, /every batch/i, /our customers are/i])
@@ -355,6 +356,12 @@ async function explorerShots() {
 const OZ = M.dep.OwnZone ?? fail("moderato.json: no OwnZone");
 const OZP = getAddress(OZ.OwnZonePortal.address), OZV = getAddress(OZ.SwornZoneVerifier.address);
 if (getAddress(await call(OZP, "verifier() view returns (address)")) !== OZV) fail(`portal ${OZP} does not call ${OZV}`);
+const forgedReceipt = await rpc("eth_getTransactionReceipt", [OZ.forgedBatch.tx]);
+if (!forgedReceipt || forgedReceipt.status !== "0x0") fail(`forged batch ${OZ.forgedBatch.tx}: expected a reverted receipt`);
+const forgedTransaction = await rpc("eth_getTransactionByHash", [OZ.forgedBatch.tx]);
+if (!forgedTransaction || getAddress(forgedTransaction.to) !== OZP || getAddress(forgedTransaction.from) !== getAddress(OZ.roles.sequencer))
+  fail(`forged batch ${OZ.forgedBatch.tx}: not sequencer → OwnZonePortal`);
+const forgedBlock = parseInt(forgedReceipt.blockNumber, 16);
 const BATCH_TOPIC = toEventSelector("BatchSubmitted(uint64,uint256,bytes32,bytes32,bytes32,uint64,uint64)");
 for (const b of OZ.batches) {
   const r = await receipt(b.submitTx, `submitBatch ${b.zoneBlocks}`);
@@ -375,10 +382,12 @@ function checkOwnZoneText(t, when) {
   const want = ["A portal that pays a withdrawal only after Sworn's proof passes", `✓ ${OZ.batches.length} batches settled · withdrawal paid`, short(OZP, 6), short(OZV, 6),
     ...OZ.batches.map((b) => short(b.submitTx)), short(OZ.payout.tx), String(payBlock), "✓ the demo user's 0.5 pathUSD withdrawal",
     "Our own Zone, not a Tempo-created one.", "One operator.", "Testnet, and not audited.",
-    "Re-verify on chain", "The portal's verify call", "✓ true", "One field changed", "✗ reverts InvalidProof()", "nextZoneHeight 61 → 62"];
+    "Re-verify on chain", "The portal's verify call", "✓ true", "One field changed", "✗ reverts InvalidProof()", "nextZoneHeight 61 → 62",
+    "A forged batch, rejected by the proof", "Forged batch 62", "sequencer-signed; made-up withdrawal queue", "✗ rejected", "status 0"];
   for (const w of want) if (!lc(t).includes(lc(w))) fail(`page #own-zone (${when}) does not show "${w}"`);
   if (/does not match|could not read/i.test(t)) fail(`page #own-zone (${when}) shows a mismatch or an error`);
 }
+
 const OZ_EX = 8; // seconds of the payout explorer insert at the end of scene 6
 let calledOwn = null;
 async function captureOwnZone(secs) {
@@ -488,7 +497,7 @@ const pub = await fetchText(PUBLISHED, "published page");
 if (!/<title>Sworn/.test(pub)) fail(`${PUBLISHED}: no "<title>Sworn"`);
 
 const data = {
-  scenes: ["d0", "d1", "dflow", "e1", "e2", "dz", "d6"],
+  scenes: ["d0", "d1", "dflow", "e1", "e2", "dforged", "dz", "d6"],
   ozId: String(OZ.zoneId), payLine: `Our portal paid ${payAmt} after the proof, block ${payBlock.toLocaleString("en-US")}.`,
   digest: short(fx.digest), attestShort: `attest ${short(Z.attest.tx)}`,
   portalSrc: `tempoxyz/zones @ ${ZONES_REF} · ZonePortal.sol`, portalLines,
@@ -499,6 +508,7 @@ const data = {
   plainSrc: "deployments/moderato.json SwornZoneVerifierWithdrawal (batch, deviations D1–D4) · README “What the Zone verifier is, and is not” · docs/specs/004-tee-plus-zk.md",
   specSrc: `spec 004: “A proposal for Tempo, not something Sworn can deploy.” · “Payouts wait for ZK.” · Tempo's factory fixes each Zone's verifier (${FACTORY.replace(/^tempo\//, "")}:${fv + 1})`,
   operatorSrc: `README Status · Tempo's Zone factory on Moderato, read now: ${nZones} Zones, one admin and one sequencer set, factory owned by a 1-of-1 Safe with that signer`,
+  forgedTx: short(OZ.forgedBatch.tx, 6), forgedBlock: String(forgedBlock),
   repo: repoUrl, pageUrl: PUBLISHED.replace(/^https:\/\//, "").replace(/\/$/, ""),
 };
 for (const [k, v] of Object.entries(data)) if (typeof v === "string") assertFresh(v, `slot ${k}`);
@@ -605,16 +615,20 @@ await recordSlides({ html: "demo.html", data, ids: ["e2"], holds: [OZ_EX], raw: 
 concat([ozA, ozX], sceneOZ);
 rmSync(og.raw, { force: true });
 
-// ── scene 7: said plainly ───────────────────────────────────────────────────────────────────────
-const scene5 = path.join(work, "scene5.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["dz"], holds: [holds[6]], raw: path.join(work, "s5.raw.mp4"), out: scene5, viewport: CONSOLE_VIEWPORT });
+// ── scene 7: the actual forged batch, evidenced with values just read from Moderato ──────────────
+const sceneForged = path.join(work, "sceneForged.mp4");
+await recordSlides({ html: "demo.html", data, ids: ["dforged"], holds: [holds[6]], raw: path.join(work, "s7.raw.mp4"), out: sceneForged, viewport: CONSOLE_VIEWPORT });
 
-// ── scene 8 ─────────────────────────────────────────────────────────────────────────────────────
+// ── scene 8: said plainly ───────────────────────────────────────────────────────────────────────
+const scene5 = path.join(work, "scene5.mp4");
+await recordSlides({ html: "demo.html", data, ids: ["dz"], holds: [holds[7]], raw: path.join(work, "s5.raw.mp4"), out: scene5, viewport: CONSOLE_VIEWPORT });
+
+// ── scene 9: compact GTM test ───────────────────────────────────────────────────────────────────
 const scene6 = path.join(work, "scene6.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["d6"], holds: [holds[7]], raw: path.join(work, "s6.raw.mp4"), out: scene6, viewport: CONSOLE_VIEWPORT });
+await recordSlides({ html: "demo.html", data, ids: ["d6"], holds: [holds[8]], raw: path.join(work, "s6.raw.mp4"), out: scene6, viewport: CONSOLE_VIEWPORT });
 
 // ── assemble ────────────────────────────────────────────────────────────────────────────────────
-const parts = [scene1, scene2, sceneDF, scene3, scene4, sceneOZ, scene5, scene6];
+const parts = [scene1, scene2, sceneDF, scene3, scene4, sceneOZ, sceneForged, scene5, scene6];
 parts.forEach((f, i) => { const d = duration(f); if (Math.abs(d - holds[i]) > 0.12) fail(`scene ${i + 1} clip is ${d} s, expected ${holds[i]} s`); });
 const out = path.join(dir, "demo.mp4");
 concat(parts, out);
@@ -623,19 +637,19 @@ if (Math.abs(got - TOTAL) > 0.25) fail(`demo.mp4 is ${got} s, expected ${TOTAL} 
 if (got > MAX_TOTAL) fail(`demo.mp4 is ${got} s > ${MAX_TOTAL} s`);
 const starts = holds.reduce((acc, h) => [...acc, acc.at(-1) + h], [0]);
 const cues = writeSrt(scenes, starts, path.join(dir, "demo.srt"));
-for (let i = 0; i < 8; i++) ff(["-ss", (starts[i + 1] - 0.2).toFixed(2), "-i", out, "-frames:v", "1", path.join(dir, "frames", `demo-scene${i + 1}.png`)]);
+for (let i = 0; i < 9; i++) ff(["-i", out, "-ss", (starts[i] + Math.min(2, holds[i] / 2)).toFixed(2), "-frames:v", "1", path.join(dir, "frames", `demo-scene${i + 1}.png`)]);
 const r2 = (e) => +K(e).toFixed(2);
 writeJson(path.join(dir, "demo.marks.json"), {
-  name: "demo", script: "video/DEMO.md", version: "5.5", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
+  name: "demo", script: "video/DEMO.md", version: "5.6", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
   page: PAGE, published: PUBLISHED, recordedFromPublishedPage: PAGE === PUBLISHED,
   zoneAttest: Z.attest.tx, liveCalls,
-  ownZone: { portal: OZP, verifier: OZV, settled: OZ.batches.map((b) => b.submitTx), payout: OZ.payout.tx, payoutBlock: payBlock, reverifyCalledAt: calledOwn, scene6: { page: OZ_PAGE, explorer: OZ_EX } },
+  ownZone: { portal: OZP, verifier: OZV, settled: OZ.batches.map((b) => b.submitTx), payout: OZ.payout.tx, payoutBlock: payBlock, reverifyCalledAt: calledOwn, forged: { tx: OZ.forgedBatch.tx, block: forgedBlock, status: 0, from: forgedTransaction.from, to: forgedTransaction.to, scene7: holds[6] }, scene6: { page: OZ_PAGE, explorer: OZ_EX } },
   pageMarks: { verifyPanel: r2("verifyPanel"), click1: r2("click1"), stub: r2("stub"), s3a: r2("s3a"), contains: r2("contains"), s3c: r2("s3c"), click2: r2("click2"), compare: r2("compare") },
   calledAt: pg.called,
   scene4: { pageA: S3.pageA, explorer: S3.explorer, pageC: S3.pageC, cutOutOfPage: IDLE },
-  note: "Silent. Read each scene's lines over its clip (video/scenes/demo/). Scene 5 has the explorer insert in its middle; scene 6 ends on the payout's explorer insert.",
+  note: "Silent. Read each scene's lines over its clip (video/scenes/demo/). Scene 5 has the explorer insert in its middle; scene 6 ends on the payout's explorer insert; scene 7 is an authored evidence view populated from the live forged-batch receipt.",
   recordedAt: new Date().toISOString(),
 });
 log(`\n✓ ${rel(out)}  (${got.toFixed(2)} s, holds ${holds.join(" / ")}, ${words} words)`);
-log(`✓ video/demo.srt  (${cues} cues) · video/demo.marks.json · video/frames/demo-scene{1..8}.png`);
+log(`✓ video/demo.srt  (${cues} cues) · video/demo.marks.json · video/frames/demo-scene{1..9}.png`);
 log(`  next: node video/split-scenes.mjs demo`);

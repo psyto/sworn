@@ -99,41 +99,41 @@ Only after the last proof passed could this withdrawal be paid: our sequencer th
 Here is the payout on the explorer: zero point five pathUSD.
 
 26
-00:02:07,500 --> 00:02:12,492
-To be clear: the batch above comes from a dev chain.
+00:02:07,500 --> 00:02:13,709
+Our sequencer submitted a forged batch: valid signature, made-up withdrawal queue, replayed proof.
 
 27
-00:02:12,542 --> 00:02:17,075
-The Zone that paid is our own Zone on Moderato,
+00:02:13,759 --> 00:02:15,635
+The portal rejected it.
 
 28
-00:02:17,125 --> 00:02:20,283
-run by us, not a Tempo-created Zone.
+00:02:15,685 --> 00:02:20,450
+No batch settled, and the Zone state did not change.
 
 29
-00:02:20,333 --> 00:02:23,950
-Tempo's own Zones still use their current verifier.
+00:02:20,500 --> 00:02:25,492
+To be clear: the batch above comes from a dev chain.
 
 30
-00:02:24,000 --> 00:02:29,023
-Sworn has no customers, revenue or payer agreement today.
+00:02:25,542 --> 00:02:30,075
+The Zone that paid is our own Zone on Moderato,
 
 31
-00:02:29,073 --> 00:02:32,968
-The first test is not broad adoption.
+00:02:30,125 --> 00:02:33,283
+run by us, not a Tempo-created Zone.
 
 32
-00:02:33,018 --> 00:02:38,605
-A Zone business supplies a batch, its reviewer re-verifies it,
+00:02:33,333 --> 00:02:36,950
+Tempo's own Zones still use their current verifier.
 
 33
-00:02:38,655 --> 00:02:45,368
-and we ask whether it needs the next batch or upgrade proved.
+00:02:37,000 --> 00:02:41,579
+Sworn has no customers, revenue or payer agreement today.
 
 34
-00:02:45,418 --> 00:02:49,877
-Only then is Proof Operations a recurring service.
+00:02:41,629 --> 00:02:46,721
+The next test is one Zone business supplying a batch;
 
 35
-00:02:49,927 --> 00:02:54,950
-Integration with Tempo's own Zones remains a separate proposal.
+00:02:46,771 --> 00:02:54,950
+its reviewer re-verifies it and decides whether the next batch or upgrade is worth paying for.
