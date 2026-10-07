@@ -1,0 +1,25 @@
+<!doctype html>
+<!-- A terminal view for demo B: the recorder (record-demo-b.mjs) runs real commands while recording and streams
+     their output into this page as it arrives. Nothing here is a figure: every line comes from the process. -->
+<meta charset="utf-8" />
+<title>Sworn terminal</title>
+<link rel="stylesheet" href="slides.css" />
+<style>
+html,body{width:1024px;height:576px;margin:0;background:#f3f2e8}
+.win{position:absolute;inset:22px;border:1px solid #2b2d36;background:#16171d;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.bar{display:flex;align-items:center;gap:7px;padding:9px 12px;background:#24252d;border-bottom:1px solid #2f313b;font:12px var(--mono);color:#a9abb8}
+.bar i{width:11px;height:11px;border-radius:50%;display:inline-block}.bar .t{margin-left:10px}
+pre{margin:0;padding:14px 16px;flex:1;overflow:hidden;font:13.5px/1.5 var(--mono);color:#e4e6ee;white-space:pre-wrap;word-break:break-all}
+.p{color:#8bd5a0}.c{color:#fff}.ok{color:#8bd5a0}.dim{color:#8d90a0}
+.cur{display:inline-block;width:8px;height:15px;background:#e4e6ee;vertical-align:-2px;animation:b 1s steps(1) infinite}@keyframes b{50%{opacity:0}}
+</style>
+<div class="win"><div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t" id="title">sworn — zsh</span></div><pre id="out"></pre></div>
+<script>
+const out = document.getElementById("out");
+const esc = (s) => s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
+let cursor = document.createElement("span"); cursor.className = "cur";
+window.__prompt = (cmd) => { const line = document.createElement("span"); line.innerHTML = `<span class="p">sworn %</span> <span class="c"></span>`; out.appendChild(line); out.appendChild(cursor); return line.querySelector(".c"); };
+window.__type = async (cmd) => { const c = window.__prompt(); for (const ch of cmd) { c.textContent += ch; await new Promise((r) => setTimeout(r, 28)); } out.appendChild(document.createTextNode("\n")); out.appendChild(cursor); };
+window.__out = (text) => { const span = document.createElement("span"); span.innerHTML = esc(text).replace(/(✓[^\n]*|\[PASS\][^\n]*|Suite result: ok[^\n]*)/g, '<span class="ok">$1</span>'); out.insertBefore(span, cursor); out.scrollTop = out.scrollHeight; };
+window.__idle = () => { window.__prompt(); };
+</script>

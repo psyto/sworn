@@ -81,8 +81,11 @@ function useLocalProofJob() {
         setWorker("ready");
         // A persisted fixture job should not become the landing page's state. Keep a recent result visible
         // while an operator is actually working, but start a fresh page in the ready state.
-        const isRecent = value.current && Date.now() - Date.parse(value.current.startedAt) < 10 * 60 * 1000;
-        setJob(isRecent ? value.current : null);
+        // A running job always shows; a finished one stays for 10 minutes after it finished.
+        const cur = value.current;
+        const running = cur && ["queued", "proving", "verifying"].includes(cur.status);
+        const isRecent = cur && Date.now() - Date.parse(cur.finishedAt ?? cur.startedAt) < 10 * 60 * 1000;
+        setJob(running || isRecent ? cur : null);
       } catch {
         if (!stopped) setWorker("offline");
       }

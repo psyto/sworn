@@ -122,6 +122,8 @@ html,body{width:1024px;height:576px}body{font-size:16px}
 .intro-list li{display:flex;gap:16px;align-items:center;border:1px solid var(--border);background:var(--surface);padding:12px 18px;font-size:22px;letter-spacing:-.02em;margin-top:-1px}
 .intro-list b{font:500 13px var(--mono);color:#fff;background:var(--accent);width:26px;height:26px;display:grid;place-items:center;flex:none}
 .intro-foot{font:12px var(--mono);color:var(--muted);letter-spacing:.03em}
+.plainlist li{font-size:19px;align-items:flex-start}.plainlist .t{font:500 19px var(--sans);background:none;color:var(--text);width:auto;height:auto;display:inline}
+#dclose{padding:49px 40px 0;justify-content:center}#dclose .intro{gap:16px;max-width:940px}
 </style>
 
 <div class="header"><span class="brand">Sworn</span><span class="spacer"></span><span class="toplink">GitHub</span><span class="theme">AUTO</span></div>
@@ -138,6 +140,33 @@ html,body{width:1024px;height:576px}body{font-size:16px}
       <li class="fade" data-at="9.8"><b>3</b><span>A forged batch, rejected</span></li>
     </ol>
     <div class="intro-foot fade" data-at="11.4">Every transaction shown is a real Moderato testnet transaction · this recording only reads</div>
+  </div>
+</div>
+
+<!-- demo B, scene 1 — title card -->
+<div class="scene" id="dintrob">
+  <div class="intro">
+    <div class="intro-head fade" data-at=".4"><img class="mark" src="../_submission/brand/mark.svg" alt="" /><div><div class="intro-k">Sworn</div><div class="intro-h">Evidence for Tempo Zones</div><div class="intro-s">Tempo Zones are private ledgers on Tempo. Sworn proves a Zone batch with Tempo's own code.</div></div></div>
+    <ol class="intro-list">
+      <li class="fade" data-at="5.4"><b>1</b><span>A real proof job, run on a laptop</span></li>
+      <li class="fade" data-at="7.6"><b>2</b><span>Real Moderato testnet transactions, on Tempo's explorer</span></li>
+      <li class="fade" data-at="9.8"><b>3</b><span>A real test run anyone can repeat</span></li>
+    </ol>
+    <div class="intro-foot fade" data-at="11">Every screen after this card is recorded live · the recording only reads</div>
+  </div>
+</div>
+
+<!-- demo B, last scene — said plainly, and next -->
+<div class="scene" id="dclose">
+  <div class="intro">
+    <div class="intro-k fade" data-at=".4">Said plainly</div>
+    <ol class="intro-list plainlist">
+      <li class="fade" data-at=".8"><span><b class="t">Fixture:</b> the proof job's batch is from Tempo's integration tests (dev chain 1337).</span></li>
+      <li class="fade" data-at="3.4"><span><b class="t">Our own Zone:</b> one operator, not a Tempo-created Zone. Tempo's Zones are unchanged; spec 004 is a proposal.</span></li>
+      <li class="fade" data-at="7"><span><b class="t">Today:</b> testnet, unaudited, no customers.</span></li>
+    </ol>
+    <div class="next2 fade" data-at="10.4">Next: one Zone business supplies a batch; its reviewer decides if it is worth paying for.</div>
+    <div class="close fade" data-at="14"><img class="mark sm" src="../_submission/brand/mark.svg" alt="" /><div><div class="closing sm">Sworn: audit-ready evidence for private execution.</div><div class="links sm"><span data-k="repo"></span> · <b data-k="pageUrl"></b></div></div></div>
   </div>
 </div>
 
