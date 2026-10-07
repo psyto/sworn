@@ -39,17 +39,18 @@ field changed”. Caption: “Fixture workflow: Tempo code in SP1 → proof → 
 > verification code in a zero-knowledge VM, then creates proof evidence that a third party can verify on
 > chain.
 
-## Scene 3: the evidence is real · ≈ 24 s
+## Scene 3: the evidence is real · ≈ 23.5 s
 
 **[Headline: “Proof-gated settlement on Moderato.” Pipeline: Tempo Zone code → ZK VM → Groth16 proof → our portal
 settles on Moderato. Three facts, read now from Moderato: “3 batches proven and settled” (counts up), “0.5 pathUSD
 withdrawal paid after the proof”, “anchor → payout: 58.5 min” (both block timestamps, read now). Chip: “our own Zone · portal calls Sworn”.
-Result, on the withdrawal batch: “✓ verify(…) → true” draws in; “one field changed → ✗ reverts InvalidProof()” flips red
-with a small shake (both from the recorder's own read-only calls to our Zone's verifier).]**
+Result: “the withdrawal batch ✓ verify(…) → true” draws in (the recorder's own read-only call to our Zone's verifier);
+“a forged batch, signed by our sequencer → ✗ rejected on chain” flips red with a small shake (the 2026-10-07 transaction:
+status 0, its trace read while recording shows the verifier reverting InvalidProof()).]**
 
 > On Moderato, our own one-operator Zone, not a Tempo-created one, settles a batch only after Sworn's proof
-> passes; only then can a withdrawal be paid. Three batches, proven and checked on chain. Change one input, and it
-> is rejected. From anchor to payout took fifty-eight minutes, every proof made on one laptop.
+> passes; only then can a withdrawal be paid. Three batches, proven and checked on chain. A forged batch, even signed
+> by our own sequencer, is rejected. Anchor to payout: fifty-eight minutes, on one laptop.
 
 ## Scene 4: the go-to-market test · ≈ 17.5 s
 
@@ -91,7 +92,7 @@ for.” The Sworn seal stamps onto the closing block: “Sworn: audit-ready evid
 | 2.1 | The Console starts the documented local fixture prover; it uses no keys and sends no transaction. | `operator/server.mjs`, `scripts/start-zone-operator.sh`, and `docs/operator-console.md`. |
 | 2.2 | Sworn runs `zone_spf::prove_zone_batch` in SP1 and exposes hashes/metadata rather than transaction contents. | Spec 003 §3 and `spikes/zone-spf`; only an operator-supplied witness can be proved. |
 | 3.1 | On Moderato, our own Zone's portal settled three proven batches through `SwornZoneVerifier` and paid a withdrawal after the proof. | `deployments/moderato.json` → `OwnZone`, reread by the recorder: `portal.verifier()`, the three `submitBatch` receipts (status 1, to the portal, `BatchSubmitted`), the payout's `WithdrawalProcessed` (user, pathUSD, 500000). |
-| 3.2 | Real proof verifies; a changed next Zone height reverts `InvalidProof()`. | Recorder's own read-only `eth_call`s to our Zone's verifier, with the withdrawal batch's verifier call taken from its `submitBatch` trace. |
+| 3.2 | Real proof verifies; a forged batch signed by our sequencer is rejected. | Recorder's own read-only `eth_call`s to our Zone's verifier (real call → true, height+1 → `InvalidProof()`); the forged-batch tx `0x3a154e4e…167d` (`OwnZone.forgedBatch`): status 0, sequencer → portal, its trace shows the verifier reverting `InvalidProof()`. |
 | 4.1 | Buyer, operations contract, payment model and willingness to pay are commercial hypotheses. | No customer, payer agreement, price or revenue is claimed. Spec 004 §5 supports the engineering fact that execution upgrades require a new guest and verification key. |
 | 5.1 | Sworn runs Tempo code and binds to Tempo IVerifier-shaped inputs; Tempo uses Reth and Revm. | Specs 003/004 and Tempo `Cargo.toml`. |
 | 5.2 | Founder works on and teaches Reth and has 15 years building banking systems in Japan. | `README.md` “Who”; fabrknt.com/dojo (21 courses, fetched by the recorder). |

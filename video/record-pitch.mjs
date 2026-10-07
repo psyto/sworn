@@ -238,6 +238,14 @@ const ozMut = [...ozArgs]; ozMut[5] = ozH + 1n;
 const ozBad = await rawCall(OZV, encodeFunctionData({ abi: verifyAbi, functionName: "verify", args: ozMut }));
 const ozAt = new Date();
 if (!ozBad.error || !String(ozBad.error.data ?? "").startsWith(toFunctionSelector("InvalidProof()"))) fail(`eth_call own-Zone verify(height+1) did not revert InvalidProof(): ${JSON.stringify(ozBad)}`);
+// The forged batch (2026-10-07): sequencer → portal, status 0, and the revert came from the verifier.
+const FB = OZ.forgedBatch ?? fail("moderato.json: no OwnZone.forgedBatch");
+const fbR = await rpc("eth_getTransactionReceipt", [FB.tx]);
+if (!fbR || fbR.status !== "0x0") fail(`forged batch ${FB.tx}: status ${fbR?.status}, not 0`);
+if (getAddress(fbR.to) !== PORTAL || getAddress(fbR.from) !== getAddress(OZ.roles.sequencer)) fail("forged batch is not sequencer → portal");
+const fbTrace = await rpc("debug_traceTransaction", [FB.tx, { tracer: "callTracer" }]);
+const fbV = findCall(fbTrace) ?? fail("forged batch: the portal did not call the verifier");
+if (!fbV.error || !String(fbV.output ?? "").startsWith(toFunctionSelector("InvalidProof()"))) fail("forged batch: the verifier did not revert InvalidProof()");
 log(`• own Zone: portal ${short(PORTAL)} → ${short(OZV)}; ${OZ.batches.length} batches settled (anchor ages ${ages.join(" / ")}); payout ${short(OZ.payout.tx)} ${pay.amount} to ${short(pay.to)}; verify(height ${ozH}) = true, (height ${ozH + 1n}) reverts InvalidProof() at ${ozAt.toISOString()}`);
 
 // The explorer, captured now, cropped to its transaction card (the site header carries Tempo's wordmark).
@@ -339,9 +347,9 @@ const data = {
   settleSrc: `our own Zone ${OZ.zoneId} · portal ${short(PORTAL, 6)} → SwornZoneVerifier ${short(OZV, 6)} → SP1 · submitBatch ${OZ.batches.map((b) => short(b.submitTx)).join(", ")} · payout ${short(OZ.payout.tx)} · read now from Moderato`,
   callRealWhat: `the withdrawal batch, zone blocks ${wdBatch.zoneBlocks}`,
   callReal: "✓ verify(…) → true",
-  callBadWhat: `one field changed: height ${ozH} → ${ozH + 1n}`,
-  callBad: "✗ rejected: reverts InvalidProof()",
-  callSrc: `eth_call, read-only, to our Zone's verifier ${short(OZV, 6)}, with the call its portal made in ${short(wdBatch.submitTx)} · called ${utc(ozAt)} UTC`,
+  callBadWhat: `a forged batch, signed by our sequencer · zone height ${FB.forged.zoneHeight}`,
+  callBad: "✗ rejected on chain: InvalidProof()",
+  callSrc: `true: eth_call, read-only, to our Zone's verifier ${short(OZV, 6)} with its portal's call in ${short(wdBatch.submitTx)}, ${utc(ozAt)} UTC · rejected: tx ${short(FB.tx)}, block ${parseInt(fbR.blockNumber, 16).toLocaleString("en-US")}, status 0, the verifier reverted (trace)`,
   // 4
   nearSrc: "On Tempo's own Zones, checked off to the side: their portals do not call this contract and it stores nothing (spec 003 §5 D2, D4). Only our own Zone settles through it.",
   laterSrc: `spec 004: “A proposal for Tempo, not something Sworn can deploy.” · “Payouts wait for ZK.” · §6: ${notBuilt} parts, not built`,
