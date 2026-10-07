@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Sworn pitch v5.4 (own-Zone live run; picture motion as v5.3 — flow.css). Dynamic chain facts (digest, settled
+<!-- Sworn pitch v5.5 (buyer, alternative and adoption path; picture motion as v5.3 — flow.css). Dynamic chain facts (digest, settled
      batches, payout, anchor age, live call results) are supplied by record-pitch.mjs at recording time. -->
 <meta charset="utf-8" />
 <title>Sworn pitch</title>
@@ -61,7 +61,7 @@
       <div class="vlock" data-at="7.6"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5.2 7V5a2.8 2.8 0 0 1 5.6 0v2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg> Private ledger · batch witness</div></div>
     <div class="lane fade" data-at="1.2"><span class="lane-line"></span><span class="batch" data-at="3.4"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 1.5h6l3 3v10h-9z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.5 1.5v3h3M5.5 8h5M5.5 10.5h5M5.5 13h3" fill="none" stroke="currentColor" stroke-width="1.1"/></svg> Withdrawal batch</span></div>
     <div class="card rev fade" data-at="2.4"><span class="k">Auditor / settlement counterparty</span><div class="h">needs evidence, not the private ledger</div>
-      <div class="qbox"><span class="qmark" data-at="5.4" data-off="10">?</span><span class="qtext" data-at="10.2">Can it independently check this exact batch?</span></div></div>
+      <div class="qbox"><span class="qmark" data-at="5.4" data-off="10">?</span><span class="qtext" data-at="10.2">Without evidence: wait<br />or carry more risk.</span></div></div>
   </div>
   <div class="answer fade" data-at="12.6"><div class="h">Sworn creates audit-ready evidence.</div><div class="b">For the exact batch — without exposing customer transactions.</div></div>
 </div>
@@ -82,14 +82,14 @@
 <div class="scene" id="p4">
   <div class="kicker fade">The go-to-market test</div><h1 class="sm fade">Earn the right to a recurring contract.</h1>
   <div class="prog fade" data-at="1"><span class="track"></span><i class="fill" data-at="1.4" style="--w:16.67%"></i><i class="fill" data-at="3.4" style="--w:50%"></i><i class="fill" data-at="7" style="--w:83.33%"></i><b class="node" data-at="1.4" style="left:16.67%"></b><b class="node" data-at="3.4" style="left:50%"></b><b class="node" data-at="7" style="left:83.33%"></b></div>
-  <div class="grid3 buy"><div class="card fade" data-at="1.6"><span class="k">1. Operator</span><div class="h">Supplies its own witness</div><div class="b">A Zone business is the only party that can begin the proof workflow.</div></div><div class="card fade" data-at="3.6"><span class="k">2. First proof</span><div class="h">Reviewer re-verifies one batch</div><div class="b">Deliver proof evidence and reproducible verification instructions.</div></div><div class="card fade" data-at="7.2"><span class="k">3. Repeat need</span><div class="h">Next batch or next upgrade</div><div class="b">Only then is Proof Operations a recurring contract.</div></div></div>
+  <div class="grid3 buy"><div class="card fade" data-at="1.6"><span class="k">1. First buyer</span><div class="h">Reviewer cannot reconstruct the witness</div><div class="b">A Zone business alone holds the private batch witness.</div></div><div class="card fade" data-at="3.6"><span class="k">2. Why this proof</span><div class="h">Not a signed report</div><div class="b">Evidence of exact Tempo execution for the reviewer.</div></div><div class="card fade" data-at="7.2"><span class="k">3. Conversion</span><div class="h">Repeat batch or upgrade</div><div class="b">Only then is Proof Operations a recurring contract.</div></div></div>
   <div class="tag fade" data-at="12.5">GTM test — not traction claimed</div>
 </div>
 
 <div class="scene" id="p5">
   <div class="kicker fade">Why now, why Sworn</div><h1 class="sm fade">Tempo-specific, not generic ZK.</h1>
   <div class="grid3 why fade" data-at="2"><div class="card"><span class="k">Tempo execution</span><div class="h">Runs Tempo's own Zone code</div><div class="b">Not an abstract proof of arbitrary application logic.</div></div><div class="card"><span class="k">Exact batch</span><div class="h">Bound to inputs Tempo's portal understands</div><div class="b">The proof fits the operational batch shape.</div></div><div class="card"><span class="k">Operational fit</span><div class="h">Rebuilt for Tempo upgrades</div><div class="b">Ongoing compatibility is part of the service.</div></div></div>
-  <div class="stack fade" data-at="15"><span>ZK proving for Zones: not implemented</span><span>Founder: Reth · Revm</span><span>ETHGlobal Tokyo · Uniswap Foundation prize</span><span>15 years · banking systems</span></div>
+  <div class="stack fade" data-at="15"><span>Tempo: no Zone ZK today</span><span>Start: Proof Operations</span><span>Later: alongside TEE</span><span>Founder: Reth · Revm · banking</span></div>
 </div>
 
 <div class="scene" id="p6">

@@ -56,19 +56,20 @@ record with a fallback font; never Tempo's logo, wordmark or Pilat).
 node video/record-pitch.mjs              # → video/pitch.mp4 + pitch.srt + pitch.marks.json   (reads only)
 node video/split-scenes.mjs pitch        # → video/scenes/pitch/scene-{1..6}.mp4|.txt + NARRATION.md
 
-DEMO_PAGE_URL=http://127.0.0.1:4180/ node video/record-demo.mjs   # demo v5.3 (local Vite preview of site/) → demo.mp4 + demo.srt + demo.marks.json + frames/demo-scene{1..6}.png (reads only)
-PREVIEW=<dir> node video/record-demo.mjs # the four authored slides as PNGs + all source checks; records nothing
-node video/split-scenes.mjs demo         # → video/scenes/demo/scene-{1..6}.mp4|.txt + NARRATION.md
+DEMO_PAGE_URL=http://127.0.0.1:4180/ node video/record-demo.mjs   # demo v5.6 → demo.mp4 + demo.srt + demo.marks.json + frames/demo-scene{1..9}.png (reads only)
+PREVIEW=<dir> node video/record-demo.mjs # one PNG per authored scene + all source checks; records nothing
+node video/split-scenes.mjs demo         # → video/scenes/demo/scene-{1..9}.mp4|.txt + NARRATION.md
 ```
 
-Pitch **v5.2** (six scenes, ≤118 s) follows the buyer's operational moment: a Zone business needs independently checkable evidence before it releases a withdrawal batch. It shows the Operator Console, then the working proof, then the explicit go-to-market test: one operator-supplied batch, independently re-verified, followed only by a repeat need. Its recorder rereads the Zones visibility and witness constraints, Tempo's Reth/Revm dependencies, the attest `0xa630…` fixture, and the live proof and mutation checks before recording. Customer, payer, contract shape and price are explicitly marked as hypotheses; no customer or adoption is claimed. `PREVIEW=<dir> node video/record-pitch.mjs` writes one PNG per scene instead of recording.
+Pitch **v5.5** (six scenes, 1:56) follows the buyer's operational moment: without independently checkable evidence, a private Zone's settlement may wait or carry more risk. It identifies the first buyer, explains why a signed report or generic proof is insufficient, and positions future TEE + ZK use as a proposal rather than Tempo adoption. It then shows the working proof, an explicit go-to-market test, and the honest limits. Its recorder rereads the Zones visibility and witness constraints, Tempo's Reth/Revm dependencies, the attest `0xa630…` fixture, and the live proof and mutation checks before recording. Customer, payer, contract shape and price are explicitly marked as hypotheses; no customer or adoption is claimed. `PREVIEW=<dir> node video/record-pitch.mjs` writes one PNG per scene instead of recording.
 
-Demo **v5.3** (six scenes, 2:31; `DEMO.md`) follows one Zone operator through a consistent Operations Console.
+Demo **v5.6** (nine scenes, 2:55; `DEMO.md`) follows one Zone operator through a consistent Operations Console.
 It reads all chain evidence at recording time (a mismatch stops the recorder): the Tempo Zone integration-test
 fixture on development chain 1337; Sworn's `verify(real)` = true; `verify(height+1)` reverting
-`InvalidProof()`; the `ZoneBatchVerified` attest transaction `0xa630…f770`; and Moderato's pre-T13 reference
-stub accepting an equivalent malformed batch. The public evidence-page and explorer portions are recorded in a
-real browser, using read-only calls only. The local Console’s proof-job action is explicitly labelled as a
+`InvalidProof()`; the `ZoneBatchVerified` attest transaction `0xa630…f770`; Moderato's pre-T13 reference
+stub accepting an equivalent malformed batch; and an actual sequencer-signed forged batch rejected through our
+own Zone portal with `InvalidProof()` and no state change. The public evidence-page and explorer portions are
+recorded in a real browser, using read-only calls only. The local Console’s proof-job action is explicitly labelled as a
 fixture workflow: it starts the documented local prover, uses no private keys, and does not send a transaction.
 See `DEMO.md` for the exact claims, scene timing, and limitations.
 
