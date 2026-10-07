@@ -14,6 +14,7 @@
 #   deposit           user: approve + encrypted deposit; waits for the mint on the zone
 #   withdraw          user, on the zone: approve ZoneOutbox + requestWithdrawal
 #   status            read-only: batches, anchor ages, proofs, withdrawals, balances
+#   forged-batch      a malicious sequencer's forged batch is rejected by the proof (print-only unless --send)
 #   stop              stop the zone node and the prover
 #
 # Keys come ONLY from the environment (never printed): OWN_ZONE_DEPLOYER_KEY, OWN_ZONE_SEQUENCER_KEY,
@@ -213,6 +214,24 @@ status)
   tail -4 "$RUN/prover.log" 2>/dev/null || true
   [ -n "${L1_BALANCE_BEFORE_WITHDRAW:-}" ] && [ -n "$USERADDR" ] && say "user L1 pathUSD $(cast call "$PATH_USD" 'balanceOf(address)(uint256)' "$USERADDR" --rpc-url "$L1_HTTP" | cut -d' ' -f1) (before withdraw: $L1_BALANCE_BEFORE_WITHDRAW)"
   say "WithdrawalProcessed logs: $(cast logs --from-block "${ANCHOR:-0}" --address "$PORTAL" 'WithdrawalProcessed(address,bytes32,address,uint128,bool)' --rpc-url "$L1_HTTP" 2>/dev/null | grep -c transactionHash || true)" ;;
+
+forged-batch)
+  # A malicious sequencer submits a forged batch (signed certificate, replayed real proof, made-up withdrawal
+  # queue). Print-only: builds, signs locally and eth_calls it (must revert InvalidProof() from the verifier).
+  # --send: sends it with a fixed gas limit; it reverts (status 0, gas paid, nothing changes), then check-tx proves
+  # the revert came from the verifier and the portal's state is unchanged. See forged-batch.mjs.
+  need_state PORTAL VERIFIER
+  out="$RUN/forged-batch.json"
+  node "$here/forged-batch.mjs" selfcheck
+  L1_HTTP="$L1_HTTP" node "$here/forged-batch.mjs" build "$out"
+  [ -n "$SEND" ] || { say "PRINT ONLY: cast send --rpc-url $L1_HTTP --private-key \$OWN_ZONE_SEQUENCER_KEY --gas-limit 2000000 $PORTAL <calldata in $out>  (reverts; changes nothing). Re-run with --send within ~1 h."; exit 0; }
+  data=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['calldata'])" "$out")
+  tx=$(cast send --rpc-url "$L1_HTTP" --private-key "$OWN_ZONE_SEQUENCER_KEY" --gas-limit 2000000 --async "$PORTAL" "$data")
+  [[ "$tx" =~ ^0x[0-9a-fA-F]{64}$ ]] || die "send failed: $tx"
+  say "sent $tx; waiting for its receipt"
+  for _ in $(seq 1 60); do cast receipt "$tx" --rpc-url "$L1_HTTP" >/dev/null 2>&1 && break; sleep 2; done
+  echo "forged-batch tx $tx" >> "$RUN/txs.log"
+  node "$here/forged-batch.mjs" check-tx "$out" "$tx" ;;
 
 stop)
   for p in zone prover; do [ -f "$RUN/$p.pid" ] && kill "$(cat "$RUN/$p.pid")" 2>/dev/null || true; done
