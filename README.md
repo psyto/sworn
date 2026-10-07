@@ -49,7 +49,7 @@ but it is not the product pitched or demoed for CWF:
 > [a forged batch, rejected](https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d) (sequencer-signed, a real proof replayed; status 0, the verifier reverted) ·
 > [the fixture's proof tx](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770)
 > (a Zone batch with one withdrawal, from Tempo's integration tests) ·
-> "Verify again" on the page (three live `eth_call`s: Sworn, the real proof → true; one field changed →
+> "Re-verify on chain" in the page's fixture section (three live `eth_call`s: Sworn, the real proof → true; one field changed →
 > `InvalidProof`; for comparison, Moderato's current prototype verifier, the pre-T13 reference stub, returns
 > true for an equivalent malformed batch) ·
 > pitch (1:57) and demo (2:55) videos: *links added once the founder narration is uploaded*.
@@ -317,7 +317,7 @@ Two more slashes were recorded live for the demo video, on the same day:
   Three batches were Groth16-proven and settled, and the withdrawal was paid only after that
   (spec 003 "Results (own Zone live run on Moderato)", `deployments/moderato.json` → `OwnZone`).
   - The zone was stopped right after the payout. The local prover is too slow to run a zone continuously
-    (about 15 min per proof).
+    (11–31 min per proof in the live run).
   - It is not a Tempo-created Zone, and Tempo's own Zones are unchanged.
 
 - **TEE + ZK is a design proposal, not built.** [Spec 004](docs/specs/004-tee-plus-zk.md) proposes that Nitro settles
