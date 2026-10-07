@@ -23,7 +23,7 @@ const FFMPEG = process.env.FFMPEG_PATH || "/opt/homebrew/bin/ffmpeg";
 const FFPROBE = FFMPEG.replace(/ffmpeg$/, "ffprobe");
 
 let base, scenes, names, heading;
-if (["pitch", "demo", "demo-a", "demo-b"].includes(arg)) {
+if (["pitch", "demo", "demo-a", "demo-b", "demo-c"].includes(arg)) {
   base = arg;
   const parsed = parseScenes(`video/${arg.toUpperCase()}.md`);
   scenes = parsed.map((s) => s.text);
@@ -39,7 +39,7 @@ if (["pitch", "demo", "demo-a", "demo-b"].includes(arg)) {
     chunk.split("\n").filter((l) => l.startsWith("> ")).map((l) => l.slice(2).trim()).join(" "));
   names = ["what I changed", "what it does", "what I learned / next"];
   heading = `Check-in 3, variant ${V} — narration by scene`;
-} else throw new Error("usage: node video/split-scenes.mjs pitch|demo|demo-a|demo-b|A|B");
+} else throw new Error("usage: node video/split-scenes.mjs pitch|demo|demo-a|demo-b|demo-c|A|B");
 
 const src = path.join(dir, `${base}.mp4`);
 const marksFile = path.join(dir, `${base}.marks.json`);
