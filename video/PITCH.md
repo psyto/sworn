@@ -20,14 +20,14 @@ product can exist, not the pitch's subject.
 
 ## Scene 1: the operational moment · ≈ 19 s
 
-**[Headline: “Before a Zone releases a withdrawal batch.” A Zone business card holds a blurred private ledger
+**[Kicker: “Tempo Zones · private ledgers on Tempo”. Headline: “Before a Zone releases a withdrawal batch.” A Zone business card holds a blurred private ledger
 (“Private ledger · batch witness”, locked); a “Withdrawal batch” token slides out of it toward a card for the
 “Auditor / settlement counterparty: needs evidence, not the private ledger”, whose “?” resolves into “Can it
 independently check this exact batch?” The answer: “Sworn creates audit-ready evidence.”]**
 
-> Before a Zone business releases a withdrawal batch, a settlement counterparty may need to check it. Without
-> evidence, settlement may wait or carry more risk. The operator holds the private ledger and
-> witness. Sworn creates independently verifiable evidence without exposing transactions.
+> Sworn is for Tempo Zones: private ledgers where only the operator sees every transaction. Before a
+> Zone business releases a withdrawal batch, a counterparty may need to check it; without evidence, settlement may
+> wait. Sworn creates verifiable evidence without exposing transactions.
 
 ## Scene 2: the product workflow · ≈ 17 s
 

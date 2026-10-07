@@ -1,18 +1,18 @@
 1
-00:00:00,000 --> 00:00:07,365
-Before a Zone business releases a withdrawal batch, a settlement counterparty may need to check it.
+00:00:00,000 --> 00:00:06,438
+Sworn is for Tempo Zones: private ledgers where only the operator sees every transaction.
 
 2
-00:00:07,415 --> 00:00:11,535
-Without evidence, settlement may wait or carry more risk.
+00:00:06,488 --> 00:00:10,145
+Before a Zone business releases a withdrawal batch,
 
 3
-00:00:11,585 --> 00:00:15,243
-The operator holds the private ledger and witness.
+00:00:10,195 --> 00:00:15,706
+a counterparty may need to check it; without evidence, settlement may wait.
 
 4
-00:00:15,293 --> 00:00:18,950
-Sworn creates independently verifiable evidence without exposing transactions.
+00:00:15,756 --> 00:00:18,950
+Sworn creates verifiable evidence without exposing transactions.
 
 5
 00:00:19,000 --> 00:00:25,382
