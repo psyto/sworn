@@ -12,6 +12,9 @@ Sworn's proof passes: three batches proven and settled, then our sequencer calle
 withdrawal was paid
 ([payout tx](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), 2026-10-06).
 The proof is a necessary condition for a payout, not a guarantee of one: it is ZK-gated, not censorship-resistant.
+The rejection side is on chain too: our own sequencer, with a valid signature, submitted a forged batch that replayed a
+real proof with a made-up withdrawal queue, and the portal rejected it on the proof
+([reverted tx](https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d), 2026-10-07).
 **What is not built:** an integration with Tempo-created Zones (it is our own Zone, with one operator), or a
 customer workflow. Testnet, unaudited.
 
@@ -43,6 +46,7 @@ but it is not the product pitched or demoed for CWF:
 > [our own Zone's payout](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), paid only after three proven batches settled (the page's
 > [own-Zone section](https://psyto.github.io/sworn/#own-zone) reads the portal, the receipts and the payout live, and
 > "Re-verify on chain" replays the withdrawal batch's verify call: true, and one field changed → `InvalidProof`) ·
+> [a forged batch, rejected](https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d) (sequencer-signed, a real proof replayed; status 0, the verifier reverted) ·
 > [the fixture's proof tx](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770)
 > (a Zone batch with one withdrawal, from Tempo's integration tests) ·
 > "Verify again" on the page (three live `eth_call`s: Sworn, the real proof → true; one field changed →
@@ -273,6 +277,7 @@ spec 003 "Results"):
 | on Moderato | `verify` returns true for the real proof and reverts when one field changes; `attest` emitted `ZoneBatchVerified` for zone 1, height 10 ([`0xb14b…3b80`](https://explore.testnet.tempo.xyz/tx/0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80), block 38080441, 260,419 gas) |
 | a batch with a withdrawal | `deposit_and_withdrawal_blocks5-6` (1 withdrawal, 2 user transactions), 24.4M cycles, Groth16 891 s; verified on Moderato by a second instance ([`0xa630…f770`](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770), block 38097996) |
 | our own Zone, live on Moderato (2026-10-06) | 3 batches Groth16-proven and settled through `OwnZonePortal` → `SwornZoneVerifier` → SP1: 123.8M / 26.3M / 31.9M cycles, Groth16 1,881 / 664 / 813 s, anchor ages 2,895 / 3,928 / 5,133 of 8,190 blocks; withdrawal paid, user +500,000 ([`0xfc31…e1f1`](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1)); 58.5 min from anchor to payout. Reproduce: the three verify calls the portal made (from the traces, = the prover's records) are test vectors in `contracts/test/vectors/own-zone/`; `forge test --match-test OWNZONE` re-checks each proof against the real SP1 Groth16 verifier and the deployed bytecode itself |
+| a forged batch on our own Zone (2026-10-07) | the sequencer submitted batch 62 with a valid signed certificate, a made-up withdrawal queue and the real proof of batch 56–61 replayed: status 0 ([`0x3a15…167d`](https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d), block 38514007); the trace shows the pairing check failing inside the SP1 verifier and `SwornZoneVerifier` reverting `InvalidProof()`; zone height, batch index, queue and the portal's pathUSD unchanged (`spikes/own-zone/scripts/own-zone.sh forged-batch`) |
 | contract | every digest field, the immutables (via clone deployments), the chain id, the proof and the vkey are each shown to matter, against the **real** SP1 Groth16 verifier |
 
 **Bonded answers** (2026-10-03; logs in `out/`):

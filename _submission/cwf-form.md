@@ -164,9 +164,9 @@ The validation sequence is concrete: find a Zone business that can supply a witn
 
 ```
 No users, no revenue. Built inside the window; on-chain verification and the own-Zone run are on Moderato testnet, the fixture batches ran on dev chain 1337:
-- Our own Zone on Moderato: 3 batches proven and settled through a portal that calls Sworn's verifier; a withdrawal paid after the proof (tx 0xfc311841…e1f1). One operator, not a Tempo-created Zone.
+- Our own Zone on Moderato: 3 batches proven and settled through a portal that calls Sworn's verifier; a withdrawal paid after the proof (tx 0xfc311841…e1f1); a forged, sequencer-signed batch reusing a real proof was rejected (tx 0x3a154e4e…167d). One operator, not a Tempo-created Zone.
 - Tempo Zones: Tempo's own batch verifier runs in SP1 on 5 integration-test batches, matching native output (19-26M cycles; tampering rejected). Proofs bound to IVerifier's inputs were verified on Moderato, including a fixture with a withdrawal (tx 0xa63009fd…f770; also 0xb14b7127…3b80).
-- 67 forge tests, including real proofs and the live batches' proofs; the verifiers have no owner (our Zone's portal keeps upstream admin controls).
+- 67 forge tests, incl. real proofs and the live batches'; the verifiers have no owner (our Zone's portal keeps upstream admin controls).
 - A public page that reads the on-chain evidence and re-runs the Zone proof check in your browser. Pitch and demo videos.
 ```
 

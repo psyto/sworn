@@ -38,7 +38,8 @@ can't get a Tempo-run Zone's batch: only the operator holds the witness.
 **3. Does it protect withdrawals?**
 On our own Zone, yes in the narrow sense: its portal settles a batch, and queues its withdrawals, only after the
 proof verifies. The proof is a necessary condition, not a guarantee: our sequencer then calls `processWithdrawals`,
-and could also withhold it. We ran that on Moderato on 2026-10-06. On Tempo's Zones, no: their verifier is fixed by Tempo's
+and could also withhold it. We also showed the rejection side: our own sequencer, with a valid signature, submitted a
+forged batch replaying a real proof, and it reverted on the proof (tx `0x3a15…167d`, state unchanged). We ran that on Moderato on 2026-10-06. On Tempo's Zones, no: their verifier is fixed by Tempo's
 factory, so it stays evidence there. Spec 004 is the design for Tempo's side.
 - *If pressed:* one operator, whose key also decrypts deposits; withdrawals wait for the proof but are not
   censorship-resistant (the operator must prove and process them); callback withdrawals bounce.

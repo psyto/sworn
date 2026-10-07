@@ -311,6 +311,27 @@
     "wallClock": "anchor block 09:53:57 UTC -> payout block 10:52:29 UTC (58.5 min)",
     "readOnlyChecks": "verifier immutables (PARENT_CHAIN_ID 42431, PINNED_ZONE_ID 4242, genesis keccak, ZONE_VKEY, SP1_VERIFIER) match; portal zoneId 4242, verifier, isSequencer, withdrawalBatchIndex 3, zoneHeight 61; no-owner --zone-verifier on deployed code OK",
     "runDir": "spikes/own-zone/runs/moderato-20261007 (not committed: logs, proofs, witnesses)",
-    "limits": "our own Zone, not Tempo-created; one operator and one sequencer key (also the deposit-decryption key); callback withdrawals bounce (messenger checks the factory); zone-side fork schedule pinned at T13 while Moderato is T11; testnet, unaudited"
+    "limits": "our own Zone, not Tempo-created; one operator and one sequencer key (also the deposit-decryption key); callback withdrawals bounce (messenger checks the factory); zone-side fork schedule pinned at T13 while Moderato is T11; testnet, unaudited",
+    "forgedBatch": {
+      "what": "A malicious-sequencer test, 2026-10-07: the sequencer submitted a FORGED batch to OwnZonePortal.submitBatch with a valid sequencer-signed settlement certificate, a made-up nextBlockHash and withdrawalQueueHash (as if paying an attacker), and the REAL Groth16 proof of batch 56-61 replayed. Every check before the proof passed; the proof check rejected it.",
+      "tx": "0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d",
+      "block": 38514007,
+      "status": 0,
+      "gasUsed": 304336,
+      "from": "roles.sequencer",
+      "to": "OwnZonePortal",
+      "forged": {
+        "zoneHeight": 62,
+        "withdrawalBatchIndex": 4,
+        "prevBlockHash": "0x6aacb4810fc0742e7aa2421abb13579b8ad84d19dba24c85219fd4f1101e74f2",
+        "nextBlockHash": "0xbffed924ff2093ed15e675f31e2bea641057136db8a5f5f36193f256b3cb53fe",
+        "withdrawalQueueHash": "0xfca553ebee6e51e5b775f441d5208da8404dedad9a5f36bd937146d1aa0e8d5c",
+        "tempoBlockNumber": 38513995,
+        "replayedProofFrom": "0x4062f79c8ea25878b41ec63f4ebfaad7164c26d3595fafceaff20cbdb42383b4"
+      },
+      "trace": "OwnZonePortal -> EIP-2935 (anchor) -> signature verifier precompile (certificate OK) -> SwornZoneVerifier.verify -> SP1 gateway -> pairing precompile 0x08 returns 0 -> ProofInvalid (0x7fcdd1f4) -> InvalidProof() (0x09bde339) -> portal reverts",
+      "stateUnchanged": "zoneHeight 61, withdrawalBatchIndex 3, blockHash 0x6aacb481\u2026f2, withdrawalQueueTail 1, lastProcessedDepositNumber 1, portal pathUSD 500000: equal at blocks 38514006 and 38514007",
+      "script": "spikes/own-zone/scripts/own-zone.sh forged-batch (forged-batch.mjs selfcheck / build / check-tx)"
+    }
   }
 }

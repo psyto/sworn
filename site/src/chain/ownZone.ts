@@ -27,6 +27,7 @@ export const ownPortalAbi = [
   view("zoneHeight", "uint256"),
 ] as const;
 
+const INVALID_PROOF = "0x09bde339";
 export const BATCH_SUBMITTED_TOPIC = toEventSelector("BatchSubmitted(uint64,uint256,bytes32,bytes32,bytes32,uint64,uint64)");
 export const WITHDRAWAL_PROCESSED_TOPIC = toEventSelector("WithdrawalProcessed(address,bytes32,address,uint128,bool)");
 
@@ -39,6 +40,8 @@ export const OWN_ZONE = {
   payoutTx: OZ.payout.tx as Hex,
   user: getAddress(OZ.roles.user),
   userDelta: BigInt(OZ.payout.userPathUSD.delta),
+  sequencer: getAddress(OZ.roles.sequencer),
+  forgedTx: OZ.forgedBatch.tx as Hex,
   date: OZ.date,
 };
 
@@ -61,6 +64,15 @@ export interface Payout {
   callbackSuccess: boolean;
 }
 
+/** The forged batch a malicious sequencer submitted: status 0, and the trace shows the verifier reverting. */
+export interface ForgedRejection {
+  txHash: Hex;
+  blockNumber: bigint;
+  gasUsed: bigint;
+  /** The verifier's revert inside the portal's call (InvalidProof() = 0x09bde339). */
+  verifierRevert: Hex;
+}
+
 export interface OwnZoneRead {
   portal: Address;
   portalVerifier: Address;
@@ -71,6 +83,7 @@ export interface OwnZoneRead {
   pinnedZoneId: number;
   batches: SettledBatch[];
   payout: Payout;
+  forged: ForgedRejection;
 }
 
 /** The WithdrawalProcessed event of a receipt, emitted by the portal. Exported for tests. */
@@ -123,7 +136,18 @@ export async function readOwnZone(client: Client, _cfg: ChainConfig): Promise<Ow
     if (pr.blockNumber <= batches[batches.length - 1].blockNumber)
       throw new DataError("block-mismatch", "the payout is not after the last settled batch");
 
-    return { portal: p, portalVerifier, zoneId, withdrawalBatchIndex, zoneHeight, parentChainId, pinnedZoneId, batches, payout };
+    // The forged batch: reverted, sequencer → portal, and the revert came from the verifier (not an earlier check).
+    const fr = await getTransactionReceipt(client, { hash: OWN_ZONE.forgedTx });
+    if (fr.status !== "reverted") throw new DataError("bad-response", `forged batch ${OWN_ZONE.forgedTx} did not revert`);
+    if (!fr.to || getAddress(fr.to) !== p || getAddress(fr.from) !== OWN_ZONE.sequencer) throw new DataError("wrong-contract", "forged batch is not sequencer → portal");
+    type Frame = { to?: string; error?: string; output?: Hex; calls?: Frame[] };
+    const trace = (await client.request({ method: "debug_traceTransaction", params: [OWN_ZONE.forgedTx, { tracer: "callTracer" }] } as never)) as Frame;
+    const find = (c: Frame): Frame | undefined => (c.to && getAddress(c.to) === OWN_ZONE.verifier ? c : (c.calls ?? []).map(find).find(Boolean));
+    const vcall = find(trace);
+    if (!vcall?.error || !String(vcall.output ?? "").startsWith(INVALID_PROOF)) throw new DataError("bad-response", "forged batch: the verifier did not revert InvalidProof()");
+    const forged: ForgedRejection = { txHash: OWN_ZONE.forgedTx, blockNumber: fr.blockNumber, gasUsed: fr.gasUsed, verifierRevert: vcall.output as Hex };
+
+    return { portal: p, portalVerifier, zoneId, withdrawalBatchIndex, zoneHeight, parentChainId, pinnedZoneId, batches, payout, forged };
   } catch (e) {
     throw asDataError(e);
   }

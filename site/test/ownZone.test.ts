@@ -26,6 +26,9 @@ describe("Own Zone live run (Moderato, read-only)", () => {
     expect(z.payout.blockNumber).toBe(BigInt(oz.payout.block));
     expect(z.payout.to).toBe(OWN_ZONE.user);
     expect(z.payout.amount).toBe(500000n);
+    expect(z.forged.txHash).toBe(oz.forgedBatch.tx);
+    expect(z.forged.blockNumber).toBe(BigInt(oz.forgedBatch.block));
+    expect(z.forged.verifierRevert.startsWith("0x09bde339")).toBe(true);
   }, 120_000);
 
   it("decodePayout refuses a receipt without the portal's WithdrawalProcessed event", () => {

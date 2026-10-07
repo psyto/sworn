@@ -460,6 +460,15 @@ Plan, conditions and runbook: `spikes/own-zone/FEASIBILITY.md`, `RUNBOOK.md`. Re
   exact calldata against the deployed bytecode (true; nextZoneHeight + 1 → `InvalidProof()`). The live page's
   own-Zone section does the same replay for the withdrawal batch with two `eth_call`s, after checking that the
   `submitBatch` transaction carries that proof and those hashes.
+- **The rejection side (2026-10-07):** a malicious-sequencer test. Our sequencer submitted a forged batch 62 to
+  `OwnZonePortal.submitBatch` with a valid sequencer-signed settlement certificate, a made-up `nextBlockHash` and
+  `withdrawalQueueHash` (as if paying an attacker), and the real Groth16 proof of batch 56–61 replayed.
+  - Every check before the proof passed (sequencer, EIP-2935 anchor, certificate, deposit and token transitions).
+  - The trace shows the SP1 verifier's pairing check returning false, `ProofInvalid`, then `SwornZoneVerifier`
+    reverting `InvalidProof()` and the portal reverting: tx `0x3a154e4e…167d`, block 38,514,007, status 0.
+  - Zone height (61), batch index (3), `blockHash`, the withdrawal queue and the portal's pathUSD (500,000) were the
+    same at the blocks before and after. Script: `spikes/own-zone/scripts/own-zone.sh forged-batch`
+    (`forged-batch.mjs`: its self-check recovers the real batch's certificate to the sequencer under the same digest).
 - **Read-only checks after the run:**
   - the verifier's immutables match;
   - `no-owner --zone-verifier` passes on the deployed code (2,993 bytes, STATICCALL ×1, forbidden opcodes 0);

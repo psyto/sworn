@@ -89,6 +89,10 @@ export function OwnZoneSection({ ownZone, check, onRetry, onVerify }: Props) {
           <p className="eyebrow">What it shows</p>
           <ul>
             <li>On this Zone, settlement waits for the proof: no batch, and so no withdrawal, without a verified proof.</li>
+            <li>
+              The rejection side too: our own sequencer, with a valid signature, submitted a forged batch that replayed a real
+              proof; the verifier rejected it and nothing changed.
+            </li>
             <li>The Zone's parent is Moderato, and every batch is anchored to real Moderato blocks.</li>
             <li>
               The verifier pins this Zone's genesis and portal (
@@ -176,6 +180,19 @@ function OwnZoneFacts({ z }: { z: OwnZoneRead }) {
           )}
         </dd>
       </dl>
+
+      <p className="eyebrow sub-head">A forged batch, rejected by the proof</p>
+      <ol className="calls">
+        <li>
+          <span className="label">Forged batch 62</span>
+          <span>sequencer-signed; made-up withdrawal queue; the real proof of blocks 56-61 replayed</span>
+          <span className="result bad">✗ rejected</span>
+          <span className="sub mono">
+            <TxLink hash={z.forged.txHash}>submitBatch {short(z.forged.txHash)}</TxLink> · block {z.forged.blockNumber.toString()} ·
+            status 0 · the trace shows SwornZoneVerifier reverting InvalidProof() · zone height still {z.zoneHeight.toString()}
+          </span>
+        </li>
+      </ol>
     </>
   );
 }
