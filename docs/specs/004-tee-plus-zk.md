@@ -156,7 +156,7 @@ a wrong batch is never finalised, so its money stays locked. That is safe, but i
 | | status |
 |---|---|
 | `prove_zone_batch` in SP1, bound to `IVerifier`'s inputs, verified on Moderato | **done**, spec 003 (different statement from §3.2) |
-| a portal that settles only after the ZK proof, on our own Zone (ZK-only, synchronous; not this spec's TEE + ZK design) | **done once on Moderato**, 2026-10-06: 3 batches, 1 withdrawal paid (spec 003 "Results (own Zone live run on Moderato)") |
+| a portal that settles only after the ZK proof, on our own Zone (ZK-only, synchronous; not this spec's TEE + ZK design) | **done once on Moderato**, 2026-10-06: 3 batches, 1 withdrawal paid; 2026-10-07: a forged, sequencer-signed batch rejected on the proof (spec 003 "Results (own Zone live run on Moderato)") |
 | guest committing `batchCommitment` (§3.2) | not built; same execution with a new commitment |
 | aggregated range guest (§3.3) | not built; SP1 recursion; not measured |
 | invalidity-proof guest (§3.5) | not built; the hardest piece |

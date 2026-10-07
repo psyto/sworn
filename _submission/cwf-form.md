@@ -131,7 +131,7 @@ https://psyto.github.io/sworn/
 ## Access instructions · ≤300
 
 ```
-https://psyto.github.io/sworn/ reads Moderato in your browser. Nothing to sign or install. "Verify again" re-checks the Zone proof on Moderato live. To re-run locally: git clone https://github.com/psyto/sworn && cd sworn/contracts && forge test
+https://psyto.github.io/sworn/ reads Moderato in your browser. Nothing to sign or install. "Re-verify on chain" re-checks the Zone proofs on Moderato live. To re-run locally: git clone https://github.com/psyto/sworn && cd sworn/contracts && forge test
 ```
 
 ## Pitch video · Public · ≤2 min · required

@@ -176,3 +176,14 @@ If any step fails **before `start`**:
 - Record the addresses, transaction hashes, gas, anchor ages and timings in `deployments/moderato.json` and the spec.
 - Re-verify the deployed verifier's code and immutables read-only.
 - Claims must follow FEASIBILITY.md C5 and risk 6. It is our Zone: our portal, one sequencer, one operator.
+
+## 4. After the run: reproducibility and the rejection side (done 2026-10-07)
+
+- `node spikes/own-zone/scripts/export-vectors.mjs` (read-only): each batch's verify call from its `submitBatch`
+  trace, checked equal to the prover's record, plus the deployed verifier's bytecode, into
+  `contracts/test/vectors/own-zone/`. Then `cd contracts && forge test --match-test OWNZONE`.
+- `Z forged-batch` (print-only), then `Z forged-batch --send` (founder): the sequencer submits a forged, signed batch
+  that replays the real proof of batch 56–61. Print-only signs locally and must see the verifier revert
+  `InvalidProof()` in an `eth_call` trace; `--send` sends it with a fixed gas limit and `check-tx` proves status 0,
+  the verifier's revert in the trace, and an unchanged portal state. Done: tx `0x3a154e4e…167d`, block 38,514,007.
+  The signature binds an anchor inside the EIP-2935 window, so a built batch is only valid for about 90 minutes.

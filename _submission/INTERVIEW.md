@@ -13,7 +13,7 @@ Rules:
 > counterparty cannot check that money leaving a Zone came from correct execution. Sworn runs Tempo's own Zone
 > verification code in a zero-knowledge VM and produces a proof anyone can verify on chain, without exposing the
 > transactions. On Tempo's testnet we ran our own Zone whose portal settles a batch, and so lets a withdrawal be
-> paid, only after that proof passes; change one field and it is rejected. No customers yet. Next is one design partner who supplies a real
+> paid, only after that proof passes; a forged batch, even signed by our own sequencer, was rejected on chain. No customers yet. Next is one design partner who supplies a real
 > batch.
 
 ## Product and evidence

@@ -54,7 +54,7 @@ but it is not the product pitched or demoed for CWF:
 > true for an equivalent malformed batch) ·
 > pitch (1:57) and demo (2:55) videos: *links added once the founder narration is uploaded*.
 >
-> **Status (2026-10-06): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
+> **Status (2026-10-07): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
 > testnet** only. Unaudited. No customers or revenue. The Zones created by Tempo's factory on Moderato have one
 > effective operator; our own Zone runs outside the factory.
 
@@ -361,7 +361,7 @@ found no public example of `tempo-revm` or `zone-spf` proven in a zkVM.
 | `program/`, `runner/`, `host/` | SP1 guest, SP1 execute/prove, native checks (AC-1, AC-2) |
 | `contracts/` | `Sworn.sol`, `SwornZoneVerifier.sol`, vendored SP1 verifier, tests, `scripts/gate.sh`, `scripts/no-owner.sh`, deploy scripts |
 | `spikes/zone-spf/` | Zone guest, shared digest code (`attest/`), native host, patches, pinned genesis, witnesses, logs; `fetch.sh` rebuilds the large trees |
-| `spikes/own-zone/` | our own Zone on Moderato: feasibility, dress rehearsals, runbook, `scripts/own-zone.sh`, `OwnZonePortal`, the pinned guest ELF |
+| `spikes/own-zone/` | our own Zone on Moderato: feasibility, dress rehearsals, runbook, `scripts/own-zone.sh` (the live run and the `forged-batch` rejection test), `scripts/export-vectors.mjs` (the live proofs as test vectors), `OwnZonePortal`, the pinned guest ELF |
 | `video/` | pitch and demo scripts (`PITCH.md`, `DEMO.md`), slides and recorders; every figure on screen is read while recording |
 | `answerer/`, `server/`, `sdk/`, `challenger/` | answer engine (Rust), MPP server (TS), client SDK (TS), `sworn-witness` / `sworn-challenge` (Rust) |
 | `site/` | the live page ([psyto.github.io/sworn](https://psyto.github.io/sworn/)): read-only, published by `.github/workflows/pages.yml` |

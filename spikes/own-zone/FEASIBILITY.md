@@ -492,3 +492,9 @@ Three Groth16-proven batches of our own Zone settled through `OwnZonePortal` →
 Moderato, and the withdrawal was paid (`WithdrawalProcessed` tx `0xfc311841…e1f1`, user +500,000), 58.5 minutes
 after the anchor and before T12. Details: `docs/specs/003-zone-verifier.md` ("Results (own Zone live run on
 Moderato)") and `deployments/moderato.json` → `OwnZone`. C5 and risk 6 govern every claim made from it.
+
+**The rejection side (2026-10-07).** Our sequencer submitted a forged batch 62 with a valid signed certificate, a
+made-up withdrawal queue and the real proof of batch 56–61 replayed. It reverted on the proof (tx `0x3a154e4e…167d`,
+status 0; the trace shows the SP1 pairing check failing and `SwornZoneVerifier` reverting `InvalidProof()`), and the
+portal's state did not change. The three live proofs are also test vectors (`contracts/test/vectors/own-zone/`),
+re-checked by `forge test --match-test OWNZONE` against the real SP1 verifier and the deployed bytecode.
