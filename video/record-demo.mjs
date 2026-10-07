@@ -374,11 +374,13 @@ log(`• own Zone: portal ${short(OZP)} → ${short(OZV)}; ${OZ.batches.length} 
 function checkOwnZoneText(t, when) {
   const want = ["A portal that pays a withdrawal only after Sworn's proof passes", `✓ ${OZ.batches.length} batches settled · withdrawal paid`, short(OZP, 6), short(OZV, 6),
     ...OZ.batches.map((b) => short(b.submitTx)), short(OZ.payout.tx), String(payBlock), "✓ the demo user's 0.5 pathUSD withdrawal",
-    "Our own Zone, not a Tempo-created one.", "One operator.", "Testnet, and not audited."];
+    "Our own Zone, not a Tempo-created one.", "One operator.", "Testnet, and not audited.",
+    "Re-verify on chain", "The portal's verify call", "✓ true", "One field changed", "✗ reverts InvalidProof()", "nextZoneHeight 61 → 62"];
   for (const w of want) if (!lc(t).includes(lc(w))) fail(`page #own-zone (${when}) does not show "${w}"`);
   if (/does not match|could not read/i.test(t)) fail(`page #own-zone (${when}) shows a mismatch or an error`);
 }
 const OZ_EX = 8; // seconds of the payout explorer insert at the end of scene 6
+let calledOwn = null;
 async function captureOwnZone(secs) {
   const browser = await launch();
   const raw = path.join(work, "own.raw.mp4");
@@ -389,7 +391,7 @@ async function captureOwnZone(secs) {
     await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: "light" }]);
     await page.emulateTimezone("UTC");
     await page.goto(PAGE, { waitUntil: "networkidle2", timeout: 120000 });
-    await page.waitForFunction(() => (document.querySelector("#own-zone")?.innerText ?? "").includes("withdrawal paid"), { timeout: 120000, polling: 250 });
+    await page.waitForFunction(() => { const t = document.querySelector("#own-zone")?.innerText ?? ""; return t.includes("withdrawal paid") && t.includes("Called at"); }, { timeout: 120000, polling: 250 });
     await fontsReady(page).catch(() => fail("the page's Geist fonts did not load"));
     checkOwnZoneText(await page.evaluate(() => document.querySelector("#own-zone").innerText), "on load");
     const hdr = await page.evaluate(() => document.querySelector("header").getBoundingClientRect().height);
@@ -408,6 +410,13 @@ async function captureOwnZone(secs) {
     await at(1.5); await go("#own-zone .zone-card .status");
     await at(3); await go("#own-zone .calls");
     await at(7); await go("#own-zone .zone-card dl:last-of-type");
+    // the page's own re-verify of the withdrawal batch, clicked live: "Called at" must change
+    await at(9); await go("#own-zone .again");
+    const readat = () => page.evaluate(() => document.querySelector("#own-zone .again .readat")?.textContent ?? "");
+    const before = await readat();
+    await at(9.8); await page.click("#own-zone .again button.btn");
+    await page.waitForFunction((b) => { const r = document.querySelector("#own-zone .again .readat")?.textContent ?? ""; return r && r !== b; }, { timeout: 30000, polling: 50 }, before);
+    calledOwn = [before, await readat()];
     await at(secs + 0.5);
     const wall = (Date.now() - t0) / 1000;
     await recorder.stop();
@@ -620,7 +629,7 @@ writeJson(path.join(dir, "demo.marks.json"), {
   name: "demo", script: "video/DEMO.md", version: "5.5", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
   page: PAGE, published: PUBLISHED, recordedFromPublishedPage: PAGE === PUBLISHED,
   zoneAttest: Z.attest.tx, liveCalls,
-  ownZone: { portal: OZP, verifier: OZV, settled: OZ.batches.map((b) => b.submitTx), payout: OZ.payout.tx, payoutBlock: payBlock, scene6: { page: OZ_PAGE, explorer: OZ_EX } },
+  ownZone: { portal: OZP, verifier: OZV, settled: OZ.batches.map((b) => b.submitTx), payout: OZ.payout.tx, payoutBlock: payBlock, reverifyCalledAt: calledOwn, scene6: { page: OZ_PAGE, explorer: OZ_EX } },
   pageMarks: { verifyPanel: r2("verifyPanel"), click1: r2("click1"), stub: r2("stub"), s3a: r2("s3a"), contains: r2("contains"), s3c: r2("s3c"), click2: r2("click2"), compare: r2("compare") },
   calledAt: pg.called,
   scene4: { pageA: S3.pageA, explorer: S3.explorer, pageC: S3.pageC, cutOutOfPage: IDLE },

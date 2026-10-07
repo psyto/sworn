@@ -84,7 +84,9 @@ read-only click, the real batch returns true and changing one field reverts `Inv
 ## Scene 6 — our own Zone on Moderato · ≈ 20 s
 
 **[The page's section “A portal that pays a withdrawal only after Sworn's proof passes”, read live: the portal and
-its verifier, three “✓ settled” batches, the payout. Explorer insert: the payout transaction, sent to our portal.]**
+its verifier, three “✓ settled” batches, the payout; then “Re-verify on chain” is clicked live: the portal's own verify
+call for the withdrawal batch → ✓ true, one field changed → ✗ InvalidProof(). Explorer insert: the payout transaction,
+sent to our portal.]**
 
 > Now our own Zone on Moderato. Its portal called the verifier in each of three batches. Only after the last
 > proof passed could this withdrawal be paid: our sequencer then called processWithdrawals. Here is the payout on
