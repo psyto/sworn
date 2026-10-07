@@ -18,7 +18,7 @@ product can exist, not the pitch's subject.
 
 ---
 
-## Scene 1: the operational moment · ≈ 20 s
+## Scene 1: the operational moment · ≈ 19 s
 
 **[Headline: “Before a Zone releases a withdrawal batch.” A Zone business card holds a blurred private ledger
 (“Private ledger · batch witness”, locked); a “Withdrawal batch” token slides out of it toward a card for the
@@ -26,7 +26,7 @@ product can exist, not the pitch's subject.
 independently check this exact batch?” The answer: “Sworn creates audit-ready evidence.”]**
 
 > Before a Zone business releases a withdrawal batch, a settlement counterparty may need to check it. Without
-> evidence, settlement waits or the business carries more risk. The operator holds the private ledger and
+> evidence, settlement may wait or carry more risk. The operator holds the private ledger and
 > witness. Sworn creates independently verifiable evidence without exposing transactions.
 
 ## Scene 2: the product workflow · ≈ 17 s
@@ -54,7 +54,7 @@ status 0, its trace read while recording shows the verifier reverting InvalidPro
 > passes; only then can a withdrawal be paid. Three batches, proven and checked on chain. A forged batch, even signed
 > by our own sequencer, is rejected. Anchor to payout: fifty-eight minutes, on one laptop.
 
-## Scene 4: the go-to-market test · ≈ 17.5 s
+## Scene 4: the go-to-market test · ≈ 19 s
 
 **[Headline: “Earn the right to a recurring contract.” A progress line advances through three cards, each
 appearing as it is spoken: “1. Zone business: reviewer cannot reconstruct the witness”; “2. Not a signed
@@ -62,27 +62,27 @@ report: evidence of exact Tempo execution”; “3. Repeat batch or upgrade: Pro
 “GTM test — not traction claimed.”]**
 
 > First buyer: a Zone business whose reviewer cannot reconstruct the private witness. A signed report or generic
-> proof is not enough: the reviewer needs evidence of exact Tempo execution. One batch tests demand; repeats or
+> proof may not be enough: the reviewer may need evidence of exact Tempo execution. One batch tests demand; repeats or
 > upgrades become Proof Operations.
 
-## Scene 5: why now, why Sworn · ≈ 26 s
+## Scene 5: why now, why Sworn · ≈ 25 s
 
 **[Headline: “Why now, why Sworn.” Three cards: “Tempo execution: runs Tempo's own Zone code”; “Exact batch:
 bound to inputs Tempo's portal understands”; “Operational fit: rebuilt for Tempo upgrades.” The footer says
-“Tempo: no Zone ZK today”; “Start: Proof Operations”; “Later: alongside TEE”; and “Founder: Reth · Revm · banking.”]
+“Tempo: no Zone ZK today”; “Start: Proof Operations”; “Later: alongside TEE”; “Founder: Reth · Revm · banking”; and “ETHGlobal Tokyo prize.”]
 The final step is a proposal for Tempo, not adoption.]**
 
 > Sworn is Tempo-specific, not generic ZK: it runs Zone code, fits the portal's batch shape, and tracks upgrades.
 > We begin as Proof Operations for a Zone business. Later, Tempo could add this as an independent check alongside
 > its TEE, not replace it. I work on Reth and Revm, with fifteen years in banking systems.
 
-## Scene 6: the honest ask · ≈ 13 s
+## Scene 6: the honest ask · ≈ 14 s
 
 **[Headline: “The honest ask.” Chips: “testnet”; “unaudited”; “our own Zone, one operator”; “no
 customer claimed.” Then: “Next: a design partner supplies a batch and decides whether the proof is worth paying
 for.” The Sworn seal stamps onto the closing block: “Sworn: audit-ready evidence for private execution.” and the URLs.]**
 
-> Today: testnet, unaudited. No customer claimed. Next, a design partner supplies
+> Today: testnet, unaudited, market unproven. No customer claimed. Next, a design partner supplies
 > a batch and decides if independent proof is worth paying for. Sworn: audit-ready evidence for private execution.
 
 ---

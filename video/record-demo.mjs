@@ -362,6 +362,16 @@ const forgedTransaction = await rpc("eth_getTransactionByHash", [OZ.forgedBatch.
 if (!forgedTransaction || getAddress(forgedTransaction.to) !== OZP || getAddress(forgedTransaction.from) !== getAddress(OZ.roles.sequencer))
   fail(`forged batch ${OZ.forgedBatch.tx}: not sequencer → OwnZonePortal`);
 const forgedBlock = parseInt(forgedReceipt.blockNumber, 16);
+// The revert must come from the verifier (InvalidProof() is also the portal's prevBlockHash error).
+const forgedTrace = await rpc("debug_traceTransaction", [OZ.forgedBatch.tx, { tracer: "callTracer" }]);
+const findV = (c) => (c.to && getAddress(c.to) === OZV ? c : (c.calls ?? []).map(findV).find(Boolean));
+const forgedV = findV(forgedTrace) ?? fail("forged batch: the portal did not call the verifier");
+if (!forgedV.error || !String(forgedV.output ?? "").startsWith(toFunctionSelector("InvalidProof()"))) fail("forged batch: the verifier did not revert InvalidProof()");
+for (const k of ["zoneHeight", "withdrawalBatchIndex"]) {
+  const sig = k === "zoneHeight" ? "zoneHeight() view returns (uint256)" : "withdrawalBatchIndex() view returns (uint64)";
+  const before = await call(OZP, sig, [], forgedBlock - 1), after = await call(OZP, sig, [], forgedBlock);
+  if (before !== after) fail(`forged batch changed ${k}: ${before} → ${after}`);
+}
 const BATCH_TOPIC = toEventSelector("BatchSubmitted(uint64,uint256,bytes32,bytes32,bytes32,uint64,uint64)");
 for (const b of OZ.batches) {
   const r = await receipt(b.submitTx, `submitBatch ${b.zoneBlocks}`);
@@ -508,7 +518,7 @@ const data = {
   plainSrc: "deployments/moderato.json SwornZoneVerifierWithdrawal (batch, deviations D1–D4) · README “What the Zone verifier is, and is not” · docs/specs/004-tee-plus-zk.md",
   specSrc: `spec 004: “A proposal for Tempo, not something Sworn can deploy.” · “Payouts wait for ZK.” · Tempo's factory fixes each Zone's verifier (${FACTORY.replace(/^tempo\//, "")}:${fv + 1})`,
   operatorSrc: `README Status · Tempo's Zone factory on Moderato, read now: ${nZones} Zones, one admin and one sequencer set, factory owned by a 1-of-1 Safe with that signer`,
-  forgedTx: short(OZ.forgedBatch.tx, 6), forgedBlock: String(forgedBlock),
+  forgedTx: short(OZ.forgedBatch.tx, 6), forgedBlock: String(forgedBlock), forgedBlockFmt: forgedBlock.toLocaleString("en-US"),
   repo: repoUrl, pageUrl: PUBLISHED.replace(/^https:\/\//, "").replace(/\/$/, ""),
 };
 for (const [k, v] of Object.entries(data)) if (typeof v === "string") assertFresh(v, `slot ${k}`);

@@ -52,7 +52,7 @@ but it is not the product pitched or demoed for CWF:
 > "Re-verify on chain" in the page's fixture section (three live `eth_call`s: Sworn, the real proof → true; one field changed →
 > `InvalidProof`; for comparison, Moderato's current prototype verifier, the pre-T13 reference stub, returns
 > true for an equivalent malformed batch) ·
-> pitch (1:57) and demo (2:55) videos: *links added once the founder narration is uploaded*.
+> pitch (1:58) and demo (2:55) videos: *links added once the founder narration is uploaded*.
 >
 > **Status (2026-10-07): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
 > testnet** only. Unaudited. No customers or revenue. The Zones created by Tempo's factory on Moderato have one
