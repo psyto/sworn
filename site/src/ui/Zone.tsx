@@ -155,12 +155,12 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
     <section className="section ops-shell" id="evidence" aria-labelledby="zone-h">
       <span id="zone" className="anchor" aria-hidden="true" />
       <aside className="ops-side" aria-label="Zone operations navigation">
-        <p className="ops-zone"><span>Example operator · illustration</span>Example Zone</p>
+        <p className="ops-zone"><span>Fixture batch · Tempo integration test</span>Zone 1 · dev chain 1337</p>
         <div className="ops-nav" aria-hidden="true" title="Static labels, not navigation">
           <span>Batches</span>
           <span className="selected">Proof evidence</span>
         </div>
-        <p className="ops-scope">Test fixture<br />zone 1 · dev chain 1337</p>
+        <p className="ops-scope">Not a Moderato Zone<br />batch from Tempo&apos;s tests</p>
       </aside>
       <div className="ops-main">
         <div className="ops-crumb"><span>Proof evidence</span><span>Zone blocks 5–6</span><b>Read live from chain</b></div>
@@ -465,7 +465,7 @@ function AttestFacts({ z }: { z: ZoneAttest }) {
         </dd>
         <dt>calldata</dt>
         <dd>
-          <Ok on={z.calldataMatchesFixture}>the attest call's arguments and proof are the ones "Verify again" uses</Ok>
+          <Ok on={z.calldataMatchesFixture}>the attest call's arguments and proof are the ones "Re-verify on chain" uses</Ok>
         </dd>
       </dl>
 

@@ -1,3 +1,7 @@
+// DEMO A (video/DEMO-A.md → video/demo-a.mp4): the v5.6 recorder with real screens where it matters. Scene 1 is a
+// title card; scene 2 is the real local Operator Console (page on localhost); every explorer view is Tempo's testnet
+// explorer recorded live at its natural size (below its header), including the forged batch's Trace tab.
+//   DEMO_PAGE_URL=http://localhost:4173/ node video/record-demo-a.mjs   # then: node video/split-scenes.mjs demo-a
 // Records video/demo.mp4 — Sworn's ≤ 3 min CWF demo v5.6, nine scenes, SILENT, 1920×1080 — plus video/demo.srt
 // and video/demo.marks.json. It follows a Zone operator's need for independently checkable batch evidence,
 // then shows the real proof on a Zone batch with a withdrawal, our own Zone's proof-gated payout on Moderato, and
@@ -49,19 +53,19 @@ const PUBLISHED = "https://psyto.github.io/sworn/";
 const PAGE = process.env.DEMO_PAGE_URL || PUBLISHED;
 // Match the real-site capture exactly. Its 1024×576 CSS canvas at 1.875× becomes 1920×1080.
 const CONSOLE_VIEWPORT = { width: 1024, height: 576, deviceScaleFactor: 1.875 };
-const work = path.join(dir, "takes", "demo-v5"); // intermediates (gitignored)
+const work = path.join(dir, "takes", "demo-a"); // intermediates (gitignored)
 mkdirSync(work, { recursive: true });
 
 // ── the script ───────────────────────────────────────────────────────────────────────────────────
-const scenes = parseScenes("video/DEMO.md");
-if (scenes.length !== 9) fail(`DEMO.md has ${scenes.length} scenes, expected 9 (v5.6)`);
-const md = read("video/DEMO.md", "DEMO.md");
+const scenes = parseScenes("video/DEMO-A.md");
+if (scenes.length !== 10) fail(`DEMO-A.md has ${scenes.length} scenes, expected 10`);
+const md = read("video/DEMO-A.md", "DEMO-A.md");
 const targets = [...md.matchAll(/^## Scene (\d+) — .*· ≈ (\d+(?:\.\d+)?) s\s*$/gm)].map((m) => +m[2]);
-if (targets.length !== 9) fail("DEMO.md: every scene heading needs its \"≈ N s\" target");
+if (targets.length !== 10) fail("DEMO-A.md: every scene heading needs its \"≈ N s\" target");
 const holds = scenes.map((s, i) => Math.max(s.hold, targets[i]));
 const TOTAL = holds.reduce((a, b) => a + b, 0);
 const words = scenes.reduce((a, s) => a + s.words, 0);
-log(`• demo v5.6: scene lengths = max(target, words ÷ 2.2)`);
+log(`• demo A (v6-A): scene lengths = max(target, words ÷ 2.2)`);
 for (const [i, s] of scenes.entries()) log(`    scene ${s.n}: ${String(s.words).padStart(3)} words (${s.hold} s of voice) → ${holds[i]} s  (${s.title})`);
 log(`    total ${TOTAL} s, ${words} words`);
 // v5.6 gives the real forged-batch rejection its own scene while keeping the final runtime below 180 seconds.
@@ -77,7 +81,7 @@ for (const s of ["127.0.0.1", "zone-prove.sh", "zone-attest.sh", "deposit_and_wi
 if (!read("docs/operator-console.md", "Operator Console documentation").includes("without `--send`")) fail("Operator Console documentation no longer states the no-send boundary");
 // Scene 4 is page; scene 5 is page (A) + explorer + page (C).
 const S3 = { pageA: 14, explorer: 8 };
-S3.pageC = holds[4] - S3.pageA - S3.explorer;
+S3.pageC = holds[5] - S3.pageA - S3.explorer;
 if (S3.pageC < 10) fail(`scene 5 leaves only ${S3.pageC} s for the rows`);
 const IDLE = 6; // seconds of page recording cut out where the explorer insert goes (the page scrolls there)
 
@@ -270,7 +274,7 @@ async function capturePage() {
       mark(`${label}:results`);
       t.called.push([before, await readat()]);
     };
-    await go("#evidence .proof-job", "start", false);
+    await go("#evidence .zone-card.again", "start", false);
     await sleep(1500);
 
     const recorder = await newRecorder(page);
@@ -278,13 +282,12 @@ async function capturePage() {
     const t0 = Date.now();
     const at = async (s) => sleep(Math.max(0, t0 + s * 1000 - Date.now()));
     function mark(e) { t.marks[e] = (Date.now() - t0) / 1000; log(`    ${t.marks[e].toFixed(1).padStart(5)} s  ${e}`); }
-    const P2 = holds[3];
+    const P2 = holds[4];
     // scene 3: show the local-job control, then click the public evidence check.
     mark("s2");
-    await at(6); await go("#evidence .zone-card.again", "start");
     t.btnRect = await rect("#evidence .again button.btn"); mark("verifyPanel");
-    await at(8); await click("click1");
-    await at(11); await go("#evidence .calls li.row-stub", "center"); mark("stub");
+    await at(2.5); await click("click1");
+    await at(5.5); await go("#evidence .calls li.row-stub", "center"); mark("stub");
     await at(P2); mark("s3a");
     // scene 4a: the attest card, then what the batch contains
     await go("#evidence .zone-card", "start");
@@ -350,6 +353,73 @@ async function explorerShots() {
     const row = await p.screenshot({ clip: clips.row, encoding: "base64" });
     return { card: `data:image/png;base64,${card}`, row: `data:image/png;base64,${row}`, cw: clips.card.width, ch: clips.card.height };
   } finally { await br.close(); }
+}
+
+// ── demo A: Tempo's testnet explorer recorded live at its natural size (scrolled just below its header) ───
+async function captureExplorer({ tx, tab, secs, wants, ready, plan }) {
+  const browser = await launch();
+  const raw = path.join(work, `ex-${tx.slice(2, 10)}.raw.mp4`);
+  try {
+    const page = await browser.newPage();
+    page.setDefaultTimeout(120000);
+    await page.emulateTimezone("UTC");
+    await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: "light" }]);
+    const url = `${EXPLORER}/tx/${tx}${tab ? `?tab=${tab}` : ""}`;
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 120000 });
+    await page.waitForFunction((r) => { const t = document.body.innerText; return t.includes("Status") && r.every((x) => t.toLowerCase().includes(x.toLowerCase())); }, { timeout: 120000, polling: 500 }, ready);
+    await sleep(1500);
+    const text = lc(await page.evaluate(() => document.body.innerText));
+    for (const w of [tx.slice(0, 18), ...wants]) if (!text.includes(lc(w))) fail(`explorer ${short(tx)} does not show "${w}"`);
+    for (let i = 0; i < 3; i++) { // absolute times, not "7 hr. ago"
+      const tt = await page.evaluate(() => document.querySelector('button[title^="Showing "][title$="click to change"]')?.title ?? null);
+      if (!tt || !/relative/i.test(tt)) break;
+      await page.click('button[title^="Showing "][title$="click to change"]'); await sleep(400);
+    }
+    const hdr = await page.evaluate(() => document.querySelector("header")?.getBoundingClientRect().bottom ?? 76);
+    await page.evaluate((y) => scrollTo(0, y), Math.ceil(hdr) + 74);
+    await sleep(600);
+    if (await page.evaluate(() => (document.querySelector("header")?.getBoundingClientRect().bottom ?? 0) > 0)) fail("explorer header (Tempo's logo) would be in frame");
+    const recorder = await newRecorder(page);
+    await recorder.start(raw);
+    const t0 = Date.now();
+    const at = async (x) => sleep(Math.max(0, t0 + x * 1000 - Date.now()));
+    if (plan) await plan(page, at);
+    await at(secs + 0.5);
+    await recorder.stop();
+    log(`• explorer ${short(tx)}${tab ? ` (${tab})` : ""}: recorded live, ${secs} s`);
+    return raw;
+  } finally { await browser.close(); }
+}
+
+// ── demo A, scene 2: the real local Operator Console (the page on localhost, worker connected) ───────
+async function captureConsole(secs) {
+  if (!/localhost|127\.0\.0\.1/.test(PAGE)) fail("demo A scene 2 needs DEMO_PAGE_URL on localhost (the Operator Console's job control)");
+  const browser = await launch();
+  const raw = path.join(work, "console.raw.mp4");
+  try {
+    const page = await browser.newPage();
+    page.setDefaultTimeout(120000);
+    await page.setViewport(CONSOLE_VIEWPORT);
+    await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: "light" }]);
+    await page.goto(PAGE, { waitUntil: "networkidle2", timeout: 120000 });
+    await page.waitForFunction(() => { const t = document.querySelector("#evidence")?.innerText ?? ""; return t.includes("Start local proof job") && t.includes("ZoneBatchVerified emitted"); }, { timeout: 120000, polling: 250 });
+    await fontsReady(page).catch(() => fail("the page's Geist fonts did not load"));
+    const panel = await page.evaluate(() => document.querySelector("#evidence .proof-job")?.innerText ?? "");
+    for (const w of ["Generate evidence for Zone blocks 5–6", "Start local proof job", "no transaction sent"]) if (!panel.includes(w)) fail(`Operator Console panel does not show "${w}"`);
+    const hdr = await page.evaluate(() => document.querySelector("header").getBoundingClientRect().height);
+    const go = (sel, smooth = true) => page.evaluate((s2, h, sm) => { const el = document.querySelector(s2); if (!el) return false; scrollTo({ top: Math.max(0, el.getBoundingClientRect().top + scrollY - h - 14), behavior: sm ? "smooth" : "instant" }); return true; }, sel, hdr, smooth).then((ok) => ok || fail(`page: no ${sel}`));
+    await go("#evidence .proof-job", false);
+    await sleep(1200);
+    const recorder = await newRecorder(page);
+    await recorder.start(raw);
+    const t0 = Date.now();
+    const at = async (x) => sleep(Math.max(0, t0 + x * 1000 - Date.now()));
+    await at(2); await page.hover("#evidence .proof-job button").catch(() => {});
+    await at(8); await go("#evidence .zone-card .sub-head");
+    await at(secs + 0.5);
+    await recorder.stop();
+    return raw;
+  } finally { await browser.close(); }
 }
 
 // ── scene 6: our own Zone on Moderato ────────────────────────────────────────────────────────────
@@ -507,7 +577,7 @@ const pub = await fetchText(PUBLISHED, "published page");
 if (!/<title>Sworn/.test(pub)) fail(`${PUBLISHED}: no "<title>Sworn"`);
 
 const data = {
-  scenes: ["d0", "d1", "dflow", "e1", "e2", "dforged", "dz", "d6"],
+  scenes: ["dintro", "d1", "dflow", "dz", "d6"],
   ozId: String(OZ.zoneId), payLine: `Our portal paid ${payAmt} after the proof, block ${payBlock.toLocaleString("en-US")}.`,
   digest: short(fx.digest), attestShort: `attest ${short(Z.attest.tx)}`,
   portalSrc: `tempoxyz/zones @ ${ZONES_REF} · ZonePortal.sol`, portalLines,
@@ -523,9 +593,7 @@ const data = {
 };
 for (const [k, v] of Object.entries(data)) if (typeof v === "string") assertFresh(v, `slot ${k}`);
 
-const shots = await explorerShots();
-data.exCard = shots.card; data.exEvent = shots.row;
-data.exPayout = await explorerCard(OZ.payout.tx, [String(payBlock), "success", OZP]);
+// demo A records the explorer live (captureExplorer) instead of inserting stills
 // Scene 3 is an authored, full-frame version of the page's data-flow diagram (demo.html #dflow, flow.css). Its
 // digest chip is the fixture's digest (= the attest event's, checked above). The live page's data-flow section
 // must still say the same things in words.
@@ -543,7 +611,6 @@ data.exPayout = await explorerCard(OZ.payout.tx, [String(payBlock), "success", O
   } finally { await br.close(); }
   log(`• page: data-flow section says the scene-3 sentences; diagram digest ${data.digest} = fixture = event`);
 }
-log(`• explorer: ${short(Z.attest.tx)} card ${Math.round(shots.cw)}×${Math.round(shots.ch)} CSS px, header excluded`);
 if (process.env.PREVIEW) {
   const outDir = path.resolve(process.env.PREVIEW);
   mkdirSync(outDir, { recursive: true });
@@ -585,11 +652,20 @@ const VF = "fps=30,scale=1920:1080,setsar=1,scale=in_range=full:out_range=tv,for
 
 // ── scenes 1–3: the Zone operator's need ────────────────────────────────────────────────────────
 const scene1 = path.join(work, "scene1.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["d0"], holds: [holds[0]], raw: path.join(work, "s1.raw.mp4"), out: scene1, viewport: CONSOLE_VIEWPORT });
+await recordSlides({ html: "demo.html", data, ids: ["dintro"], holds: [holds[0]], raw: path.join(work, "s1.raw.mp4"), out: scene1, viewport: CONSOLE_VIEWPORT });
+log("• scene 2: recording the real Operator Console …");
+const consoleRaw = await captureConsole(holds[1]);
+const sceneConsole = path.join(work, "sceneConsole.mp4");
+ff(["-i", consoleRaw, "-vf", VF, "-an", "-t", String(holds[1]), ...ENC, sceneConsole]);
+rmSync(consoleRaw, { force: true });
 const scene2 = path.join(work, "scene2.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["d1"], holds: [holds[1]], raw: path.join(work, "s2.raw.mp4"), out: scene2, viewport: CONSOLE_VIEWPORT });
+await recordSlides({ html: "demo.html", data, ids: ["d1"], holds: [holds[2]], raw: path.join(work, "s2.raw.mp4"), out: scene2, viewport: CONSOLE_VIEWPORT });
 const sceneDF = path.join(work, "sceneDF.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["dflow"], holds: [holds[2]], raw: path.join(work, "sDF.raw.mp4"), out: sceneDF, viewport: CONSOLE_VIEWPORT });
+await recordSlides({ html: "demo.html", data, ids: ["dflow"], holds: [holds[3]], raw: path.join(work, "sDF.raw.mp4"), out: sceneDF, viewport: CONSOLE_VIEWPORT });
+// a live explorer clip, cut to its hold, with a small "recorded live" label
+const LIVE_PILL = path.join(work, "pill-live.png");
+await pills([{ file: LIVE_PILL, pos: "bottom:18px;right:18px", html: pill("Tempo testnet explorer · recorded live", "read-only, below the site header") }]);
+const liveClip = (raw, secs, out) => { ff(["-i", raw, "-loop", "1", "-framerate", "30", "-i", LIVE_PILL, "-filter_complex", "[0:v]fps=30,scale=1920:1080,setsar=1[b];[b][1:v]overlay=0:0:shortest=1,scale=in_range=full:out_range=tv,format=yuv420p[v]", "-map", "[v]", "-an", "-t", String(secs), ...ENC, out]); rmSync(raw, { force: true }); };
 
 // ── scenes 4–5: the page ────────────────────────────────────────────────────────────────────────
 log("• scenes 4–5: recording the page …");
@@ -604,9 +680,9 @@ const K = (e) => pg.marks[e] * k;
 const scene3 = path.join(work, "scene3.mp4"), s4a = path.join(work, "s4a.mp4"), s4x = path.join(work, "s4x.mp4"), s4c = path.join(work, "s4c.mp4");
 ff(["-i", pg.raw, "-loop", "1", "-framerate", "30", "-i", P.click, "-filter_complex",
   `[0:v]fps=30,scale=1920:1080,setsar=1[b];[b][1:v]overlay=0:0:shortest=1:enable='between(t,${(K("click1") - 0.3).toFixed(2)},${(K("click1") + 4).toFixed(2)})',scale=in_range=full:out_range=tv,format=yuv420p[v]`,
-  "-map", "[v]", "-an", "-t", String(holds[3]), ...ENC, scene3]);
+  "-map", "[v]", "-an", "-t", String(holds[4]), ...ENC, scene3]);
 ff(["-ss", K("s3a").toFixed(3), "-i", pg.raw, "-vf", VF, "-an", "-t", String(S3.pageA), ...ENC, s4a]);
-await recordSlides({ html: "demo.html", data, ids: ["e1"], holds: [S3.explorer], raw: path.join(work, "s4x.raw.mp4"), out: s4x, viewport: CONSOLE_VIEWPORT });
+liveClip(await captureExplorer({ tx: Z.attest.tx, tab: "events", secs: S3.explorer, ready: ["Success", topic0], wants: ["success", String(atBlock), topic0, ZV] }), S3.explorer, s4x);
 const c2 = K("click2") - K("s3c");
 ff(["-ss", K("s3c").toFixed(3), "-i", pg.raw, "-loop", "1", "-framerate", "30", "-i", P.click2, "-filter_complex",
   `[0:v]fps=30,scale=1920:1080,setsar=1[b];[b][1:v]overlay=0:0:shortest=1:enable='between(t,${Math.max(0, c2 - 0.3).toFixed(2)},${(c2 + 1.4).toFixed(2)})',scale=in_range=full:out_range=tv,format=yuv420p[v]`,
@@ -617,49 +693,51 @@ rmSync(pg.raw, { force: true });
 
 // ── scene 6: our own Zone on Moderato (page footage, then the payout on the explorer) ─────────────
 log("• scene 6: recording the page's #own-zone section …");
-const OZ_PAGE = holds[5] - OZ_EX;
+const OZ_PAGE = holds[6] - OZ_EX;
 const og = await captureOwnZone(OZ_PAGE);
 const ozA = path.join(work, "s6a.mp4"), ozX = path.join(work, "s6x.mp4"), sceneOZ = path.join(work, "sceneOZ.mp4");
 ff(["-i", og.raw, "-vf", VF, "-an", "-t", String(OZ_PAGE), ...ENC, ozA]);
-await recordSlides({ html: "demo.html", data, ids: ["e2"], holds: [OZ_EX], raw: path.join(work, "s6x.raw.mp4"), out: ozX, viewport: CONSOLE_VIEWPORT });
+liveClip(await captureExplorer({ tx: OZ.payout.tx, secs: OZ_EX, ready: ["Success", "Private Zone Withdrawal"], wants: ["success", String(payBlock), "Private Zone Withdrawal", "0.5"] }), OZ_EX, ozX);
 concat([ozA, ozX], sceneOZ);
 rmSync(og.raw, { force: true });
 
 // ── scene 7: the actual forged batch, evidenced with values just read from Moderato ──────────────
 const sceneForged = path.join(work, "sceneForged.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["dforged"], holds: [holds[6]], raw: path.join(work, "s7.raw.mp4"), out: sceneForged, viewport: CONSOLE_VIEWPORT });
+liveClip(await captureExplorer({ tx: OZ.forgedBatch.tx, tab: "trace", secs: holds[7], ready: ["Failed", "Execution Trace", "reverted", "Signature Verification"],
+  wants: ["failed", String(forgedBlock), "reverted", "signature verification", lc(OZV).slice(0, 12), lc(getAddress(OZ.roles.sequencer)).slice(0, 12)],
+  plan: async (page, at) => { await at(6.5); await page.evaluate(() => scrollBy({ top: 140, behavior: "smooth" })); } }), holds[7], sceneForged);
 
 // ── scene 8: said plainly ───────────────────────────────────────────────────────────────────────
 const scene5 = path.join(work, "scene5.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["dz"], holds: [holds[7]], raw: path.join(work, "s5.raw.mp4"), out: scene5, viewport: CONSOLE_VIEWPORT });
+await recordSlides({ html: "demo.html", data, ids: ["dz"], holds: [holds[8]], raw: path.join(work, "s5.raw.mp4"), out: scene5, viewport: CONSOLE_VIEWPORT });
 
 // ── scene 9: compact GTM test ───────────────────────────────────────────────────────────────────
 const scene6 = path.join(work, "scene6.mp4");
-await recordSlides({ html: "demo.html", data, ids: ["d6"], holds: [holds[8]], raw: path.join(work, "s6.raw.mp4"), out: scene6, viewport: CONSOLE_VIEWPORT });
+await recordSlides({ html: "demo.html", data, ids: ["d6"], holds: [holds[9]], raw: path.join(work, "s6.raw.mp4"), out: scene6, viewport: CONSOLE_VIEWPORT });
 
 // ── assemble ────────────────────────────────────────────────────────────────────────────────────
-const parts = [scene1, scene2, sceneDF, scene3, scene4, sceneOZ, sceneForged, scene5, scene6];
+const parts = [scene1, sceneConsole, scene2, sceneDF, scene3, scene4, sceneOZ, sceneForged, scene5, scene6];
 parts.forEach((f, i) => { const d = duration(f); if (Math.abs(d - holds[i]) > 0.12) fail(`scene ${i + 1} clip is ${d} s, expected ${holds[i]} s`); });
-const out = path.join(dir, "demo.mp4");
+const out = path.join(dir, "demo-a.mp4");
 concat(parts, out);
 const got = duration(out);
-if (Math.abs(got - TOTAL) > 0.25) fail(`demo.mp4 is ${got} s, expected ${TOTAL} s`);
-if (got > MAX_TOTAL) fail(`demo.mp4 is ${got} s > ${MAX_TOTAL} s`);
+if (Math.abs(got - TOTAL) > 0.25) fail(`demo-a.mp4 is ${got} s, expected ${TOTAL} s`);
+if (got > MAX_TOTAL) fail(`demo-a.mp4 is ${got} s > ${MAX_TOTAL} s`);
 const starts = holds.reduce((acc, h) => [...acc, acc.at(-1) + h], [0]);
-const cues = writeSrt(scenes, starts, path.join(dir, "demo.srt"));
-for (let i = 0; i < 9; i++) ff(["-i", out, "-ss", (starts[i] + Math.min(2, holds[i] / 2)).toFixed(2), "-frames:v", "1", path.join(dir, "frames", `demo-scene${i + 1}.png`)]);
+const cues = writeSrt(scenes, starts, path.join(dir, "demo-a.srt"));
+for (let i = 0; i < 10; i++) ff(["-i", out, "-ss", (starts[i] + Math.min(2, holds[i] / 2)).toFixed(2), "-frames:v", "1", path.join(dir, "frames", `demo-a-scene${i + 1}.png`)]);
 const r2 = (e) => +K(e).toFixed(2);
-writeJson(path.join(dir, "demo.marks.json"), {
-  name: "demo", script: "video/DEMO.md", version: "5.6", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
+writeJson(path.join(dir, "demo-a.marks.json"), {
+  name: "demo-a", script: "video/DEMO-A.md", version: "6-A", holds, titles: scenes.map((s) => s.title), words: scenes.map((s) => s.words), totalWords: words,
   page: PAGE, published: PUBLISHED, recordedFromPublishedPage: PAGE === PUBLISHED,
   zoneAttest: Z.attest.tx, liveCalls,
-  ownZone: { portal: OZP, verifier: OZV, settled: OZ.batches.map((b) => b.submitTx), payout: OZ.payout.tx, payoutBlock: payBlock, reverifyCalledAt: calledOwn, forged: { tx: OZ.forgedBatch.tx, block: forgedBlock, status: 0, from: forgedTransaction.from, to: forgedTransaction.to, scene7: holds[6] }, scene6: { page: OZ_PAGE, explorer: OZ_EX } },
+  ownZone: { portal: OZP, verifier: OZV, settled: OZ.batches.map((b) => b.submitTx), payout: OZ.payout.tx, payoutBlock: payBlock, reverifyCalledAt: calledOwn, forged: { tx: OZ.forgedBatch.tx, block: forgedBlock, status: 0, from: forgedTransaction.from, to: forgedTransaction.to, scene8: holds[7] }, scene6: { page: OZ_PAGE, explorer: OZ_EX } },
   pageMarks: { verifyPanel: r2("verifyPanel"), click1: r2("click1"), stub: r2("stub"), s3a: r2("s3a"), contains: r2("contains"), s3c: r2("s3c"), click2: r2("click2"), compare: r2("compare") },
   calledAt: pg.called,
   scene4: { pageA: S3.pageA, explorer: S3.explorer, pageC: S3.pageC, cutOutOfPage: IDLE },
-  note: "Silent. Read each scene's lines over its clip (video/scenes/demo/). Scene 5 has the explorer insert in its middle; scene 6 ends on the payout's explorer insert; scene 7 is an authored evidence view populated from the live forged-batch receipt.",
+  note: "Silent. Read each scene's lines over its clip (video/scenes/demo-a/). Scene 2 is the real local Operator Console; every explorer view (scenes 6, 7, 8) is Tempo's testnet explorer recorded live at its natural size.",
   recordedAt: new Date().toISOString(),
 });
 log(`\n✓ ${rel(out)}  (${got.toFixed(2)} s, holds ${holds.join(" / ")}, ${words} words)`);
-log(`✓ video/demo.srt  (${cues} cues) · video/demo.marks.json · video/frames/demo-scene{1..9}.png`);
-log(`  next: node video/split-scenes.mjs demo`);
+log(`✓ video/demo-a.srt  (${cues} cues) · video/demo-a.marks.json · video/frames/demo-a-scene{1..10}.png`);
+log(`  next: node video/split-scenes.mjs demo-a`);

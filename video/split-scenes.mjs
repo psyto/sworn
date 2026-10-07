@@ -23,12 +23,12 @@ const FFMPEG = process.env.FFMPEG_PATH || "/opt/homebrew/bin/ffmpeg";
 const FFPROBE = FFMPEG.replace(/ffmpeg$/, "ffprobe");
 
 let base, scenes, names, heading;
-if (arg === "pitch" || arg === "demo") {
+if (["pitch", "demo", "demo-a", "demo-b"].includes(arg)) {
   base = arg;
   const parsed = parseScenes(`video/${arg.toUpperCase()}.md`);
   scenes = parsed.map((s) => s.text);
   names = parsed.map((s) => s.title);
-  heading = `${arg === "pitch" ? "Pitch" : "Demo"} — narration by scene`;
+  heading = `${arg === "pitch" ? "Pitch" : arg === "demo" ? "Demo" : `Demo ${arg.slice(-1).toUpperCase()}`} — narration by scene`;
 } else if (["A", "B"].includes(arg.toUpperCase())) {
   const V = arg.toUpperCase();
   base = `checkin-3-${V}`;
@@ -39,7 +39,7 @@ if (arg === "pitch" || arg === "demo") {
     chunk.split("\n").filter((l) => l.startsWith("> ")).map((l) => l.slice(2).trim()).join(" "));
   names = ["what I changed", "what it does", "what I learned / next"];
   heading = `Check-in 3, variant ${V} — narration by scene`;
-} else throw new Error("usage: node video/split-scenes.mjs pitch|demo|A|B");
+} else throw new Error("usage: node video/split-scenes.mjs pitch|demo|demo-a|demo-b|A|B");
 
 const src = path.join(dir, `${base}.mp4`);
 const marksFile = path.join(dir, `${base}.marks.json`);
@@ -52,7 +52,7 @@ const total = parseFloat(execFileSync(FFPROBE, ["-v", "error", "-show_entries", 
 const sum = holds.reduce((a, b) => a + b, 0);
 if (Math.abs(total - sum) > 0.1) throw new Error(`${path.basename(src)} is ${total}s but holds sum to ${sum}s — re-record`);
 
-const out = path.join(dir, "scenes", arg === "pitch" || arg === "demo" ? arg : base);
+const out = path.join(dir, "scenes", base);
 mkdirSync(out, { recursive: true });
 const doc = [`# ${heading}\n`,
   `Read each block over its clip. Target pace ≈ 2.2 words/s (the clip lengths were derived from it).`,
