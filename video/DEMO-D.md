@@ -1,4 +1,4 @@
-# Demo video D: Sworn (90 seconds, founder voice), v6-D, 2026-10-08
+# Demo video D: Sworn (94 seconds, founder voice), v6-D, 2026-10-08
 
 **The idea.** A concise edit of demo C that keeps two facts separate. First, a local job proves Tempo's
 integration-test fixture (dev chain 1337) and is checked read-only against `SwornZoneVerifierWithdrawal`.
@@ -12,9 +12,9 @@ assembles. The final card and persistent footer keep the testnet scope visible.
 
 | scene | target | picture |
 |---|---:|---|
-| 1 Two demonstrations | 10 s | title card with the boundary stated upfront |
+| 1 Two demonstrations | 12 s | title card with the boundary stated upfront |
 | 2 Fixture proof job | 15 s | local Operator Console |
-| 3 Privacy boundary | 8 s | what remains private / what becomes public |
+| 3 Privacy boundary | 10 s | what remains private / what becomes public |
 | 4 Fixture verified read-only | 14 s | evidence page, explorer, and re-verification |
 | 5 Separate OwnZone run | 5 s | explicit factual cut card |
 | 6 OwnZone settlement and payout | 10 s | own Zone and payout explorer |
@@ -22,7 +22,7 @@ assembles. The final card and persistent footer keep the testnet scope visible.
 | 8 Re-run the evidence | 8 s | vector export and Forge test |
 | 9 The outcome | 10 s | conclusion, links, and scope |
 
-## Scene 1 — two demonstrations · ≈ 10 s
+## Scene 1 — two demonstrations · ≈ 12 s
 
 > Sworn is for Tempo Zones: only the operator sees every transaction. It makes that private execution checkable. Two separate demonstrations follow.
 
@@ -30,7 +30,7 @@ assembles. The final card and persistent footer keep the testnet scope visible.
 
 > An operator runs a real proof job for Tempo's integration-test fixture: deposit and withdrawal blocks five through six, on dev chain 1337. Nothing is sent.
 
-## Scene 3 — privacy boundary · ≈ 8 s
+## Scene 3 — privacy boundary · ≈ 10 s
 
 > The witness stays private. The verifier learns the batch is valid, not balances, senders, recipients or amounts.
 

@@ -1,4 +1,4 @@
-// DEMO D: a 90-second, value-first cut built from the verified source clips of demo C.
+// DEMO D: a 94-second, value-first cut built from the verified source clips of demo C.
 // It does not create transactions or re-run proving. The source clips remain the recordings made by
 // record-demo-c.mjs; this script only renders D's intro/privacy/closing cards and makes frame-accurate trims.
 import path from "node:path";
@@ -19,10 +19,10 @@ if (scenes.length !== 9) fail(`DEMO-D.md has ${scenes.length} scenes, expected 9
 const targets = [...read("video/DEMO-D.md", "DEMO-D.md").matchAll(/^## Scene \d+ — .*· ≈ (\d+(?:\.\d+)?) s\s*$/gm)].map((m) => +m[1]);
 if (targets.length !== scenes.length) fail("DEMO-D.md needs a target duration for every scene");
 const holds = scenes.map((s, i) => Math.max(s.hold, targets[i]));
-const expected = [10, 15, 8, 14, 5, 10, 10, 8, 10];
+const expected = [12, 15, 10, 14, 5, 10, 10, 8, 10];
 if (holds.some((v, i) => v !== expected[i])) fail(`demo D lengths drifted: ${holds.join(" / ")}`);
 const total = holds.reduce((a, b) => a + b, 0);
-if (total !== 90) fail(`demo D is ${total}s, expected 90s`);
+if (total !== 94) fail(`demo D is ${total}s, expected 94s`);
 
 // The retained clips were originally recorded by record-demo-c.mjs, which verifies every visible
 // receipt, trace, call and page value before recording. Re-read the facts that identify D's two
@@ -143,7 +143,7 @@ for (let i = 0; i < scenes.length; i++) {
 writeJson(path.join(dir, "demo-d.marks.json"), {
   name: "demo-d", version: "6-D", script: "video/DEMO-D.md", holds, titles: scenes.map((s) => s.title),
   words: scenes.map((s) => s.words), totalWords: scenes.reduce((n, s) => n + s.words, 0),
-  source: "Demo C's verified recordings, rechecked against Moderato and trimmed into a 90-second two-result cut.",
+  source: "Demo C's verified recordings, rechecked against Moderato and trimmed into a 94-second two-result cut.",
   note: "Silent. The fixture proof job and OwnZone settlement are visibly separated; add founder narration from DEMO-D.md or demo-d.srt.",
 });
 log(`✓ video/demo-d.mp4 (${total}s) · video/demo-d.srt (${cues} cues) · video/demo-d.marks.json`);
