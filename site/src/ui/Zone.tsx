@@ -169,7 +169,7 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
         <div className="ops-crumb"><span>Proof evidence</span><span>Zone blocks 5–6</span><b>Read live from chain</b></div>
       <div className="section-head">
         <p className="eyebrow">Technical evidence</p>
-        <h2 id="zone-h">A fixture batch with a withdrawal (dev chain 1337), verified read-only on Moderato</h2>
+        <h2 id="zone-h">A fixture batch with a withdrawal (dev chain 1337), verified on Moderato</h2>
         <p className="lede">
           Tempo's own Zone batch verifier ran inside SP1 on a batch with {BATCH_CONTENTS.withdrawals} withdrawal and{" "}
           {BATCH_CONTENTS.userTransactions} user transactions, taken from Tempo's zones integration tests on a dev chain (1337),
@@ -253,7 +253,7 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
                         <a href={STUB_SRC} target="_blank" rel="noreferrer">
                           source
                         </a>
-                        ). Sworn demonstrates the missing ZK check.
+                        ). Tempo&apos;s Zone design relies on a TEE (Nitro) attestation instead; Sworn shows what an independent ZK check adds.
                       </>
                     ) : (
                       <>This call no longer returns true: Moderato's Zone verifier has changed since this page was written.</>
@@ -293,7 +293,7 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
             <li>Tempo Zones' own batch verifier, executed inside SP1.</li>
             <li>
               A fixture batch from Tempo&apos;s integration tests with {BATCH_CONTENTS.withdrawals} withdrawal and{" "}
-              {BATCH_CONTENTS.userTransactions} user transactions, proven, then verified read-only on Moderato by a standalone contract. It accepts the real proof and rejects a mutated input.
+              {BATCH_CONTENTS.userTransactions} user transactions, proven, then verified on Moderato by a standalone contract (not connected to a portal). It accepts the real proof and rejects a mutated input.
             </li>
             <li>A digest bound to the same batch fields Tempo&apos;s TEE (Nitro) attestation commits, plus the destination chain and the exact genesis artifact.</li>
             <li>

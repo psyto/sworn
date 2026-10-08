@@ -153,7 +153,7 @@ A native host computes the same public values with the same Rust code (shared mo
 ## 7. What may be claimed afterwards (and what may not)
 
 - **May:** "Tempo's own Zone batch verifier runs inside a zero-knowledge VM, and a contract on Tempo's
-  Moderato testnet verified that proof against the `IVerifier` inputs (tx …)."
+  Moderato testnet verified that proof against the `IVerifier` inputs (tx `0xa630…f770`)."
 - **May (after the own-Zone live run, 2026-10-06/07):** "On our own Zone on Moderato (one operator, not a
   Tempo-created Zone), the portal settled three batches only after this verifier accepted their proofs; our
   sequencer then paid a withdrawal; a forged sequencer-signed batch was rejected on the proof." The proof is a
@@ -161,7 +161,7 @@ A native host computes the same public values with the same Rust code (shared mo
 - **May not:**
   - that a Tempo-created Zone settles with it;
   - that it secures withdrawals on Tempo's Zones;
-  - that the batch came from Moderato (it came from Tempo's zones integration tests on a dev chain);
+  - that the fixture batches came from Moderato (they came from Tempo's zones integration tests on a dev chain);
   - that it is production-ready or audited;
   - that the pinned genesis is Tempo's authentic Zone spec (it is the artifact from Tempo's integration test);
   - anything about cross-chain or settlement security (D2/D4).

@@ -34,6 +34,7 @@ exactly the inputs IVerifier.verify receives. Two results on Moderato, all read-
    proven batches; our sequencer paid the withdrawal only after the last proof passed, and a forged,
    sequencer-signed batch replaying a real proof was rejected on the proof:
    https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1
+   https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d
 
 Repo: https://github.com/psyto/sworn (spec 003 = the verifier, spec 004 = a TEE + ZK proposal).
 
@@ -94,7 +95,7 @@ Hi <name>,
 
 A short question about evidence, not a sales request.
 
-Tempo "Zones" are private ledgers: only the operator sees the transactions. I built a tool that turns one
+Tempo "Zones" are private ledgers: users see only their own transactions, and only the operator sees them all. I built a tool that turns one
 operator-supplied batch into a zero-knowledge proof that Tempo's own Zone code accepts exactly that batch. Anyone
 can verify the proof on chain; it reveals hashes and batch metadata, not transactions or balances.
 

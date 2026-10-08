@@ -1,7 +1,3 @@
-import type { Loadable } from "../chain/loadable.ts";
-import type { ProofPins } from "../chain/timeline.ts";
-import { AddrLink, ErrorBox } from "./common.tsx";
-
 export interface PipeNode {
   title: string;
   sub: string[];
@@ -110,67 +106,5 @@ export function Pipeline(p: PipeProps) {
       <Wide {...p} />
       <Tall {...p} />
     </>
-  );
-}
-
-const SLASH_NODES: PipeNode[] = [
-  { title: "Tempo block N", sub: ["state + block hash", "MPT-verified"], tempo: true },
-  { title: "tempo-revm", sub: ["Tempo's own EVM", "re-runs the transfer"] },
-  { title: "SP1 zkVM", sub: ["proves that run", "RISC-V execution"] },
-  { title: "Groth16", sub: ["succinct proof", "made locally"] },
-  { title: "Sworn.sol", sub: ["on Tempo", "verifyProof → slash"], tempo: true },
-];
-
-export function ProofSection({ pins, onRetry }: { pins: Loadable<ProofPins>; onRetry: () => void }) {
-  return (
-    <section className="section" aria-labelledby="how">
-      <div className="section-head">
-        <p className="eyebrow">The engine</p>
-        <h2 id="how">How the slash proof is made</h2>
-        <p className="lede">
-          The same recipe as the Zone proof above, with Tempo's EVM in place of the Zone verifier: the challenger re-runs the
-          exact transfer with tempo-revm over state proven against block N's header, inside SP1, and Sworn.sol checks the
-          Groth16 proof against that block's hash on Tempo.
-        </p>
-      </div>
-      <figure className="figure">
-        <Pipeline
-          id="dg-slash"
-          nodes={SLASH_NODES}
-          label="Tempo block N, re-executed by tempo-revm inside the SP1 zkVM, wrapped as a Groth16 proof, verified by Sworn.sol on Tempo against block N's hash."
-          back={{ wide: "blockhash(N) == the question's block hash, checked on Tempo", tall: "blockhash(N) checked on Tempo" }}
-        />
-        <figcaption>
-          Heavy edges are on Tempo; the middle three run on the challenger's machine (the three Moderato proofs took about 7 to 9
-          minutes, per the run logs).
-        </figcaption>
-      </figure>
-      <div className="pins" aria-live="polite">
-        <p className="eyebrow">Pinned in Sworn.sol, read from chain</p>
-        {pins.status === "ok" ? (
-          <dl className="facts">
-            <dt>SP1_VERIFIER</dt>
-            <dd>
-              <AddrLink address={pins.value.verifier} label={pins.value.verifier} /> · {pins.value.verifierVersion}
-            </dd>
-            <dt>GUEST_VKEY</dt>
-            <dd className="mono">{pins.value.guestVkey}</dd>
-            <dt>GUEST_VERSION</dt>
-            <dd className="mono">
-              {pins.value.guestVersion}
-              {pins.value.guestVersionIsV1 && <span className="ok"> = keccak256("sworn-guest-v1") ✓</span>}
-            </dd>
-            <dt>MAX_AGE</dt>
-            <dd className="mono">{pins.value.maxAge.toString()} blocks (the answer must be about a block whose hash Tempo still serves)</dd>
-          </dl>
-        ) : pins.status === "error" ? (
-          <ErrorBox error={pins.error} onRetry={onRetry} />
-        ) : (
-          <p className="loading">
-            <span className="pulse" aria-hidden /> Reading the verifier and vkey from Sworn…
-          </p>
-        )}
-      </div>
-    </section>
   );
 }

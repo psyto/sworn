@@ -1,6 +1,6 @@
 # CWF videos — pitch (≤ 2 min) and demo (≤ 3 min)
 
-The submission videos are **Pitch D** (`PITCH-D.md`, ≤ 2:00 after the voice edit; the silent cut is 123 s) and **Demo D** (`DEMO-D.md`, 1:34). The scripts are
+The submission videos are **Pitch D** (`PITCH-D.md`, ≤ 2:00 after the voice edit; the silent cut is 123 s) and **Demo D** (`DEMO-D.md`, 1:22 narrated; the silent cut is 94 s). The scripts are
 the only source of narration; each ends with a claims → source table, and every figure on screen is **read at
 record time** (missing or changed source → the recorder throws). Silent 1920×1080 output, scene lengths =
 words ÷ 2.2 words/s rounded up to 0.5 s. Look: `slides.css`, Geist / Geist Mono (the recorder refuses a
@@ -23,7 +23,7 @@ deployments against Moderato (bytecode, every receipt, the 0.5 pathUSD payout, t
 README statements it relies on, Tempo's `Cargo.toml`, Fabrknt Dojo, the ETHGlobal showcase and Superteam's winner
 record.
 
-**Demo D** (nine scenes, 94 s) keeps the two results apart: a real local proof job for Tempo's
+**Demo D** (nine scenes, 94 s silent; 1:22 narrated) keeps the two results apart: a real local proof job for Tempo's
 integration-test fixture (dev chain 1337, nothing sent; a labelled cut from its start to its verified result),
 what stays private, the fixture attest on Tempo's explorer and a live re-verify (true / `InvalidProof()`), then
 a separate-run card, our own Zone's settlement and payout, the forged batch's failed trace, and the reproduction

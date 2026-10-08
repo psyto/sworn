@@ -25,7 +25,7 @@ export function OwnZoneSection({ ownZone, check, onRetry, onVerify }: Props) {
     <section className="section" id="own-zone" aria-labelledby="own-zone-h">
       <div className="section-head">
         <p className="eyebrow">Our own Zone on Moderato · {OWN_ZONE.date}</p>
-        <h2 id="own-zone-h">A portal that pays a withdrawal only after Sworn's proof passes</h2>
+        <h2 id="own-zone-h">A portal that settles a batch, and so lets a withdrawal be paid, only after Sworn's proof passes</h2>
         <p className="lede">
           We ran our own Zone (zone {OWN_ZONE.zoneId}) on Moderato. Its portal calls <code>SwornZoneVerifier</code> in every{" "}
           <code>submitBatch</code>, so a batch settles, and its withdrawals can be paid, only after the Groth16 proof verifies.

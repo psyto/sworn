@@ -39,7 +39,7 @@ can't get a Tempo-run Zone's batch: only the operator holds the witness.
 On our own Zone, yes in the narrow sense: its portal settles a batch, and queues its withdrawals, only after the
 proof verifies. The proof is a necessary condition, not a guarantee: our sequencer then calls `processWithdrawals`,
 and could also withhold it. We also showed the rejection side: our own sequencer, with a valid signature, submitted a
-forged batch replaying a real proof, and it reverted on the proof (tx `0x3a15…167d`, state unchanged). We ran that on Moderato on 2026-10-06. On Tempo's Zones, no: their verifier is fixed by Tempo's
+forged batch replaying a real proof, and it reverted on the proof (tx `0x3a15…167d`, state unchanged). We ran that on Moderato on 2026-10-07. On Tempo's Zones, no: their verifier is fixed by Tempo's
 factory, so it stays evidence there. Spec 004 is the design for Tempo's side.
 - *If pressed:* one operator, whose key also decrypts deposits; withdrawals wait for the proof but are not
   censorship-resistant (the operator must prove and process them); callback withdrawals bounce.
@@ -67,8 +67,9 @@ the portal recorded); spec 004 would make it automatic there.
 - Not validated: no customer, no price agreed.
 
 **8. There is one Zone operator on Moderato. Where is the market?**
-There is no demonstrated market today, and we say that. The immediate buyer hypothesis is either a Zone team
-with a reviewer requirement or Tempo itself (proofs in settlement, spec 004). A design-partner conversation is the
+There is no demonstrated market today, and we say that. The immediate buyer hypothesis is a Zone business
+whose reviewer cannot reconstruct the private witness. Tempo itself (an independent check beside its TEE, spec 004)
+is a later proposal, not the first buyer. A design-partner conversation is the
 next falsifiable test.
 
 **9. Tempo chose a TEE (Nitro). Why would anyone need ZK?**
@@ -94,7 +95,9 @@ next falsifiable test.
 
 **12. Why you?**
 - Tempo is built on Reth and Revm. I work on that stack and teach it (Fabrknt Dojo, fabrknt.com/dojo: 21 source-grounded courses on Rust, Reth, Revm and Alloy).
-- My last project took a Uniswap Foundation prize at ETHGlobal Tokyo.
+- My last project, Reckn, took a Uniswap Foundation sponsor prize (Best Uniswap Stack Contribution, 3rd place) at
+  ETHGlobal Tokyo 2026; I also placed 3rd in the Superteam Japan × NTT DOCOMO R&D side track of Colosseum's Solana
+  Cypherpunk Hackathon (2025). Fabrknt Dojo has 21 courses and 234 lessons.
 - Fifteen years building banking systems: I know what auditors ask an operator for.
 
 **13. Solo founder. Can you run an operations business?**
@@ -141,7 +144,7 @@ Introductions to teams building Zones or private payment ledgers on Tempo, and t
 - For Tempo's Zones, the evidence product is off the settlement path, so its speed never delays their settlement.
   It only sets when the evidence reaches the auditor.
 - On our own Zone, the proof *is* on the path, and it does delay settlement: in the live run each batch waited
-  11–32 minutes for its proof (payout 58.5 minutes after the anchor). That is why the Zone was stopped after
+  11–31 minutes for its proof (payout 58.5 minutes after the anchor). That is why the Zone was stopped after
   the demo: this prover cannot keep up with a continuously running Zone.
 - In the settlement design (spec 004), the TEE settles at once and ZK only gates the payout of withdrawals.
   Deposits and Zone execution never wait for it.
@@ -154,7 +157,7 @@ Introductions to teams building Zones or private payment ledgers on Tempo, and t
 - Zcash proves each shielded transaction is valid and hides it from everyone. Sworn proves a Zone batch was
   executed correctly by Tempo's own Zone code; it shields nothing from the operator, who still sees every
   transaction. Zones are private from the public, not from their sequencers.
-- So: Zcash-style verifiability for an operator-run private ledger, not Zcash-level privacy.
+- So the shared part is only "verify without revealing"; Sworn is not Zcash-level privacy.
 
 **21. How is a Zone different from Solana's Contra or a Lightning channel?**
 - Contra is the closer analogy: operator-run private execution backed by public escrow (Contra holds SPL tokens
@@ -178,6 +181,12 @@ Introductions to teams building Zones or private payment ledgers on Tempo, and t
 **24. "Only the operator sees every transaction": isn't it the sequencers?**
 - Yes: a Zone is run by its operator's sequencer set (a leader and followers). "The operator" in the pitch means
   that set. Account holders see only their own activity (RPC-level authentication); the public sees none.
+
+**25. What existed before the hackathon?**
+- The repo started inside the window (2026-10-03). It vendors Succinct's SP1 verifier contracts (v6.1.0,
+  unmodified) and fetches and patches Tempo and Tempo Zones at pinned commits; none of that is my code.
+- The design discipline (no owner, no admin, a build check that fails if one appears) comes from my earlier
+  project Reckn; no Reckn code is used. All of this is in the README and should be in the form's disclosure.
 
 ## Numbers to have ready
 

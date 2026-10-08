@@ -1,7 +1,7 @@
 # Sworn
 
 **Private execution. Checkable validity.** Sworn is for Tempo Zones: private ledgers where only the operator sees every
-transaction. Tempo's own Zone verifier runs in SP1, producing a proof plus public batch data that anyone can verify
+transaction. Sworn runs Tempo's own Zone verifier in SP1, producing a proof plus public batch data that anyone can verify
 on chain without publishing transactions.
 
 **Like Zcash? Only in one way.** Zcash uses zero knowledge to prove a shielded transaction is valid without
@@ -59,7 +59,7 @@ but it is not the product pitched or demoed for CWF:
 > "Re-verify on chain" in the page's fixture section (three live `eth_call`s: Sworn, the real proof → true; one field changed →
 > `InvalidProof`; for comparison, Moderato's current prototype verifier, the pre-T13 reference stub, returns
 > true for an equivalent malformed batch) ·
-> pitch (≤ 2:00) and demo (1:34) videos: *links added once the founder narration is uploaded*.
+> pitch (≤ 2:00) and demo (1:22) videos: *links added once the founder narration is uploaded*.
 >
 > **Status (2026-10-07): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
 > testnet** only. Unaudited. No customers or revenue. The Zones created by Tempo's factory on Moderato have one

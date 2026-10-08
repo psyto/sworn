@@ -61,8 +61,8 @@ export function Hero() {
   return (
     <section className="hero">
       <div className="hero-copy">
-        <p className="eyebrow">Sworn · for Tempo Zones · Private execution, checkable validity</p>
-        <h1>Make private Zone execution checkable.</h1>
+        <p className="eyebrow">Sworn · for Tempo Zones</p>
+        <h1>Private execution. Checkable validity.</h1>
         <p className="lede">
           Tempo Zones are private ledgers: only the operator sees every transaction. Sworn turns an operator-supplied
           batch into evidence anyone can verify on chain—without the private ledger or customer transactions.
@@ -232,7 +232,7 @@ export function DataFlow() {
           Zcash proves a shielded transaction is valid; Sworn proves a Zone batch executed correctly. Sworn hides nothing
           from the Zone&apos;s operator, who still sees every transaction.</p>
         <p className="df-note">This diagram shows the fixture batch from Tempo&apos;s integration tests (dev chain 1337), verified
-          read-only on Moderato. The own-Zone run above is separate: its portal calls its own instance of the verifier before it
+          on Moderato by a standalone verifier, not connected to a portal. The own-Zone run above is separate: its portal calls its own instance of the verifier before it
           settles a batch, and our sequencer pays withdrawals afterwards. Tempo&apos;s own Zones are unchanged; spec 004 is a
           proposal.</p>
       </div>
@@ -259,8 +259,7 @@ export function OperationsTest() {
       <p className="note">
         <b>Market, honestly:</b> it grows with Zones × batches × upgrades, and only if Zones are adopted; no TAM is claimed.
         Later, Sworn could sit beside Tempo&apos;s TEE as an independent check (spec 004, a proposal).<br />
-        <b>What is true today:</b> the three Zones Tempo&apos;s factory created on Moderato share one admin; Sworn has no
-        customer, revenue, design partner or payer agreement. The commercial thesis becomes credible only after this repeat
+        <b>What is true today:</b> Sworn has no customer, revenue, design partner or payer agreement. The commercial thesis becomes credible only after this repeat
         test.
       </p>
     </section>
@@ -275,6 +274,7 @@ export function Footer() {
         <li>Unaudited</li>
         <li>Fixture batches from Tempo's integration tests (dev chain)</li>
         <li>Live settlement only on our own Zone (one operator), not Tempo's Zones</li>
+        <li>Proof gates settlement; no data-availability, liveness or censorship-resistance guarantee</li>
         <li>No customers, revenue or mainnet</li>
       </ul>
       <ul className="links">
@@ -315,8 +315,9 @@ export function Footer() {
       </ul>
       <p className="fine team">
         Built by Hiroyuki Saito (<a href="https://github.com/psyto" target="_blank" rel="noreferrer">@psyto</a>): Rust on
-        Tempo&apos;s stack (Reth, Revm); author of <a href="https://fabrknt.com/dojo" target="_blank" rel="noreferrer">Fabrknt Dojo</a> (21 courses); Uniswap Foundation sponsor prize, ETHGlobal Tokyo
-        2026; 3rd place, Superteam Japan × NTT DOCOMO R&amp;D side track, Colosseum Cypherpunk 2025; 15 years building banking
+        Tempo&apos;s stack (Reth, Revm); author of <a href="https://fabrknt.com/dojo" target="_blank" rel="noreferrer">Fabrknt Dojo</a> (21 courses); Uniswap Foundation sponsor prize (Best
+        Uniswap Stack Contribution, 3rd place), ETHGlobal Tokyo 2026; 3rd place, Superteam Japan × NTT DOCOMO R&amp;D side track,
+        Colosseum&apos;s Solana Cypherpunk Hackathon 2025; 15 years building banking
         systems in Japan.
       </p>
       <p className="fine">

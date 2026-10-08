@@ -16,10 +16,13 @@
 # flag), then prints how to read the receipt and the ZoneBatchVerified event.
 #   RPC (default https://rpc.moderato.tempo.xyz) may be overridden, e.g. to a local anvil for a rehearsal.
 set -euo pipefail
+caller="$PWD"
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$root/contracts"
 addr="${1:?usage: zone-attest.sh <verifier-address> <fixture.json> [--send]}"
 fx="${2:?usage: zone-attest.sh <verifier-address> <fixture.json> [--send]}"
+# A relative fixture path is relative to where the script was run, not to contracts/.
+case "$fx" in /*) ;; *) [ -e "$caller/$fx" ] && fx="$caller/$fx" ;; esac
 SEND=
 case "${3:-}" in --send) SEND=1 ;; "") ;; *) echo "unknown argument $3"; exit 2 ;; esac
 RPC="${RPC:-https://rpc.moderato.tempo.xyz}"
