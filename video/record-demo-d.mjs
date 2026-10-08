@@ -68,7 +68,7 @@ const encodeTrim = (input, start, seconds, output) => {
   const src = path.join(dir, input);
   if (Math.abs(duration(src) - start) < seconds - 0.1) fail(`${input} is too short for ${start}s + ${seconds}s`);
   execFileSync(FFMPEG, ["-v", "error", "-ss", String(start), "-i", src, "-t", String(seconds), "-an",
-    "-vf", "fps=30,scale=1920:1080,setsar=1,scale=in_range=full:out_range=tv,format=yuv420p",
+    "-vf", "fps=30,scale=1920:1080,setsar=1,format=yuv420p",
     "-c:v", "libx264", "-profile:v", "high", "-level", "4.0", "-crf", "20", "-preset", "slow",
     "-color_range", "tv", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-movflags", "+faststart", output, "-y"]);
 };
@@ -90,7 +90,7 @@ const encodeOwnScopeTrim = (input, start, seconds, output) => {
   const src = path.join(dir, input);
   if (Math.abs(duration(src) - start) < seconds - 0.1) fail(`${input} is too short for ${start}s + ${seconds}s`);
   execFileSync(FFMPEG, ["-v", "error", "-ss", String(start), "-i", src, "-loop", "1", "-framerate", "30", "-i", OWN_SCOPE,
-    "-filter_complex", "[0:v]fps=30,scale=1920:1080,setsar=1[base];[base][1:v]overlay=0:0:shortest=1,scale=in_range=full:out_range=tv,format=yuv420p[v]",
+    "-filter_complex", "[0:v]fps=30,scale=1920:1080,setsar=1[base];[base][1:v]overlay=0:0:shortest=1,format=yuv420p[v]",
     "-map", "[v]", "-an", "-t", String(seconds), "-c:v", "libx264", "-profile:v", "high", "-level", "4.0", "-crf", "20", "-preset", "slow",
     "-color_range", "tv", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-movflags", "+faststart", output, "-y"]);
 };
@@ -115,17 +115,19 @@ const verifyA = path.join(work, "s4a.mp4"), verifyX = path.join(work, "s4x.mp4")
 const payA = path.join(work, "s6a.mp4"), payX = path.join(work, "s6x.mp4"), pay = path.join(work, "s6-scoped.mp4");
 const forged = path.join(work, "s7-scoped.mp4"), repeat = path.join(work, "s8.mp4");
 encodeTrim("takes/demo-b/job-scene.mp4", 0, holds[1], job);
-encodeTrim("takes/demo-c/b3a.mp4", 0, 5, verifyA);
-encodeTrim("takes/demo-c/b3x.mp4", 0, 5, verifyX);
+encodeTrim("takes/demo-c/b3a.mp4", 0, 2, verifyA);
+encodeTrim("takes/demo-c/b3x.mp4", 0, 2, verifyX);
 // b3c opens on the previous click's results; start just before the live click.
-encodeTrim("takes/demo-c/b3c.mp4", 1.5, 4, verifyC);
+// The narration reaches "re-verify it live" about 3 s in, so the live click gets most of the scene.
+encodeTrim("takes/demo-c/b3c.mp4", 1.5, holds[3] - 4, verifyC);
 concat([verifyA, verifyX, verifyC], verify);
 await ownScopeOverlay();
 encodeOwnScopeTrim("takes/demo-c/b4a.mp4", 0, 5, payA);
 encodeOwnScopeTrim("takes/demo-c/b4x.mp4", 0, 5, payX);
 concat([payA, payX], pay);
 encodeOwnScopeTrim("takes/demo-c/b5.mp4", 0, holds[6], forged);
-encodeTrim("takes/demo-c/b6.mp4", 0, holds[7], repeat);
+// Start after the export command is typed, so the three [PASS] lines stay on screen for about 3 s.
+encodeTrim("takes/demo-c/b6.mp4", 2, holds[7], repeat);
 
 const parts = [intro, job, privacy, verify, separate, pay, forged, repeat, close];
 parts.forEach((f, i) => exact(f, holds[i]));
@@ -135,6 +137,9 @@ exact(out, total);
 const pixel = execFileSync(FFMPEG, ["-v", "error", "-ss", "1", "-i", out, "-vf", "crop=1:1:1900:1060,format=rgb24", "-frames:v", "1", "-f", "rawvideo", "-"], { encoding: null });
 if (![243, 242, 232].every((v, i) => pixel[i] === v)) fail(`background pixel is #${[...pixel.slice(0, 3)].map((v) => v.toString(16).padStart(2, "0")).join("")}, expected #f3f2e8`);
 const starts = holds.reduce((a, h) => [...a, a.at(-1) + h], [0]);
+// The real screens are tv-range already: re-encoding must not squeeze them again (that once darkened them to #e0dfd8).
+const screenPx = execFileSync(FFMPEG, ["-v", "error", "-ss", String(starts[3] + 1), "-i", out, "-vf", "crop=1:1:1900:1060,format=rgb24", "-frames:v", "1", "-f", "rawvideo", "-"], { encoding: null });
+if (screenPx[0] < 0xf0) fail(`scene 4 page background is #${[...screenPx.slice(0, 3)].map((v) => v.toString(16).padStart(2, "0")).join("")}: a double range conversion`);
 const cues = writeSrt(scenes, starts, path.join(dir, "demo-d.srt"));
 for (let i = 0; i < scenes.length; i++) {
   const image = path.join(dir, "frames", `demo-d-scene${i + 1}.png`);
