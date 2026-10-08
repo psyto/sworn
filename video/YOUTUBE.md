@@ -89,8 +89,8 @@ After uploading, replace `[DEMO VIDEO URL]` / `[PITCH VIDEO URL]` in each descri
 ## Check-in 4 (week 4)
 
 Upload the narrated `checkin-4` with its captions the same way; the weekly form also requires that judges can watch
-without requesting access. **The chapter times below are the silent cut's (11 / 14 / 7 / 15 / 11 s); after the
-voice edit, set them to where each scene actually starts.** Submit between Oct 9 08:00 PDT and Oct 12 08:00 PDT;
+without requesting access. Chapter times match the narrated `video/final/Sworn_CheckIn4_20261008.mp4` (51.7 s); captions:
+`video/final/Sworn_CheckIn4_20261008.en.srt`. Submit between Oct 9 08:00 PDT and Oct 12 08:00 PDT;
 the link cannot be changed afterwards.
 
 **Title** (≤ 100 characters)
@@ -121,8 +121,8 @@ Code: https://github.com/psyto/sworn
 
 0:00 Last check-in → this week
 0:11 Oct 6–8: on chain, and re-checkable
-0:32 What I learned
-0:47 Next, with dates
+0:31 What I learned
+0:41 Next, with dates
 
 Colosseum Crypto World's Fair, Tempo track.
 #Tempo #ZeroKnowledge #SP1
