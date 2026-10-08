@@ -228,6 +228,9 @@ export function DataFlow() {
       <div className="df-learns" aria-label="What a reviewer learns">
         <p><b>Learns:</b> Tempo&apos;s own Zone code accepts this exact batch.</p>
         <p><b>Does not learn:</b> balances, senders, recipients or amounts inside the Zone.</p>
+        <p className="df-note"><b>Like Zcash? Only in one way.</b> Both use zero knowledge to verify without revealing.
+          Zcash proves a shielded transaction is valid; Sworn proves a Zone batch executed correctly. Sworn hides nothing
+          from the Zone&apos;s operator, who still sees every transaction.</p>
         <p className="df-note">This diagram shows the fixture batch from Tempo&apos;s integration tests (dev chain 1337), verified
           read-only on Moderato. The own-Zone run above is separate: its portal calls its own instance of the verifier before it
           settles a batch, and our sequencer pays withdrawals afterwards. Tempo&apos;s own Zones are unchanged; spec 004 is a

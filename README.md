@@ -4,6 +4,11 @@
 transaction. Tempo's own Zone verifier runs in SP1, producing a proof plus public batch data that anyone can verify
 on chain without publishing transactions.
 
+**Like Zcash? Only in one way.** Zcash uses zero knowledge to prove a shielded transaction is valid without
+revealing it. Sworn uses zero knowledge differently: it proves a private Tempo Zone batch executed correctly, without
+publishing its transactions. It hides nothing from the Zone's operator, who still sees every transaction: Zones are
+private from the public, not from their operator.
+
 Before a private Tempo Zone releases a withdrawal batch, its operator may need to show an auditor or reviewer
 evidence without disclosing the private ledger. For an operator-supplied batch, Sworn runs Tempo's own Zone
 verification code in SP1 and produces a proof anyone can verify on chain. The public output is hashes and

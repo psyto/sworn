@@ -125,6 +125,14 @@ because the data is private.
    network), so the Zone can keep running instead of stopping after the demo.
 3. Track T12/T13 in the guest.
 4. Price a proof (rented hardware, aggregation).
+5. Benchmark batch size: one proof amortises on-chain verification over more transactions, but proving time,
+   memory, hardware cost and settlement latency can rise with batch size. The ≈ 260k-gas attest is one fixture
+   measurement, not a production per-transaction price.
+6. Prototype one narrowly specified audit-property proof (per token, for a named Zone and a finalized Tempo
+   checkpoint) and measure what extra public commitments, circuit work, proving cost and reviewer workflow it needs.
+   Solvency or TIP-403 compliance are examples that need their own statement design; today's proof does not cover them.
+7. Agent payments only with a design partner: a counterparty could verify settlement evidence without seeing the
+   ledger, but Sworn has no agent integration or MPP product and does not solve operator liveness or finality.
 
 **18. What do you want from Colosseum?**
 Introductions to teams building Zones or private payment ledgers on Tempo, and to Tempo's Zones engineers.
@@ -160,6 +168,16 @@ Introductions to teams building Zones or private payment ledgers on Tempo, and t
 - Does not guarantee: data availability, that a transaction was included, that proving keeps going, that the
   sequencer processes withdrawals (it paid ours, but could withhold), or censorship resistance. The proof is a
   necessary condition for a payout, not a guarantee.
+
+**23. Is Sworn an AI-agent payments product?**
+- No. The product today is independent validity evidence for private Zone execution.
+- Agent payments are a possible application only after a buyer validates the core proof workflow.
+- The hard constraints remain proving latency, the counterparty's settlement requirements, policy enforcement and
+  operator withholding.
+
+**24. "Only the operator sees every transaction": isn't it the sequencers?**
+- Yes: a Zone is run by its operator's sequencer set (a leader and followers). "The operator" in the pitch means
+  that set. Account holders see only their own activity (RPC-level authentication); the public sees none.
 
 ## Numbers to have ready
 
