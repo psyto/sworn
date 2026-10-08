@@ -23,7 +23,7 @@ The scope, including "no customers yet", is said once aloud. v8.1 adds a forward
 
 > Separately, on our own one-operator Zone, the portal settled three batches only after the proof passed, and our sequencer paid a withdrawal. Then our own sequencer signed a forged batch. It was rejected: a real proof cannot authorize a different batch.
 
-## Scene 5 — the business · ≈ 18 s
+## Scene 5 — the business · ≈ 20 s
 
 > First buyer: a Zone business whose reviewer cannot reconstruct the witness. One batch tests demand; repeats and upgrades become Proof Operations. The market grows with Zones, batches and upgrades, if Zones are adopted. Later, beside Tempo's TEE.
 
@@ -31,7 +31,7 @@ The scope, including "no customers yet", is said once aloud. v8.1 adds a forward
 
 > I build on Tempo's stack, Reth and Revm, and teach it through Fabrknt Dojo. Uniswap Foundation sponsor prize at ETHGlobal Tokyo; third in Superteam Japan and NTT DOCOMO R&D's side track at Colosseum's Cypherpunk hackathon. Before crypto, fifteen years of banking systems.
 
-## Scene 7 — the honest ask · ≈ 15 s
+## Scene 7 — the honest ask · ≈ 14 s
 
 > Today: testnet, unaudited, no customers yet. Next, one design partner supplies a batch, and its reviewer decides whether the evidence is worth paying for. Sworn: verifiable evidence for private execution.
 
