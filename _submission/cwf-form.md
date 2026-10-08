@@ -67,7 +67,7 @@ Tempo
 ## Category · Public
 
 ```
-Infrastructure
+Developer Infrastructure
 ```
 
 ## Is your project a mobile-focused dApp?
