@@ -61,7 +61,7 @@ export function Hero() {
   return (
     <section className="hero">
       <div className="hero-copy">
-        <p className="eyebrow">Sworn · for Tempo Zones</p>
+        <p className="eyebrow">Sworn · for Tempo Zones · Private execution, checkable validity</p>
         <h1>Make private Zone execution checkable.</h1>
         <p className="lede">
           Tempo Zones are private ledgers: only the operator sees every transaction. Sworn turns an operator-supplied

@@ -141,6 +141,26 @@ Introductions to teams building Zones or private payment ledgers on Tempo, and t
   it. Hence a second check, not a replacement.
 - 12–15 minutes is one laptop. GPU or proving-network times are unmeasured, so we don't quote them.
 
+**20. Isn't this just Zcash for Tempo?**
+- No. Both use zero knowledge to verify a claim without revealing private data, and that is all they share.
+- Zcash proves each shielded transaction is valid and hides it from everyone. Sworn proves a Zone batch was
+  executed correctly by Tempo's own Zone code; it shields nothing from the operator, who still sees every
+  transaction. Zones are private from the public, not from their sequencers.
+- So: Zcash-style verifiability for an operator-run private ledger, not Zcash-level privacy.
+
+**21. How is a Zone different from Solana's Contra or a Lightning channel?**
+- Contra is the closer analogy: operator-run private execution backed by public escrow (Contra holds SPL tokens
+  in an onchain escrow program; a Zone's portal holds the deposits). Sworn does not prove Contra's code.
+- Lightning is different: each party holds signed state and can enforce it on chain alone. A Zone user cannot;
+  the operator runs the ledger. Sworn does not change that.
+
+**22. What exactly does Sworn prove, and what does it not guarantee?**
+- Proves: a specified private batch executes correctly under Tempo's own Zone verifier, bound to the inputs the
+  portal's `IVerifier` receives. On our own Zone, the portal settles a batch only if that proof passes.
+- Does not guarantee: data availability, that a transaction was included, that proving keeps going, that the
+  sequencer processes withdrawals (it paid ours, but could withhold), or censorship resistance. The proof is a
+  necessary condition for a payout, not a guarantee.
+
 ## Numbers to have ready
 
 | | value |

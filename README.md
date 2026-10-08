@@ -1,7 +1,8 @@
 # Sworn
 
-**Sworn is for Tempo Zones: private ledgers where only the operator sees every transaction. Sworn makes that
-private execution checkable.**
+**Private execution. Checkable validity.** Sworn is for Tempo Zones: private ledgers where only the operator sees every
+transaction. Tempo's own Zone verifier runs in SP1, producing a proof plus public batch data that anyone can verify
+on chain without publishing transactions.
 
 Before a private Tempo Zone releases a withdrawal batch, its operator may need to show an auditor or reviewer
 evidence without disclosing the private ledger. For an operator-supplied batch, Sworn runs Tempo's own Zone

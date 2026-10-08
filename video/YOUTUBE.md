@@ -18,7 +18,7 @@ Sworn: make private Tempo Zone execution checkable — Pitch (CWF, Tempo track)
 **Description**
 
 ```
-Sworn is for Tempo Zones: private ledgers where only the operator sees every transaction. Before a withdrawal moves, a reviewer cannot verify the private batch. Sworn runs Tempo's own Zone verifier in a zero-knowledge VM (SP1) and turns an operator-supplied batch into evidence anyone can verify on chain, without publishing customer transactions.
+Private execution. Checkable validity. Sworn is for Tempo Zones, which keep payments private: users see only their own, and only the operator sees every transaction. Before a withdrawal, no outside reviewer can verify the private batch. Zcash uses zero knowledge to prove a transaction is valid without revealing it; Sworn uses zero knowledge differently: Tempo's own Zone verifier runs in SP1 and proves a private Zone batch executed correctly, without publishing transactions. (It does not hide anything from the operator.)
 
 Built on Moderato testnet, two separate results:
 • A test-fixture proof (Tempo integration test, dev chain 1337) verified on Moderato.
@@ -32,8 +32,8 @@ Code and specs: https://github.com/psyto/sworn
 Payout tx: https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1
 Rejected forged batch: https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d
 
-0:00 Sworn is for Tempo Zones
-0:14 Keep the batch private, make its execution checkable
+0:00 Private execution needs independent evidence
+0:14 Private execution. Checkable validity. (Zcash vs Sworn)
 0:29 Why now: not a generic proof wrapper
 0:45 Our own Zone: the proof is the control
 1:01 The business: one batch, then Proof Operations

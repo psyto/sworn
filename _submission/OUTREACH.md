@@ -31,10 +31,15 @@ exactly the inputs IVerifier.verify receives. Two results on Moderato, all read-
 1. A standalone verifier with IVerifier's signature verified proofs of two batches from your integration tests
    (one with a withdrawal).
 2. On our own Zone (outside the factory, one operator, testnet), a ZonePortal using that verifier settled three
-   proven batches, and the withdrawal was paid only after the last proof passed:
+   proven batches; our sequencer paid the withdrawal only after the last proof passed, and a forged,
+   sequencer-signed batch replaying a real proof was rejected on the proof:
    https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1
 
 Repo: https://github.com/psyto/sworn (spec 003 = the verifier, spec 004 = a TEE + ZK proposal).
+
+In short: a working example of ZK batch-validity evidence using Tempo's own Zone verifier, plus proof-gated
+settlement demonstrated separately on our own testnet Zone. It does not address data availability, liveness,
+censorship or witness access; it is meant as an independent check beside Nitro, not a replacement.
 
 I am not asking you to adopt anything. Three questions, any of which would help:
 - Is a ZK path next to Nitro something you would want for Zones at all, or is Nitro the intended end state?
@@ -49,9 +54,10 @@ Hiroyuki Saito (@psyto)
 ## 2. Tempo developer relations / Zones engineers (DM, Discord or X)
 
 ```
-Hi — I built Sworn for the CWF Tempo track: Tempo Zones' own batch verifier running in SP1, with the proof
-checked on Moderato. On our own testnet Zone, the portal settled three proven batches and paid a withdrawal only
-after the proof passed (one operator, not a Tempo-created Zone).
+Hi — I built Sworn for the CWF Tempo track. Private execution, checkable validity: Tempo Zones' own batch verifier
+runs in SP1, so a Zone batch's correctness can be checked on Moderato without publishing its transactions.
+Separately, on our own testnet Zone (one operator, not Tempo-created), the portal settled three proven batches,
+our sequencer paid a withdrawal only after the proof passed, and a forged batch was rejected.
 
 One question, two lines is plenty: is a ZK check next to the Nitro attestation something Tempo would want for
 Zones, and if so, who on the Zones team should I ask about the integration path?
