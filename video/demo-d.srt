@@ -1,0 +1,75 @@
+1
+00:00:00,000 --> 00:00:05,405
+Sworn is for Tempo Zones, where only the operator sees every transaction.
+
+2
+00:00:05,455 --> 00:00:08,132
+It makes that private execution checkable.
+
+3
+00:00:08,182 --> 00:00:09,950
+Two separate demonstrations follow.
+
+4
+00:00:10,000 --> 00:00:16,550
+An operator runs a real proof job for Tempo's integration-test fixture:
+
+5
+00:00:16,600 --> 00:00:23,150
+deposit and withdrawal blocks five through six, on dev chain 1337.
+
+6
+00:00:23,200 --> 00:00:24,950
+Nothing is sent.
+
+7
+00:00:25,000 --> 00:00:26,832
+The witness stays private.
+
+8
+00:00:26,882 --> 00:00:32,950
+The verifier learns the batch is valid, not balances, senders, recipients or amounts.
+
+9
+00:00:33,000 --> 00:00:38,283
+This fixture batch was attested on Moderato earlier.
+
+10
+00:00:38,333 --> 00:00:46,950
+Re-verify it live: the real batch passes; change one field, and it reverts.
+
+11
+00:00:47,000 --> 00:00:51,950
+Separately, on our own Zone: a different batch and verifier.
+
+12
+00:00:52,000 --> 00:00:58,421
+There, the portal settled three batches only after the proof passed.
+
+13
+00:00:58,471 --> 00:01:01,950
+Then our sequencer paid a withdrawal.
+
+14
+00:01:02,000 --> 00:01:06,687
+A forged batch, even signed by our own sequencer,
+
+15
+00:01:06,737 --> 00:01:11,950
+was rejected: a real proof cannot authorize a different batch.
+
+16
+00:01:12,000 --> 00:01:15,586
+Export the live verify calls.
+
+17
+00:01:15,636 --> 00:01:19,950
+Re-run the tests against deployed bytecode.
+
+18
+00:01:20,000 --> 00:01:23,450
+Sworn turns private execution into verifiable evidence.
+
+19
+00:01:23,500 --> 00:01:29,950
+On our own Zone, a withdrawal was paid only after the proof passed.

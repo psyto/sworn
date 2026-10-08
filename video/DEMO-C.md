@@ -1,5 +1,7 @@
 # Demo video C: Sworn (≤ 3 min, founder's voice), v6-C (real screens + the privacy diagram), 2026-10-08
 
+**Kept as a source recorder only.** Demo D (`DEMO-D.md`, `record-demo-d.mjs`) is cut from the clips this recorder writes to `video/takes/`; this version's own video is no longer kept.
+
 **The idea.** Demo B plus one diagram: what stays private (the page's data-flow motif), right after the proof job.
 Apart from that diagram, a title card and a closing card, every frame is a real screen recorded while it ran: the
 local Operator Console running a real proof job (its start and its verified result, with a labelled cut between), the live page making read-only

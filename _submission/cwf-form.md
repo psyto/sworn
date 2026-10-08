@@ -119,7 +119,7 @@ The repo starts 2026-10-03, inside the window. Start at README.md. docs/specs/ h
 ## Demo video · ≤3 min · required
 
 ```
-[FOUNDER: paste the public demo-video URL after adding your narration to video/demo.mp4]
+[FOUNDER: paste the public demo-video URL after adding your narration to video/demo-d.mp4]
 ```
 
 ## Live product link
@@ -137,7 +137,7 @@ https://psyto.github.io/sworn/ reads Moderato in your browser. Nothing to sign o
 ## Pitch video · Public · ≤2 min · required
 
 ```
-[FOUNDER: paste the public pitch-video URL after adding your narration to video/pitch.mp4]
+[FOUNDER: paste the public pitch-video URL after adding your narration to video/pitch-d.mp4]
 ```
 
 ## X profile · Public

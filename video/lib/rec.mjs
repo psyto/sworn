@@ -1,4 +1,4 @@
-// Shared pieces of the CWF video recorders (record-pitch.mjs, record-demo.mjs) and split-scenes.mjs.
+// Shared pieces of the CWF video recorders (record-pitch-d.mjs, record-demo-b/c/d.mjs, record-checkin.mjs) and split-scenes.mjs.
 // Same discipline as record-checkin.mjs: the script decides the scene lengths, every figure is read at
 // record time from its source, and a source that is missing or says something unexpected THROWS.
 // Reads only: eth_call / eth_getCode / eth_getTransactionReceipt / eth_getTransactionByHash. No keys.

@@ -52,7 +52,7 @@ but it is not the product pitched or demoed for CWF:
 > "Re-verify on chain" in the page's fixture section (three live `eth_call`s: Sworn, the real proof → true; one field changed →
 > `InvalidProof`; for comparison, Moderato's current prototype verifier, the pre-T13 reference stub, returns
 > true for an equivalent malformed batch) ·
-> pitch (1:58) and demo (2:55) videos: *links added once the founder narration is uploaded*.
+> pitch (1:58) and demo (1:30) videos: *links added once the founder narration is uploaded*.
 >
 > **Status (2026-10-07): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
 > testnet** only. Unaudited. No customers or revenue. The Zones created by Tempo's factory on Moderato have one
@@ -174,8 +174,10 @@ and a decision by its reviewer about whether the evidence is worth repeating or 
 - **Rust engineer on Tempo's stack:** Reth, Revm, Alloy and Foundry. Author of
   [Fabrknt Dojo](https://fabrknt.com/dojo) (21 source-grounded courses, 234 lessons, on Rust, Reth, Revm and Alloy) and
   [rdk](https://github.com/psyto/rdk), a DeFi kit on Reth.
-- **Previous project:** [Reckn](https://github.com/psyto/reckn) won a Uniswap Foundation prize at
-  ETHGlobal Tokyo 2026.
+- **Previous project:** [Reckn](https://github.com/psyto/reckn) won a Uniswap Foundation sponsor prize
+  (Best Uniswap Stack Contribution, 3rd place) at ETHGlobal Tokyo 2026.
+- **Colosseum:** 3rd place in the Superteam Japan × NTT DOCOMO R&D side track of Colosseum's Solana Cypherpunk
+  Hackathon (2025).
 - **Before that:** 15 years building banking systems in Japan, familiar with banking regulation;
   earlier, software development in Hong Kong and India.
 
@@ -362,7 +364,7 @@ found no public example of `tempo-revm` or `zone-spf` proven in a zkVM.
 | `contracts/` | `Sworn.sol`, `SwornZoneVerifier.sol`, vendored SP1 verifier, tests, `scripts/gate.sh`, `scripts/no-owner.sh`, deploy scripts |
 | `spikes/zone-spf/` | Zone guest, shared digest code (`attest/`), native host, patches, pinned genesis, witnesses, logs; `fetch.sh` rebuilds the large trees |
 | `spikes/own-zone/` | our own Zone on Moderato: feasibility, dress rehearsals, runbook, `scripts/own-zone.sh` (the live run and the `forged-batch` rejection test), `scripts/export-vectors.mjs` (the live proofs as test vectors), `OwnZonePortal`, the pinned guest ELF |
-| `video/` | pitch and demo scripts (`PITCH.md`, `DEMO.md`), slides and recorders; every figure on screen is read while recording |
+| `video/` | pitch and demo scripts (`PITCH-D.md`, `DEMO-D.md`), slides and recorders; every figure on screen is read while recording |
 | `answerer/`, `server/`, `sdk/`, `challenger/` | answer engine (Rust), MPP server (TS), client SDK (TS), `sworn-witness` / `sworn-challenge` (Rust) |
 | `site/` | the live page ([psyto.github.io/sworn](https://psyto.github.io/sworn/)): read-only, published by `.github/workflows/pages.yml` |
 | `demo/` | agent wallet and owner's phone (Vite + React + viem); every number read from chain |

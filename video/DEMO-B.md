@@ -1,5 +1,7 @@
 # Demo video B: Sworn (≤ 3 min, founder's voice), v6-B (real screens only), 2026-10-07
 
+**Kept as a source recorder only.** Demo D (`DEMO-D.md`, `record-demo-d.mjs`) is cut from the clips this recorder writes to `video/takes/`; this version's own video is no longer kept.
+
 **The idea.** Apart from a title card and a closing card, every frame is a real screen recorded while it ran: the
 local Operator Console running a real proof job (its start and its verified result, with a labelled cut between), the live page making read-only
 calls, Tempo's testnet explorer, and a terminal running the reproduction script and the forge tests. No diagrams,

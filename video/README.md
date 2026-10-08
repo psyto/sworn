@@ -45,33 +45,39 @@ runs long, trim a pause rather than speeding the video.
 
 # CWF videos — pitch (≤ 2 min) and demo (≤ 3 min)
 
-Scripts: `PITCH.md`, `DEMO.md` (+ the founder's `CLAUDE-CODE-DEMO-BRIEF.md`). They are the only source of
-narration; each ends with a claims → source table, and every figure on screen comes from one of those
-sources, **read at record time** (missing or changed source → the recorder throws). Silent 1920×1080 output,
-scene lengths = words ÷ 2.2 words/s rounded up to 0.5 s. Look: `slides.css` uses the demo app's
-"Tempo-adjacent design language" tokens (Geist / Geist Mono from Google Fonts — the recorder refuses to
-record with a fallback font; never Tempo's logo, wordmark or Pilat).
+The submission videos are **Pitch D** (`PITCH-D.md`, 1:58) and **Demo D** (`DEMO-D.md`, 1:30). The scripts are
+the only source of narration; each ends with a claims → source table, and every figure on screen is **read at
+record time** (missing or changed source → the recorder throws). Silent 1920×1080 output, scene lengths =
+words ÷ 2.2 words/s rounded up to 0.5 s. Look: `slides.css`, Geist / Geist Mono (the recorder refuses a
+fallback font); never Tempo's logo, wordmark or Pilat.
 
 ```sh
-node video/record-pitch.mjs              # → video/pitch.mp4 + pitch.srt + pitch.marks.json   (reads only)
-node video/split-scenes.mjs pitch        # → video/scenes/pitch/scene-{1..6}.mp4|.txt + NARRATION.md
-
-DEMO_PAGE_URL=http://127.0.0.1:4180/ node video/record-demo.mjs   # demo v5.6 → demo.mp4 + demo.srt + demo.marks.json + frames/demo-scene{1..9}.png (reads only)
-PREVIEW=<dir> node video/record-demo.mjs # one PNG per authored scene + all source checks; records nothing
-node video/split-scenes.mjs demo         # → video/scenes/demo/scene-{1..9}.mp4|.txt + NARRATION.md
+node video/record-pitch-d.mjs            # → video/pitch-d.mp4 + pitch-d.srt + pitch-d.marks.json   (reads only)
+node video/record-demo-d.mjs             # → video/demo-d.mp4 + demo-d.srt + frames/demo-d-scene{1..9}.png (reads only)
+node video/split-scenes.mjs pitch-d      # → video/scenes/pitch-d/scene-{1..7}.mp4|.txt + NARRATION.md
+node video/split-scenes.mjs demo-d       # → video/scenes/demo-d/scene-{1..9}.mp4|.txt + NARRATION.md
 ```
 
-Pitch **v5.5** (six scenes, 1:58) follows the buyer's operational moment: without independently checkable evidence, a private Zone's settlement may wait or carry more risk. It identifies the first buyer, explains why a signed report or generic proof may be insufficient (a hypothesis), and positions future TEE + ZK use as a proposal rather than Tempo adoption. It then shows the working proof, an explicit go-to-market test, and the honest limits. Its recorder rereads the Zones visibility and witness constraints, Tempo's Reth/Revm dependencies, the attest `0xa630…` fixture, and the live proof and mutation checks before recording. Customer, payer, contract shape and price are explicitly marked as hypotheses; no customer or adoption is claimed. `PREVIEW=<dir> node video/record-pitch.mjs` writes one PNG per scene instead of recording.
+**Pitch D** (seven scenes, 118 s): Sworn is for Tempo Zones → the trust gap before a withdrawal → keep the batch
+private, make its execution checkable → why now (Tempo Zones ship no native ZK proof today) and Tempo's own Zone
+verifier compiled for SP1, logic unchanged, with a fixture proof verified read-only → a separate run on our own
+Zone: three batches settled only after the proof passed, a withdrawal paid, a forged sequencer-signed batch
+rejected → the business (first buyer, one batch, Proof Operations; market grows with Zones × batches × upgrades,
+if Zones are adopted; later beside Tempo's TEE) → the founder → the honest ask. Its recorder rereads the
+deployments against Moderato (bytecode, every receipt, the 0.5 pathUSD payout, the forged batch's status 0), the
+README statements it relies on, Tempo's `Cargo.toml`, Fabrknt Dojo, the ETHGlobal showcase and Superteam's winner
+record.
 
-Demo **v5.6** (nine scenes, 2:55; `DEMO.md`) follows one Zone operator through a consistent Operations Console.
-It reads all chain evidence at recording time (a mismatch stops the recorder): the Tempo Zone integration-test
-fixture on development chain 1337; Sworn's `verify(real)` = true; `verify(height+1)` reverting
-`InvalidProof()`; the `ZoneBatchVerified` attest transaction `0xa630…f770`; Moderato's pre-T13 reference
-stub accepting an equivalent malformed batch; and an actual sequencer-signed forged batch rejected through our
-own Zone portal with `InvalidProof()` and no state change. The public evidence-page and explorer portions are
-recorded in a real browser, using read-only calls only. The local Console’s proof-job action is explicitly labelled as a
-fixture workflow: it starts the documented local prover, uses no private keys, and does not send a transaction.
-See `DEMO.md` for the exact claims, scene timing, and limitations.
+**Demo D** (nine scenes, 90 s) keeps the two results apart: a real local proof job for Tempo's
+integration-test fixture (dev chain 1337, nothing sent; a labelled cut from its start to its verified result),
+what stays private, the fixture attest on Tempo's explorer and a live re-verify (true / `InvalidProof()`), then
+a separate-run card, our own Zone's settlement and payout, the forged batch's failed trace, and the reproduction
+script plus `forge test` against the deployed bytecode. It is cut from clips recorded live by
+`record-demo-b.mjs` (the proof job, cached in `takes/demo-b/`) and `record-demo-c.mjs` (page, explorer and
+terminal, in `takes/demo-c/`), which verify every value they show; `record-demo-d.mjs` re-reads the receipts and
+bytecode before assembling. Neither of those two versions' own videos is kept.
+
+## Earlier versions (history; their recorders and videos are removed)
 
 v1 pitch sources: `deployments/moderato.json` ↔ Moderato (codehash, GUEST_VKEY, SP1 verifier VERSION, MAX_AGE,
 CHALLENGE_PERIOD); the three first-slash receipts (reserve `0x08f6…0350`, payment `0x65bc…312a` with guard /

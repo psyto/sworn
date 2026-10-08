@@ -1,12 +1,12 @@
 // Split a recorded video into its scenes, each with the narration that belongs to it — for adding the
 // founder's voice scene by scene (e.g. in Google Vids).
 //
-//   node video/split-scenes.mjs pitch     # after record-pitch.mjs  → video/scenes/pitch/
-//   node video/split-scenes.mjs demo      # after record-demo.mjs   → video/scenes/demo/
+//   node video/split-scenes.mjs pitch-d   # after record-pitch-d.mjs → video/scenes/pitch-d/
+//   node video/split-scenes.mjs demo-d    # after record-demo-d.mjs  → video/scenes/demo-d/
 //   node video/split-scenes.mjs B         # after VARIANT=B record-checkin.mjs (or A) → video/scenes/checkin-3-B/
 //
 // Reads video/<name>.mp4 and its .marks.json (written by the recorder: the per-scene clip lengths), and
-// the narration from the same script the recorder derived those lengths from (PITCH.md / DEMO.md /
+// the narration from the same script the recorder derived those lengths from (PITCH-D.md / DEMO-D.md /
 // CHECKIN-3.md), so the words and the clip lengths cannot drift apart. Writes:
 //   scene-N.mp4   (silent, re-encoded so each cut is frame-accurate)
 //   scene-N.txt   (the lines to read over that clip)
@@ -23,12 +23,12 @@ const FFMPEG = process.env.FFMPEG_PATH || "/opt/homebrew/bin/ffmpeg";
 const FFPROBE = FFMPEG.replace(/ffmpeg$/, "ffprobe");
 
 let base, scenes, names, heading;
-if (["pitch", "demo", "demo-a", "demo-b", "demo-c"].includes(arg)) {
+if (["pitch-d", "demo-d"].includes(arg)) {
   base = arg;
   const parsed = parseScenes(`video/${arg.toUpperCase()}.md`);
   scenes = parsed.map((s) => s.text);
   names = parsed.map((s) => s.title);
-  heading = `${arg === "pitch" ? "Pitch" : arg === "demo" ? "Demo" : `Demo ${arg.slice(-1).toUpperCase()}`} — narration by scene`;
+  heading = `${arg === "pitch-d" ? "Pitch D" : "Demo D"} — narration by scene`;
 } else if (["A", "B"].includes(arg.toUpperCase())) {
   const V = arg.toUpperCase();
   base = `checkin-3-${V}`;
@@ -39,7 +39,7 @@ if (["pitch", "demo", "demo-a", "demo-b", "demo-c"].includes(arg)) {
     chunk.split("\n").filter((l) => l.startsWith("> ")).map((l) => l.slice(2).trim()).join(" "));
   names = ["what I changed", "what it does", "what I learned / next"];
   heading = `Check-in 3, variant ${V} — narration by scene`;
-} else throw new Error("usage: node video/split-scenes.mjs pitch|demo|demo-a|demo-b|demo-c|A|B");
+} else throw new Error("usage: node video/split-scenes.mjs pitch-d|demo-d|A|B");
 
 const src = path.join(dir, `${base}.mp4`);
 const marksFile = path.join(dir, `${base}.marks.json`);
