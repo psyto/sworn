@@ -136,13 +136,20 @@ html,body{width:1024px;height:576px}body{font-size:16px}
 #dclosed .outcome b{font-weight:500;color:var(--accent)}
 #dclosed .close{margin-top:4px;gap:16px}
 #dclosed .scope{font:11px var(--mono);color:var(--muted);letter-spacing:.035em;line-height:1.45}
-#c4learn .intro,#c4next .intro{gap:18px;max-width:920px}
-#c4learn .c4-h,#c4next .c4-h{font-size:38px;font-weight:400;letter-spacing:-.035em;line-height:1.1}
-#c4learn .c4-h b,#c4next .c4-h b{font-weight:500;color:var(--accent)}
-#c4learn .c4-row{display:grid;grid-template-columns:1fr 1fr;gap:0}
-#c4learn .c4-row>div{border:1px solid var(--border);background:var(--surface);padding:16px 18px;font-size:19px;line-height:1.35}
-#c4learn .c4-row>div+div{margin-left:-1px}
-#c4learn .c4-row small,#c4next small{display:block;font:500 11px var(--mono);letter-spacing:.07em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+#c4learn .intro,#c4next .intro,#c4week .intro{gap:18px;max-width:920px}
+#c4learn .c4-h,#c4next .c4-h,#c4week .c4-h{font-size:38px;font-weight:400;letter-spacing:-.035em;line-height:1.1}
+#c4learn .c4-h b,#c4next .c4-h b,#c4week .c4-h b{font-weight:500;color:var(--accent)}
+#c4learn .c4-row,#c4week .c4-row{display:grid;grid-template-columns:1fr 1fr;gap:0}
+#c4week .c4-row>div,#c4learn .c4-row>div{font-size:21px}
+#c4week .c4-sub{display:block;font:12px var(--mono);color:var(--muted);letter-spacing:.03em;margin-top:8px}
+#c4week .c4-now{background:#f4f4fd;border-color:var(--accent)}
+#c4next .c4-list{list-style:none;padding:0;margin:0;display:grid;gap:0}
+#c4next .c4-list li{border:1px solid var(--border);background:var(--surface);padding:13px 18px;font-size:20px;margin-top:-1px;display:grid;grid-template-columns:130px 1fr;align-items:baseline}
+#c4next .c4-list b{font:500 14px var(--mono);color:var(--accent);letter-spacing:.04em}
+
+#c4learn .c4-row>div,#c4week .c4-row>div{border:1px solid var(--border);background:var(--surface);padding:16px 18px;font-size:19px;line-height:1.35}
+#c4learn .c4-row>div+div,#c4week .c4-row>div+div{margin-left:-1px}
+#c4learn .c4-row small,#c4week .c4-row small,#c4next small{display:block;font:500 11px var(--mono);letter-spacing:.07em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
 #dseparate .intro{gap:14px;max-width:900px}
 #dseparate .separate-title{font-size:34px;font-weight:400;letter-spacing:-.03em;line-height:1.1}
 #dseparate .separate-title b{font-weight:500;color:var(--accent)}
@@ -300,26 +307,41 @@ html,body{width:1024px;height:576px}body{font-size:16px}
 </div>
 
 
-<!-- check-in 4, scene 2 — what I learned -->
-<div class="scene" id="c4learn">
+<!-- check-in 4, scene 1 — last check-in → this week -->
+<div class="scene" id="c4week">
   <div class="intro">
-    <div class="intro-k fade" data-at=".3">Sworn · check-in 4 · what I learned</div>
-    <div class="c4-h fade" data-at=".7">The proof is <b>necessary, not sufficient.</b></div>
+    <div class="intro-k fade" data-at=".3">Sworn · for Tempo Zones · week 4 check-in</div>
+    <div class="c4-h fade" data-at=".7">Last check-in → <b>this week.</b></div>
     <div class="c4-row">
-      <div class="fade" data-at="1.6"><small>On our own Zone</small>The proof gates settlement; our sequencer still pays the withdrawal.</div>
-      <div class="fade" data-at="7"><small>The open question</small>Not proving: whether a Zone business's reviewer will pay for evidence it can check.</div>
+      <div class="fade" data-at="3"><small>Last check-in · Oct 3–5</small>A test batch&apos;s proof verified on Moderato.<span class="c4-sub">Fixture from Tempo&apos;s integration tests · dev chain 1337</span></div>
+      <div class="fade c4-now" data-at="7.6"><small>This week · Oct 6–8</small>Settlement on our own Zone, on Moderato.<span class="c4-sub">Zone 4242 · one operator · not Tempo-created</span></div>
     </div>
   </div>
 </div>
 
-<!-- check-in 4, scene 3 — what's next -->
+<!-- check-in 4, scene 4 — what I learned -->
+<div class="scene" id="c4learn">
+  <div class="intro">
+    <div class="intro-k fade" data-at=".3">Sworn · week 4 · what I learned</div>
+    <div class="c4-h fade" data-at=".7">What I learned.</div>
+    <div class="c4-row">
+      <div class="fade" data-at="1.6"><small>On a live Zone</small>Proving takes up to ~30 min a batch, so the proof sits on the settlement path.</div>
+      <div class="fade" data-at="8.6"><small>Necessary, not sufficient</small>The proof gates settlement; the sequencer still pays the withdrawal.</div>
+    </div>
+  </div>
+</div>
+
+<!-- check-in 4, scene 5 — next, with dates -->
 <div class="scene" id="c4next">
   <div class="intro">
-    <div class="intro-k fade" data-at=".3">Sworn · check-in 4 · next</div>
-    <div class="c4-h fade" data-at=".7">One design partner. <b>One batch. One reviewer decision.</b></div>
-    <div class="proof-line fade" data-at="4.2">Everything is re-runnable from the repo.</div>
-    <div class="close fade" data-at="5.4"><img class="mark sm" src="../_submission/brand/mark.svg" alt="" /><div><div class="links sm"><span data-k="repo"></span> · <b data-k="pageUrl"></b></div></div></div>
-    <div class="intro-foot fade" data-at="6.2">Testnet · unaudited · our own Zone, one operator, not Tempo-created · no customers yet</div>
+    <div class="intro-k fade" data-at=".3">Sworn · week 4 · next</div>
+    <div class="c4-h fade" data-at=".7">Next, with dates.</div>
+    <ol class="c4-list">
+      <li class="fade" data-at="1.4"><b>Oct 9–12</b>Ask Zone builders and reviewers if they need this.</li>
+      <li class="fade" data-at="5.2"><b>Oct 13</b>Submit to the Crypto World&apos;s Fair.</li>
+      <li class="fade" data-at="7.2"><b>Then</b>One design partner supplies a batch; its reviewer decides.</li>
+    </ol>
+    <div class="intro-foot fade" data-at="8.6"><span data-k="repo"></span> · <span data-k="pageUrl"></span> · testnet · unaudited · no customers yet</div>
   </div>
 </div>
 

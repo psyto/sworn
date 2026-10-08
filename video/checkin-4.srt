@@ -1,35 +1,43 @@
 1
-00:00:00,000 --> 00:00:03,132
-Sworn makes private Tempo Zone execution checkable.
+00:00:00,000 --> 00:00:03,158
+Week four of Sworn, for Tempo Zones.
 
 2
-00:00:03,182 --> 00:00:11,314
-Since my last check-in, it went from a test batch to a live run on our own Zone:
+00:00:03,208 --> 00:00:07,742
+Last check-in, a test batch's proof was verified on Moderato.
 
 3
-00:00:11,364 --> 00:00:19,495
-on Moderato, the portal settled three batches only after the proof passed, and our sequencer paid a withdrawal.
+00:00:07,792 --> 00:00:10,950
+This week: settlement on our own Zone.
 
 4
-00:00:19,545 --> 00:00:24,950
-A forged batch, signed by our own sequencer, was rejected on chain.
+00:00:11,000 --> 00:00:18,674
+October sixth: our own Zone's portal settled three proven batches, then our sequencer paid a withdrawal.
 
 5
-00:00:25,000 --> 00:00:31,044
-What I learned: the proof is necessary, not sufficient; our sequencer still pays.
+00:00:18,724 --> 00:00:24,950
+October seventh: a forged batch, signed by our sequencer, was rejected on chain.
 
 6
-00:00:31,094 --> 00:00:33,856
-And the hard part isn't proving.
+00:00:25,000 --> 00:00:31,950
+Then I made the live proofs re-checkable by anyone, with one test command.
 
 7
-00:00:33,906 --> 00:00:39,950
-It's whether a Zone business's reviewer will pay for evidence it can check.
+00:00:32,000 --> 00:00:39,450
+What I learned: on a live Zone, proving takes up to half an hour a batch,
 
 8
-00:00:40,000 --> 00:00:46,421
-Next: one design partner supplies a batch, and its reviewer decides.
+00:00:39,500 --> 00:00:43,200
+so the proof sits on the settlement path.
 
 9
-00:00:46,471 --> 00:00:49,950
-Everything is re-runnable from the repo.
+00:00:43,250 --> 00:00:46,950
+It's necessary, not sufficient: the sequencer still pays.
+
+10
+00:00:47,000 --> 00:00:52,908
+Next: this week I ask Zone builders and reviewers if they need this.
+
+11
+00:00:52,958 --> 00:00:57,950
+I submit October thirteenth, then look for one design partner's batch.

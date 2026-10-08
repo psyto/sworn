@@ -14,11 +14,11 @@ const work = path.join(dir, "takes", "checkin-4");
 mkdirSync(work, { recursive: true });
 
 const scenes = parseScenes("video/CHECKIN-4.md");
-if (scenes.length !== 3) fail(`CHECKIN-4.md has ${scenes.length} scenes, expected 3`);
+if (scenes.length !== 5) fail(`CHECKIN-4.md has ${scenes.length} scenes, expected 5`);
 const targets = [...read("video/CHECKIN-4.md", "CHECKIN-4.md").matchAll(/^## Scene \d+ — .*· ≈ (\d+(?:\.\d+)?) s\s*$/gm)].map((m) => +m[1]);
 if (targets.length !== scenes.length) fail("CHECKIN-4.md needs a target duration for every scene");
 const holds = scenes.map((s, i) => Math.max(s.hold, targets[i]));
-const expected = [25, 15, 10];
+const expected = [11, 14, 7, 15, 11];
 if (holds.some((v, i) => v !== expected[i])) fail(`check-in 4 lengths drifted: ${holds.join(" / ")}`);
 const total = holds.reduce((a, b) => a + b, 0);
 if (total > 58) fail(`check-in 4 is ${total}s, over 58s`);
@@ -52,7 +52,7 @@ await receipt(own.forgedBatch.tx, "0x0", ownPortal.address, "forged OwnZone batc
 if (own.zoneId !== 4242 || own.batches.at(-1)?.zoneBlocks !== "56-61" || ownVerifier.address !== "0x15D192a08F41150cae9178D14D55c04F27FF2733")
   fail("OwnZone record no longer matches the stated distinct batch/verifier");
 
-const data = { scenes: ["c4learn", "c4next"], repo: "github.com/psyto/sworn", pageUrl: "psyto.github.io/sworn" };
+const data = { scenes: ["c4week", "c4learn", "c4next"], repo: "github.com/psyto/sworn", pageUrl: "psyto.github.io/sworn" };
 await checkOverflow("demo.html", data, data.scenes, VIEWPORT);
 
 const encodeTrim = (input, start, seconds, output) => {
@@ -67,46 +67,54 @@ const exact = (f, seconds) => {
   const got = duration(f);
   if (Math.abs(got - seconds) > 0.12) fail(`${path.basename(f)} is ${got}s, expected ${seconds}s`);
 };
-const OWN_SCOPE = path.join(work, "own-zone-scope.png");
-async function ownScopeOverlay() {
-  if (existsSync(OWN_SCOPE)) return;
+const PILL = "background:#2b3078;color:#fff;padding:11px 16px;font:500 17px ui-monospace,Menlo,monospace;letter-spacing:.055em;position:absolute";
+async function overlay(name, date, scope) {
+  const file = path.join(work, `${name}.png`);
   const browser = await launch({ width: 1920, height: 1080, deviceScaleFactor: 1 });
   try {
     const page = await browser.newPage();
-    await page.setContent(`<!doctype html><div style="position:absolute;right:28px;bottom:28px;background:#2b3078;color:#fff;padding:11px 16px;font:500 17px ui-monospace,Menlo,monospace;letter-spacing:.055em">OWN ZONE · ONE OPERATOR · NOT TEMPO-CREATED</div>`, { waitUntil: "load" });
-    await page.screenshot({ path: OWN_SCOPE, omitBackground: true });
+    await page.setContent(`<!doctype html><div style="${PILL};right:28px;top:96px;font-size:20px;padding:13px 18px">${date}</div>` +
+      (scope ? `<div style="${PILL};right:28px;bottom:28px">OWN ZONE · ONE OPERATOR · NOT TEMPO-CREATED</div>` : ""), { waitUntil: "load" });
+    await page.screenshot({ path: file, omitBackground: true });
   } finally { await browser.close(); }
+  return file;
 }
-const encodeOwnScopeTrim = (input, start, seconds, output) => {
+const encodeOverlayTrim = (input, start, seconds, png, output) => {
   const src = path.join(dir, input);
   if (Math.abs(duration(src) - start) < seconds - 0.1) fail(`${input} is too short for ${start}s + ${seconds}s`);
-  execFileSync(FFMPEG, ["-v", "error", "-ss", String(start), "-i", src, "-loop", "1", "-framerate", "30", "-i", OWN_SCOPE,
+  execFileSync(FFMPEG, ["-v", "error", "-ss", String(start), "-i", src, "-loop", "1", "-framerate", "30", "-i", png,
     "-filter_complex", "[0:v]fps=30,scale=1920:1080,setsar=1[base];[base][1:v]overlay=0:0:shortest=1,format=yuv420p[v]",
     "-map", "[v]", "-an", "-t", String(seconds), "-c:v", "libx264", "-profile:v", "high", "-level", "4.0", "-crf", "20", "-preset", "slow",
     "-color_range", "tv", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-movflags", "+faststart", output, "-y"]);
 };
 
-const learn = path.join(work, "s2.mp4"), next = path.join(work, "s3.mp4");
+const week = path.join(work, "c1.mp4"), learn = path.join(work, "c4.mp4"), next = path.join(work, "c5.mp4");
 const renderCard = async (id, hold, raw, out) => {
   if (existsSync(out) && Math.abs(duration(out) - hold) < 0.12) return log(`• reusing ${path.basename(out)}`);
   await recordSlides({ html: "demo.html", data, ids: [id], holds: [hold], raw, out, viewport: VIEWPORT });
 };
-await renderCard("c4learn", holds[1], path.join(work, "s2.raw.mp4"), learn);
-await renderCard("c4next", holds[2], path.join(work, "s3.raw.mp4"), next);
-await ownScopeOverlay();
-// Scene 1: the own-Zone section (8 s), the payout on Tempo's explorer (7 s), the forged batch's failed trace (rest).
-const page = path.join(work, "s1a.mp4"), payout = path.join(work, "s1b.mp4"), forged = path.join(work, "s1c.mp4"), built = path.join(work, "s1.mp4");
-encodeOwnScopeTrim("takes/demo-c/b4a.mp4", 0, 8, page);
-encodeOwnScopeTrim("takes/demo-c/b4x.mp4", 0, 7, payout);
-encodeOwnScopeTrim("takes/demo-c/b5.mp4", 0, holds[0] - 15, forged);
-concat([page, payout, forged], built);
-const parts = [built, learn, next];
+await renderCard("c4week", holds[0], path.join(work, "c1.raw.mp4"), week);
+await renderCard("c4learn", holds[3], path.join(work, "c4.raw.mp4"), learn);
+await renderCard("c4next", holds[4], path.join(work, "c5.raw.mp4"), next);
+// Scene 2: Oct 6, the own-Zone section then the payout on Tempo's explorer; Oct 7, the forged batch's failed trace.
+const oct6 = await overlay("oct6", "OCT 6 · OWN-ZONE LIVE RUN · 3 BATCHES SETTLED, WITHDRAWAL PAID", true);
+const oct7 = await overlay("oct7", "OCT 7 · FORGED BATCH REJECTED ON CHAIN", true);
+const oct8 = await overlay("oct78", "OCT 7–8 · LIVE PROOFS RE-CHECKABLE: forge test, 3/3 PASS", false);
+const page = path.join(work, "s2a.mp4"), payout = path.join(work, "s2b.mp4"), forged = path.join(work, "s2c.mp4"), chain = path.join(work, "s2.mp4");
+encodeOverlayTrim("takes/demo-c/b4a.mp4", 0, 4, oct6, page);
+encodeOverlayTrim("takes/demo-c/b4x.mp4", 0, 3.5, oct6, payout);
+encodeOverlayTrim("takes/demo-c/b5.mp4", 0, holds[1] - 7.5, oct7, forged);
+concat([page, payout, forged], chain);
+// Scene 3: the terminal, from just after the export command is typed, so [PASS] ×3 is on screen for ~3 s.
+const rerun = path.join(work, "s3.mp4");
+encodeOverlayTrim("takes/demo-c/b6.mp4", 2, holds[2], oct8, rerun);
+const parts = [week, chain, rerun, learn, next];
 parts.forEach((f, i) => exact(f, holds[i]));
 const out = path.join(dir, "checkin-4.mp4");
 concat(parts, out);
 exact(out, total);
 const starts = holds.reduce((a, h) => [...a, a.at(-1) + h], [0]);
-for (const [t, label] of [[starts[1] + 1, "scene 2 card"], [3, "scene 1 page"]]) {
+for (const [t, label] of [[1, "scene 1 card"], [starts[1] + 2, "scene 2 page"]]) {
   const px = execFileSync(FFMPEG, ["-v", "error", "-ss", String(t), "-i", out, "-vf", "crop=1:1:1900:1060,format=rgb24", "-frames:v", "1", "-f", "rawvideo", "-"], { encoding: null });
   if (px[0] < 0xf0) fail(`${label} background is #${[...px.slice(0, 3)].map((v) => v.toString(16).padStart(2, "0")).join("")}: wrong range`);
 }
