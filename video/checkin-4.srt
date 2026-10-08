@@ -1,0 +1,35 @@
+1
+00:00:00,000 --> 00:00:03,132
+Sworn makes private Tempo Zone execution checkable.
+
+2
+00:00:03,182 --> 00:00:11,314
+Since my last check-in, it went from a test batch to a live run on our own Zone:
+
+3
+00:00:11,364 --> 00:00:19,495
+on Moderato, the portal settled three batches only after the proof passed, and our sequencer paid a withdrawal.
+
+4
+00:00:19,545 --> 00:00:24,950
+A forged batch, signed by our own sequencer, was rejected on chain.
+
+5
+00:00:25,000 --> 00:00:31,044
+What I learned: the proof is necessary, not sufficient; our sequencer still pays.
+
+6
+00:00:31,094 --> 00:00:33,856
+And the hard part isn't proving.
+
+7
+00:00:33,906 --> 00:00:39,950
+It's whether a Zone business's reviewer will pay for evidence it can check.
+
+8
+00:00:40,000 --> 00:00:46,421
+Next: one design partner supplies a batch, and its reviewer decides.
+
+9
+00:00:46,471 --> 00:00:49,950
+Everything is re-runnable from the repo.

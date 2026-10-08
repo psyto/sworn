@@ -136,6 +136,13 @@ html,body{width:1024px;height:576px}body{font-size:16px}
 #dclosed .outcome b{font-weight:500;color:var(--accent)}
 #dclosed .close{margin-top:4px;gap:16px}
 #dclosed .scope{font:11px var(--mono);color:var(--muted);letter-spacing:.035em;line-height:1.45}
+#c4learn .intro,#c4next .intro{gap:18px;max-width:920px}
+#c4learn .c4-h,#c4next .c4-h{font-size:38px;font-weight:400;letter-spacing:-.035em;line-height:1.1}
+#c4learn .c4-h b,#c4next .c4-h b{font-weight:500;color:var(--accent)}
+#c4learn .c4-row{display:grid;grid-template-columns:1fr 1fr;gap:0}
+#c4learn .c4-row>div{border:1px solid var(--border);background:var(--surface);padding:16px 18px;font-size:19px;line-height:1.35}
+#c4learn .c4-row>div+div{margin-left:-1px}
+#c4learn .c4-row small,#c4next small{display:block;font:500 11px var(--mono);letter-spacing:.07em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
 #dseparate .intro{gap:14px;max-width:900px}
 #dseparate .separate-title{font-size:34px;font-weight:400;letter-spacing:-.03em;line-height:1.1}
 #dseparate .separate-title b{font-weight:500;color:var(--accent)}
@@ -290,6 +297,30 @@ html,body{width:1024px;height:576px}body{font-size:16px}
 <div class="scene" id="d6">
   <div class="kicker fade">The GTM test</div>
   <div class="console fade" data-at=".8"><aside class="side"><div class="zone-name"><small>Fixture batch · Tempo integration test</small>Zone 1 · dev chain 1337</div><div class="nav"><div>Batches</div><div>Proof evidence</div></div><div class="side-bottom">Not a Moderato Zone<br />batch from Tempo's tests</div></aside><section class="main"><div class="crumb">Proof Operations / validation</div><div class="route"><div class="card"><div class="when">1. First wedge</div><div><div class="h">A Zone business supplies its witness</div><div class="b">The proof starts only with an operator-supplied batch.</div></div><div class="tag">Hypothesis</div></div><div class="card" data-at="5"><div class="when">2. First proof</div><div><div class="h">Reviewer re-verifies the proof</div><div class="b">Evidence and reproducible verification instructions.</div></div><div class="tag">GTM test</div></div><div class="card" data-at="9"><div class="when">3. Repeat test</div><div><div class="h">Next batch or Tempo upgrade</div><div class="b">Only a repeat need becomes Proof Operations.</div></div><div class="tag">Not traction</div></div></div><div class="limits" data-at="12"><span>Testnet</span><span>unaudited</span><span>no customers</span></div><div class="next2" data-at="14">Next: one supplied batch — then test for a repeat need or budget.</div><div class="close" data-at="16"><img class="mark sm" src="../_submission/brand/mark.svg" alt="" /><div><div class="closing sm">Sworn: audit-ready evidence for private execution.</div><div class="links sm"><span data-k="repo"></span> · <b data-k="pageUrl"></b></div></div></div></section></div>
+</div>
+
+
+<!-- check-in 4, scene 2 — what I learned -->
+<div class="scene" id="c4learn">
+  <div class="intro">
+    <div class="intro-k fade" data-at=".3">Sworn · check-in 4 · what I learned</div>
+    <div class="c4-h fade" data-at=".7">The proof is <b>necessary, not sufficient.</b></div>
+    <div class="c4-row">
+      <div class="fade" data-at="1.6"><small>On our own Zone</small>The proof gates settlement; our sequencer still pays the withdrawal.</div>
+      <div class="fade" data-at="7"><small>The open question</small>Not proving: whether a Zone business's reviewer will pay for evidence it can check.</div>
+    </div>
+  </div>
+</div>
+
+<!-- check-in 4, scene 3 — what's next -->
+<div class="scene" id="c4next">
+  <div class="intro">
+    <div class="intro-k fade" data-at=".3">Sworn · check-in 4 · next</div>
+    <div class="c4-h fade" data-at=".7">One design partner. <b>One batch. One reviewer decision.</b></div>
+    <div class="proof-line fade" data-at="4.2">Everything is re-runnable from the repo.</div>
+    <div class="close fade" data-at="5.4"><img class="mark sm" src="../_submission/brand/mark.svg" alt="" /><div><div class="links sm"><span data-k="repo"></span> · <b data-k="pageUrl"></b></div></div></div>
+    <div class="intro-foot fade" data-at="6.2">Testnet · unaudited · our own Zone, one operator, not Tempo-created · no customers yet</div>
+  </div>
 </div>
 
 <script src="slides.js"></script>
