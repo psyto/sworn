@@ -1,4 +1,4 @@
-# Own Zone on Moderato: founder runbook (live run, 2026-10-07)
+# Own Zone on Moderato: founder runbook (live run planned for 2026-10-07; done 2026-10-06)
 
 **Done 2026-10-06: the live run succeeded** (3 batches settled, withdrawal paid). Results: `docs/specs/003-zone-verifier.md`
 → "Results (own Zone live run on Moderato)".

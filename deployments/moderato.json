@@ -60,7 +60,7 @@
   "demoLiveTake": {
     "take": "video/takes/demo-20261003T131156Z",
     "date": "2026-10-03",
-    "note": "re-take in Sworn's own palette; this is the take in demo.mp4",
+    "note": "re-take in Sworn's own palette; used in an earlier demo video (v1–v5), not in the CWF submission videos",
     "honestReserve": "0x5c06912ec295019d0f369a2ba2adcea9f878aa45c032b31c1d94a89606ec4643",
     "dishonestReserve": "0xaa1daae5d552bcd7580a080a34f89bce5ddc4c2256f9cbb2bccaffe03464e45d",
     "paymentDivertedToReceivePolicyGuard": "0x5d764201fc26e6e30a02864adb96dca7c282105ce12cc77af479d74dd8fbde62",

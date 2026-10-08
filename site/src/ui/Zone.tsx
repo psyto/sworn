@@ -163,13 +163,13 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
           <span>Batches</span>
           <span className="selected">Proof evidence</span>
         </div>
-        <p className="ops-scope">Not a Moderato Zone<br />batch from Tempo&apos;s tests</p>
+        <p className="ops-scope">From Tempo&apos;s tests,<br />not a Moderato Zone</p>
       </aside>
       <div className="ops-main">
         <div className="ops-crumb"><span>Proof evidence</span><span>Zone blocks 5–6</span><b>Read live from chain</b></div>
       <div className="section-head">
         <p className="eyebrow">Technical evidence</p>
-        <h2 id="zone-h">A Tempo Zone batch with a withdrawal, verified on Moderato</h2>
+        <h2 id="zone-h">A fixture batch with a withdrawal (dev chain 1337), verified read-only on Moderato</h2>
         <p className="lede">
           Tempo's own Zone batch verifier ran inside SP1 on a batch with {BATCH_CONTENTS.withdrawals} withdrawal and{" "}
           {BATCH_CONTENTS.userTransactions} user transactions, taken from Tempo's zones integration tests on a dev chain (1337),
@@ -187,7 +187,7 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
         />
         <figcaption>
           <code>zone_spf::prove_zone_batch</code> from Tempo's zones repository, with small build patches so it builds for the
-          zkVM. The proof of this batch took {(PROVING.cycles / 1e6).toFixed(1)}M cycles and {Math.round(PROVING.groth16WallSecs)} s to make locally. The heavy edge is on Tempo.
+          zkVM. The proof of this batch took {(PROVING.cycles / 1e6).toFixed(1)}M cycles and {Math.round(PROVING.groth16WallSecs)} s to make locally.
         </figcaption>
       </figure>
 
@@ -228,7 +228,7 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
             <>
               <ol className="calls">
                 <li className="row-real">
-                  <span className="label">Sworn · the real withdrawal batch</span>
+                  <span className="label">Sworn · the fixture withdrawal batch</span>
                   <span className="result ok">✓ true</span>
                   <span className="sub">The proof from the on-chain attest transaction verifies.</span>
                 </li>
@@ -292,10 +292,10 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
           <ul>
             <li>Tempo Zones' own batch verifier, executed inside SP1.</li>
             <li>
-              A real batch with {BATCH_CONTENTS.withdrawals} withdrawal and {BATCH_CONTENTS.userTransactions} user transactions,
-              proven and verified on Moderato by a standalone contract. It accepts the real proof and rejects a mutated input.
+              A fixture batch from Tempo&apos;s integration tests with {BATCH_CONTENTS.withdrawals} withdrawal and{" "}
+              {BATCH_CONTENTS.userTransactions} user transactions, proven, then verified read-only on Moderato by a standalone contract. It accepts the real proof and rejects a mutated input.
             </li>
-            <li>A digest bound to everything a Nitro attestation commits, plus the destination chain and the exact genesis artifact.</li>
+            <li>A digest bound to the same batch fields Tempo&apos;s TEE (Nitro) attestation commits, plus the destination chain and the exact genesis artifact.</li>
             <li>
               Verified on chain by a contract with <code>IVerifier</code>'s exact signature (
               <a href={SPEC} target="_blank" rel="noreferrer">
@@ -343,6 +343,8 @@ export function ZoneSection({ attest, also, check, onRetry, onVerify }: Props) {
   );
 }
 
+const LOCAL_HOST = ["localhost", "127.0.0.1"].includes(globalThis.location?.hostname ?? "");
+
 function ProofJobPanel({ worker, job, start, startError }: ReturnType<typeof useLocalProofJob>) {
   const running = job?.status === "queued" || job?.status === "proving" || job?.status === "verifying";
   return (
@@ -352,7 +354,12 @@ function ProofJobPanel({ worker, job, start, startError }: ReturnType<typeof use
         <h3>Generate evidence for Zone blocks 5–6</h3>
         <p className="sub">Runs the real SP1 Groth16 pipeline for the withdrawal fixture, then runs read-only verification on Moderato.</p>
       </div>
-      {worker === "offline" ? (
+      {worker === "offline" && !LOCAL_HOST ? (
+        <div className="job-offline">
+          <b>Runs on the operator&apos;s machine.</b>
+          <span>The public page cannot start proof jobs; see <code>docs/operator-console.md</code> to run one locally.</span>
+        </div>
+      ) : worker === "offline" ? (
         <div className="job-offline">
           <b>Local worker not connected.</b>
           <span>Start <code>scripts/start-zone-operator.sh</code> locally. The public site cannot start proof jobs.</span>

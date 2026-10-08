@@ -1,5 +1,8 @@
 # Narration drafts after the own-Zone live run: pitch v5.4, demo v5.5
 
+> **Superseded (2026-10-08).** Kept as history. The submission videos are `video/PITCH-D.md` and `video/DEMO-D.md`;
+> files named below (`PITCH.md`, `DEMO.md`, their recorders and videos) were removed.
+
 **Applied 2026-10-06** as approved: `PITCH.md` v5.4 and `DEMO.md` v5.5, the recorders and slides updated, and both
 silent videos re-recorded (`pitch.mp4` 116.5 s, `demo.mp4` 173.4 s). The demo's word cap was raised from 330 to 350
 for the new scene. What follows is the draft as it was approved.

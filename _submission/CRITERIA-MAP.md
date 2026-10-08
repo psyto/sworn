@@ -1,4 +1,4 @@
-# CWF submission map — Sworn, v5.2
+# CWF submission map — Sworn, v5.3
 
 This is the single source of truth for the submission narrative. It maps only evidence that exists today
 and labels commercial statements as hypotheses. The CWF submission asks for a presentation, demo, public
@@ -7,8 +7,9 @@ founder-market fit, insight, product/execution, market size, communication, viab
 
 ## The one message
 
-**Before a private Tempo Zone releases a withdrawal batch, Sworn creates independently verifiable,
-audit-ready evidence for that exact batch without disclosing customer transaction contents.**
+**Sworn is for Tempo Zones: only the operator sees every transaction. Sworn makes that private execution
+checkable: for an operator-supplied batch, evidence anyone can verify on chain, without disclosing customer
+transaction contents.** (The wording of Pitch D and Demo D, 2026-10-08.)
 
 The narrow first product is **Proof Operations**: an operator supplies a witness; Sworn generates a proof for
 the batch and keeps the proof pipeline compatible as Tempo execution changes. The demonstrated evidence is
@@ -29,10 +30,10 @@ real; the buyer, willingness to pay and distribution channel are not yet validat
 
 | CWF criterion | Honest evidence now | Submission treatment |
 |---|---|---|
-| Founder + market fit | Reth/Revm engineering, Fabrknt Dojo (21 courses), Reckn award, 15 years in banking systems | Pitch: why this founder can maintain Tempo-specific proof operations. Form: how the opportunity was uncovered. |
+| Founder + market fit | Reth/Revm engineering, Fabrknt Dojo (21 courses, 234 lessons), Reckn: Uniswap Foundation sponsor prize (3rd, ETHGlobal Tokyo 2026), 3rd place in the Superteam Japan × NTT DOCOMO R&D side track of Colosseum's Cypherpunk Hackathon (2025), 15 years building banking systems in Japan | Pitch: why this founder can maintain Tempo-specific proof operations. Form: how the opportunity was uncovered. |
 | Insight | Private execution creates an external-verification gap; public batch evidence can preserve transaction confidentiality | Pitch and README lead with the operator / reviewer moment, not the zkVM. |
 | Product + execution | Real Tempo Zone code in SP1; on-chain verify; mutation rejection; our own Zone's portal settled 3 proven batches and paid a withdrawal after the proof, and rejected a forged, sequencer-signed batch on the proof; the live proofs re-checkable by forge and on the page; working local Operator Console | Demo is the technical proof. Pitch shows Console briefly and links to demo/site. |
-| Potential market size | No credible numeric TAM for this precise market. A narrow wedge can expand only with Zone adoption and repeated batches/upgrades. | Do not invent a TAM. State the expansion mechanism and the gating assumption. |
+| Potential market size | No credible numeric TAM for this precise market. The market grows with Zones × batches × upgrades, and only if Zones are adopted (Pitch D's wording). | Do not invent a TAM. State the expansion mechanism and the gating assumption. |
 | Founder communication | One buyer story, a concrete first test, and one honest boundary | Every surface uses the same vocabulary: Zone business, operator-supplied batch, independent evidence, Proof Operations. |
 | Viability | Candidate recurring service: batch proof generation plus upgrade maintenance | Form and pitch label buyer, price and willingness to pay as hypotheses. |
 | Traction | No customers or revenue. Strong build velocity and verifiable technical execution are not demand. | State zero traction once; define the next falsifiable milestone: a partner supplies a batch and elects to repeat/pay. |

@@ -6,7 +6,7 @@ a real proof was rejected on the proof. See "Results (own Zone live run on Moder
 
 Status: r2 (2026-10-04), after Codex r1 CHANGES (`docs/reviews/003-spec-r1.md`). Builds on the zone-spf spike (`spikes/zone-spf/`), which ran Tempo Zones'
 own `prove_zone_batch` (zones `ac49071f`) inside SP1 on four real batches from the zones integration
-tests, matched native output, and produced a Groth16 proof of `hardfork_t13_recovery` (22,659,079 cycles,
+tests, matched native output, and produced a Groth16 proof of `hardfork_t13_recovery` with the earlier spike guest (22,659,079 cycles,
 706.6 s locally).
 
 ## 1. What the spike does not yet do (the gap this spec closes)
@@ -154,9 +154,13 @@ A native host computes the same public values with the same Rust code (shared mo
 
 - **May:** "Tempo's own Zone batch verifier runs inside a zero-knowledge VM, and a contract on Tempo's
   Moderato testnet verified that proof against the `IVerifier` inputs (tx …)."
+- **May (after the own-Zone live run, 2026-10-06/07):** "On our own Zone on Moderato (one operator, not a
+  Tempo-created Zone), the portal settled three batches only after this verifier accepted their proofs; our
+  sequencer then paid a withdrawal; a forged sequencer-signed batch was rejected on the proof." The proof is a
+  necessary condition for that payout, not a guarantee of one.
 - **May not:**
-  - that a Tempo Zone settles with it;
-  - that it secures withdrawals;
+  - that a Tempo-created Zone settles with it;
+  - that it secures withdrawals on Tempo's Zones;
   - that the batch came from Moderato (it came from Tempo's zones integration tests on a dev chain);
   - that it is production-ready or audited;
   - that the pinned genesis is Tempo's authentic Zone spec (it is the artifact from Tempo's integration test);

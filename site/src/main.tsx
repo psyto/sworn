@@ -47,10 +47,10 @@ function App() {
         <Hero />
         <ReviewGap />
         <ProofFlow />
-        <DataFlow />
-        <OperationsTest />
         <OwnZoneSection ownZone={ownZone} check={ownCheck} onRetry={() => void readOwn()} onVerify={() => void verifyOwn()} />
+        <DataFlow />
         <ZoneSection attest={zone} also={also} check={check} onRetry={() => { void readZone(); void readAlso(); }} onVerify={() => void verifyNow()} />
+        <OperationsTest />
       </main>
       <Footer />
     </>

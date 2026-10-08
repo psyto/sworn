@@ -9,7 +9,7 @@ export interface ChainConfig {
   sworn: Address;
   /** SwornZoneVerifier (spec 003), pinned to the hardfork_t13_recovery genesis. */
   zoneVerifier: Address;
-  /** The same verifier code, pinned to the genesis of the batch with a withdrawal (the page's primary evidence). */
+  /** The same verifier code, pinned to the genesis of the batch with a withdrawal (the fixture evidence section). */
   zoneVerifierWithdrawal: Address;
   /** Moderato's shared Zone verifier today: the pre-T13 reference stub (tempo ZONE_VERIFIER_RUNTIME). */
   preT13Verifier: Address;

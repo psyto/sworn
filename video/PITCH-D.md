@@ -5,8 +5,7 @@ first sentence. Pitch C's two evidence scenes become one. The two results stay v
 scene 3 is labelled as the fixture run (dev chain 1337, read-only, nothing sent), and scene 4 opens with
 "Separately" under a "separate run · our own Zone · one operator · not Tempo-created" chip.
 The freed time goes to the buyer and the business: the first buyer, Proof Operations, and beside Tempo's TEE.
-The scope, including "no customers yet", is said once aloud. v8.1 adds a forward hook in scene 1, why now (Tempo Zones ship no native ZK proof today) in scene 3, and the market mechanism without a TAM in scene 5. `pitch.mp4`, `pitch-b.mp4` and `pitch-c.mp4`
-remain intact.
+The scope, including "no customers yet", is said once aloud. v8.1 adds a forward hook in scene 1, why now (Tempo Zones ship no native ZK proof today) in scene 3, and the market mechanism without a TAM in scene 5.
 
 ## Scene 1 — the trust gap · ≈ 15 s
 

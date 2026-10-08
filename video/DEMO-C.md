@@ -102,7 +102,7 @@ Sworn mark, the repo and the page.]**
 
 ## Claims and sources
 
-Same sources as `DEMO.md`, `DEMO-A.md` and `DEMO-B.md`, plus: the proof job is `operator/server.mjs` running
+Same sources as the removed `DEMO.md` (git history), `DEMO-A.md` and `DEMO-B.md`, plus: the proof job is `operator/server.mjs` running
 `scripts/zone-prove.sh` then `scripts/zone-attest.sh` (no `--send`); the recorder requires the job to end
 `verified`. The terminal runs `spikes/own-zone/scripts/export-vectors.mjs` and `forge test --match-test OWNZONE`
 while recording, and requires both to succeed and the vectors to be unchanged.

@@ -1,6 +1,7 @@
 # Sworn
 
-**Audit-ready evidence for private Tempo execution.**
+**Sworn is for Tempo Zones: private ledgers where only the operator sees every transaction. Sworn makes that
+private execution checkable.**
 
 Before a private Tempo Zone releases a withdrawal batch, its operator may need to show an auditor or reviewer
 evidence without disclosing the private ledger. For an operator-supplied batch, Sworn runs Tempo's own Zone
@@ -33,14 +34,14 @@ but it is not the product pitched or demoed for CWF:
    after a first batch without one
    ([tx](https://explore.testnet.tempo.xyz/tx/0xb14b7127895ed8431e63154a4d665d0c19492fbb7c09152c13844e35c5023b80)).
    Both batches come from Tempo's integration tests, not from a Moderato Zone.
-   **On 2026-10-06 our own Zone on Moderato settled three proven batches through a portal that calls
-   `SwornZoneVerifier`, and then paid a withdrawal**
+   **Separately, on 2026-10-06, our own Zone on Moderato settled three proven batches through a portal that calls
+   its own instance of `SwornZoneVerifier`, and then our sequencer paid a withdrawal**
    ([payout tx](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1)). It is our Zone and our
    portal, not a Tempo-created Zone.
-2. **Bonded answers (separate engine experiment).** A server sells an answer about a TIP-20 transfer over
-   [MPP](https://mpp.dev) and reserves bond behind it. A wrong answer is proven false by re-running
-   **Tempo's own EVM (`tempo-revm`)** inside SP1 against Tempo's own block hash, and the bond pays the
-   client. No judge, no owner. This has slashed a lying server **three times on Moderato**.
+2. **Bonded answers — an earlier engine experiment, not the CWF product.** A server sells an answer about a
+   TIP-20 transfer over [MPP](https://mpp.dev) with bond behind it; a wrong answer is proven false by re-running
+   Tempo's own EVM (`tempo-revm`) inside SP1, and the bond pays the client. Details and its Moderato slashes are
+   [further down](#separate-engine-experiment-bonded-answers).
 
 > **For judges, the fast path:** the [live page](https://psyto.github.io/sworn/) ·
 > [our own Zone's payout](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), paid only after three proven batches settled (the page's
@@ -307,7 +308,7 @@ load and the tool's output was lost — re-checked with the same proof in
 `out/e2e/moderato-20261003T064745Z-honestReverts-recheck.log`). Recorded in
 [`deployments/moderato.json`](deployments/moderato.json).
 
-Two more slashes were recorded live for the demo video, on the same day:
+Two more slashes were recorded live on the same day, for an earlier demo video (not the CWF submission videos):
 [`0xbf8e…f046`](https://explore.testnet.tempo.xyz/tx/0xbf8ef2e317359cceee89bc29ea2ef9512bd13b9a916805751e2653c71f39f046) and
 [`0x69ab…5188`](https://explore.testnet.tempo.xyz/tx/0x69abea9b6d5a54150486701f2f1deddc0843dc488a07765553a11e7cd2ce5188)
 (`demoLiveTakeFirst`, `demoLiveTake`).
@@ -373,8 +374,8 @@ found no public example of `tempo-revm` or `zone-spf` proven in a zkVM.
 | `_submission/` | CWF form draft, counted by `scripts/cwf-form.sh` |
 
 ```bash
+(cd contracts && forge test)                             # ~1 s, no fetch needed: 67 tests incl. a real Zone proof and the own-Zone live batches
 scripts/fetch-tempo.sh                                   # tempoxyz/tempo at the pinned commit, patched
-cd contracts && forge test                               # 67 tests incl. a real Groth16 slash, a real Zone proof and the own-Zone live batches
 spikes/zone-spf/fetch.sh && spikes/zone-spf/build-guest.sh  # Tempo zones + tempo at pinned commits, patched; Zone guest
 scripts/check-rust-tests.sh                              # required Rust tests
 scripts/check-e2e.sh --log out/e2e/localnet-full-gate.log  # re-gate the recorded full-flow run

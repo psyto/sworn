@@ -1,5 +1,8 @@
 # Claude Code 指示書 — CWF 用 Sworn デモ
 
+> **Superseded (2026-10-08).** Kept as history. The submission videos are `video/PITCH-D.md` and `video/DEMO-D.md`;
+> files named below (`PITCH.md`, `DEMO.md`, their recorders and videos) were removed.
+
 ## 目的
 
 Colosseum Crypto World's Fair に提出する **3分以内のプロダクトデモ**を完成させる。
