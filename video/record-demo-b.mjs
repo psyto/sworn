@@ -3,18 +3,13 @@
 // between; cached in takes/demo-b/, FORCE_JOB=1 re-runs it); scenes 3–5 are the live page and Tempo's testnet
 // explorer recorded live; scene 6 runs export-vectors.mjs and forge test in a terminal while recording.
 //   (local Operator worker running) DEMO_PAGE_URL=http://localhost:4173/ node video/record-demo-b.mjs
-//   then: node video/split-scenes.mjs demo-b
-// Records video/demo.mp4 — Sworn's ≤ 3 min CWF demo v5.6, nine scenes, SILENT, 1920×1080 — plus video/demo.srt
-// and video/demo.marks.json. It follows a Zone operator's need for independently checkable batch evidence,
-// then shows the real proof on a Zone batch with a withdrawal, our own Zone's proof-gated payout on Moderato, and
-// the explicit present-day limits.
-//
-//   DEMO_PAGE_URL=http://localhost:4173/ node video/record-demo.mjs   # then: node video/split-scenes.mjs demo
-//   PREVIEW=<dir> node video/record-demo.mjs   # one PNG per authored slide + all source checks; records nothing
+//   then: node video/record-demo-d.mjs
+// Kept as the source recorder for Demo D: record-demo-d.mjs cuts its clips from video/takes/ (not committed).
+// This version's own video is no longer kept. Its header once described demo v5.6 (record-demo.mjs, removed).
 //
 // Reads only. No keys, no transactions: the page makes eth_call / receipt reads, this script makes eth_call /
-// eth_getCode / receipts. Scene lengths: max(DEMO.md's "≈ N s" target, words ÷ 2.2 w/s rounded up to 0.5 s).
-// Every figure on screen is read now from the source DEMO.md's claims table names; a missing or changed
+// eth_getCode / receipts. Scene lengths: max(DEMO-B.md's "≈ N s" target, words ÷ 2.2 w/s rounded up to 0.5 s).
+// Every figure on screen is read now from the source DEMO-B.md's claims table names; a missing or changed
 // source THROWS:
 //   scene 1  local Operator worker: fixed fixture only; zone-prove.sh → zone-attest.sh without --send.
 //   scene 2  zones @ ac49071f ZonePortal.sol: submitBatch → verify → revert InvalidProof → enqueue withdrawals;
@@ -71,11 +66,11 @@ log(`• demo B (v6-B): scene lengths = max(target, words ÷ 2.2)`);
 for (const [i, s] of scenes.entries()) log(`    scene ${s.n}: ${String(s.words).padStart(3)} words (${s.hold} s of voice) → ${holds[i]} s  (${s.title})`);
 log(`    total ${TOTAL} s, ${words} words`);
 // v5.6 gives the real forged-batch rejection its own scene while keeping the final runtime below 180 seconds.
-if (words > 370) fail(`DEMO.md narration is ${words} words > the cap 370`);
+if (words > 370) fail(`DEMO-B.md narration is ${words} words > the cap 370`);
 if (TOTAL > MAX_TOTAL) fail(`demo runs ${TOTAL} s > ${MAX_TOTAL} s`);
 const narr = scenes.map((s) => s.text).join(" ");
 for (const banned of [/the same input/i, /\bbroken\b/i, /secures? withdrawals/i, /protects withdrawals(?! yet)/i, /every batch/i, /our customers are/i])
-  if (banned.test(narr)) fail(`DEMO.md narration says ${banned}`);
+  if (banned.test(narr)) fail(`DEMO-B.md narration says ${banned}`);
 const operatorWorker = read("operator/server.mjs", "local Operator worker");
 for (const s of ["127.0.0.1", "zone-prove.sh", "zone-attest.sh", "deposit_and_withdrawal_blocks5-6"]) {
   if (!operatorWorker.includes(s)) fail(`operator/server.mjs no longer demonstrates ${s}`);
@@ -124,7 +119,7 @@ const ZV = getAddress(Z.address);
 if (keccak256(await rpc("eth_getCode", [ZV, "latest"])) !== Z.codehash) fail("SwornZoneVerifierWithdrawal codehash on chain != moderato.json");
 const staleNeedles = [OLD.address, OLD.attest.tx, short(OLD.address), short(OLD.attest.tx), short(OLD.address, 6), OLD.address.slice(0, 10), OLD.attest.tx.slice(0, 10)].map(lc);
 const assertFresh = (text, where) => { for (const n of staleNeedles) if (lc(text).includes(n)) fail(`${where} shows the SUPERSEDED verifier/attest (${n})`); };
-assertFresh(md, "video/DEMO.md");
+assertFresh(md, "video/DEMO-B.md");
 
 const zsol = read("contracts/src/SwornZoneVerifier.sol", "SwornZoneVerifier source");
 const zev = parseAbiItem(`event ${flat(zsol.match(/event (ZoneBatchVerified\([^)]*\));/)?.[1] ?? fail("no ZoneBatchVerified in SwornZoneVerifier.sol"))}`);
@@ -147,7 +142,7 @@ const [, ITEST, DEVCHAIN, NW, NU, wqA, wqB] = bm;
 const WQH = lc(fx.args.withdrawalQueueHash);
 if (!WQH.startsWith(wqA) || !WQH.endsWith(wqB)) fail("moderato.json withdrawalQueueHash disagrees with the fixture");
 if (/^0x0+$/.test(WQH)) fail("fixture withdrawalQueueHash is zero");
-if (+NW !== 1 || +NU !== 2 || DEVCHAIN !== "1337") fail(`batch is ${NW} withdrawals / ${NU} user txs / chain ${DEVCHAIN}; DEMO.md says 1 / 2 / 1337`);
+if (+NW !== 1 || +NU !== 2 || DEVCHAIN !== "1337") fail(`batch is ${NW} withdrawals / ${NU} user txs / chain ${DEVCHAIN}; DEMO-B.md says 1 / 2 / 1337`);
 const atTx = await rpc("eth_getTransactionByHash", [Z.attest.tx]);
 const atInput = atTx.calls?.length === 1 ? atTx.calls[0].input : atTx.input;
 if (!lc(atInput).includes(WQH.slice(2))) fail("attest calldata does not carry the fixture's withdrawalQueueHash");
