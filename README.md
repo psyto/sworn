@@ -240,33 +240,6 @@ from receipts in [`deployments/moderato.json`](deployments/moderato.json).
    from its arguments and checks the Groth16 proof. `attest(...)` does the same and emits
    `ZoneBatchVerified`.
 
-## Separate engine experiment: bonded answers
-
-**An honest note on this experiment.** Its question ("if I send this transfer, what is the receiver credited?") is one a client can
-check for itself: `eth_simulateV1` with `validation: true` and a fee token reproduces the answer,
-including the fee charge and a receive-policy block (measured 2026-10-04). That is why it makes a good
-demo: anyone can check that the server lied, without trusting us. It is not the product. The product is
-the engine behind the slash: proving Tempo's execution so that a contract on Tempo can act on it.
-
-1. **Ask.** The client asks a `Question` (block N and its hash, sender, TIP-20 token, `transfer` /
-   `transferWithMemo` calldata, fee token, gas limit) and pays for it with an ordinary MPP charge.
-2. **Reserve.** The server computes the `Answer` (success, return data, gas, fee, the receiver's
-   balance before and after) and calls `reserve(q, a, client, coverage)`. The contract computes the
-   EIP-712 digest itself, checks `blockhash(N) == q.blockHash` within 32 blocks, refuses any question
-   the proof could not cover, and locks `coverage` of the server's bond.
-3. **Capture.** The client's SDK checks the reservation on-chain and captures its own state proofs for
-   block N (the public RPC keeps them ~150 s) — so a server cannot make an answer unchallengeable by
-   withholding evidence.
-4. **Challenge.** If the answer is wrong, anyone runs `sworn-challenge`: `tempo-revm` runs the exact
-   transaction inside SP1 over state MPT-verified against N's header, a Groth16 proof is made locally
-   (~6.5 min), and `challenge()` pays the reserved coverage to the client. A correct answer cannot be
-   slashed (`AnswerCorrect`).
-
-The transaction is fully fixed (sender pays fees, explicit fee token, no account-abstraction batch,
-no access key), and a transaction Tempo would reject before execution is itself a provable answer:
-*"this payment would be rejected."* Spec: [`docs/specs/001-bonded-answers.md`](docs/specs/001-bonded-answers.md)
-§R3 (normative).
-
 ## What is measured
 
 **Zone verifier** (2026-10-04, and the own-Zone live run 2026-10-06; logs in `spikes/zone-spf/z-logs/`, numbers in
@@ -292,26 +265,6 @@ spec 003 "Results"):
 | proving | receive-policy case **5,970,394 cycles**; local Groth16 **391 s**, peak 15 GB (`out/ac7_groth16.log`) |
 | contract | **59 / 59** forge tests for `Sworn.sol` (67 with the Zone verifier); the gate requires 49 named tests and was seen to fail when one is missing. A **real Groth16 proof** slashes a lying answer and cannot slash the true one (`contracts/test/RealGroth16.t.sol`) |
 | full flow | **32 / 32** checks on Tempo's own node (`tempo-localnet` at the vendored commit, chain 42431, Moderato's fork schedule): MPP charge → reserve → SDK verification → dishonest answer → own witness → local proof → challenge pays the client 500; honest answer → `AnswerCorrect`; 9 SDK rejections; live fork-schedule drift refused (`out/e2e/localnet-full-gate.log`) |
-
-## On Moderato — the first of three slashes (2026-10-03)
-
-| step | tx |
-|---|---|
-| dishonest server reserves 500 behind "the receiver gets +500" | [`0x08f6…0350`](https://explore.testnet.tempo.xyz/tx/0x08f614340b1a6a7fe07dfc3923341332a33d9e9174e41c9847372a11cdb20350) |
-| the client's real payment — **diverted to `ReceivePolicyGuard`** (guard +500, receiver +0) | [`0x65bc…312a`](https://explore.testnet.tempo.xyz/tx/0x65bc66fa56f866149348cc5f7346bf4fe9345cf819642269870a94bf8183312a) |
-| challenge with a real Groth16 proof (414 s, local) → `Slashed`, **client +500** | [`0xa7b9…ab9b`](https://explore.testnet.tempo.xyz/tx/0xa7b90b8cd4909bcdae03e5e78281ceeabda7d2976e692d33888f4f006924ab9b) |
-
-The honest server's answer, challenged with a real proof, is rejected with `AnswerCorrect` — which
-`Sworn.sol` raises only after `verifyProof` succeeds. Run log `out/e2e/moderato-20261003T064745Z.log`
-(33 of 34 checks; the 34th, `S-2.honestReverts`, failed in the harness: the second proof took ~48 min under
-load and the tool's output was lost — re-checked with the same proof in
-`out/e2e/moderato-20261003T064745Z-honestReverts-recheck.log`). Recorded in
-[`deployments/moderato.json`](deployments/moderato.json).
-
-Two more slashes were recorded live on the same day, for an earlier demo video (not the CWF submission videos):
-[`0xbf8e…f046`](https://explore.testnet.tempo.xyz/tx/0xbf8ef2e317359cceee89bc29ea2ef9512bd13b9a916805751e2653c71f39f046) and
-[`0x69ab…5188`](https://explore.testnet.tempo.xyz/tx/0x69abea9b6d5a54150486701f2f1deddc0843dc488a07765553a11e7cd2ce5188)
-(`demoLiveTakeFirst`, `demoLiveTake`).
 
 ## What is not done
 
@@ -352,6 +305,53 @@ over a witness, and is *"presently a normal Rust verifier rather than a `no_std`
 runs that same code inside SP1, with build patches to zones, tempo and two dependency crates; the verification logic is Tempo's, unchanged.
 [`succinctlabs/rsp`](https://github.com/succinctlabs/rsp) proves reth blocks in SP1, but not Tempo. We
 found no public example of `tempo-revm` or `zone-spf` proven in a zkVM.
+
+## Separate engine experiment: bonded answers
+
+**An honest note on this experiment.** Its question ("if I send this transfer, what is the receiver credited?") is one a client can
+check for itself: `eth_simulateV1` with `validation: true` and a fee token reproduces the answer,
+including the fee charge and a receive-policy block (measured 2026-10-04). That is why it makes a good
+demo: anyone can check that the server lied, without trusting us. It is not the product. The product is
+the engine behind the slash: proving Tempo's execution so that a contract on Tempo can act on it.
+
+1. **Ask.** The client asks a `Question` (block N and its hash, sender, TIP-20 token, `transfer` /
+   `transferWithMemo` calldata, fee token, gas limit) and pays for it with an ordinary MPP charge.
+2. **Reserve.** The server computes the `Answer` (success, return data, gas, fee, the receiver's
+   balance before and after) and calls `reserve(q, a, client, coverage)`. The contract computes the
+   EIP-712 digest itself, checks `blockhash(N) == q.blockHash` within 32 blocks, refuses any question
+   the proof could not cover, and locks `coverage` of the server's bond.
+3. **Capture.** The client's SDK checks the reservation on-chain and captures its own state proofs for
+   block N (the public RPC keeps them ~150 s) — so a server cannot make an answer unchallengeable by
+   withholding evidence.
+4. **Challenge.** If the answer is wrong, anyone runs `sworn-challenge`: `tempo-revm` runs the exact
+   transaction inside SP1 over state MPT-verified against N's header, a Groth16 proof is made locally
+   (~6.5 min), and `challenge()` pays the reserved coverage to the client. A correct answer cannot be
+   slashed (`AnswerCorrect`).
+
+The transaction is fully fixed (sender pays fees, explicit fee token, no account-abstraction batch,
+no access key), and a transaction Tempo would reject before execution is itself a provable answer:
+*"this payment would be rejected."* Spec: [`docs/specs/001-bonded-answers.md`](docs/specs/001-bonded-answers.md)
+§R3 (normative).
+
+## On Moderato — the first of three slashes (2026-10-03)
+
+| step | tx |
+|---|---|
+| dishonest server reserves 500 behind "the receiver gets +500" | [`0x08f6…0350`](https://explore.testnet.tempo.xyz/tx/0x08f614340b1a6a7fe07dfc3923341332a33d9e9174e41c9847372a11cdb20350) |
+| the client's real payment — **diverted to `ReceivePolicyGuard`** (guard +500, receiver +0) | [`0x65bc…312a`](https://explore.testnet.tempo.xyz/tx/0x65bc66fa56f866149348cc5f7346bf4fe9345cf819642269870a94bf8183312a) |
+| challenge with a real Groth16 proof (414 s, local) → `Slashed`, **client +500** | [`0xa7b9…ab9b`](https://explore.testnet.tempo.xyz/tx/0xa7b90b8cd4909bcdae03e5e78281ceeabda7d2976e692d33888f4f006924ab9b) |
+
+The honest server's answer, challenged with a real proof, is rejected with `AnswerCorrect` — which
+`Sworn.sol` raises only after `verifyProof` succeeds. Run log `out/e2e/moderato-20261003T064745Z.log`
+(33 of 34 checks; the 34th, `S-2.honestReverts`, failed in the harness: the second proof took ~48 min under
+load and the tool's output was lost — re-checked with the same proof in
+`out/e2e/moderato-20261003T064745Z-honestReverts-recheck.log`). Recorded in
+[`deployments/moderato.json`](deployments/moderato.json).
+
+Two more slashes were recorded live on the same day, for an earlier demo video (not the CWF submission videos):
+[`0xbf8e…f046`](https://explore.testnet.tempo.xyz/tx/0xbf8ef2e317359cceee89bc29ea2ef9512bd13b9a916805751e2653c71f39f046) and
+[`0x69ab…5188`](https://explore.testnet.tempo.xyz/tx/0x69abea9b6d5a54150486701f2f1deddc0843dc488a07765553a11e7cd2ce5188)
+(`demoLiveTakeFirst`, `demoLiveTake`).
 
 ## Layout
 

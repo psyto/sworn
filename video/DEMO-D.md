@@ -24,7 +24,7 @@ assembles. The final card and persistent footer keep the testnet scope visible.
 
 ## Scene 1 — two demonstrations · ≈ 10 s
 
-> Sworn is for Tempo Zones, where only the operator sees every transaction. It makes that private execution checkable. Two separate demonstrations follow.
+> Sworn is for Tempo Zones: only the operator sees every transaction. It makes that private execution checkable. Two separate demonstrations follow.
 
 ## Scene 2 — fixture proof job · ≈ 15 s
 
@@ -44,7 +44,7 @@ assembles. The final card and persistent footer keep the testnet scope visible.
 
 ## Scene 6 — OwnZone settlement and payout · ≈ 10 s
 
-> There, the portal settled three batches only after the proof passed. Then our sequencer paid a withdrawal.
+> There, the portal settled three batches only after the proof passed. Then our sequencer, not the proof, paid a withdrawal.
 
 ## Scene 7 — forged batch rejected · ≈ 10 s
 

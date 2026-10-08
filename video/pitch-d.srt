@@ -1,99 +1,103 @@
 1
-00:00:00,000 --> 00:00:02,369
+00:00:00,000 --> 00:00:02,223
 Sworn is for Tempo Zones.
 
 2
-00:00:02,419 --> 00:00:09,627
-Only the operator sees every transaction, so before a withdrawal, a reviewer can check nothing.
+00:00:02,273 --> 00:00:06,768
+Only the operator sees every transaction, so before a withdrawal,
 
 3
-00:00:09,677 --> 00:00:14,950
-Sworn makes that private execution checkable, already on our own Zone.
+00:00:06,818 --> 00:00:09,950
+a reviewer cannot verify the private batch.
 
 4
-00:00:15,000 --> 00:00:20,307
-Sworn turns an operator-supplied batch into evidence anyone can verify.
+00:00:10,000 --> 00:00:14,950
+Sworn makes that private execution checkable, already on our own Zone.
 
 5
-00:00:20,357 --> 00:00:25,129
-Tempo's own Zone code runs inside a zero-knowledge VM,
+00:00:15,000 --> 00:00:19,789
+Sworn turns an operator-supplied batch into evidence anyone can verify.
 
 6
-00:00:25,179 --> 00:00:29,950
-and only the batch commitment crosses the privacy boundary.
+00:00:19,839 --> 00:00:24,144
+Tempo's own Zone code runs inside a zero-knowledge VM,
 
 7
+00:00:24,194 --> 00:00:29,950
+and only the proof and public batch data cross the privacy boundary.
+
+8
 00:00:30,000 --> 00:00:33,607
 Tempo Zones ship no native ZK proof today.
 
-8
+9
 00:00:33,657 --> 00:00:39,093
 We compiled Tempo's own Zone verifier for SP1, with its logic unchanged,
 
-9
+10
 00:00:39,143 --> 00:00:45,950
 bound it to the portal's batch inputs, and verified a test-fixture proof read-only on Moderato.
 
-10
-00:00:46,000 --> 00:00:48,800
+11
+00:00:46,000 --> 00:00:48,730
 Separately, on our own one-operator Zone,
 
-11
-00:00:48,850 --> 00:00:55,925
-the portal settled three batches only after the proof passed, and a withdrawal was paid.
-
 12
-00:00:55,975 --> 00:00:59,725
-Then our own sequencer signed a forged batch.
+00:00:48,780 --> 00:00:56,145
+the portal settled three batches only after the proof passed, and our sequencer paid a withdrawal.
 
 13
-00:00:59,775 --> 00:01:04,950
-It was rejected: a real proof cannot authorize a different batch.
+00:00:56,195 --> 00:00:59,852
+Then our own sequencer signed a forged batch.
 
 14
+00:00:59,902 --> 00:01:04,950
+It was rejected: a real proof cannot authorize a different batch.
+
+15
 00:01:05,000 --> 00:01:10,301
 First buyer: a Zone business whose reviewer cannot reconstruct the witness.
 
-15
+16
 00:01:10,351 --> 00:01:15,166
 One batch tests demand; repeats and upgrades become Proof Operations.
 
-16
+17
 00:01:15,216 --> 00:01:21,004
 The market grows with Zones, batches and upgrades, if Zones are adopted.
 
-17
+18
 00:01:21,054 --> 00:01:22,950
 Later, beside Tempo's TEE.
 
-18
+19
 00:01:23,000 --> 00:01:29,617
 I build on Tempo's stack, Reth and Revm, and teach it through Fabrknt Dojo.
 
-19
+20
 00:01:29,667 --> 00:01:32,950
 Uniswap Foundation sponsor prize at ETHGlobal Tokyo;
 
-20
+21
 00:01:33,000 --> 00:01:39,617
 third in Superteam Japan and NTT DOCOMO R&D's side track at Colosseum's Cypherpunk hackathon.
 
-21
+22
 00:01:39,667 --> 00:01:42,950
 Before crypto, fifteen years of banking systems.
 
-22
+23
 00:01:43,000 --> 00:01:45,950
 Today: testnet, unaudited, no customers yet.
 
-23
+24
 00:01:46,000 --> 00:01:49,450
 Next, one design partner supplies a batch,
 
-24
+25
 00:01:49,500 --> 00:01:54,950
 and its reviewer decides whether the evidence is worth paying for.
 
-25
+26
 00:01:55,000 --> 00:01:57,950
 Sworn: verifiable evidence for private execution.

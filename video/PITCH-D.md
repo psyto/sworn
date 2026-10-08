@@ -9,11 +9,11 @@ The scope, including "no customers yet", is said once aloud. v8.1 adds a forward
 
 ## Scene 1 — the trust gap · ≈ 15 s
 
-> Sworn is for Tempo Zones. Only the operator sees every transaction, so before a withdrawal, a reviewer can check nothing. Sworn makes that private execution checkable, already on our own Zone.
+> Sworn is for Tempo Zones. Only the operator sees every transaction, so before a withdrawal, a reviewer cannot verify the private batch. Sworn makes that private execution checkable, already on our own Zone.
 
 ## Scene 2 — a new primitive · ≈ 15 s
 
-> Sworn turns an operator-supplied batch into evidence anyone can verify. Tempo's own Zone code runs inside a zero-knowledge VM, and only the batch commitment crosses the privacy boundary.
+> Sworn turns an operator-supplied batch into evidence anyone can verify. Tempo's own Zone code runs inside a zero-knowledge VM, and only the proof and public batch data cross the privacy boundary.
 
 ## Scene 3 — difficult work, shipped · ≈ 16 s
 
@@ -21,7 +21,7 @@ The scope, including "no customers yet", is said once aloud. v8.1 adds a forward
 
 ## Scene 4 — the proof is the control · ≈ 19 s
 
-> Separately, on our own one-operator Zone, the portal settled three batches only after the proof passed, and a withdrawal was paid. Then our own sequencer signed a forged batch. It was rejected: a real proof cannot authorize a different batch.
+> Separately, on our own one-operator Zone, the portal settled three batches only after the proof passed, and our sequencer paid a withdrawal. Then our own sequencer signed a forged batch. It was rejected: a real proof cannot authorize a different batch.
 
 ## Scene 5 — the business · ≈ 18 s
 
