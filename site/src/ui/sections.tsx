@@ -312,7 +312,7 @@ export function Footer() {
       </ul>
       <p className="fine team">
         Built by Hiroyuki Saito (<a href="https://github.com/psyto" target="_blank" rel="noreferrer">@psyto</a>): Rust on
-        Tempo&apos;s stack (Reth, Revm); author of Fabrknt Dojo (21 courses); Uniswap Foundation sponsor prize, ETHGlobal Tokyo
+        Tempo&apos;s stack (Reth, Revm); author of <a href="https://fabrknt.com/dojo" target="_blank" rel="noreferrer">Fabrknt Dojo</a> (21 courses); Uniswap Foundation sponsor prize, ETHGlobal Tokyo
         2026; 3rd place, Superteam Japan × NTT DOCOMO R&amp;D side track, Colosseum Cypherpunk 2025; 15 years building banking
         systems in Japan.
       </p>
