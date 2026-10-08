@@ -6,10 +6,10 @@ import { getAddress, keccak256 } from "viem";
 import { dir, read, fail, log, rpc, parseScenes, checkOverflow, recordSlides, duration, writeSrt, writeJson, fetchText } from "./lib/rec.mjs";
 
 const scenes = parseScenes("video/PITCH-D.md");
-const expected = [15, 15, 16, 19, 20, 20, 14];
+const expected = [15, 15, 18, 19, 20, 20, 16];
 if (scenes.length !== expected.length) fail(`PITCH-D.md has ${scenes.length} scenes, expected ${expected.length}`);
 const holds = scenes.map((s, i) => { if (s.hold > expected[i]) fail(`scene ${s.n} needs ${s.hold}s at 2.2 words/s, above its ${expected[i]}s target`); return expected[i]; });
-const total = holds.reduce((a, b) => a + b, 0); if (total !== 119) fail(`pitch D is ${total}s, expected 119s`);
+const total = holds.reduce((a, b) => a + b, 0); if (total !== 123) fail(`pitch D is ${total}s, expected 123s`);
 
 const dep = JSON.parse(read("deployments/moderato.json", "deployments/moderato.json"));
 const fixture = dep.SwornZoneVerifierWithdrawal ?? fail("missing fixture record");

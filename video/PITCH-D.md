@@ -15,7 +15,7 @@ The scope, including "no customers yet", is said once aloud. v8.1 adds a forward
 
 > Sworn turns an operator-supplied batch into evidence anyone can verify. Tempo's own Zone code runs inside a zero-knowledge VM, and only the proof and public batch data cross the privacy boundary.
 
-## Scene 3 — difficult work, shipped · ≈ 16 s
+## Scene 3 — difficult work, shipped · ≈ 18 s
 
 > Tempo Zones ship no native ZK proof today. We compiled Tempo's own Zone verifier for SP1, with its logic unchanged, bound it to the portal's batch inputs, and verified a test-fixture proof read-only on Moderato.
 
@@ -31,7 +31,7 @@ The scope, including "no customers yet", is said once aloud. v8.1 adds a forward
 
 > I build on Tempo's stack, Reth and Revm, and teach it through Fabrknt Dojo. Uniswap Foundation sponsor prize at ETHGlobal Tokyo; third in Superteam Japan and NTT DOCOMO R&D's side track at Colosseum's Cypherpunk hackathon. Before crypto, fifteen years of banking systems.
 
-## Scene 7 — the honest ask · ≈ 14 s
+## Scene 7 — the honest ask · ≈ 16 s
 
 > Today: testnet, unaudited, no customers yet. Next, one design partner supplies a batch, and its reviewer decides whether the evidence is worth paying for. Sworn: verifiable evidence for private execution.
 
