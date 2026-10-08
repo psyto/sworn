@@ -11,16 +11,16 @@ They keep payments private: users see only their own; only the operator sees eve
 So before a withdrawal, no outside reviewer can verify the private batch.
 
 4
-00:00:15,000 --> 00:00:21,450
+00:00:15,000 --> 00:00:21,044
 Zcash uses zero knowledge to prove a transaction is valid without revealing it.
 
 5
-00:00:21,500 --> 00:00:23,950
-Sworn uses zero knowledge differently:
+00:00:21,094 --> 00:00:26,200
+Sworn uses it differently: it proves a Zone batch executed correctly,
 
 6
-00:00:24,000 --> 00:00:29,950
-it proves a private Tempo Zone batch executed correctly, without publishing transactions.
+00:00:26,250 --> 00:00:29,950
+without publishing transactions; the operator still sees them.
 
 7
 00:00:30,000 --> 00:00:34,064
@@ -35,65 +35,65 @@ We compiled Tempo's own Zone verifier for SP1, with its logic unchanged,
 bound it to the portal's batch inputs, and verified a test-fixture proof read-only on Moderato.
 
 10
-00:00:48,000 --> 00:00:50,730
-Separately, on our own one-operator Zone,
+00:00:48,000 --> 00:00:55,223
+Separately, on our own one-operator Zone, the portal settled three batches only after the proof passed;
 
 11
-00:00:50,780 --> 00:00:58,145
-the portal settled three batches only after the proof passed, and our sequencer paid a withdrawal.
+00:00:55,273 --> 00:00:59,314
+then our sequencer, not the proof, paid a withdrawal.
 
 12
-00:00:58,195 --> 00:01:01,852
+00:00:59,364 --> 00:01:02,950
 Then our own sequencer signed a forged batch.
 
 13
-00:01:01,902 --> 00:01:06,950
+00:01:03,000 --> 00:01:07,950
 It was rejected: a real proof cannot authorize a different batch.
 
 14
-00:01:07,000 --> 00:01:12,896
+00:01:08,000 --> 00:01:13,896
 First buyer: a Zone business whose reviewer cannot reconstruct the witness.
 
 15
-00:01:12,946 --> 00:01:18,301
+00:01:13,946 --> 00:01:19,301
 One batch tests demand; repeats and upgrades become Proof Operations.
 
 16
-00:01:18,351 --> 00:01:24,788
+00:01:19,351 --> 00:01:25,788
 The market grows with Zones, batches and upgrades, if Zones are adopted.
 
 17
-00:01:24,838 --> 00:01:26,950
+00:01:25,838 --> 00:01:27,950
 Later, beside Tempo's TEE.
 
 18
-00:01:27,000 --> 00:01:33,617
+00:01:28,000 --> 00:01:34,617
 I build on Tempo's stack, Reth and Revm, and teach it through Fabrknt Dojo.
 
 19
-00:01:33,667 --> 00:01:36,950
+00:01:34,667 --> 00:01:37,950
 Uniswap Foundation sponsor prize at ETHGlobal Tokyo;
 
 20
-00:01:37,000 --> 00:01:43,617
+00:01:38,000 --> 00:01:44,617
 third in Superteam Japan and NTT DOCOMO R&D's side track at Colosseum's Cypherpunk hackathon.
 
 21
-00:01:43,667 --> 00:01:46,950
+00:01:44,667 --> 00:01:47,950
 Before crypto, fifteen years of banking systems.
 
 22
-00:01:47,000 --> 00:01:50,150
+00:01:48,000 --> 00:01:51,150
 Today: testnet, unaudited, no customers yet.
 
 23
-00:01:50,200 --> 00:01:53,883
+00:01:51,200 --> 00:01:54,883
 Next, one design partner supplies a batch,
 
 24
-00:01:53,933 --> 00:01:59,750
+00:01:54,933 --> 00:02:00,750
 and its reviewer decides whether the evidence is worth paying for.
 
 25
-00:01:59,800 --> 00:02:02,950
+00:02:00,800 --> 00:02:03,950
 Sworn: verifiable evidence for private execution.

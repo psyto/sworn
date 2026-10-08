@@ -28,7 +28,7 @@ for (const el of document.querySelectorAll("[data-flow]")) {
   <div class="dfx-card card dfx-prover fade" data-at="${c + step}"><p class="dfx-eb">Sworn prover · SP1</p><div class="dfx-h">Tempo's own Zone code</div>
     <p class="dfx-run"><span class="dfx-ring"${at("ring")}${t.chip === undefined ? "" : ` data-off="${t.chip}"`}></span><span>re-executes the batch</span></p>
     <div class="dfx-slot"><span class="dfx-chip cue"${at("chip")} data-k="digest"></span></div></div>
-  <div class="dfx-bnd fade" data-at="${c + 2 * step}"><span class="dfx-bnd-l"${at("cross")}>Only hashes<br>cross this line</span></div>
+  <div class="dfx-bnd fade" data-at="${c + 2 * step}"><span class="dfx-bnd-l"${at("cross")}>Only proof + public<br>data cross this line</span></div>
   <div class="dfx-card card dfx-public fade" data-at="${c + 3 * step}"><p class="dfx-eb">Public · Tempo</p><div class="dfx-h">SwornZoneVerifier</div>
     <p class="dfx-badge cue"${at("badge")}>✓ ZoneBatchVerified</p>
     <div class="dfx-slot"><span class="dfx-chip cue"${t.cross === undefined ? "" : ` data-at="${t.cross + 1.4}"`} data-k="digest"></span></div></div>

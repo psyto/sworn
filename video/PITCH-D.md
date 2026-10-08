@@ -13,15 +13,15 @@ The scope, including "no customers yet", is said once aloud. v8.1 adds a forward
 
 ## Scene 2 — private execution, checkable validity · ≈ 15 s
 
-> Zcash uses zero knowledge to prove a transaction is valid without revealing it. Sworn uses zero knowledge differently: it proves a private Tempo Zone batch executed correctly, without publishing transactions.
+> Zcash uses zero knowledge to prove a transaction is valid without revealing it. Sworn uses it differently: it proves a Zone batch executed correctly, without publishing transactions; the operator still sees them.
 
 ## Scene 3 — difficult work, shipped · ≈ 18 s
 
 > Tempo Zones ship no native ZK proof today. We compiled Tempo's own Zone verifier for SP1, with its logic unchanged, bound it to the portal's batch inputs, and verified a test-fixture proof read-only on Moderato.
 
-## Scene 4 — the proof is the control · ≈ 19 s
+## Scene 4 — the proof is the control · ≈ 20 s
 
-> Separately, on our own one-operator Zone, the portal settled three batches only after the proof passed, and our sequencer paid a withdrawal. Then our own sequencer signed a forged batch. It was rejected: a real proof cannot authorize a different batch.
+> Separately, on our own one-operator Zone, the portal settled three batches only after the proof passed; then our sequencer, not the proof, paid a withdrawal. Then our own sequencer signed a forged batch. It was rejected: a real proof cannot authorize a different batch.
 
 ## Scene 5 — the business · ≈ 20 s
 

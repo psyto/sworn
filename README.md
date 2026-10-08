@@ -27,10 +27,9 @@ customer workflow. Testnet, unaudited.
 
 Sworn runs Tempo's own code inside an [SP1](https://github.com/succinctlabs/sp1) zero-knowledge VM and
 checks the resulting Groth16 proof in a contract on [Tempo](https://tempo.xyz). The CWF submission is the
-Zone evidence product. The repository also contains a separate proof-engine experiment, documented below,
-but it is not the product pitched or demoed for CWF:
+Zone evidence product:
 
-1. **Tempo Zone batches — the CWF submission.** Tempo's own Zone batch verifier (`zone_spf::prove_zone_batch`) runs inside
+- **Tempo Zone batches.** Tempo's own Zone batch verifier (`zone_spf::prove_zone_batch`) runs inside
    SP1, and the proof is bound to the exact inputs Tempo's `IVerifier` receives from a ZonePortal.
    `SwornZoneVerifier` is deployed on Moderato. Tempo's docs say ZK proving for Zones *"is not
    implemented"*. Tempo's design (T13) checks batches with a Nitro hardware attestation; on Moderato
@@ -44,10 +43,9 @@ but it is not the product pitched or demoed for CWF:
    its own instance of `SwornZoneVerifier`, and then our sequencer paid a withdrawal**
    ([payout tx](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1)). It is our Zone and our
    portal, not a Tempo-created Zone.
-2. **Bonded answers — an earlier engine experiment, not the CWF product.** A server sells an answer about a
-   TIP-20 transfer over [MPP](https://mpp.dev) with bond behind it; a wrong answer is proven false by re-running
-   Tempo's own EVM (`tempo-revm`) inside SP1, and the bond pays the client. Details and its Moderato slashes are
-   [further down](#separate-engine-experiment-bonded-answers).
+
+(The repository also holds an earlier, separate engine experiment, [bonded answers](#separate-engine-experiment-bonded-answers);
+it is not the CWF product.)
 
 > **For judges, the fast path:** the [live page](https://psyto.github.io/sworn/) ·
 > [our own Zone's payout](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), paid only after three proven batches settled (the page's

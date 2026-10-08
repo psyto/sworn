@@ -159,7 +159,7 @@ const DIGEST = short(FIXTURE.digest);
  */
 function FlowDiagram() {
   return (
-    <div className="dfx" role="img" aria-label={`Diagram: the batch witness goes from the Zone operator to the Sworn prover and stops there. Only the digest ${DIGEST} crosses to Tempo, where SwornZoneVerifier emits ZoneBatchVerified; a reviewer's check returns true, or InvalidProof() if one field changes.`}>
+    <div className="dfx" role="img" aria-label={`Diagram: the batch witness goes from the Zone operator to the Sworn prover and stops there. Only the proof and public batch data, with the digest ${DIGEST}, cross to Tempo, where SwornZoneVerifier emits ZoneBatchVerified; a reviewer's check returns true, or InvalidProof() if one field changes.`}>
       <div className="dfx-stage" aria-hidden="true">
         <div className="dfx-card dfx-private">
           <p className="eyebrow">Private · Zone operator</p>
@@ -178,7 +178,7 @@ function FlowDiagram() {
           <p className="dfx-run"><span className="dfx-ring" /> <span>re-executes the batch</span></p>
           <div className="dfx-slot"><span className="dfx-chip dfx-chip-p">{DIGEST}</span></div>
         </div>
-        <div className="dfx-bnd"><span className="dfx-bnd-l">Only hashes{" "}<br />cross this line</span></div>
+        <div className="dfx-bnd"><span className="dfx-bnd-l">Only proof + public{" "}<br />data cross this line</span></div>
         <div className="dfx-card dfx-public">
           <p className="eyebrow">Public · Tempo</p>
           <h3>SwornZoneVerifier</h3>
@@ -215,7 +215,7 @@ export function DataFlow() {
         <p className="eyebrow">Data flow</p>
         <h2 id="data-flow">What stays private, and what becomes public.</h2>
         <p className="lede">
-          The batch witness goes to the prover and stops there. Only hashes, counters and public batch metadata reach Tempo,
+          The batch witness goes to the prover and stops there. Only the proof, hashes, counters and public batch metadata reach Tempo,
           and that is all a reviewer needs to check the proof: not transaction contents, balances, senders or amounts.
         </p>
       </div>

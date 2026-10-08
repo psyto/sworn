@@ -31,7 +31,7 @@ exactly the inputs IVerifier.verify receives. Two results on Moderato, all read-
 1. A standalone verifier with IVerifier's signature verified proofs of two batches from your integration tests
    (one with a withdrawal).
 2. On our own Zone (outside the factory, one operator, testnet), a ZonePortal using that verifier settled three
-   proven batches; our sequencer paid the withdrawal only after the last proof passed, and a forged,
+   proven batches only after each proof passed, then our sequencer separately paid the withdrawal, and a forged,
    sequencer-signed batch replaying a real proof was rejected on the proof:
    https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1
    https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d
@@ -58,7 +58,7 @@ Hiroyuki Saito (@psyto)
 Hi — I built Sworn for the CWF Tempo track. Private execution, checkable validity: Tempo Zones' own batch verifier
 runs in SP1, so a Zone batch's correctness can be checked on Moderato without publishing its transactions.
 Separately, on our own testnet Zone (one operator, not Tempo-created), the portal settled three proven batches,
-our sequencer paid a withdrawal only after the proof passed, and a forged batch was rejected.
+then our sequencer separately paid a withdrawal; a forged batch was rejected.
 
 One question, two lines is plenty: is a ZK check next to the Nitro attestation something Tempo would want for
 Zones, and if so, who on the Zones team should I ask about the integration path?
@@ -112,7 +112,7 @@ Hiroyuki Saito
 ```
 Built for the CWF Tempo track: Tempo Zones' own batch verifier, proven in SP1 and checked on Moderato.
 
-On our own testnet Zone, the portal settled 3 proven batches and paid a withdrawal only after the proof passed.
+On our own testnet Zone, the portal settled 3 batches only after their proofs passed; our sequencer then paid a withdrawal.
 Click "Re-verify on chain" yourself: https://psyto.github.io/sworn/#own-zone
 
 Question for Zone builders: would you want this next to a TEE attestation? Replies welcome.

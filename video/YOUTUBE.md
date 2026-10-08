@@ -1,7 +1,8 @@
 # YouTube titles and descriptions — Sworn CWF videos
 
-Upload `video/final/Sworn_Pitch_20261007.mp4` and `video/final/Sworn_Demo_20261007.mp4` with the captions
-`video/final/*.en.srt` (Subtitles → English → Upload file → With timing). Visibility: **Unlisted** is enough
+**Pitch: do not upload `video/final/Sworn_Pitch_20261007.mp4` — it has the old scenes 1, 2 and 4.** Upload the
+re-voiced pitch (scenes 1, 2 and 4 re-synthesised from `video/scenes/pitch-d/`); its captions and chapters will be
+regenerated from that file. Demo: `video/final/Sworn_Demo_20261007.mp4` with `video/final/Sworn_Demo_20261007.en.srt` (Subtitles → English → Upload file → With timing). Visibility: **Unlisted** is enough
 (the form requires that judges can watch without requesting access; check the link in a logged-out window).
 Audience: not made for kids. Language: English. Chapters below follow the narrated cuts (each ≥ 10 s, first at 0:00).
 
@@ -51,7 +52,7 @@ Submission to Colosseum's Crypto World's Fair, Tempo track.
 **Title** (≤ 100 characters)
 
 ```
-Sworn demo: a real ZK proof job, and proof-gated settlement on our own Tempo Zone (Moderato)
+Sworn demo: a real ZK proof job, and proof-gated settlement on our own Zone on Moderato
 ```
 
 **Description**
