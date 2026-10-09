@@ -26,7 +26,7 @@ Built on Moderato testnet, two separate results:
 
 Product hypothesis: Proof Operations for a Zone business whose reviewer cannot reconstruct the witness. Testnet, unaudited, no customers yet.
 
-Demo video: [DEMO VIDEO URL]
+Demo video: https://youtu.be/GZz52yUDJKo
 Live page (reads Moderato from your browser): https://psyto.github.io/sworn/
 Code and specs: https://github.com/psyto/sworn
 Payout tx: https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1
@@ -65,7 +65,7 @@ Every screen is a real recording; the recording only reads. Two separate demonst
 
 Testnet, unaudited, no customers yet. The proof is a necessary condition for a payout, not a guarantee (not censorship-resistant).
 
-Pitch video: [PITCH VIDEO URL]
+Pitch video: https://youtu.be/qTBetXF5SPY
 Live page: https://psyto.github.io/sworn/
 Code, specs and reproduction: https://github.com/psyto/sworn
 Fixture attest tx: https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770
@@ -82,7 +82,7 @@ Submission to Colosseum's Crypto World's Fair, Tempo track.
 #Tempo #ZeroKnowledge #SP1
 ```
 
-After uploading, replace `[DEMO VIDEO URL]` / `[PITCH VIDEO URL]` in each description with the other video's link.
+Uploaded 2026-10-09 (Unlisted): pitch https://youtu.be/qTBetXF5SPY, demo https://youtu.be/GZz52yUDJKo; each description links the other video.
 
 ---
 

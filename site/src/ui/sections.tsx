@@ -55,7 +55,10 @@ export function Topbar() {
 const PAYOUT_TX = deployments.OwnZone.payout.tx;
 const FORGED_TX = deployments.OwnZone.forgedBatch.tx;
 /** YouTube links for the two submission videos; null until published (then the links appear). */
-const VIDEOS: { pitch: string | null; demo: string | null } = { pitch: null, demo: null };
+const VIDEOS: { pitch: string | null; demo: string | null } = {
+  pitch: "https://youtu.be/qTBetXF5SPY",
+  demo: "https://youtu.be/GZz52yUDJKo",
+};
 
 export function Hero() {
   return (
