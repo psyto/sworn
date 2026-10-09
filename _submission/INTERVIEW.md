@@ -156,6 +156,10 @@ Introductions to teams building Zones or private payment ledgers on Tempo, and t
 - The trade-off: a TEE is fast but means trusting one vendor's hardware; a ZK proof is slow but anyone can check
   it. Hence a second check, not a replacement.
 - 12–15 minutes is one laptop. GPU or proving-network times are unmeasured, so we don't quote them.
+- My view: Tempo rightly puts Nitro on the fast-withdrawal path. But Zones settle in batches, so a per-operator
+  ZK check does not have to be frequent or fast: an operator can prove on its own schedule (for an audit, a
+  counterparty, after an upgrade), and a larger batch spreads the proving cost (Q17, item 5). Cost per batch
+  matters more there than latency.
 
 **20. Isn't this just Zcash for Tempo?**
 - No. Both use zero knowledge to verify a claim without revealing private data, and that is all they share.

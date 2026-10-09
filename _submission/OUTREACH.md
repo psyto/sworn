@@ -17,7 +17,7 @@ a fact we can cite. **Sent so far (2026-10-09): the public X post in the log; no
 Use only if the repo accepts issues from outsiders; otherwise send it as a DM (section 2). Title:
 
 ```
-Question: would a ZK proof of prove_zone_batch, bound to IVerifier's inputs, be useful next to the Nitro verifier?
+Question: would per-operator ZK evidence of prove_zone_batch be useful alongside Nitro, off the fast-withdrawal path?
 ```
 
 Body:
@@ -30,20 +30,24 @@ exactly the inputs IVerifier.verify receives. Two results on Moderato, all read-
 
 1. A standalone verifier with IVerifier's signature verified proofs of two batches from your integration tests
    (one with a withdrawal).
-2. On our own Zone (outside the factory, one operator, testnet), a ZonePortal using that verifier settled three
-   proven batches only after each proof passed, then our sequencer separately paid the withdrawal, and a forged,
+2. On our own Zone (outside the factory, one operator, testnet), a ZonePortal using its own instance of that
+   verifier settled three proven batches only after each proof passed, then our sequencer separately paid the
+   withdrawal, and a forged,
    sequencer-signed batch replaying a real proof was rejected on the proof:
    https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1
    https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d
 
 Repo: https://github.com/psyto/sworn (spec 003 = the verifier, spec 004 = a TEE + ZK proposal).
 
-In short: a working example of ZK batch-validity evidence using Tempo's own Zone verifier, plus proof-gated
-settlement demonstrated separately on our own testnet Zone. It does not address data availability, liveness,
-censorship or witness access; it is meant as an independent check beside Nitro, not a replacement.
+I understand Nitro is the path for fast withdrawals, and a proof here takes 12-15 minutes on one machine, so I am
+not suggesting ZK on that path. My question is about a different use: because Zones settle in batches, an operator
+could prove batches on its own schedule (for an audit, a counterparty or after an upgrade), where minutes or hours
+of proving do not matter, and anyone could check the result without trusting hardware. It does not address data
+availability, liveness, censorship or witness access; it is meant as an independent check beside Nitro.
 
 I am not asking you to adopt anything. Three questions, any of which would help:
-- Is a ZK path next to Nitro something you would want for Zones at all, or is Nitro the intended end state?
+- Would per-operator ZK evidence like this, off the fast path, be useful for Zones, or is Nitro the intended end
+  state for all review needs?
 - If yes, would per-Zone config policy belong in the native verifier or in the portal?
 - Is there a canonical way for an operator to publish (or escrow) a batch witness, so proving is not
   operator-only?
