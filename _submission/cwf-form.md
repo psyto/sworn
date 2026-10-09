@@ -39,9 +39,9 @@ The first product hypothesis is Proof Operations for a Zone business that must g
 ## Why did you decide to build this, and why build it now? · ≤1000
 
 ```
-I build in Rust on Tempo's stack (Reth, Revm, Alloy, Foundry) and wrote Fabrknt Dojo, 21 courses on that stack, and Veil, a privacy library (@fabrknt/veil-core). Reckn won a Uniswap Foundation sponsor prize at ETHGlobal Tokyo 2026; I placed 3rd in the Superteam Japan × NTT DOCOMO R&D side track of Colosseum's Cypherpunk; and I spent 15 years building banking systems in Japan.
+I build in Rust on Tempo's stack (Reth, Revm, Alloy, Foundry) and wrote Fabrknt Dojo, 21 courses on that stack, and Veil, a privacy library (@fabrknt/veil-core). Reckn won a Uniswap Foundation sponsor prize at ETHGlobal Tokyo 2026; I was 3rd in the Superteam Japan × NTT DOCOMO R&D side track of Colosseum's Cypherpunk; and I spent 15 years building banking systems in Japan.
 
-I believe privacy and batch processing matter more to businesses than to individuals. Tempo Zones offer both: private ledgers that settle in batches. But the operator holds the witness, and an outside reviewer cannot recreate a private batch from public data. Tempo Zones ship no native ZK proof today.
+I believe privacy and batch processing matter to individuals and are essential for businesses. Tempo Zones offer both: private ledgers settling in batches. But the operator holds the witness, and an outside reviewer can't recreate a private batch from public data. Tempo Zones ship no native ZK proof today.
 
 In this hackathon, Tempo's Zone verifier ran in SP1 and a contract on Moderato verified the proof. Separately, our own Zone's portal verified each proof before settling a batch; our sequencer then paid a withdrawal. Why now is a hypothesis: Zones are testnet, so a first operator can shape evidence requirements.
 ```
