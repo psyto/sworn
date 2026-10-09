@@ -23,7 +23,7 @@ The scope, including "no customers yet", is said once aloud. v8.1 adds a forward
 
 > Separately, on our own one-operator Zone, the portal settled three batches only after the proof passed; then our sequencer, not the proof, paid a withdrawal. Then our own sequencer signed a forged batch. It was rejected: a real proof cannot authorize a different batch.
 
-## Scene 5 — the business · ≈ 20 s
+## Scene 5 — the business · ≈ 22 s
 
 > First buyer: a Zone business whose reviewer cannot reconstruct the witness. One batch tests demand; repeats and upgrades become Proof Operations. The market grows with Zones, batches and upgrades, if Zones are adopted. Later, beside Tempo's TEE.
 

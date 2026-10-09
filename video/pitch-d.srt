@@ -51,49 +51,49 @@ Then our own sequencer signed a forged batch.
 It was rejected: a real proof cannot authorize a different batch.
 
 14
-00:01:08,000 --> 00:01:13,896
+00:01:08,000 --> 00:01:14,491
 First buyer: a Zone business whose reviewer cannot reconstruct the witness.
 
 15
-00:01:13,946 --> 00:01:19,301
+00:01:14,541 --> 00:01:20,436
 One batch tests demand; repeats and upgrades become Proof Operations.
 
 16
-00:01:19,351 --> 00:01:25,788
+00:01:20,486 --> 00:01:27,572
 The market grows with Zones, batches and upgrades, if Zones are adopted.
 
 17
-00:01:25,838 --> 00:01:27,950
+00:01:27,622 --> 00:01:29,950
 Later, beside Tempo's TEE.
 
 18
-00:01:28,000 --> 00:01:34,617
+00:01:30,000 --> 00:01:36,617
 I build on Tempo's stack, Reth and Revm, and teach it through Fabrknt Dojo.
 
 19
-00:01:34,667 --> 00:01:37,950
+00:01:36,667 --> 00:01:39,950
 Uniswap Foundation sponsor prize at ETHGlobal Tokyo;
 
 20
-00:01:38,000 --> 00:01:44,617
+00:01:40,000 --> 00:01:46,617
 third in Superteam Japan and NTT DOCOMO R&D's side track at Colosseum's Cypherpunk hackathon.
 
 21
-00:01:44,667 --> 00:01:47,950
+00:01:46,667 --> 00:01:49,950
 Before crypto, fifteen years of banking systems.
 
 22
-00:01:48,000 --> 00:01:51,150
+00:01:50,000 --> 00:01:53,150
 Today: testnet, unaudited, no customers yet.
 
 23
-00:01:51,200 --> 00:01:54,883
+00:01:53,200 --> 00:01:56,883
 Next, one design partner supplies a batch,
 
 24
-00:01:54,933 --> 00:02:00,750
+00:01:56,933 --> 00:02:02,750
 and its reviewer decides whether the evidence is worth paying for.
 
 25
-00:02:00,800 --> 00:02:03,950
+00:02:02,800 --> 00:02:05,950
 Sworn: verifiable evidence for private execution.
