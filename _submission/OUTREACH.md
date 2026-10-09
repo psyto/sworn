@@ -124,7 +124,7 @@ Question for Zone builders: would you want this next to a TEE attestation? Repli
 
 | date | to | channel | message | reply (verbatim) or "no reply after 48 h" |
 |---|---|---|---|---|
-| 2026-10-09 | public (@tempo, @colosseum mentioned) | X post with the pitch video: https://x.com/psyto/status/2108529502842503352 | "@tempo: would Zone operators want this?" | (check after 48 h: 2026-10-11 12:06 UTC) |
+| 2026-10-09 | public (@tempo, @colosseum mentioned) | X post with the pitch video: https://x.com/psyto/status/2108529502842503352 (links in self-reply https://x.com/psyto/status/2108529680274149860) | "@tempo: would Zone operators want this?" | (check after 48 h: 2026-10-11 12:06 UTC) |
 
 **Where a reply goes.** One line in the form's "How do you know people actually need…" (≤ 1000 chars; check with
 `scripts/cwf-form.sh`), the README's "The plan", and interview Q8. Template:
