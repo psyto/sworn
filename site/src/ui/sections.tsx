@@ -67,19 +67,26 @@ export function Hero() {
         <p className="eyebrow">Sworn · for Tempo Zones</p>
         <h1>Private execution. Checkable validity.</h1>
         <p className="lede">
-          Privacy and batch processing matter to everyone; for businesses they are essential. Tempo Zones give them both:
-          private ledgers that settle to Tempo in batches, where users see only their own activity and the operator&apos;s sequencer set
-          sees every transaction. But then who can check a private batch? Sworn turns an operator-supplied batch into
-          evidence anyone can verify on chain—without the private ledger or customer transactions.
+          Privacy and batch processing matter to everyone; for businesses they are essential. Tempo Zones give them both.{" "}
+          <strong>But then who can check a private batch?</strong> Sworn turns an operator-supplied batch into evidence
+          anyone can verify on chain, without customer transactions.
         </p>
         <div className="hero-actions">
-          <a className="btn" href="#own-zone">See the settlement on Moderato</a>
-          <a className="text-action" href="#operations">See the Proof Operations test ↓</a>
+          {VIDEOS.pitch && (
+            <a className="btn" href={VIDEOS.pitch} target="_blank" rel="noreferrer">
+              Watch the 1:49 pitch ↗
+            </a>
+          )}
+          <a className="btn secondary" href="#own-zone">Verify on chain ↓</a>
         </div>
       </div>
       <aside className="hero-proof" aria-label="Built evidence">
         <p className="eyebrow">Built and verifiable</p>
-        <strong>3 batches settled<br />1 withdrawal paid<br />1 forged batch rejected</strong>
+        <ul className="hero-stats">
+          <li><b>3</b><span>batches settled</span></li>
+          <li><b>1</b><span>withdrawal paid</span></li>
+          <li><b>1</b><span>forged batch rejected</span></li>
+        </ul>
         <p>
           On Moderato, our own Zone&apos;s portal verified each proof before settling its batch; our sequencer then separately
           paid the withdrawal. A forged batch, even signed by our own sequencer, was rejected on the proof.
@@ -92,9 +99,8 @@ export function Hero() {
         </a>
       </aside>
       <p className="hero-boundary">
-        Testnet. On Moderato, our own Zone&apos;s portal requires a verified Sworn proof to settle a batch; the payout is a
-        separate action by our sequencer. It is not a
-        Tempo-created Zone, and it is unaudited.
+        Moderato testnet · unaudited · our own Zone (one operator), not Tempo-created · the payout is a separate action
+        by our sequencer
       </p>
     </section>
   );
@@ -107,7 +113,8 @@ export function ReviewGap() {
         <p className="eyebrow">The review gap</p>
         <h2 id="review-gap">Private execution should not require blind trust.</h2>
         <p className="lede">
-          Tempo Zones are private by design. That is useful for customers, but it leaves a reviewer unable to recreate
+          Tempo Zones are private ledgers that settle to Tempo in batches: users see only their own activity, and the
+          operator&apos;s sequencer set sees every transaction. That is useful for customers, but it leaves a reviewer unable to recreate
           the operator&apos;s complete batch from public data.
         </p>
       </div>
