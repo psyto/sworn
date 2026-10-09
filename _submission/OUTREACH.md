@@ -2,7 +2,7 @@
 
 **Purpose.** The weakest part of the submission is demand: no operator, auditor or Tempo engineer has said whether
 this evidence matters (Codex review r1, deciding factor 3). Any reply, positive or negative, turns a hypothesis into
-a fact we can cite. **Sent so far (2026-10-09): the public X post in the log; none of the direct messages below.** The founder sends each message; Claude sends nothing.
+a fact we can cite. **Sent so far (2026-10-10): the public X posts, the Arena Builder Update and the GitHub issue (section 1), all in the log; the direct messages below are not sent yet.** The founder sends each message; Claude sends nothing.
 
 **Rules for every message**
 - Ask a question someone can answer in two lines. Do not pitch.
@@ -130,6 +130,7 @@ Question for Zone builders: would you want this next to a TEE attestation? Repli
 |---|---|---|---|---|
 | 2026-10-09 | public (@tempo, @colosseum mentioned) | X post with the pitch video: https://x.com/psyto/status/2108529502842503352 (links in self-reply https://x.com/psyto/status/2108529680274149860) | "@tempo: would Zone operators want this?" | after ~9 h (2026-10-09 21:00 UTC): post 67 impressions, 1 like, no replies; self-reply 22 impressions. Check again after 48 h (2026-10-11 12:06 UTC) |
 | 2026-10-09 | Arena builders (tag: Looking for testers) | Builder Update: https://colosseum.com/arena/projects/confide/updates/1549 | 1-minute "Verify on chain" test; what was unclear; would this change how you review a batch? | (builder feedback, not operator demand; check 2026-10-11) |
+| 2026-10-10 | Tempo Zones team | GitHub issue (Feature request): https://github.com/tempoxyz/zones/issues/1685 | per-operator ZK evidence alongside Nitro, off the fast-withdrawal path? (3 questions) | (check after 48 h) |
 
 **Where a reply goes.** One line in the form's "How do you know people actually need…" (≤ 1000 chars; check with
 `scripts/cwf-form.sh`), the README's "The plan", and interview Q8. Template:
