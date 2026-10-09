@@ -113,13 +113,13 @@ https://github.com/psyto/sworn
 ## Important context about the repo · ≤500
 
 ```
-The repo starts 2026-10-03, inside the window. Start at README.md. docs/specs/ has the specs (003 = Zone verifier); docs/reviews/ has independent reviews with the exact prompts. spikes/zone-spf/ holds the Zone guest; spikes/own-zone/ the own-Zone run. deployments/moderato.json records every Moderato transaction from receipts. contracts/: 64 forge tests, including real Groth16 proofs.
+The repo starts 2026-10-03, inside the window. Start at README.md. docs/specs/ has the specs (003 = Zone verifier); docs/reviews/ has independent reviews with the exact prompts. spikes/zone-spf/ holds the Zone guest; spikes/own-zone/ the own-Zone run. deployments/moderato.json records every Moderato transaction from receipts. contracts/: 67 forge tests, including real Groth16 proofs.
 ```
 
 ## Demo video · ≤3 min · required
 
 ```
-[FOUNDER: paste the public demo-video URL after adding your narration to video/demo-d.mp4]
+https://youtu.be/GZz52yUDJKo
 ```
 
 ## Live product link
@@ -137,7 +137,7 @@ https://psyto.github.io/sworn/ reads Moderato in your browser. Nothing to sign o
 ## Pitch video · Public · ≤2 min · required
 
 ```
-[FOUNDER: paste the public pitch-video URL after adding your narration to video/pitch-d.mp4]
+https://youtu.be/qTBetXF5SPY
 ```
 
 ## X profile · Public
