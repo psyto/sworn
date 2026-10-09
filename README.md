@@ -136,7 +136,7 @@ sequenceDiagram
   SZV-->>Rv: event ZoneBatchVerified(zone, height, block hashes, digest)
   Rv->>SZV: verify(same fields, proof) by eth_call
   SZV-->>Rv: true, or InvalidProof() if any field differs
-  Note over SZV: on our own Zone, the portal calls verify in submitBatch; the sequencer separately pays withdrawals
+  Note over SZV: on our own Zone, the portal calls verify in submitBatch, and the sequencer separately pays withdrawals
 ```
 
 What a reviewer learns: that Tempo's own Zone code accepts this exact batch. What a reviewer does not learn:
