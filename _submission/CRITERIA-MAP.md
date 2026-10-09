@@ -7,7 +7,7 @@ founder-market fit, insight, product/execution, market size, communication, viab
 
 ## The one message
 
-**Sworn is for Tempo Zones: only the operator sees every transaction. Sworn makes that private execution
+**Sworn is for Tempo Zones: users see only their own activity, while the operator's sequencer set sees every transaction. Sworn makes that private execution
 checkable: for an operator-supplied batch, evidence anyone can verify on chain, without disclosing customer
 transaction contents.** (The wording of Pitch D and Demo D, 2026-10-08.)
 
@@ -20,7 +20,7 @@ real; the buyer, willingness to pay and distribution channel are not yet validat
 | Statement | Status | Evidence / boundary |
 |---|---|---|
 | Tempo's Zone verifier runs in SP1; a Groth16 proof for a fixture with one withdrawal and two user transactions was verified by a contract on Moderato. | Built and independently re-checkable | Attest `0xa630…f770`, `ZoneBatchVerified`, public page and demo. The fixture is from Tempo's integration tests on dev chain 1337, not a Moderato Zone. |
-| On Moderato, our own Zone's portal settled three Groth16-proven batches through `SwornZoneVerifier` only after each proof passed; separately, our sequencer then called `processWithdrawals` and paid a withdrawal (2026-10-06). The proof is necessary, not sufficient. | Built and independently re-checkable | Payout `0xfc31…e1f1`, three `submitBatch` txs, `deployments/moderato.json` → `OwnZone`, the public page's live section. Our own Zone, one operator, not Tempo-created; stopped after the payout. A forged, sequencer-signed batch replaying a real proof was rejected on the proof (`0x3a15…167d`, status 0). |
+| On Moderato, our own Zone's portal required `SwornZoneVerifier` to verify each of three Groth16-proven batches before settling them; separately, our sequencer then called `processWithdrawals` and paid a withdrawal (2026-10-06). The proof is necessary, not sufficient. | Built and independently re-checkable | Payout `0xfc31…e1f1`, three `submitBatch` txs, `deployments/moderato.json` → `OwnZone`, the public page's live section. Our own Zone, one operator, not Tempo-created; stopped after the payout. A forged, sequencer-signed batch replaying a real proof was rejected on the proof (`0x3a15…167d`, status 0). |
 | A changed proof input reverts `InvalidProof()`. | Built and re-checkable | Browser and recorder read-only calls. |
 | A Zone operator could use proof evidence in an audit or settlement-review workflow. | Commercial hypothesis | No operator, auditor or counterparty has requested, reviewed or paid for it. On Tempo's own Zones the proof is off the settlement path and protects no withdrawal; only our own demonstration Zone settles through it. |
 | A Zone business could buy per-batch proving plus upgrade maintenance. | Commercial hypothesis | Only the operator has the witness. No payer, price, contract or revenue exists. |

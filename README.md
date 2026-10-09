@@ -1,12 +1,12 @@
 # Sworn
 
-**Private execution. Checkable validity.** Sworn is for Tempo Zones: private ledgers where only the operator sees every
-transaction. Sworn runs Tempo's own Zone verifier in SP1, producing a proof plus public batch data that anyone can verify
+**Private execution. Checkable validity.** Sworn is for Tempo Zones: private ledgers where users see their own activity
+and the operator's sequencer set sees every transaction. Sworn runs Tempo's own Zone verifier in SP1, producing a proof plus public batch data that anyone can verify
 on chain without publishing transactions.
 
 **Like Zcash? Only in one way.** Zcash uses zero knowledge to prove a shielded transaction is valid without
 revealing it. Sworn uses zero knowledge differently: it proves a private Tempo Zone batch executed correctly, without
-publishing its transactions. It hides nothing from the Zone's operator, who still sees every transaction: Zones are
+publishing its transactions. It hides nothing from the Zone's operator sequencer set, which still sees every transaction: Zones are
 private from the public, not from their operator.
 
 Before a private Tempo Zone releases a withdrawal batch, its operator may need to show an auditor or reviewer
@@ -14,8 +14,8 @@ evidence without disclosing the private ledger. For an operator-supplied batch, 
 verification code in SP1 and produces a proof anyone can verify on chain. The public output is hashes and
 batch metadata, not customer transaction contents.
 
-**What is built:** on Moderato, our own Zone's portal settles a batch, and queues its withdrawals, only after
-Sworn's proof passes: three batches proven and settled, then our sequencer called `processWithdrawals` and the
+**What is built:** on Moderato, our own Zone's portal requires Sworn's proof before settling a batch and queuing its
+withdrawals: three batches were proven and settled, then our sequencer separately called `processWithdrawals` and the
 withdrawal was paid
 ([payout tx](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), 2026-10-06).
 The proof is a necessary condition for a payout, not a guarantee of one: it is ZK-gated, not censorship-resistant.
@@ -109,7 +109,7 @@ flowchart LR
   U3["Record the proof on Tempo (attest)"]
   U4["Verify the proof live: true, or InvalidProof if any field changed"]
   U5["Match the proof to the batch that settled (automatic on our own Zone; manual for Tempo's Zones)"]
-  U6["Pay withdrawals only after the proof passes"]
+  U6["After proof-gated settlement, sequencer may process withdrawals"]
   O --> U1 --> U2 --> U3
   A --> U4
   A --> U5
@@ -133,7 +133,7 @@ sequenceDiagram
   SZV-->>Rv: event ZoneBatchVerified(zone, height, block hashes, digest)
   Rv->>SZV: verify(same fields, proof) by eth_call
   SZV-->>Rv: true, or InvalidProof() if any field differs
-  Note over SZV: on our own Zone, the portal calls verify in submitBatch and pays the withdrawal only after it passes
+  Note over SZV: on our own Zone, the portal calls verify in submitBatch; the sequencer separately pays withdrawals
 ```
 
 What a reviewer learns: that Tempo's own Zone code accepts this exact batch. What a reviewer does not learn:
@@ -274,7 +274,7 @@ spec 003 "Results"):
 
 - **Our own Zone on Moderato is a one-operator demonstration, not a running service.** On 2026-10-06 we ran
   our own Zone sequencer and a Solidity `ZonePortal` on Moderato, with `SwornZoneVerifier` as its verifier.
-  Three batches were Groth16-proven and settled, and the withdrawal was paid only after that
+  Three batches were Groth16-proven and settled; the sequencer separately paid the withdrawal
   (spec 003 "Results (own Zone live run on Moderato)", `deployments/moderato.json` → `OwnZone`).
   - The zone was stopped right after the payout. The local prover is too slow to run a zone continuously
     (11–31 min per proof in the live run).

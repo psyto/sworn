@@ -64,7 +64,7 @@ export function Hero() {
         <p className="eyebrow">Sworn · for Tempo Zones</p>
         <h1>Private execution. Checkable validity.</h1>
         <p className="lede">
-          Tempo Zones are private ledgers: only the operator sees every transaction. Sworn turns an operator-supplied
+          Tempo Zones are private ledgers: users see only their own activity, while the operator&apos;s sequencer set sees every transaction. Sworn turns an operator-supplied
           batch into evidence anyone can verify on chain—without the private ledger or customer transactions.
         </p>
         <div className="hero-actions">
@@ -76,8 +76,8 @@ export function Hero() {
         <p className="eyebrow">Built and verifiable</p>
         <strong>3 batches settled<br />1 withdrawal paid<br />1 forged batch rejected</strong>
         <p>
-          On Moderato, our own Zone&apos;s portal settled each batch only after Sworn&apos;s proof passed, then the withdrawal was
-          paid. A forged batch, even signed by our own sequencer, was rejected on the proof.
+          On Moderato, our own Zone&apos;s portal verified each proof before settling its batch; our sequencer then separately
+          paid the withdrawal. A forged batch, even signed by our own sequencer, was rejected on the proof.
         </p>
         <a href={txUrl(MODERATO, PAYOUT_TX)} target="_blank" rel="noreferrer">
           Open the payout transaction <span className="mono">{short(PAYOUT_TX)} ↗</span>
@@ -87,8 +87,8 @@ export function Hero() {
         </a>
       </aside>
       <p className="hero-boundary">
-        Testnet. On Moderato, our own Zone&apos;s portal settles a batch, and so lets a withdrawal be paid, only after Sworn&apos;s
-        proof passes; the payout itself is made by our sequencer. It is not a
+        Testnet. On Moderato, our own Zone&apos;s portal requires a verified Sworn proof to settle a batch; the payout is a
+        separate action by our sequencer. It is not a
         Tempo-created Zone, and it is unaudited.
       </p>
     </section>

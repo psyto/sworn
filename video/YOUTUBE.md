@@ -1,8 +1,8 @@
 # YouTube titles and descriptions — Sworn CWF videos
 
 Pitch: `video/final/Sworn_Pitch_20261009.mp4` (1:49) with `video/final/Sworn_Pitch_20261009.en.srt`; **do not upload
-the older `Sworn_Pitch_20261007.mp4`** (old scenes 1, 2 and 4). Demo: `video/final/Sworn_Demo_20261007.mp4` with `video/final/Sworn_Demo_20261007.en.srt` (Subtitles → English → Upload file → With timing). Visibility: **Unlisted** is enough
-(the form requires that judges can watch without requesting access; check the link in a logged-out window).
+the older `Sworn_Pitch_20261007.mp4`** (old scenes 1, 2 and 4). Demo: `video/final/Sworn_Demo_20261007.mp4` with `video/final/Sworn_Demo_20261007.en.srt` (Subtitles → English → Upload file → With timing). Visibility: **Unlisted** is enough (the form requires that judges can watch without requesting
+access; check the link in a logged-out window).
 Audience: not made for kids. Language: English. Chapters below follow the narrated cuts (each ≥ 10 s, first at 0:00).
 
 ---
@@ -18,11 +18,11 @@ Sworn: make private Tempo Zone execution checkable — Pitch (CWF, Tempo track)
 **Description**
 
 ```
-Private execution. Checkable validity. Sworn is for Tempo Zones, which keep payments private: users see only their own, and only the operator sees every transaction. Before a withdrawal, no outside reviewer can verify the private batch. Zcash uses zero knowledge to prove a transaction is valid without revealing it; Sworn uses zero knowledge differently: Tempo's own Zone verifier runs in SP1 and proves a private Zone batch executed correctly, without publishing transactions. (It does not hide anything from the operator.)
+Private execution. Checkable validity. Sworn is for Tempo Zones, which keep payments private: users see only their own, while the operator's sequencer set sees every transaction. Before a withdrawal, no outside reviewer can verify the private batch. Zcash uses zero knowledge to prove a transaction is valid without revealing it; Sworn uses zero knowledge differently: Tempo's own Zone verifier runs in SP1 and proves a private Zone batch executed correctly, without publishing transactions. (It does not hide anything from the operator.)
 
 Built on Moderato testnet, two separate results:
 • A test-fixture proof (Tempo integration test, dev chain 1337) verified on Moderato.
-• Separately, on our own Zone (one operator, not Tempo-created): the portal settled three batches only after the proof passed, then our sequencer paid a withdrawal. A forged batch, even signed by our own sequencer, was rejected on chain.
+• Separately, on our own Zone (one operator, not Tempo-created): the portal verified each proof before settling three batches; our sequencer then separately paid a withdrawal. A forged batch, even signed by our own sequencer, was rejected on chain.
 
 Product hypothesis: Proof Operations for a Zone business whose reviewer cannot reconstruct the witness. Testnet, unaudited, no customers yet.
 
@@ -51,7 +51,7 @@ Submission to Colosseum's Crypto World's Fair, Tempo track.
 **Title** (≤ 100 characters)
 
 ```
-Sworn demo: a real ZK proof job, and proof-gated settlement on our own Zone on Moderato
+Sworn demo: a real ZK proof job, and proof-gated settlement on our non-factory Zone
 ```
 
 **Description**
@@ -61,7 +61,7 @@ Every screen is a real recording; the recording only reads. Two separate demonst
 
 1. A real local proof job for Tempo's integration-test fixture (deposit and withdrawal, dev chain 1337): Tempo's own Zone verifier runs in SP1, and the proof is verified read-only on Moderato. Nothing is sent. Then the page re-verifies the attested batch live: the real batch passes; change one field and it reverts with InvalidProof().
 
-2. Separately, our own Zone on Moderato (zone 4242, one operator, not Tempo-created): the portal settled three batches only after the proof passed, then our sequencer, not the proof, paid a withdrawal of 0.5 pathUSD. A forged batch, signed by our own sequencer, replayed a real proof for a different batch and was rejected on chain. Anyone can re-run the three live proofs with forge test against the deployed bytecode.
+2. Separately, our own non-factory Zone on Moderato (zone 4242, one operator): the portal verified each proof before settling three batches; then our sequencer, not the proof, separately paid a withdrawal of 0.5 pathUSD. A forged batch, signed by our own sequencer, replayed a real proof for a different batch and was rejected on chain. Anyone can re-run the three live proofs with forge test against the deployed bytecode.
 
 Testnet, unaudited, no customers yet. The proof is a necessary condition for a payout, not a guarantee (not censorship-resistant).
 
