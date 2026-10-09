@@ -92,6 +92,7 @@ Upload the narrated `checkin-4` with its captions the same way; the weekly form 
 without requesting access. Chapter times match the narrated `video/final/Sworn_CheckIn4_20261008.mp4` (51.7 s); captions:
 `video/final/Sworn_CheckIn4_20261008.en.srt`. Submit between Oct 9 08:00 PDT and Oct 12 08:00 PDT;
 the link cannot be changed afterwards.
+Uploaded 2026-10-09: https://youtu.be/Dqipz1hYM04 (submit this link in the check-in 4 form).
 
 **Title** (≤ 100 characters)
 
