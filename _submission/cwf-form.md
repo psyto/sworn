@@ -49,13 +49,13 @@ In this hackathon, Tempo's Zone verifier ran in SP1 and a contract on Moderato v
 ## How does your product use these chains? · ≤500
 
 ```
-Tempo (Moderato). SwornZoneVerifier, with Tempo's IVerifier signature, verifies a Groth16 proof of a Tempo Zone batch on Tempo, through the SP1 Groth16 verifier deployed there. Inside the proof runs Tempo Zones' own prove_zone_batch code, bound to the batch inputs and destination chain. Our own Zone's ZonePortal on Moderato calls it in every submitBatch.
+Tempo (Moderato). SwornZoneVerifier, with Tempo's IVerifier signature, verifies Groth16 proofs of Zone batches on Moderato through the SP1 Groth16 verifier deployed there: one instance for an integration-test fixture (dev chain 1337), a separate one for our own Zone, whose ZonePortal calls it in every submitBatch. Inside the proof runs Tempo Zones' own prove_zone_batch code, bound to the batch inputs and destination chain.
 ```
 
 ## What technologies are you using or integrating with? · ≤500
 
 ```
-Tempo: Zones (zone-spf, the IVerifier interface, ZonePortal), Foundry on Tempo (67 forge tests, deployment), the TypeScript SDK (viem), Tempo transactions (type 0x76), TIP-20 and receive policies (a blocked transfer that succeeds), the Machine Payments Protocol (mppx), tempo-revm. Paradigm stack: Reth, Revm, Alloy (sol!, EIP-712). Succinct SP1 6.3: zkVM guests and Groth16, verified on-chain by SP1VerifierGroth16 v6.1.0. React for the live page and demo.
+Tempo: Zones (zone-spf, the IVerifier interface, ZonePortal), Foundry on Tempo (67 forge tests, deployment), tempo-revm. Paradigm stack: Reth, Revm, Alloy. Succinct SP1 6.3: zkVM guests and Groth16, verified on-chain by SP1VerifierGroth16 v6.1.0. React for the live page and demo. A separate bonded-answers experiment in the repo also uses TIP-20 receive policies, Tempo transactions (type 0x76), MPP (mppx) and viem.
 ```
 
 ## Which chains · select
@@ -113,7 +113,7 @@ https://github.com/psyto/sworn
 ## Important context about the repo · ≤500
 
 ```
-The repo starts 2026-10-03, inside the window. Start at README.md. docs/specs/ has the specs (003 = Zone verifier); docs/reviews/ has independent reviews with the exact prompts. spikes/zone-spf/ holds the Zone guest; spikes/own-zone/ the own-Zone run. deployments/moderato.json records every Moderato transaction from receipts. contracts/: 67 forge tests, including real Groth16 proofs.
+The repo starts 2026-10-03, inside the window. Start at README.md. docs/specs/ has the specs (003 = Zone verifier); docs/reviews/ has independent reviews. spikes/zone-spf/ holds the Zone guest; spikes/own-zone/ the own-Zone run. deployments/moderato.json records every Moderato transaction from receipts. contracts/: 67 forge tests. Confide, the earlier entry, is a separate repo begun Sep 12 for Stocklana, before the window; none of its product code is in Sworn.
 ```
 
 ## Demo video · ≤3 min · required
@@ -163,11 +163,11 @@ The validation sequence is concrete: find a Zone business that can supply a witn
 ## How far along are you? Do you have users? · ≤1000
 
 ```
-No users, no revenue. Built inside the window; on-chain verification and the own-Zone run are on Moderato testnet, the fixture batches ran on dev chain 1337:
-- Our own Zone on Moderato: 3 batches proven and settled through a portal that calls Sworn's verifier; a withdrawal paid after the proof (tx 0xfc311841…e1f1); a forged, sequencer-signed batch reusing a real proof was rejected (tx 0x3a154e4e…167d). One operator, not a Tempo-created Zone.
-- Tempo Zones: Tempo's own batch verifier runs in SP1 on 5 integration-test batches, matching native output (19-26M cycles; tampering rejected). Proofs bound to IVerifier's inputs were verified on Moderato, including a fixture with a withdrawal (tx 0xa63009fd…f770; also 0xb14b7127…3b80).
+No users, no revenue. On-chain verification and the own-Zone run are on Moderato testnet, the fixture batches ran on dev chain 1337:
+- Our own Zone on Moderato: 3 batches proven and settled through a portal that calls Sworn's verifier; then our sequencer separately paid a withdrawal via processWithdrawals (tx 0xfc311841…e1f1); a forged, sequencer-signed batch reusing a real proof was rejected (tx 0x3a154e4e…167d). One operator, not a Tempo-created Zone.
+- Tempo Zones: Tempo's own batch verifier runs in SP1 on 4 integration-test batches, matching native output (19-26M cycles; tampering rejected). Proofs bound to IVerifier's inputs were verified on Moderato, including a fixture with a withdrawal (tx 0xa63009fd…f770; also 0xb14b7127…3b80).
 - 67 forge tests, incl. real proofs and the live batches'; the verifiers have no owner (our Zone's portal keeps upstream admin controls).
-- A public page that reads the on-chain evidence and re-runs the Zone proof check in your browser. Pitch and demo videos.
+- A public page that reads the on-chain evidence and re-runs the Zone proof check in your browser.
 ```
 
 ## Who else is building in this space, and what are they getting wrong? · ≤1000
