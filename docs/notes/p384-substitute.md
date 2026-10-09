@@ -32,8 +32,8 @@ reasons below.
    `spec.is_t13()` (`tempo/crates/precompiles/src/lib.rs:258`). The guest takes its fork schedule from
    Moderato's genesis config (`core/src/lib.rs:113-127`). That config has `t11Time` and `t12Time` and no
    `t13Time` (`tempo/crates/chainspec/src/genesis/moderato.json:37-38`), so under the guest the
-   address is not a precompile at any block. Moderato runs T11 today; T12 activates 2026-10-08
-   14:00 UTC. The answerer refuses on any schedule change (spec 002 S-4), so a future T13 cannot reach
+   address is not a precompile at any block. Moderato has run T12 since 2026-10-08 14:00 UTC,
+   the `t12Time` in that config. The answerer refuses on any schedule change (spec 002 S-4), so a future T13 cannot reach
    the guest unnoticed.
 2. **The guest executes only a TIP-20 transfer.** A question must target a `0x20c0…` TIP-20 precompile
    with `transfer` or `transferWithMemo` calldata. Otherwise Sworn refuses to reserve
@@ -44,6 +44,6 @@ So no proven execution runs a single p384 instruction. The substitute is dead co
 affects the binary's identity, which is why it is not touched.
 
 **When it should go.** Remove it together with the next deliberate guest change that redeploys Sworn
-anyway, for example the T12 re-check. Remove it by gating the `aws-lc` feature of
+anyway, for example the T13 update. Remove it by gating the `aws-lc` feature of
 `tempo-nitro-attestation` out of the guest build, not by keeping a substitute crypto backend. That
 redeploy then records a new `GUEST_VKEY`.

@@ -111,9 +111,13 @@ For that question, yes. Anyone can reproduce it with `eth_simulateV1`, and we sa
 the engine works on the live chain; the product is proofs for Zones, where outsiders cannot simulate anything
 because the data is private.
 
-**15. What happens at T12 (2026-10-08) and T13?**
+**15. What happened at T12 (2026-10-08), and what about T13?**
 - Each upgrade that changes execution needs a new guest and verifier key; that is the maintenance we sell.
-- Our pinned code predates Moderato's T12 schedule, so the bonded-answer server stops answering at T12 by design.
+- T12 activated on schedule. Our pinned Tempo already had its activation time, so the bonded-answer server's
+  schedule check still matches. After T12, 20 / 20 transfers and 10 / 10 reverted transactions replayed with the
+  pinned engine matched their receipts (samples, 2026-10-09).
+- T13 is not scheduled on Moderato yet. When it is, the live schedule changes and the server refuses until the
+  guest is updated, by design.
 - The proofs already on chain are unaffected.
 
 **16. What did you get wrong along the way?**
@@ -126,7 +130,7 @@ because the data is private.
 1. One design partner and a proof of a batch they supply.
 2. Turn the one-off own-Zone run into something repeatable: faster proving (rented hardware or a prover
    network), so the Zone can keep running instead of stopping after the demo.
-3. Track T12/T13 in the guest.
+3. Track T13 in the guest (T12 re-checked 2026-10-09).
 4. Price a proof (rented hardware, aggregation).
 5. Benchmark batch size: one proof amortises on-chain verification over more transactions, but proving time,
    memory, hardware cost and settlement latency can rise with batch size. The ≈ 260k-gas attest is one fixture

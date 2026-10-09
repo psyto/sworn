@@ -1,0 +1,13 @@
+ac2-reverts: target 6 reverted TIP-20 transfers; scanning from block 38834877 (head 38834937, lookback 60) then following head
+B=38834877 idx=2 tx="0xe01354325e273f16ac726947dadaa88e8e3890e18a5dae8a9858e455f24938cc" class=tip20:0x095ea7b3 MATCH status ours=false gas=100000 fee="61" reason="halt OutOfGas(Precompile)" prior_txs=2 balances_checked=1 mismatches=[]
+B=38834877 idx=6 tx="0x4806eb445360fd3b319b1aeb126bc5c262330643a42f69908fab51a0e9853917" class=tip20:0x095ea7b3 MATCH status ours=false gas=100000 fee="61" reason="halt OutOfGas(Precompile)" prior_txs=6 balances_checked=1 mismatches=[]
+B=38834877 idx=15 tx="0x20be8ef691e5e72971aea6e24e1dc80908521683876d7cf21339b2be7a2dfa52" class=tip20:0xa9059cbb MATCH status ours=false gas=106812 fee="65" reason="halt OutOfGas(Precompile)" prior_txs=15 balances_checked=2 mismatches=[]
+B=38835034 idx=19 tx="0x1ecf802f2d9490ca36f3d755a03dc574cf0dba97d59929e5c6e372f06a3b6796" class=other:0x84a3bb6b MATCH status ours=false gas=295763 fee="178" reason="revert empty (0 bytes)" prior_txs=19 balances_checked=1 mismatches=[]
+B=38835261 idx=5 tx="0xaeb3a99161aa63168792b934340f66e7faa11ffe4343ea1f427989389751a281" class=other:0x84a3bb6b MATCH status ours=false gas=295763 fee="178" reason="revert empty (0 bytes)" prior_txs=5 balances_checked=1 mismatches=[]
+B=38835394 idx=27 tx="0x024b6a22ba4d36a4350b26ad00b73556302b9a72e8d6066ff88d6e751ef45946" class=tip20:0xa9059cbb MATCH status ours=false gas=104128 fee="64" reason="halt OutOfGas(Precompile)" prior_txs=27 balances_checked=2 mismatches=[]
+B=38835688 idx=2 tx="0x659ab215d31788aa1490fbb7a1e587a02a335920418dd9813141ab19d4d353c4" class=tip20:0xa9059cbb MATCH status ours=false gas=106342 fee="64" reason="halt OutOfGas(Precompile)" prior_txs=2 balances_checked=2 mismatches=[]
+B=38835767 idx=2 tx="0x9c2a4b432a74326f859a9b0efde498c61142fe664f397f8a37c805aff4ec5dc9" class=tip20:0xa9059cbb MATCH status ours=false gas=108153 fee="65" reason="halt OutOfGas(Precompile)" prior_txs=2 balances_checked=2 mismatches=[]
+B=38835847 idx=0 tx="0x6e793bc67028d19f3f7ae3a6c7ef9dcc01ef72c5e162d9efbfef284f3bf5d737" class=tip20:0xa9059cbb MATCH status ours=false gas=105301 fee="64" reason="halt OutOfGas(Precompile)" prior_txs=0 balances_checked=2 mismatches=[]
+B=38835961 idx=10 tx="0x73814ef89750dbb6dfac37bd76d1e0515c2fe8ea81f4bd3ee8408e84b287c157" class=tip20:0xa9059cbb MATCH status ours=false gas=102284 fee="62" reason="halt OutOfGas(Precompile)" prior_txs=10 balances_checked=2 mismatches=[]
+AC-2 reverts: matched 10 / 10 reverted txs (6 TIP-20 transfers, 6 matched) (scanned 31 blocks, skipped 1054)
+exit 0

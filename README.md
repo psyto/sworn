@@ -284,8 +284,13 @@ spec 003 "Results"):
   and a ZK proof of the exact batch commitment releases payouts. The proof statement it needs, the portal
   changes and an invalidity proof are not built, and all of it would land in Tempo's code, not ours.
 
-- **Moderato's next hardfork, T12, activates at 2026-10-08 14:00 UTC (23:00 JST)** (`1791468000`). The answerer refuses on a schedule
-  it does not know, so it stops answering at T12 until the guest is checked against it.
+- **Moderato's T12 hardfork activated on schedule, 2026-10-08 14:00 UTC (`1791468000`).** Our vendored Tempo (`61c979a`)
+  already carries that activation time, so the answerer's fork-schedule check (spec 002 S-4) still matches the live
+  schedule. It refuses only within ±64 s of an activation, or when the live schedule changes (for example once T13
+  is scheduled). Read-only re-checks on 2026-10-09, after T12: 20 / 20 TIP-20 transfers (first in their block) and
+  10 / 10 reverted transactions (6 TIP-20 transfers), replayed with the pinned engine, match their receipts
+  (`out/t12/`), and the page's 12 live read-only checks pass. These are samples, not proof that every T12 change
+  is covered.
 - The p384 substitute patched into Tempo is still linked into the guest. It is not on the T11 path, and
   removing it would change `GUEST_VKEY`, so it stays until the next redeploy
   ([`docs/notes/p384-substitute.md`](docs/notes/p384-substitute.md)).
