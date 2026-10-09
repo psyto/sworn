@@ -19,7 +19,7 @@ Sworn
 ## Brief description · Public · ≤500
 
 ```
-Before a private Tempo Zone releases a withdrawal batch, Sworn creates independently verifiable, audit-ready evidence for that operator-supplied batch without exposing customer transaction contents. It runs Tempo's own Zone verifier in SP1. On Moderato, our own Zone's portal settled each batch only after Sworn's proof passed; then a withdrawal was paid. Testnet only: not a Tempo-created Zone; no customers or revenue.
+Before a private Tempo Zone settles a batch, Sworn creates independently verifiable, audit-ready evidence for that operator-supplied batch without exposing customer transaction contents. It runs Tempo's own Zone verifier in SP1. On Moderato, our own Zone's portal verified each proof before settling its batch; our sequencer then separately paid a withdrawal, and a forged batch was rejected on the proof. Testnet only: not a Tempo-created Zone; no customers or revenue.
 ```
 
 ## Project website · Public
@@ -39,11 +39,11 @@ The first product hypothesis is Proof Operations for a Zone business that must g
 ## Why did you decide to build this, and why build it now? · ≤1000
 
 ```
-I work in Rust on Tempo's stack: Reth, Revm, Alloy and Foundry. I wrote Fabrknt Dojo (fabrknt.com/dojo), 21 source-grounded courses on that stack, and rdk, a Reth-based DeFi kit. Reckn, my previous project, won a Uniswap Foundation prize at ETHGlobal Tokyo 2026; I also spent 15 years building banking systems in Japan.
+I build in Rust on Tempo's stack (Reth, Revm, Alloy, Foundry) and wrote Fabrknt Dojo, 21 courses on that stack, and Veil, a privacy library (@fabrknt/veil-core). Reckn won a Uniswap Foundation sponsor prize at ETHGlobal Tokyo 2026; I placed 3rd in the Superteam Japan × NTT DOCOMO R&D side track of Colosseum's Cypherpunk; and I spent 15 years building banking systems in Japan.
 
-Tempo Zones make the operational gap concrete: the operator has the witness, but an outside reviewer cannot recreate the complete private batch from public data. Tempo's verifier is Rust code; I tested whether it could run in a zkVM and be bound to the inputs a Zone portal understands.
+I believe privacy and batch processing matter more to businesses than to individuals. Tempo Zones offer both: private ledgers that settle in batches. But the operator holds the witness, and an outside reviewer cannot recreate a private batch from public data. Tempo Zones ship no native ZK proof today.
 
-Inside this hackathon, Tempo's Zone verifier ran in SP1, a contract on Moderato verified the proof, and our own Zone's portal settled batches, and so a withdrawal, only after it. Why now is a hypothesis, not a claim of demand: Zones are still testnet, so a first operator can shape evidence requirements before a workflow is entrenched.
+In this hackathon, Tempo's Zone verifier ran in SP1 and a contract on Moderato verified the proof. Separately, our own Zone's portal verified each proof before settling a batch; our sequencer then paid a withdrawal. Why now is a hypothesis: Zones are testnet, so a first operator can shape evidence requirements.
 ```
 
 ## How does your product use these chains? · ≤500
@@ -183,13 +183,13 @@ The differentiation is therefore execution and maintenance, not exclusive crypto
 ## How do you make money, or how do you plan to? · ≤500
 
 ```
-Hypothesis: a Zone business pays for a Proof Operations agreement — proof generation for each batch it supplies plus compatibility maintenance through Tempo upgrades. The initial sale is a paid or unpaid design-partner proof; conversion is a repeat batch or upgrade need that has an identified budget owner. I do not have a price, payer agreement, customer or revenue yet. Integration with Tempo's own Zones is a separate proposal, not a prerequisite for testing this evidence service.
+Hypothesis: a Zone business pays for a Proof Operations agreement — proof generation for each batch it supplies plus compatibility maintenance through Tempo upgrades. The initial sale is a paid or unpaid design-partner proof; conversion is a repeat batch or upgrade need that has an identified budget owner. I do not have a price, payer agreement, customer or revenue yet. The market grows with Zones × batches × upgrades, if Zones are adopted.
 ```
 
 ## How long have you each been working on this? Full time? · ≤500
 
 ```
-One founder. Sworn started on 2026-10-03; the Reth/Revm work it rests on goes back to 2026 (Fabrknt Dojo, rdk, Reckn). Part-time.
+One founder, part-time, about 10 hours a week. Sworn started on 2026-10-03; the Reth/Revm and privacy work it rests on goes back to 2026 (Fabrknt Dojo, Veil, rdk, Reckn). Next 90 days: one design partner and a proof of a batch they supply; faster proving, so a Zone can keep running instead of stopping after a demo; tracking Tempo upgrades (T13) in the guest; and pricing a proof.
 ```
 
 ## Where is each member based? Do you work in-person? · ≤500
