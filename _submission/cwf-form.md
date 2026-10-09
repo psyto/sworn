@@ -91,7 +91,7 @@ Solo founder; no collaborators, contractors or teammates. AI tools used for code
 ## Anything else judges should know · ≤500
 
 ```
-This project began as Confide (check-in 1, Sep 21): private block trades for tokenized stocks, hot on Solana. Building it showed that a confidential transfer needs the issuer to approve the receiving account, so I judged it premature. Given my Reth/Revm work and Fabrknt Dojo, the attention on Zcash's privacy, and my view that Tempo will need private batch transactions, I moved to Tempo on Oct 3 and to Zones on Oct 4. No product code was reused (only video-recorder boilerplate from Confide).
+This entry began as Confide, carried over from Stocklana (check-in 1, Sep 21): private block trades for tokenized stocks, hot on Solana. Building it showed that a confidential transfer needs the issuer to approve the receiving account, so I judged it premature. Given my Reth/Revm work and Fabrknt Dojo, attention on Zcash's privacy, and my view that Tempo will need private batch transactions, I moved to Tempo on Oct 3 and to Zones on Oct 4. No product code was reused (only recorder boilerplate).
 ```
 
 ---
