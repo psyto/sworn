@@ -33,8 +33,7 @@ the Groth16 proof to exactly the inputs IVerifier.verify receives. Two results o
    (one with a withdrawal).
 2. On our own Zone (outside the factory, one operator, testnet), a ZonePortal using its own instance of that
    verifier settled three proven batches only after each proof passed, then our sequencer separately paid the
-   withdrawal, and a forged,
-   sequencer-signed batch replaying a real proof was rejected on the proof:
+   withdrawal, and a forged, sequencer-signed batch replaying a real proof was rejected on the proof:
    https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1
    https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d
 
