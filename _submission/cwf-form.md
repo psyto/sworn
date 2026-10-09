@@ -189,7 +189,7 @@ Hypothesis: a Zone business pays for a Proof Operations agreement — proof gene
 ## How long have you each been working on this? Full time? · ≤500
 
 ```
-One founder, part-time, about 10 hours a week. Sworn started on 2026-10-03; the Reth/Revm and privacy work it rests on goes back to 2026 (Fabrknt Dojo, Veil, rdk, Reckn). Next 90 days: one design partner and a proof of a batch they supply; faster proving, so a Zone can keep running instead of stopping after a demo; tracking Tempo upgrades (T13) in the guest; and pricing a proof.
+One founder, part-time, about 20 hours a week. Sworn started on 2026-10-03; the Reth/Revm and privacy work it rests on goes back to 2026 (Fabrknt Dojo, Veil, rdk, Reckn). Next 90 days: one design partner and a proof of a batch they supply; faster proving, so a Zone can keep running instead of stopping after a demo; tracking Tempo upgrades (T13) in the guest; and pricing a proof.
 ```
 
 ## Where is each member based? Do you work in-person? · ≤500
