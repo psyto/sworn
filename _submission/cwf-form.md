@@ -91,7 +91,7 @@ Solo founder; no collaborators, contractors or teammates. AI tools used for code
 ## Anything else judges should know · ≤500
 
 ```
-Everything in github.com/psyto/sworn was written inside the window, from 2026-10-03. Tempo and Tempo Zones are fetched at pinned commits and patched, not vendored. The live settlement is our own Zone on Moderato (one operator, not Tempo-created); the fixture proofs come from Tempo's integration tests on dev chain 1337. The public page re-checks both from a browser. Testnet-only, unaudited, no customer or revenue claim.
+This project began as Confide (check-in 1, Sep 21). Tokenized stocks were hot on Solana, but building it showed that P2P transfer of tokenized stocks needs the issuer's cooperation, so I judged it premature. Given my work with Reth/Revm/Alloy/Foundry and Fabrknt Dojo, the attention on Zcash's privacy features, and my expectation that Tempo will need privacy-focused batch transactions, I pivoted to Sworn on Oct 3. Earlier work gave knowledge only; no code was reused. Testnet only, unaudited.
 ```
 
 ---
