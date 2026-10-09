@@ -25,8 +25,9 @@ Body:
 ```
 Hi Zones team,
 
-For a Tempo hackathon I ran zone_spf::prove_zone_batch (zones ac49071f) inside SP1 and bound the Groth16 proof to
-exactly the inputs IVerifier.verify receives. Two results on Moderato, all read-only reproducible:
+I built Sworn as my entry for the Tempo track of Colosseum's Crypto World's Fair hackathon, to see whether Zone
+batches could be checked with a ZK proof. I ran zone_spf::prove_zone_batch (zones ac49071f) inside SP1 and bound
+the Groth16 proof to exactly the inputs IVerifier.verify receives. Two results on Moderato, all read-only reproducible:
 
 1. A standalone verifier with IVerifier's signature verified proofs of two batches from your integration tests
    (one with a withdrawal).
