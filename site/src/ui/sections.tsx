@@ -68,7 +68,7 @@ export function Hero() {
         <h1>Private execution. Checkable validity.</h1>
         <p className="lede">
           Privacy and batch processing matter to everyone; for businesses they are essential. Tempo Zones give them both:
-          private ledgers that settle in batches, where users see only their own activity and the operator&apos;s sequencer set
+          private ledgers that settle to Tempo in batches, where users see only their own activity and the operator&apos;s sequencer set
           sees every transaction. But then who can check a private batch? Sworn turns an operator-supplied batch into
           evidence anyone can verify on chain—without the private ledger or customer transactions.
         </p>

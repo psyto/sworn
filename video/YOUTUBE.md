@@ -18,7 +18,7 @@ Sworn: make private Tempo Zone execution checkable — Pitch (CWF, Tempo track)
 **Description**
 
 ```
-Private execution. Checkable validity. Privacy and batch processing matter to everyone; for businesses they are essential. Tempo Zones give them both: private ledgers that settle in batches, where users see only their own activity and the operator's sequencer set sees every transaction. But then who can check a private batch? Before a withdrawal, no outside reviewer can verify it. Zcash uses zero knowledge to prove a transaction is valid without revealing it; Sworn uses zero knowledge differently: Tempo's own Zone verifier runs in SP1 and proves a private Zone batch executed correctly, without publishing transactions. (It does not hide anything from the operator.)
+Private execution. Checkable validity. Privacy and batch processing matter to everyone; for businesses they are essential. Tempo Zones give them both: private ledgers that settle to Tempo in batches, where users see only their own activity and the operator's sequencer set sees every transaction. But then who can check a private batch? Before a withdrawal, no outside reviewer can verify it. Zcash uses zero knowledge to prove a transaction is valid without revealing it; Sworn uses zero knowledge differently: Tempo's own Zone verifier runs in SP1 and proves a private Zone batch executed correctly, without publishing transactions. (It does not hide anything from the operator.)
 
 Built on Moderato testnet, two separate results:
 • A test-fixture proof (Tempo integration test, dev chain 1337) verified on Moderato.

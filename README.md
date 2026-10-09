@@ -1,7 +1,7 @@
 # Sworn
 
 **Private execution. Checkable validity.** Privacy and batch processing matter to everyone; for businesses they are
-essential. Tempo Zones give them both: private ledgers that settle in batches, where users see their own activity and
+essential. Tempo Zones give them both: private ledgers that settle to Tempo in batches, where users see their own activity and
 the operator's sequencer set sees every transaction. But then who can check a private batch? Sworn runs Tempo's own
 Zone verifier in SP1, producing a proof plus public batch data that anyone can verify on chain without publishing
 transactions.
