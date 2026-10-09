@@ -82,7 +82,7 @@ Submission to Colosseum's Crypto World's Fair, Tempo track.
 #Tempo #ZeroKnowledge #SP1
 ```
 
-Uploaded 2026-10-09 (Unlisted): pitch https://youtu.be/qTBetXF5SPY, demo https://youtu.be/GZz52yUDJKo; each description links the other video.
+Uploaded 2026-10-09: pitch https://youtu.be/qTBetXF5SPY, demo https://youtu.be/GZz52yUDJKo; each description links the other video.
 
 ---
 
