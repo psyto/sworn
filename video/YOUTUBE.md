@@ -1,8 +1,7 @@
 # YouTube titles and descriptions — Sworn CWF videos
 
-**Pitch: do not upload `video/final/Sworn_Pitch_20261007.mp4` — it has the old scenes 1, 2 and 4.** Upload the
-re-voiced pitch (scenes 1, 2 and 4 re-synthesised from `video/scenes/pitch-d/`); its captions and chapters will be
-regenerated from that file. Demo: `video/final/Sworn_Demo_20261007.mp4` with `video/final/Sworn_Demo_20261007.en.srt` (Subtitles → English → Upload file → With timing). Visibility: **Unlisted** is enough
+Pitch: `video/final/Sworn_Pitch_20261009.mp4` (1:49) with `video/final/Sworn_Pitch_20261009.en.srt`; **do not upload
+the older `Sworn_Pitch_20261007.mp4`** (old scenes 1, 2 and 4). Demo: `video/final/Sworn_Demo_20261007.mp4` with `video/final/Sworn_Demo_20261007.en.srt` (Subtitles → English → Upload file → With timing). Visibility: **Unlisted** is enough
 (the form requires that judges can watch without requesting access; check the link in a logged-out window).
 Audience: not made for kids. Language: English. Chapters below follow the narrated cuts (each ≥ 10 s, first at 0:00).
 
@@ -34,12 +33,12 @@ Payout tx: https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567
 Rejected forged batch: https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d
 
 0:00 Private execution needs independent evidence
-0:14 Private execution. Checkable validity. (Zcash vs Sworn)
-0:29 Why now: not a generic proof wrapper
-0:45 Our own Zone: the proof is the control
-1:01 The business: one batch, then Proof Operations
-1:19 Why me
-1:37 What is true today, and the next step
+0:12 Private execution. Checkable validity. (Zcash vs Sworn)
+0:25 Why now: not a generic proof wrapper
+0:39 Our own Zone: the proof is the control
+0:56 The business: one batch, then Proof Operations
+1:16 Why me
+1:33 What is true today, and the next step
 
 Submission to Colosseum's Crypto World's Fair, Tempo track.
 #Tempo #ZeroKnowledge #SP1

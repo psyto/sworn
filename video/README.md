@@ -1,6 +1,6 @@
 # CWF videos — pitch (≤ 2 min) and demo (≤ 3 min)
 
-The submission videos are **Pitch D** (`PITCH-D.md`, ≤ 2:00 after the voice edit; the silent cut is 126 s) and **Demo D** (`DEMO-D.md`, 1:22 narrated; the silent cut is 94 s). The scripts are
+The submission videos are **Pitch D** (`PITCH-D.md`, 1:49 narrated; the silent cut is 126 s) and **Demo D** (`DEMO-D.md`, 1:22 narrated; the silent cut is 94 s). The scripts are
 the only source of narration; each ends with a claims → source table, and every figure on screen is **read at
 record time** (missing or changed source → the recorder throws). Silent 1920×1080 output, scene lengths =
 words ÷ 2.2 words/s rounded up to 0.5 s. Look: `slides.css`, Geist / Geist Mono (the recorder refuses a
@@ -13,7 +13,7 @@ node video/split-scenes.mjs pitch-d      # → video/scenes/pitch-d/scene-{1..7}
 node video/split-scenes.mjs demo-d       # → video/scenes/demo-d/scene-{1..9}.mp4|.txt + NARRATION.md
 ```
 
-**Pitch D** (seven scenes, 126 s silent; trimmed to ≤ 2:00 in the voice edit): Sworn is for Tempo Zones → the trust gap before a withdrawal → keep the batch
+**Pitch D** (seven scenes, 126 s silent; 1:49 narrated): Sworn is for Tempo Zones → the trust gap before a withdrawal → keep the batch
 private, make its execution checkable → why now (Tempo Zones ship no native ZK proof today) and Tempo's own Zone
 verifier compiled for SP1, logic unchanged, with a fixture proof verified read-only → a separate run on our own
 Zone: three batches settled only after the proof passed, a withdrawal paid, a forged sequencer-signed batch
