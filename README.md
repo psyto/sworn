@@ -50,7 +50,7 @@ Zone evidence product:
 it is not the CWF product.)
 
 > **For judges, the fast path:** the [live page](https://psyto.github.io/sworn/) ·
-> [our own Zone's payout](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), paid only after three proven batches settled (the page's
+> [our own Zone's payout](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), paid separately by our sequencer after three proof-gated batches settled (the page's
 > [own-Zone section](https://psyto.github.io/sworn/#own-zone) reads the portal, the receipts and the payout live, and
 > "Re-verify on chain" replays the withdrawal batch's verify call: true, and one field changed → `InvalidProof`) ·
 > [a forged batch, rejected](https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d) (sequencer-signed, a real proof replayed; status 0, the verifier reverted) ·
@@ -59,10 +59,11 @@ it is not the CWF product.)
 > "Re-verify on chain" in the page's fixture section (three live `eth_call`s: Sworn, the real proof → true; one field changed →
 > `InvalidProof`; for comparison, Moderato's current prototype verifier, the pre-T13 reference stub, returns
 > true for an equivalent malformed batch) ·
-> [pitch video](https://youtu.be/qTBetXF5SPY) (1:49) and [demo video](https://youtu.be/GZz52yUDJKo) (1:22).
+> [pitch video](https://youtu.be/qTBetXF5SPY) (1:49) and [demo video](https://youtu.be/GZz52yUDJKo) (1:22); weekly
+> check-ins [3](https://youtu.be/vI-Zx7ue0dA) and [4](https://youtu.be/Dqipz1hYM04).
 >
-> **Status (2026-10-07): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
-> testnet** only. Unaudited. No customers or revenue. The Zones created by Tempo's factory on Moderato have one
+> **Status (2026-10-09): built for Colosseum's Crypto World's Fair, Tempo track.** Tempo **Moderato
+> testnet** only; re-checked after Moderato's T12 hardfork (2026-10-08). Unaudited. No customers or revenue. The Zones created by Tempo's factory on Moderato have one
 > effective operator; our own Zone runs outside the factory.
 
 ## Sworn in three diagrams
@@ -181,6 +182,8 @@ and a decision by its reviewer about whether the evidence is worth repeating or 
 - **Rust engineer on Tempo's stack:** Reth, Revm, Alloy and Foundry. Author of
   [Fabrknt Dojo](https://fabrknt.com/dojo) (21 source-grounded courses, 234 lessons, on Rust, Reth, Revm and Alloy) and
   [rdk](https://github.com/psyto/rdk), a DeFi kit on Reth.
+- **Privacy work before Sworn:** [Veil](https://github.com/fabrknt/veil) (`@fabrknt/veil-core` on npm), chain-agnostic
+  privacy primitives.
 - **Previous project:** [Reckn](https://github.com/psyto/reckn) won a Uniswap Foundation sponsor prize
   (Best Uniswap Stack Contribution, 3rd place) at ETHGlobal Tokyo 2026.
 - **Colosseum:** 3rd place in the Superteam Japan × NTT DOCOMO R&D side track of Colosseum's Solana Cypherpunk
@@ -189,6 +192,13 @@ and a decision by its reviewer about whether the evidence is worth repeating or 
   earlier, software development in Hong Kong and India.
 
 Getting Tempo's code into a zkVM meant patching it (`patches/`, `spikes/zone-spf/patches/`).
+
+**History of this entry.** It began as [Confide](https://github.com/psyto/confide) (private block trades for
+tokenized stocks on Solana; a separate repo begun 2026-09-12 for Stocklana, before this window; CWF check-in 1).
+A confidential transfer there turned out to need the issuer to approve the recipient, so it was premature. The entry
+moved to Tempo on 2026-10-03 (the bonded-answers experiment below) and to Zones on 2026-10-04. This repo starts on
+2026-10-03; no Confide product code is in it (only video-recorder boilerplate). Earlier work (Fabrknt Dojo, Veil,
+rdk, Reckn) contributed knowledge, not code.
 
 ## What the Zone verifier is, and is not
 

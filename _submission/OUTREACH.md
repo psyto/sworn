@@ -2,7 +2,7 @@
 
 **Purpose.** The weakest part of the submission is demand: no operator, auditor or Tempo engineer has said whether
 this evidence matters (Codex review r1, deciding factor 3). Any reply, positive or negative, turns a hypothesis into
-a fact we can cite. **Nothing here has been sent.** The founder sends each message; Claude sends nothing.
+a fact we can cite. **Sent so far (2026-10-09): the public X post in the log; none of the direct messages below.** The founder sends each message; Claude sends nothing.
 
 **Rules for every message**
 - Ask a question someone can answer in two lines. Do not pitch.

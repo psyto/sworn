@@ -98,10 +98,11 @@ next falsifiable test.
 - My last project, Reckn, took a Uniswap Foundation sponsor prize (Best Uniswap Stack Contribution, 3rd place) at
   ETHGlobal Tokyo 2026; I also placed 3rd in the Superteam Japan × NTT DOCOMO R&D side track of Colosseum's Solana
   Cypherpunk Hackathon (2025). Fabrknt Dojo has 21 courses and 234 lessons.
+- Privacy work before Sworn: Veil (`fabrknt/veil`, `@fabrknt/veil-core`), chain-agnostic privacy primitives.
 - Fifteen years building banking systems: I know what auditors ask an operator for.
 
 **13. Solo founder. Can you run an operations business?**
-Proving is automated. The hard part is Tempo-specific engineering, which is what I do. A first hire would be on
+Part-time today, about 20 hours a week (the form says so). Proving is automated. The hard part is Tempo-specific engineering, which is what I do. A first hire would be on
 operations and partner integration, once a design partner exists.
 
 ## Hard questions to expect
@@ -190,7 +191,11 @@ Introductions to teams building Zones or private payment ledgers on Tempo, and t
 - The repo started inside the window (2026-10-03). It vendors Succinct's SP1 verifier contracts (v6.1.0,
   unmodified) and fetches and patches Tempo and Tempo Zones at pinned commits; none of that is my code.
 - The design discipline (no owner, no admin, a build check that fails if one appears) comes from my earlier
-  project Reckn; no Reckn code is used. All of this is in the README and should be in the form's disclosure.
+  project Reckn; no Reckn code is used.
+- The entry began as Confide (Solana, a separate repo begun 2026-09-12 for Stocklana, before the window; check-in 1).
+  A confidential transfer of tokenized stock needs the issuer to approve the recipient, so I judged it premature
+  and moved to Tempo on 2026-10-03, then to Zones on 2026-10-04. No Confide product code is in Sworn; only a few
+  lines of video-recorder boilerplate. All of this is in the README and the form ("Anything else", repo context).
 
 ## Numbers to have ready
 

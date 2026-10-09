@@ -6,6 +6,11 @@ record time** (missing or changed source → the recorder throws). Silent 1920×
 words ÷ 2.2 words/s rounded up to 0.5 s. Look: `slides.css`, Geist / Geist Mono (the recorder refuses a
 fallback font); never Tempo's logo, wordmark or Pilat.
 
+**Uploaded (2026-10-09):** pitch https://youtu.be/qTBetXF5SPY (`final/Sworn_Pitch_20261009.mp4` + `.en.srt`), demo
+https://youtu.be/GZz52yUDJKo (`final/Sworn_Demo_20261007.mp4` + `.en.srt`), check-in 4 https://youtu.be/Dqipz1hYM04
+(`final/Sworn_CheckIn4_20261008.mp4`). Titles, descriptions and chapters: `YOUTUBE.md`. The voiced scripts are final;
+later wording changes went to text surfaces only.
+
 ```sh
 node video/record-pitch-d.mjs            # → video/pitch-d.mp4 + pitch-d.srt + pitch-d.marks.json   (reads only)
 node video/record-demo-d.mjs             # → video/demo-d.mp4 + demo-d.srt + frames/demo-d-scene{1..9}.png (reads only)
@@ -16,8 +21,8 @@ node video/split-scenes.mjs demo-d       # → video/scenes/demo-d/scene-{1..9}.
 **Pitch D** (seven scenes, 126 s silent; 1:49 narrated): Sworn is for Tempo Zones → the trust gap before a withdrawal → keep the batch
 private, make its execution checkable → why now (Tempo Zones ship no native ZK proof today) and Tempo's own Zone
 verifier compiled for SP1, logic unchanged, with a fixture proof verified read-only → a separate run on our own
-Zone: three batches settled only after the proof passed, a withdrawal paid, a forged sequencer-signed batch
-rejected → the business (first buyer, one batch, Proof Operations; market grows with Zones × batches × upgrades,
+Zone: three batches settled only after the proof passed, then a withdrawal paid by our sequencer, not the proof; a
+forged sequencer-signed batch rejected → the business (first buyer, one batch, Proof Operations; market grows with Zones × batches × upgrades,
 if Zones are adopted; later beside Tempo's TEE) → the founder → the honest ask. Its recorder rereads the
 deployments against Moderato (bytecode, every receipt, the 0.5 pathUSD payout, the forged batch's status 0), the
 README statements it relies on, Tempo's `Cargo.toml`, Fabrknt Dojo, the ETHGlobal showcase and Superteam's winner

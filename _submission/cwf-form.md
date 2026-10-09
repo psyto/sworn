@@ -1,4 +1,4 @@
-# CWF submission form: Sworn (submission draft v5.2, 2026-10-05)
+# CWF submission form: Sworn (v6, 2026-10-09: entered in Colosseum, still a draft until the founder submits)
 
 **Every field below is written to be pasted.** Limits are the form's own (field list and limits taken
 from the copy of this form kept for the previous entry); `scripts/cwf-form.sh` counts them.
