@@ -128,7 +128,7 @@ Question for Zone builders: would you want this next to a TEE attestation? Repli
 
 | date | to | channel | message | reply (verbatim) or "no reply after 48 h" |
 |---|---|---|---|---|
-| 2026-10-09 | public (@tempo, @colosseum mentioned) | X post with the pitch video: https://x.com/psyto/status/2108529502842503352 (links in self-reply https://x.com/psyto/status/2108529680274149860) | "@tempo: would Zone operators want this?" | after ~9 h (2026-10-09 21:00 UTC): post 67 impressions, 1 like, no replies; self-reply 22 impressions. Check again after 48 h (2026-10-11 12:06 UTC) |
+| 2026-10-09 | public (@tempo, @colosseum mentioned) | X post with the pitch video: https://x.com/psyto/status/2108529502842503352 (links in self-reply https://x.com/psyto/status/2108529680274149860) | "@tempo: would Zone operators want this?" | after ~9 h: post 67 impressions, 1 like; self-reply 22. After ~17 h (2026-10-10 05:00 UTC): post 120 impressions, 1 like, no replies; self-reply 120; Japanese quote post 39 impressions, 1 like. Check again after 48 h (2026-10-11 12:06 UTC) |
 | 2026-10-09 | Arena builders (tag: Looking for testers) | Builder Update: https://colosseum.com/arena/projects/confide/updates/1549 | 1-minute "Verify on chain" test; what was unclear; would this change how you review a batch? | (builder feedback, not operator demand; check 2026-10-11) |
 | 2026-10-10 | Tempo Zones team | GitHub issue (Feature request): https://github.com/tempoxyz/zones/issues/1685 | per-operator ZK evidence alongside Nitro, off the fast-withdrawal path? (3 questions) | (check after 48 h) |
 
