@@ -19,7 +19,7 @@ Sworn
 ## Brief description · Public · ≤500
 
 ```
-Before a private Tempo Zone settles a batch, Sworn creates independently verifiable, audit-ready evidence for that operator-supplied batch without exposing customer transaction contents. It runs Tempo's own Zone verifier in SP1. On Moderato, our own Zone's portal verified each proof before settling its batch; our sequencer then separately paid a withdrawal, and a forged batch was rejected on the proof. Testnet only: not a Tempo-created Zone; no customers or revenue.
+Before a private Tempo Zone settles, Sworn creates an independently verifiable proof for an operator-supplied batch without exposing transaction contents. Sworn runs Tempo's verifier in SP1. On Moderato, our portal verified each proof before settling its batch across 3 batches, and a forged batch was rejected. Testnet only: unaudited, operated on our own Zone, not Tempo-created.
 ```
 
 ## Project website · Public
@@ -31,9 +31,13 @@ https://psyto.github.io/sworn/
 ## What are you building, and who is it for? · ≤1000
 
 ```
-Sworn runs Tempo's own Zone batch verifier (zone_spf::prove_zone_batch) inside the SP1 zkVM. For a batch an operator supplies, it produces a proof bound to Tempo's IVerifier-shaped inputs. Anyone can verify it on chain; public values are hashes and batch metadata, not transaction contents. On Moderato, SwornZoneVerifier verified a Tempo integration-test batch with one withdrawal (tx 0xa63009fd…f770); changing one field is rejected.
-
-The first product hypothesis is Proof Operations for a Zone business that must give a reviewer evidence before settlement: per-batch proof generation plus maintenance through Tempo upgrades. This is not withdrawal protection for Tempo's Zones: only our own Zone's portal calls Sworn, and no customer has requested or paid for it. The first test is one operator-supplied batch, delivered with reproducible verification instructions to its reviewer.
+Zone transactions are private, meaning external auditors and counterparties cannot recreate batches using public data alone. I am building Sworn for Zone operators and their external reviewers.
+The workflow is concrete:
+The operator provides a batch witness.
+Sworn executes Tempo's Zone code inside the SP1 zkVM.
+A contract on Tempo verifies the proof against the batch's public inputs (hashes and metadata).
+This allows reviewers to independently verify that a specific batch was executed correctly without revealing private transaction contents.
+Currently, this is only demonstrated on our own single-operator Zone. The initial validation step is to deliver a reproducible verification procedure for one actual operator's batch to their reviewer, for which I have opened an onboarding issue template.
 ```
 
 ## Why did you decide to build this, and why build it now? · ≤1000
