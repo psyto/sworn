@@ -153,16 +153,13 @@ https://youtu.be/qTBetXF5SPY
 ## How do you know people actually need, or will need this product? · ≤1000
 
 ```
-No direct demand validation yet: $0 revenue and no requests from customers, design partners, or auditors. Tempo's Zones on Moderato have one effective operator, with creation owner-gated. Technical proof is not customer traction.
+No direct demand validation yet: $0 revenue, no requests from customers, design partners, or auditors. Technical proof is not customer traction.
 
-Outreach as of Oct 11:
-Oct 9 X Post: 166 impressions, 1 like, 0 replies (24h).
-Oct 10 Tempo Zones GitHub Issue: 0 responses observed as of Oct 11.
-Oct 11 Issue Template: Inbound channel, not proof of demand.
+From my background in banking and settlement systems, I observe that corporate high-value batch processing requires mandatory reconciliation, auditability, and counterparty explanation. Tempo targets batch flows like payroll and merchant payouts. While Zones protect transaction privacy, external auditors and counterparties cannot verify the operator’s private ledger. I believe demand for such privacy will grow. Sworn bridges this: the operator generates a proof allowing external parties to verify batch validity independently without revealing details or trusting the operator.
 
-The motive is structural: a Zone operator holds the private ledger and witness; outside reviewers cannot recreate batches from public data. Sworn turns an operator batch into verifiable evidence without revealing transactions. Value to audits, sales, or settlements remains unproven.
+Outreach via X, Tempo GitHub issue, and an intake template yielded zero responses as of Oct 11.
 
-A recurring need with a budget owner is the first demand signal. If no operator values it, the service thesis fails.
+The first true demand signal is when proof is requested for the next batch and a budget owner is identified. If no operator values this, the service thesis fails.
 ```
 
 ## How far along are you? Do you have users? · ≤1000
