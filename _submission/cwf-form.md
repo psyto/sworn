@@ -19,7 +19,7 @@ Sworn
 ## Brief description · Public · ≤500
 
 ```
-Sworn proves a private Tempo Zone batch executed correctly—without publishing its transactions. Tempo's docs say ZK proof generation is not implemented for Zones. Sworn addresses this gap using Tempo's own Zone code to generate proofs anyone can check on-chain while keeping data private. On Moderato, 3 batches settled only after their proofs verified, and a forged batch was rejected. Testnet only: unaudited, operated on our own single-operator Zone, not Tempo-created.
+Prove a private Tempo Zone batch ran correctly—without publishing its transactions. External reviewers need independent verifiability. Sworn complements TEEs by using Tempo's own Zone code in a zkVM to generate ZK proofs anyone can check on-chain. On Moderato, 3 batches settled only after their proofs verified, and a forged batch with a valid sequencer signature was rejected. Testnet only: unaudited, our own single-operator Zone, not Tempo-created.
 ```
 
 ## Project website · Public
