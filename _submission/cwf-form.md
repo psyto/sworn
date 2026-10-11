@@ -130,6 +130,10 @@ https://psyto.github.io/sworn/
 
 ## Access instructions · ≤300
 
+**[FOUNDER] Out of date since the 2026-10-11 site split:** the root URL no longer reads Moderato and has no
+"Re-verify on chain"; the live re-checks (own Zone and fixture) are at https://psyto.github.io/sworn/evidence/.
+Rewrite in your own words, then update the form.
+
 ```
 https://psyto.github.io/sworn/ reads Moderato in your browser. Nothing to sign or install. "Re-verify on chain" re-checks the Zone proofs on Moderato live. To re-run locally: git clone https://github.com/psyto/sworn && cd sworn/contracts && forge test
 ```

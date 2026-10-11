@@ -301,7 +301,7 @@ spec 003 "Results"):
   schedule. It refuses only within ±64 s of an activation, or when the live schedule changes (for example once T13
   is scheduled). Read-only re-checks on 2026-10-09, after T12: 20 / 20 TIP-20 transfers (first in their block) and
   10 / 10 reverted transactions (6 TIP-20 transfers), replayed with the pinned engine, match their receipts
-  (`out/t12/`), and the page's 12 live read-only checks pass. These are samples, not proof that every T12 change
+  (`out/t12/`), and the evidence page's 12 live read-only checks pass. These are samples, not proof that every T12 change
   is covered.
 - The p384 substitute patched into Tempo is still linked into the guest. It is not on the T11 path, and
   removing it would change `GUEST_VKEY`, so it stays until the next redeploy
@@ -388,7 +388,7 @@ Two more slashes were recorded live on the same day, for an earlier demo video (
 | `spikes/own-zone/` | our own Zone on Moderato: feasibility, dress rehearsals, runbook, `scripts/own-zone.sh` (the live run and the `forged-batch` rejection test), `scripts/export-vectors.mjs` (the live proofs as test vectors), `OwnZonePortal`, the pinned guest ELF |
 | `video/` | pitch and demo scripts (`PITCH-D.md`, `DEMO-D.md`), slides and recorders; every figure on screen is read while recording |
 | `answerer/`, `server/`, `sdk/`, `challenger/` | answer engine (Rust), MPP server (TS), client SDK (TS), `sworn-witness` / `sworn-challenge` (Rust) |
-| `site/` | the live page ([psyto.github.io/sworn](https://psyto.github.io/sworn/)): read-only, published by `.github/workflows/pages.yml` |
+| `site/` | the live site: a static landing page ([psyto.github.io/sworn](https://psyto.github.io/sworn/)) and the read-only evidence page that re-checks the proofs on Moderato ([/evidence/](https://psyto.github.io/sworn/evidence/)); published by `.github/workflows/pages.yml` |
 | `demo/` | agent wallet and owner's phone (Vite + React + viem); every number read from chain |
 | `deployments/` | Moderato addresses, from receipts |
 | `patches/tempo.patch`, `scripts/fetch-tempo.sh` | Tempo at `61c979a` + three patches so it builds for the zkVM |

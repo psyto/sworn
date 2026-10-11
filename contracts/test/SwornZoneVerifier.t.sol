@@ -23,7 +23,7 @@ import {MockSP1Verifier} from "./mocks/MockSP1Verifier.sol";
 ///                                                         while the file is absent, and FAILS on a stale one.
 ///           test/vectors/superseded/zone-hardfork-config02-moderato.json  SUPERSEDED record (verifierConfig 0x02 = upstream NoProof
 ///                                                         since zones 344ff785) of the attest at 0x64bA9F64…42De; the
-///                                                         live page reads it. Not used by tests.
+///                                                         evidence page reads it. Not used by tests.
 ///           test/vectors/superseded/                      the 0x02 placeholder-address proof; not used by tests.
 abstract contract ZoneBase is Test {
     string constant TYPE_STRING =

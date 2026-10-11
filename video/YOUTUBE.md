@@ -27,7 +27,8 @@ Built on Moderato testnet, two separate results:
 Product hypothesis: Proof Operations for a Zone business whose reviewer cannot reconstruct the witness. Testnet, unaudited, no customers yet.
 
 Demo video: https://youtu.be/GZz52yUDJKo
-Live page (reads Moderato from your browser): https://psyto.github.io/sworn/
+Live page: https://psyto.github.io/sworn/
+Re-check the proofs on Moderato from your browser: https://psyto.github.io/sworn/evidence/
 Code and specs: https://github.com/psyto/sworn
 Payout tx: https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1
 Rejected forged batch: https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d
@@ -67,6 +68,7 @@ Testnet, unaudited, no customers yet. The proof is a necessary condition for a p
 
 Pitch video: https://youtu.be/qTBetXF5SPY
 Live page: https://psyto.github.io/sworn/
+Evidence, re-checked live: https://psyto.github.io/sworn/evidence/
 Code, specs and reproduction: https://github.com/psyto/sworn
 Fixture attest tx: https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770
 Payout tx: https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1
@@ -118,6 +120,7 @@ Next: Oct 9–12, ask Zone builders and reviewers whether they need this; Oct 13
 Payout tx: https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1
 Rejected forged batch: https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d
 Live page: https://psyto.github.io/sworn/
+Evidence, re-checked live: https://psyto.github.io/sworn/evidence/
 Code: https://github.com/psyto/sworn
 
 0:00 Last check-in → this week

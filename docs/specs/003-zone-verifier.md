@@ -462,8 +462,8 @@ Plan, conditions and runbook: `spikes/own-zone/FEASIBILITY.md`, `RUNBOOK.md`. Re
   `submitBatch` trace, checks it equal to the prover's record (all fields and the proof bytes), and writes it to
   `contracts/test/vectors/own-zone/` with the deployed verifier's bytecode. `forge test --match-test OWNZONE` runs
   each real proof through the AC-Z4 cases against the real SP1 v6.1.0 Groth16 verifier, then replays the portal's
-  exact calldata against the deployed bytecode (true; nextZoneHeight + 1 → `InvalidProof()`). The live page's
-  own-Zone section does the same replay for the withdrawal batch with two `eth_call`s, after checking that the
+  exact calldata against the deployed bytecode (true; nextZoneHeight + 1 → `InvalidProof()`). The evidence page's
+  own-Zone section (psyto.github.io/sworn/evidence/) does the same replay for the withdrawal batch with two `eth_call`s, after checking that the
   `submitBatch` transaction carries that proof and those hashes.
 - **The rejection side (2026-10-07):** a malicious-sequencer test. Our sequencer submitted a forged batch 62 to
   `OwnZonePortal.submitBatch` with a valid sequencer-signed settlement certificate, a made-up `nextBlockHash` and

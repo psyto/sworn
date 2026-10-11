@@ -8,13 +8,16 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(path.join(here, "../../video/package.json"));
 const puppeteer = require("puppeteer");
 
-const url = process.argv[2] ?? "http://localhost:4173/evidence/";
+const base = process.argv[2] ?? "http://localhost:4173/";
 const out = path.join(here, "../screenshots");
 
+// The landing page is static; the evidence page reads Moderato and is captured once its checks have rendered.
 const shots = [
-  { file: "desktop-light.png", width: 1280, height: 900, scheme: "light" },
-  { file: "desktop-dark.png", width: 1280, height: 900, scheme: "dark" },
-  { file: "mobile-390.png", width: 390, height: 844, scheme: "light", mobile: true },
+  { file: "desktop-light.png", path: "", width: 1280, height: 900, scheme: "light" },
+  { file: "desktop-dark.png", path: "", width: 1280, height: 900, scheme: "dark" },
+  { file: "mobile-390.png", path: "", width: 390, height: 844, scheme: "light", mobile: true },
+  { file: "evidence-desktop-light.png", path: "evidence/", width: 1280, height: 900, scheme: "light", evidence: true },
+  { file: "evidence-mobile-390.png", path: "evidence/", width: 390, height: 844, scheme: "light", mobile: true, evidence: true },
 ];
 
 const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
@@ -23,11 +26,11 @@ try {
     const page = await browser.newPage();
     await page.setViewport({ width: s.width, height: s.height, deviceScaleFactor: s.mobile ? 2 : 1, isMobile: !!s.mobile, hasTouch: !!s.mobile });
     await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: s.scheme }]);
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30_000 });
-    await page.waitForSelector(".zone-card .facts, .zone-card .error", { timeout: 90_000 });
-    await page.waitForSelector(".calls, .again .error", { timeout: 90_000 });
-    await page.waitForSelector(".timeline, #slashes .error", { timeout: 90_000 });
-    await page.waitForSelector(".pins dl, .pins .error", { timeout: 90_000 });
+    await page.goto(base + s.path, { waitUntil: "domcontentloaded", timeout: 30_000 });
+    if (s.evidence) {
+      await page.waitForSelector(".zone-card .facts, .zone-card .error", { timeout: 90_000 });
+      await page.waitForSelector(".calls, .again .error", { timeout: 90_000 });
+    }
     await page.evaluate(() => document.fonts.ready);
     const overflow = await page.evaluate(() => {
       const w = document.documentElement.clientWidth;

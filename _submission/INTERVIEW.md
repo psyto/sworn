@@ -207,7 +207,7 @@ Introductions to teams building Zones or private payment ledgers on Tempo, and t
 |---|---|
 | withdrawal batch | 1 withdrawal, 2 user txs; 24,443,996 cycles; Groth16 891 s; tx `0xa630…f770` |
 | first batch | 25,536,122 cycles; Groth16 701 s; tx `0xb14b…3b80` |
-| mutation | one field changed → `InvalidProof()` (live `eth_call` on the page) |
+| mutation | one field changed → `InvalidProof()` (live `eth_call` on the evidence page, psyto.github.io/sworn/evidence/) |
 | live-chain fidelity | 40/40 transactions; 18/18 reverted transactions |
 | Moderato Zones | 3, one operator; their verifier returns true for any input |
 | slashes on Moderato | three recorded in deployments/moderato.json |
