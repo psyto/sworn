@@ -33,11 +33,12 @@ https://psyto.github.io/sworn/
 ```
 Zone transactions are private, meaning external auditors and counterparties cannot recreate batches using public data alone. I am building Sworn for Zone operators and their external reviewers.
 The workflow is concrete:
-The operator provides a batch witness.
-Sworn executes Tempo's Zone code inside the SP1 zkVM.
-A contract on Tempo verifies the proof against the batch's public inputs (hashes and metadata).
+- The operator provides a batch witness.
+- Sworn executes Tempo's Zone code inside the SP1 zkVM.
+- A contract on Tempo verifies the proof against the batch's public inputs (hashes and metadata).
 This allows reviewers to independently verify that a specific batch was executed correctly without revealing private transaction contents.
-Currently, this is only demonstrated on our own single-operator Zone. The initial validation step is to deliver a reproducible verification procedure for one actual operator's batch to their reviewer, for which I have opened an onboarding issue template.
+Currently, this is only demonstrated on our own single-operator Zone.
+The initial validation step is to deliver a reproducible verification procedure for one actual operator's batch to their reviewer, for which I have opened an onboarding issue template.
 ```
 
 ## Why did you decide to build this, and why build it now? · ≤1000
