@@ -49,14 +49,14 @@ Zone evidence product:
 (The repository also holds an earlier, separate engine experiment, [bonded answers](#separate-engine-experiment-bonded-answers);
 it is not the CWF product.)
 
-> **For judges, the fast path:** the [live page](https://psyto.github.io/sworn/) ·
-> [our own Zone's payout](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), paid separately by our sequencer after three proof-gated batches settled (the page's
-> [own-Zone section](https://psyto.github.io/sworn/#own-zone) reads the portal, the receipts and the payout live, and
+> **For judges, the fast path:** the [live page](https://psyto.github.io/sworn/) and its [evidence page](https://psyto.github.io/sworn/evidence/) ·
+> [our own Zone's payout](https://explore.testnet.tempo.xyz/tx/0xfc3118412ed0c4d6a5b0a55e61a567b280861461551f927fc5fc650c541be1f1), paid separately by our sequencer after three proof-gated batches settled (the evidence page's
+> [own-Zone section](https://psyto.github.io/sworn/evidence/#own-zone) reads the portal, the receipts and the payout live, and
 > "Re-verify on chain" replays the withdrawal batch's verify call: true, and one field changed → `InvalidProof`) ·
 > [a forged batch, rejected](https://explore.testnet.tempo.xyz/tx/0x3a154e4e0b9dde8531a151ff39d6991af76b264d292eab2b8b0b0b31717b167d) (sequencer-signed, a real proof replayed; status 0, the verifier reverted) ·
 > [the fixture's proof tx](https://explore.testnet.tempo.xyz/tx/0xa63009fd13648ed246885b7b476e8284e55bab4d5a9325127155fe292b3df770)
 > (a Zone batch with one withdrawal, from Tempo's integration tests) ·
-> "Re-verify on chain" in the page's fixture section (three live `eth_call`s: Sworn, the real proof → true; one field changed →
+> "Re-verify on chain" in the evidence page's fixture section (three live `eth_call`s: Sworn, the real proof → true; one field changed →
 > `InvalidProof`; for comparison, Moderato's current prototype verifier, the pre-T13 reference stub, returns
 > true for an equivalent malformed batch) ·
 > [pitch video](https://youtu.be/qTBetXF5SPY) (1:49) and [demo video](https://youtu.be/GZz52yUDJKo) (1:22); weekly

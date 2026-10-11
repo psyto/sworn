@@ -1,0 +1,15 @@
+Not shippable until the builder card is corrected.
+
+- [V] **MAJOR** — [sections.tsx:405](file:///Users/hiroyusai/src/sworn/site/src/ui/sections.tsx:405)–409 promises a fresh-clone path that fails: `build-guest.sh` requires `spikes/zone-spf/riscv/bin/riscv64-unknown-elf-{gcc,ar}`, but `fetch.sh` explicitly does not fetch it. It also needs Rust/Cargo, SP1 `cargo-prove`, Foundry `cast`, and a matching deployed (or fixed) `SwornZoneVerifier` address; Docker is not required. `scripts/fetch-tempo.sh` is unrelated to this prover path. Minimal fix: remove that command; name/link the toolchain prerequisites and verifier/deployment requirement, or replace the card with a documented setup guide. Say the script writes a local fixture.
+
+- [V] **MAJOR** — [sections.tsx:405](file:///Users/hiroyusai/src/sworn/site/src/ui/sections.tsx:405) understates the complete fresh setup. The cited default-script header says ~12 min/~18 GB, but recorded end-to-end build+proof is ~15 min/21.7 GB; other supported fixtures are ~12–15 min and ~18.5–20 GB, and the largest own-Zone proof took 31 min. Minimal fix: “default fixture proof: roughly 12–15 minutes and 18–20 GB RAM after prerequisites are installed; fresh setup takes longer.”
+
+- [V] **MINOR** — [sections.tsx:382](file:///Users/hiroyusai/src/sworn/site/src/ui/sections.tsx:382)–384 is appropriately bounded: testnet, hands-on, no hosted service, no price or service timeline. The exact pin/version claim is accurate; “a newer version may need porting” is cautious and supported by the pinned commit plus zkVM patches. I would say “requires compatibility review and may need porting” for precision.
+
+- [V] **MINOR** — [sections.tsx:396](file:///Users/hiroyusai/src/sworn/site/src/ui/sections.tsx:396)–399 is good as written, assuming Foundry is installed. `forge-std` and proof vectors are tracked. `OWNZONE` executes the three recorded proofs through vendored real SP1 v6.1.0 Groth16 bytecode and replays the deployed verifier bytecode; it is reproducible locally, not a live-RPC check. “About a minute” is conservative.
+
+- [V] **MINOR** — [request-batch-proof.yml:1](file:///Users/hiroyusai/src/sworn/.github/ISSUE_TEMPLATE/request-batch-proof.yml:1)–44 is valid issue-form YAML (parsed successfully) and its warning is strong. But line 20 invites “mainnet” despite the CTA limiting this process to testnet; remove mainnet or explicitly state it is not supported. Lines 41–44 call a public field “Preferred private contact,” inviting disclosure. Rename it “Public contact handle (optional)” or remove it and direct people to DM.
+
+- [I] **MINOR** — The phrase “we prove it” could read as a committed service despite no current design partner. “Request a testnet pilot for one batch” would better align with the rest of the page’s candid “no customers/design partner” disclosures.
+
+The hero’s new anchor and preserved evidence links are coherent. Once the builder prerequisites/measurements and issue-form privacy wording are fixed, this CTA is shippable.

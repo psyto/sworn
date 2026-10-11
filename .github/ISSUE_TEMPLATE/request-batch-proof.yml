@@ -1,0 +1,44 @@
+name: Request a batch proof
+description: Run a Tempo testnet Zone and want one batch proven, with steps your reviewer can verify independently.
+title: "Batch proof request: <your Zone or company>"
+labels: ["batch-proof-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Sworn proves that an operator-supplied Tempo Zone batch executed correctly, with Tempo's own Zone code in SP1, and gives
+        your reviewer steps to verify the proof on chain. Today this is a hands-on design-partner process on testnet, not a
+        hosted service.
+
+        **This issue is public. Do not paste a batch witness, keys, genesis files, customer data or anything private here.**
+        We will agree a private way to transfer the batch witness after we talk. You can also reach the founder on
+        X (@psyto) or Telegram (@psyto69).
+  - type: input
+    id: zone
+    attributes:
+      label: Your Zone
+      description: Which testnet Zone (chain, rough Tempo / zones version if you know it). Mainnet is not supported.
+    validations:
+      required: true
+  - type: textarea
+    id: reviewer
+    attributes:
+      label: Who needs the evidence, and why
+      description: For example an auditor, a counterparty or your own risk team, and what they need to be convinced of.
+    validations:
+      required: true
+  - type: textarea
+    id: batch
+    attributes:
+      label: The batch
+      description: Roughly what it contains (number of blocks or transactions, deposits / withdrawals). No private data.
+  - type: input
+    id: timing
+    attributes:
+      label: Timing
+      description: When the reviewer needs it.
+  - type: input
+    id: contact
+    attributes:
+      label: Public contact handle (optional)
+      description: An X or Telegram handle we can DM. This field is public too.

@@ -67,7 +67,7 @@ then our sequencer separately paid a withdrawal; a forged batch was rejected.
 One question, two lines is plenty: is a ZK check next to the Nitro attestation something Tempo would want for
 Zones, and if so, who on the Zones team should I ask about the integration path?
 
-Live evidence: https://psyto.github.io/sworn/#own-zone · repo: https://github.com/psyto/sworn
+Live evidence: https://psyto.github.io/sworn/evidence/#own-zone · repo: https://github.com/psyto/sworn
 ```
 
 ## 3. Someone building a Zone or a private payment ledger (DM or email)
@@ -83,7 +83,7 @@ without handing over the private ledger, how would you do it today? Would a proo
 exposing only hashes and batch metadata, change that conversation, or is the operator's attestation enough?
 
 Context (not a pitch): I proved Tempo's own Zone verifier in SP1 and ran a testnet Zone whose portal settles only
-after the proof — https://psyto.github.io/sworn/#own-zone. No customers yet; I'm trying to learn whether this
+after the proof — https://psyto.github.io/sworn/evidence/#own-zone. No customers yet; I'm trying to learn whether this
 matters to anyone running a Zone.
 ```
 
@@ -106,7 +106,7 @@ can verify the proof on chain; it reveals hashes and batch metadata, not transac
 If a client running such a ledger handed you that proof for a withdrawal batch, would it reduce the work you need
 to do, replace some of it, or not matter? A two-line answer would help me a lot.
 
-Live example (testnet): https://psyto.github.io/sworn/#own-zone
+Live example (testnet): https://psyto.github.io/sworn/evidence/#own-zone
 
 Hiroyuki Saito
 ```
@@ -117,7 +117,7 @@ Hiroyuki Saito
 Built for the CWF Tempo track: Tempo Zones' own batch verifier, proven in SP1 and checked on Moderato.
 
 On our own testnet Zone, the portal settled 3 batches only after their proofs passed; our sequencer then paid a withdrawal.
-Click "Re-verify on chain" yourself: https://psyto.github.io/sworn/#own-zone
+Click "Re-verify on chain" yourself: https://psyto.github.io/sworn/evidence/#own-zone
 
 Question for Zone builders: would you want this next to a TEE attestation? Replies welcome.
 ```
@@ -128,7 +128,7 @@ Question for Zone builders: would you want this next to a TEE attestation? Repli
 
 | date | to | channel | message | reply (verbatim) or "no reply after 48 h" |
 |---|---|---|---|---|
-| 2026-10-09 | public (@tempo, @colosseum mentioned) | X post with the pitch video: https://x.com/psyto/status/2108529502842503352 (links in self-reply https://x.com/psyto/status/2108529680274149860) | "@tempo: would Zone operators want this?" | after ~9 h: post 67 impressions, 1 like; self-reply 22. After ~17 h (2026-10-10 05:00 UTC): post 120 impressions, 1 like, no replies; self-reply 120; Japanese quote post 39 impressions, 1 like. Check again after 48 h (2026-10-11 12:06 UTC) |
+| 2026-10-09 | public (@tempo, @colosseum mentioned) | X post with the pitch video: https://x.com/psyto/status/2108529502842503352 (links in self-reply https://x.com/psyto/status/2108529680274149860) | "@tempo: would Zone operators want this?" | after ~9 h: post 67 impressions, 1 like; self-reply 22. After ~17 h (2026-10-10 05:00 UTC): post 120 impressions, 1 like, no replies; self-reply 30; Japanese quote post 39 impressions, 1 like. After ~1 day: post 166 impressions, 1 like, no replies; self-reply 45; Japanese quote post 66 impressions, 1 like. Check again after 48 h (2026-10-11 12:06 UTC) |
 | 2026-10-09 | Arena builders (tag: Looking for testers) | Builder Update: https://colosseum.com/arena/projects/confide/updates/1549 | 1-minute "Verify on chain" test; what was unclear; would this change how you review a batch? | (builder feedback, not operator demand; check 2026-10-11) |
 | 2026-10-10 | Tempo Zones team | GitHub issue (Feature request): https://github.com/tempoxyz/zones/issues/1685 | per-operator ZK evidence alongside Nitro, off the fast-withdrawal path? (3 questions) | (check after 48 h) |
 

@@ -8,7 +8,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(path.join(here, "../../video/package.json"));
 const puppeteer = require("puppeteer");
 
-const url = process.argv[2] ?? "http://localhost:4173/";
+const url = process.argv[2] ?? "http://localhost:4173/evidence/";
 const out = path.join(here, "../screenshots");
 
 const shots = [
