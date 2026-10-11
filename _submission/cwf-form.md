@@ -19,7 +19,7 @@ Sworn
 ## Brief description · Public · ≤500
 
 ```
-Before a private Tempo Zone settles, Sworn creates an independently verifiable proof for an operator-supplied batch without exposing transaction contents. Sworn runs Tempo's verifier in SP1. On Moderato, our portal verified each proof before settling its batch across 3 batches, and a forged batch was rejected. Testnet only: unaudited, operated on our own Zone, not Tempo-created.
+Sworn proves a private Tempo Zone batch executed correctly—without publishing its transactions. Tempo's docs say ZK proof generation is not implemented for Zones. Sworn addresses this gap using Tempo's own Zone code to generate proofs anyone can check on-chain while keeping data private. On Moderato, 3 batches settled only after their proofs verified, and a forged batch was rejected. Testnet only: unaudited, operated on our own single-operator Zone, not Tempo-created.
 ```
 
 ## Project website · Public
