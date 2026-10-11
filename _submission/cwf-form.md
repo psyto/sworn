@@ -153,11 +153,16 @@ https://youtu.be/qTBetXF5SPY
 ## How do you know people actually need, or will need this product? · ≤1000
 
 ```
-No direct demand validation yet: no customer, design partner, auditor request or revenue. Tempo's Zones on Moderato have one effective operator and creation is owner-gated. I will not treat technical proof as customer traction.
+No direct demand validation yet: $0 revenue and no requests from customers, design partners, or auditors. Tempo's Zones on Moderato have one effective operator, with creation owner-gated. Technical proof is not customer traction.
 
-The reason to test the hypothesis is structural. A Zone operator has the private ledger and witness; an outside reviewer cannot recreate its batch from public data. Sworn can turn an operator-supplied batch into independently checkable evidence without publishing transactions. Whether that changes an audit, sales or settlement-review outcome is unproven.
+Outreach as of Oct 11:
+Oct 9 X Post: 166 impressions, 1 like, 0 replies (24h).
+Oct 10 Tempo Zones GitHub Issue: 0 responses observed as of Oct 11.
+Oct 11 Issue Template: Inbound channel, not proof of demand.
 
-The validation sequence is concrete: find a Zone business that can supply a witness and has a reviewer; prove one supplied batch; give the reviewer reproducible verification instructions; ask whether the operator needs the next batch or upgrade proved and who owns that budget. A repeat need is the first demand signal. If no operator values it, the service thesis fails rather than becoming a claimed market.
+The motive is structural: a Zone operator holds the private ledger and witness; outside reviewers cannot recreate batches from public data. Sworn turns an operator batch into verifiable evidence without revealing transactions. Value to audits, sales, or settlements remains unproven.
+
+A recurring need with a budget owner is the first demand signal. If no operator values it, the service thesis fails.
 ```
 
 ## How far along are you? Do you have users? · ≤1000
