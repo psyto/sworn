@@ -1,6 +1,9 @@
 # Interview prep: Sworn (CWF, 15-minute Zoom)
 
 Short answers first; "If pressed" adds one level of detail. Every number here is in the repo (source in brackets).
+Updated 2026-10-12 after submission: the split site (landing + evidence page), the pilot request form, the final
+form wording (Brief, "What are you building", demand), the founder profile (current role, full-time plan) and the
+outreach results. These are notes to speak from, not a script: say it in your own words.
 Rules:
 - Say what is unknown, plainly.
 - Never claim a customer, a hosted service, or protection of withdrawals on Tempo's Zones. The live settlement
@@ -9,18 +12,20 @@ Rules:
 
 ## The 30-second answer
 
-> Tempo Zones are private ledgers: only the operator holds the batch and its witness, so an auditor or a
-> counterparty cannot check that money leaving a Zone came from correct execution. Sworn runs Tempo's own Zone
+> Tempo Zones are private ledgers: users see their own activity, the operator's sequencers see everything, and the
+> public sees none of it. So who verifies? An auditor or a counterparty cannot check that money leaving a Zone came
+> from correct execution without trusting the operator or seeing the ledger. Sworn runs Tempo's own Zone
 > verification code in a zero-knowledge VM and produces a proof anyone can verify on chain, without exposing the
 > transactions. On Tempo's testnet we ran our own Zone whose portal settles a batch, and so lets a withdrawal be
 > paid, only after that proof passes; a forged batch, even signed by our own sequencer, was rejected on chain. No customers yet. Next is one design partner who supplies a real
-> batch.
+> batch; the pilot request form is open on the repo.
 
 ## Product and evidence
 
 **1. What exactly works today?**
-- Tempo's own Zone batch verifier (`prove_zone_batch`) runs inside SP1, on five batches from Tempo's integration
-  tests. The output matches the native run, and tampering is rejected.
+- Tempo's own Zone batch verifier (`prove_zone_batch`) runs inside SP1, on four batches from Tempo's integration
+  tests plus the batch with a withdrawal (the form says "4 integration-test batches … including a fixture with a
+  withdrawal"). The output matches the native run, and tampering is rejected.
 - A contract on Moderato verified the proof of a batch with one withdrawal and two user transactions
   (tx `0xa630…f770`).
 - Our own Zone on Moderato (2026-10-06): three batches proven and settled through a portal that calls the
@@ -73,6 +78,8 @@ is a later proposal, not the first buyer. A design-partner conversation is the
 next falsifiable test.
 
 **9. Tempo chose a TEE (Nitro). Why would anyone need ZK?**
+- The Brief's framing: Tempo's T13 upgrade introduces Nitro attestation; Sworn explores a complementary zkVM path.
+  Tempo's Zones spec calls the proving system "proof-agnostic" (`IVerifier`), so a second backend fits the design.
 - A TEE means trusting one vendor's hardware; a ZK proof anyone can check.
 - Tempo's docs: "ZK proof generation is not implemented".
 - That is about Moderato's testnet today, not Tempo's production design: at the reviewed commit the Nitro
@@ -99,13 +106,41 @@ next falsifiable test.
   ETHGlobal Tokyo 2026; I also placed 3rd in the Superteam Japan × NTT DOCOMO R&D side track of Colosseum's Solana
   Cypherpunk Hackathon (2025). Fabrknt Dojo has 21 courses and 234 lessons.
 - Privacy work before Sworn: Veil (`fabrknt/veil`, `@fabrknt/veil-core`), chain-agnostic privacy primitives.
-- Fifteen years building banking systems: I know what auditors ask an operator for.
+- Fifteen years building core banking systems: I know what auditors ask an operator for, especially for
+  high-value batch processing.
+- Today: Biz Dev Head at SBI Solana Global (enterprise onchain finance with Solana infrastructure), so I see
+  enterprises' privacy and verification requirements first-hand. (Matches the submission profile and Arena.)
 
 **13. Solo founder. Can you run an operations business?**
-Part-time today, about 20 hours a week (the form says so). Proving is automated. The hard part is Tempo-specific engineering, which is what I do. A first hire would be on
+Part-time today, about 20 hours a week, alongside my role at SBI Solana Global (the form says so). I go full-time
+immediately on acceptance into the Colosseum Accelerator (the profile says so). Proving is automated. The hard part is Tempo-specific engineering, which is what I do. A first hire would be on
 operations and partner integration, once a design partner exists.
 
 ## Hard questions to expect
+
+**14a. You work at SBI Solana Global. Why build on Tempo, not Solana? Any conflict?**
+- *Facts to use:* the entry began on Solana (Confide, private block trades for tokenized stocks); a confidential
+  transfer needed the issuer to approve the recipient, so I judged it premature (form, "Anything else"). Tempo
+  Zones are private ledgers that settle in batches, the exact problem my banking background is about, and Tempo
+  runs on Reth/Revm, the stack I build on and teach.
+- *Founder to confirm before the interview:* that Sworn is a personal project outside the employer's scope, with
+  no employer IP or time involved, and what you would say about conflicts. Do not improvise this.
+
+**14b. You said you'd validate demand. What happened?**
+- X post (Oct 9): 166 impressions, 1 like, 0 replies after 24 h; a Japanese quote post; a "who verifies?" post on
+  Oct 11. GitHub issue tempoxyz/zones#1685 (Oct 10): no response as of Oct 11. Arena Builder Update (Oct 9).
+- Oct 11: a public pilot request form (`.github/ISSUE_TEMPLATE/request-batch-proof.yml`) and a "Use Sworn" section
+  on the site. No requests yet. Direct messages (Tempo DevRel, a Zone builder, auditors): say what was sent and
+  any replies, from `_submission/OUTREACH.md`.
+- Zero replies is a result, not a failure to hide: the first real signal is an operator who supplies a batch and
+  asks for the next one with a budget owner (form, demand field).
+
+**14c. Can an operator use Sworn today?**
+- Not self-serve and not hosted. A testnet pilot: the operator supplies one batch's witness privately, Sworn proves
+  it, the reviewer verifies it. Pinned to one Tempo Zones version; a newer one needs a compatibility review and
+  may need porting.
+- A reviewer can re-check our three own-Zone proofs in about a minute: `git clone` →
+  `cd sworn/contracts && forge test --match-test OWNZONE` (a fresh clone passes 67/67, checked 2026-10-11).
 
 **14. Isn't the bonded-answer demo pointless if a client can just simulate the transfer?**
 For that question, yes. Anyone can reproduce it with `eth_simulateV1`, and we say so. It was the first proof that
@@ -208,6 +243,11 @@ Introductions to teams building Zones or private payment ledgers on Tempo, and t
 | withdrawal batch | 1 withdrawal, 2 user txs; 24,443,996 cycles; Groth16 891 s; tx `0xa630…f770` |
 | first batch | 25,536,122 cycles; Groth16 701 s; tx `0xb14b…3b80` |
 | mutation | one field changed → `InvalidProof()` (live `eth_call` on the evidence page, psyto.github.io/sworn/evidence/) |
+| own Zone (2026-10-06/07) | 3 batches settled only after their proofs verified; Groth16 664–1,881 s each; payout `0xfc31…e1f1`; forged, sequencer-signed batch rejected `0x3a15…167d` |
+| site | landing psyto.github.io/sworn (static) · evidence page /evidence/ ("Re-verify on chain") · pilot request form on the repo |
+| tests | 67 forge tests; fresh clone passes |
+| Tempo batch use cases | payroll and merchant payouts (tempo.xyz/blog/tempo-transactions, tempo.xyz/learn/stablecoin-payroll) |
+| outreach | 0 replies as of Oct 11 (X, GitHub issue #1685, pilot form) |
 | live-chain fidelity | 40/40 transactions; 18/18 reverted transactions |
 | Moderato Zones | 3, one operator; their verifier returns true for any input |
 | slashes on Moderato | three recorded in deployments/moderato.json |
